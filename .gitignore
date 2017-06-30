@@ -1,0 +1,8 @@
+.idea/
+target/
+logs/
+.project
+.classpath
+*.log
+*.iml
+danmu_java_client/DmFile/
