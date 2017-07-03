@@ -1,4 +1,4 @@
-package cn.yangtengfei;
+package cn.partytime;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

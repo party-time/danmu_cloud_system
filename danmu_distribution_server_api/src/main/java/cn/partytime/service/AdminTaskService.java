@@ -3,11 +3,14 @@ package cn.partytime.service;
 import cn.partytime.model.ResultInfo;
 import cn.partytime.model.ServerInfo;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 /**
  * Created by lENOVO on 2016/11/22.
  */
+
+@RefreshScope
 @Service
 public class AdminTaskService {
 
