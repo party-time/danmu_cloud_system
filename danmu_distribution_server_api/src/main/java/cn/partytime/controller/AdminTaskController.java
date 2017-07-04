@@ -1,7 +1,6 @@
 package cn.partytime.controller;
 
 import cn.partytime.model.ResultInfo;
-import cn.partytime.service.AdminTaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +19,5 @@ import javax.servlet.http.HttpServletRequest;
 public class AdminTaskController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminTaskController.class);
-
-    @Autowired
-    private AdminTaskService adminTaskService;
-
-    @RequestMapping(value = "/socketAddress", method = RequestMethod.GET)
-    public ResultInfo socketAddress(HttpServletRequest request) {
-        logger.info("获取task socketAddress连接地址");
-        return adminTaskService.findTaskServerInfo();
-    }
-
-    @RequestMapping(value = "/filmSocketAddress", method = RequestMethod.GET)
-    public ResultInfo filmSocketAddress(HttpServletRequest request) {
-        logger.info("获取task socketAddress连接地址");
-        return adminTaskService.findFilmTaskServerInfo();
-    }
 
 }

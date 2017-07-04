@@ -1,7 +1,5 @@
 package cn.partytime.repository.manager;
 
-import cn.partytime.model.manager.PartyResource;
-import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.model.manager.TimerDanmuFile;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;

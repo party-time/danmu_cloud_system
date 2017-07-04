@@ -14,14 +14,14 @@ public interface DanmuPoolRepository extends MongoRepository<DanmuPool, String> 
 
     DanmuPool findById(String id);
 
-    public DanmuPool findByIdAndIsDelete(String id,Integer isDelete);
+    public DanmuPool findByIdAndIsDelete(String id, Integer isDelete);
 
 
-    public List<DanmuPool> findByIdInAndIsDelete(List<String> ids,Integer isDelete);
+    public List<DanmuPool> findByIdInAndIsDelete(List<String> ids, Integer isDelete);
 
     List<DanmuPool> findByIdIn(List<String> ids);
 
-    public List<DanmuPool> findByPartyAddressRelationIdInAndIsDelete(List<String> partyAddressRelationIdList,Integer isDelete);
+    public List<DanmuPool> findByPartyAddressRelationIdInAndIsDelete(List<String> partyAddressRelationIdList, Integer isDelete);
 
 
 

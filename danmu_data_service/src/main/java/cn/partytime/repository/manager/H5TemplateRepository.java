@@ -18,11 +18,11 @@ public interface H5TemplateRepository extends MongoRepository<H5Template,String>
 
     public Integer countByH5Url(String h5Url);
 
-    public Integer countByIsBaseAndIdNot(Integer isBase,String id);
+    public Integer countByIsBaseAndIdNot(Integer isBase, String id);
 
-    public Integer countByH5UrlAndIdNot(String h5Url,String id);
+    public Integer countByH5UrlAndIdNot(String h5Url, String id);
 
-    public Page<H5Template> findByIsIndex(Integer isIndex,Pageable pageable);
+    public Page<H5Template> findByIsIndex(Integer isIndex, Pageable pageable);
 
     public H5Template findByIsBase(Integer isBase);
 

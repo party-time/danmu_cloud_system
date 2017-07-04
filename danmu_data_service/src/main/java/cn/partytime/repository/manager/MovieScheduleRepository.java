@@ -14,13 +14,13 @@ import java.util.List;
 @EnableMongoRepositories(mongoTemplateRef = "managerMongoTemplate")
 public interface MovieScheduleRepository extends MongoRepository<MovieSchedule,String> {
 
-    List<MovieSchedule> findByPartyIdAndAddressId(String partyId,String addressId);
+    List<MovieSchedule> findByPartyIdAndAddressId(String partyId, String addressId);
 
     Page<MovieSchedule> findByPartyId(String partyId, Pageable pageable);
 
 
     Page<MovieSchedule> findByAddressId(String addressId, Pageable pageable);
 
-    Page<MovieSchedule> findByPartyIdAndAddressId(String partyId,String addressId, Pageable pageable);
+    Page<MovieSchedule> findByPartyIdAndAddressId(String partyId, String addressId, Pageable pageable);
 
 }

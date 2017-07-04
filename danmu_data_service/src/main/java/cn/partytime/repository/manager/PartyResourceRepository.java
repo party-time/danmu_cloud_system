@@ -16,9 +16,9 @@ public interface PartyResourceRepository extends MongoRepository<PartyResource, 
 
     List<PartyResource> findByResourceId(String resourceId);
 
-    List<PartyResource> findByPartyIdAndFileType(String partyId,Integer fileType);
+    List<PartyResource> findByPartyIdAndFileType(String partyId, Integer fileType);
 
-    PartyResource findByPartyIdAndResourceId(String partyId,String resourceId);
+    PartyResource findByPartyIdAndResourceId(String partyId, String resourceId);
 
 
 }

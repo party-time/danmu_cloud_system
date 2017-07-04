@@ -16,9 +16,9 @@ public interface VersionRepository extends MongoRepository<Version,String> {
 
     Page<Version> findAll(Pageable pageable);
 
-    List<Version> findByVersionAndType(String version,Integer type);
+    List<Version> findByVersionAndType(String version, Integer type);
 
     List<Version> findByIdIn(List<String> idList);
 
-    Page<Version> findByIdNotIn(List<String> idList,Pageable pageable);
+    Page<Version> findByIdNotIn(List<String> idList, Pageable pageable);
 }

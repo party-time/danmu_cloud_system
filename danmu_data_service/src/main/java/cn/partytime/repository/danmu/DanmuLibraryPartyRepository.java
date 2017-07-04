@@ -1,6 +1,5 @@
 package cn.partytime.repository.danmu;
 
-import cn.partytime.model.danmu.DanmuLibrary;
 import cn.partytime.model.danmu.DanmuLibraryParty;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -13,7 +12,7 @@ import java.util.List;
 @EnableMongoRepositories(mongoTemplateRef = "danmuMongoTemplate")
 public interface DanmuLibraryPartyRepository  extends MongoRepository<DanmuLibraryParty,String> {
 
-    DanmuLibraryParty findByPartyIdAndDanmuLibraryId(String partyId,String danmuLibraryId);
+    DanmuLibraryParty findByPartyIdAndDanmuLibraryId(String partyId, String danmuLibraryId);
 
     DanmuLibraryParty findByPartyId(String partyId);
 

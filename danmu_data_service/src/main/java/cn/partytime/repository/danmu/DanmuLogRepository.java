@@ -1,7 +1,6 @@
 package cn.partytime.repository.danmu;
 
 import cn.partytime.model.danmu.DanmuLog;
-import cn.partytime.model.danmu.DanmuModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;

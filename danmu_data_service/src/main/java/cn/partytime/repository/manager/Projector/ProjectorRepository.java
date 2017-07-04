@@ -1,7 +1,6 @@
 package cn.partytime.repository.manager.Projector;
 
 import cn.partytime.model.projector.Projector;
-import cn.partytime.model.projector.ProjectorAction;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 

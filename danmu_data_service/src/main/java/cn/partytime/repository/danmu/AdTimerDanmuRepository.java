@@ -1,8 +1,6 @@
 package cn.partytime.repository.danmu;
 
 import cn.partytime.model.danmu.AdTimerDanmu;
-import cn.partytime.model.danmu.DanmuLibraryParty;
-import cn.partytime.model.manager.DanmuAddress;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -16,7 +14,7 @@ import java.util.List;
 @EnableMongoRepositories(mongoTemplateRef = "danmuMongoTemplate")
 public interface AdTimerDanmuRepository extends MongoRepository<AdTimerDanmu,String> {
 
-    Page<AdTimerDanmu> findByLibraryId(String libraryId , Pageable pageable);
+    Page<AdTimerDanmu> findByLibraryId(String libraryId, Pageable pageable);
 
     List<AdTimerDanmu> findByLibraryIdOrderByBeginTimeAsc(String libraryId);
 

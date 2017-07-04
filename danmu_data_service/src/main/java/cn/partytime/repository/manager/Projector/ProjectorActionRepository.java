@@ -1,6 +1,5 @@
 package cn.partytime.repository.manager.Projector;
 
-import cn.partytime.model.manager.AdminUserCompany;
 import cn.partytime.model.projector.ProjectorAction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +16,9 @@ import java.util.List;
 public interface ProjectorActionRepository extends MongoRepository<ProjectorAction, String> {
 
 
-    Page<ProjectorAction> findByRegisterCode(String registCode , Pageable pageable);
+    Page<ProjectorAction> findByRegisterCode(String registCode, Pageable pageable);
 
 
 
-    List<ProjectorAction> findByRegisterCodeAndStartTimeAfterOrderByUpdateTimeDesc(String registCode,Date startDate);
+    List<ProjectorAction> findByRegisterCodeAndStartTimeAfterOrderByUpdateTimeDesc(String registCode, Date startDate);
 }

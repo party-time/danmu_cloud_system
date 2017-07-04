@@ -15,9 +15,9 @@ public interface ParamValueRepository extends MongoRepository<ParamValue,String>
 
     public List<ParamValue> findByObjId(String objId);
 
-    public List<ParamValue> findByObjIdAndTypeAndParamId(String objId,Integer type,String paramId);
+    public List<ParamValue> findByObjIdAndTypeAndParamId(String objId, Integer type, String paramId);
 
-    public List<ParamValue> findByObjIdAndTypeAndParamIdIn(String objId,Integer type,List<String> paramIdList);
+    public List<ParamValue> findByObjIdAndTypeAndParamIdIn(String objId, Integer type, List<String> paramIdList);
 
-    public List<ParamValue> findByObjIdAndType(String objId,Integer type);
+    public List<ParamValue> findByObjIdAndType(String objId, Integer type);
 }
