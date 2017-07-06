@@ -1,9 +1,6 @@
 package cn.partytime.collector.service;
 
-import cn.partytime.common.cachekey.ScreenClientCacheKey;
-import cn.partytime.logic.danmu.DanmuClientModel;
 import cn.partytime.redis.service.RedisService;
-import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,15 +1,13 @@
 package cn.partytime.collector.service;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
-import cn.partytime.logic.danmu.DanmuClientModel;
-import cn.partytime.model.client.DanmuClient;
+import cn.partytime.collector.model.DanmuClientModel;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

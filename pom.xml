@@ -21,16 +21,26 @@
 
         <module>danmu_bms_api</module>
         <module>danmu_clientSever_api</module>
+
         <module>danmu_distribution_server_api</module>
+
+
+        <module>danmu_data_rpc_server</module>
+
+        <module>danmu_collector_server</module>
+        <module>danmu_check_server</module>
+
+
 
         <module>danmu_db_model</module>
         <module>danmu_data_service</module>
+
         <module>danmu_logic_model</module>
 
         <module>danmu_log_server_api</module>
         <module>danmu_common</module>
         <module>danmu_redis_server</module>
-        <module>danmu_collector_server</module>
+
 
 
     </modules>

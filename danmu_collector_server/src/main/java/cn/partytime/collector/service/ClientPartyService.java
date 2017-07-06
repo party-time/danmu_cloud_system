@@ -1,7 +1,7 @@
 package cn.partytime.collector.service;
 
+import cn.partytime.collector.model.PartyLogicModel;
 import cn.partytime.common.cachekey.PartyCacheKey;
-import cn.partytime.logic.danmu.PartyLogicModel;
 import cn.partytime.redis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

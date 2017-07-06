@@ -1,15 +1,18 @@
 package cn.partytime.collector.service;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
+import cn.partytime.collector.dataService.PartyLogicService;
+import cn.partytime.collector.dataService.WechatUserInfoService;
+import cn.partytime.collector.dataService.WechatUserService;
+import cn.partytime.collector.model.DanmuClientModel;
+import cn.partytime.collector.model.PartyLogicModel;
+import cn.partytime.collector.model.WechatUser;
+import cn.partytime.collector.model.WechatUserInfo;
 import cn.partytime.collector.util.PotocolTypeConst;
 import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.util.IntegerUtils;
-import cn.partytime.logic.danmu.DanmuClientModel;
-import cn.partytime.logic.danmu.PartyLogicModel;
-import cn.partytime.model.wechat.WechatUser;
-import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -17,6 +20,7 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -33,19 +37,9 @@ import java.util.Set;
 public class PotocolService {
 
     private static final Logger logger = LoggerFactory.getLogger(PotocolService.class);
+
     @Autowired
     private DanmuChannelRepository danmuChannelRepository;
-
-    @Autowired
-    private ClientCacheService clientCacheService;
-
-
-
-    @Autowired
-    private DanmuSendService danmuSendService;
-
-    @Autowired
-    private PreDanmuLogicService preDanmuService;
 
 
     @Autowired
@@ -53,6 +47,17 @@ public class PotocolService {
 
     @Autowired
     private RedisService redisService;
+
+
+    @Autowired
+    private WechatUserService wechatUserService;
+
+    @Autowired
+    private WechatUserInfoService wechatUserInfoService;
+
+
+    @Autowired
+    private PartyLogicService partyLogicService;
 
     /**
      * 协议处理
@@ -82,10 +87,10 @@ public class PotocolService {
                 forceLogout(channel);
             }
             //判断微信用户是否合法
-            WechatUser wechatUser = null;
+            WechatUser wechatUser = wechatUserService.findByOpenId(openId);
             logger.info("当前登录的手机用户信息:{}", JSON.toJSONString(wechatUser));
-            WechatUserInfo wechatuserInfo = null;
-            PartyLogicModel partyLogicModel = null;
+            WechatUserInfo wechatuserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
+            PartyLogicModel partyLogicModel = partyLogicService.findPartyByLonLat(wechatuserInfo.getLastLongitude(), wechatuserInfo.getLastLatitude());
             //如果活动不存在，不做任何处理
             if (partyLogicModel == null) {
                 forceLogout(channel);
@@ -131,10 +136,6 @@ public class PotocolService {
                 }
             }
 
-
-            //redisService.deleteSortData()
-
-
         } else if(PotocolTypeConst.POTOCOL_DANMU_COUNT.equals(type)){
 
             DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
@@ -154,15 +155,13 @@ public class PotocolService {
             logger.info("当前客户端信息:{}接受ping",clientInfoModel.getScreenId());
 
             Map<String,Object> resultMap = new HashMap<String,Object>();
-            resultMap.put("type",PotocolTypeConst.POTOCOL_PONG);
+            resultMap.put("type", PotocolTypeConst.POTOCOL_PONG);
             String msg = JSON.toJSONString(resultMap);
             logger.info("返回给客户端信息{}：" + msg);
             channel.writeAndFlush(new TextWebSocketFrame(msg));
         } else {
 
             logger.info("客户端发送给服务器信息:{},不处理", JSON.toJSONString(map));
-
-            //forceLogout(channel);
         }
     }
 
@@ -173,11 +172,6 @@ public class PotocolService {
      * @param channel
      */
     public void forceLogout(Channel channel) {
-
-        DanmuClientModel danmuClientModel = danmuChannelRepository.get(channel);
-
-
-        //redisService.expire(ScreenClientCacheKey.SCREEN_DANMU_COUNT+danmuClientModel.getAddressId(),0);
 
         //清除用户状态
         danmuChannelRepository.remove(channel);

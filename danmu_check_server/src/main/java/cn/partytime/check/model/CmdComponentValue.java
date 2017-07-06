@@ -1,0 +1,47 @@
+package cn.partytime.check.model;
+
+public class CmdComponentValue {
+
+    private String id;
+
+    //组件的id
+    private String componentId;
+
+    //组件值的名称
+    private String name;
+
+    //组件值的值
+    private String value;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getComponentId() {
+        return componentId;
+    }
+
+    public void setComponentId(String componentId) {
+        this.componentId = componentId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+}

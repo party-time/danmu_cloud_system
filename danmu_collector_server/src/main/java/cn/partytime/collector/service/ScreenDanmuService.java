@@ -18,12 +18,8 @@ public class ScreenDanmuService {
 
     private static final Logger logger = LoggerFactory.getLogger(ScreenDanmuService.class);
 
-
     @Autowired
     private RedisService redisService;
-
-
-
 
     public void addScreenDanmuCount(String addressId){
         String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;

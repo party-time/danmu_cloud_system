@@ -1,42 +1,37 @@
 package cn.partytime.collector.scheduler;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
+import cn.partytime.collector.model.DanmuCollectorInfo;
 import cn.partytime.collector.service.*;
 import cn.partytime.common.cachekey.CollectorServerCacheKey;
 import cn.partytime.common.cachekey.CommandCacheKey;
-import cn.partytime.common.cachekey.ScreenClientCacheKey;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.common.util.LongUtils;
-import cn.partytime.logic.collector.DanmuCollectorInfo;
-import cn.partytime.logic.danmu.DanmuClientModel;
-import cn.partytime.logic.danmu.ProtocolCommandModel;
-import cn.partytime.logic.danmu.ProtocolModel;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
-import io.netty.channel.Channel;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
-
-import static com.alibaba.fastjson.JSON.toJSONString;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by task on 16/6/23.
  */
 @Component
-@Configuration
 @EnableScheduling
+@RefreshScope
 public class DanmuServerScheduler {
 
     private static final Logger logger = LoggerFactory.getLogger(DanmuServerScheduler.class);
@@ -82,7 +77,7 @@ public class DanmuServerScheduler {
         danmuCollectorInfo.setCount(size);
         //将客户端信息写入到缓存中
         String key = CollectorServerCacheKey.COLLECTOR_SERVERLIST_CACHE_KEY;
-        redisService.setSortSet(key, size, toJSONString(danmuCollectorInfo));
+        redisService.setSortSet(key, size, JSON.toJSONString(danmuCollectorInfo));
         redisService.expire(key, 60);
         logger.info("将连接的客户端数量入缓存------------>end");
     }

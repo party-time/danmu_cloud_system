@@ -1,8 +1,8 @@
 package cn.partytime.collector.service;
 
+import cn.partytime.collector.model.PartyLogicModel;
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
 import cn.partytime.common.cachekey.PreDanmuCacheKey;
-import cn.partytime.logic.danmu.PartyLogicModel;
 import cn.partytime.redis.service.RedisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +23,6 @@ public class ClientPreDanmuService {
 
     @Autowired
     private RedisService redisService;
-
-
-
 
     @Autowired
     private ClientCacheService clientCacheService;

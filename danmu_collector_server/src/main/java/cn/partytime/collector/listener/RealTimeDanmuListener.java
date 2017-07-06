@@ -1,20 +1,15 @@
 package cn.partytime.collector.listener;
 
 import cn.partytime.collector.clientHandler.RealTimeDanmuHandler;
-import cn.partytime.collector.config.DanmuChannelRepository;
 import cn.partytime.collector.service.ClientChannelService;
 import cn.partytime.common.constants.ClientConst;
-import cn.partytime.common.util.ListUtils;
 import com.alibaba.fastjson.JSON;
-import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 
 @Component("realTimeDanmuListener")

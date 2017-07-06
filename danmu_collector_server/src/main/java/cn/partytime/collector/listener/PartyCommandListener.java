@@ -1,17 +1,10 @@
 package cn.partytime.collector.listener;
 
-import cn.partytime.collector.config.DanmuChannelRepository;
 import cn.partytime.collector.service.ClientChannelService;
 import cn.partytime.collector.service.PreDanmuLogicService;
 import cn.partytime.common.cachekey.CommandCacheKey;
-import cn.partytime.common.cachekey.ScreenClientCacheKey;
 import cn.partytime.common.constants.ClientConst;
-import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.logic.danmu.DanmuClientModel;
-import cn.partytime.logic.danmu.PromotionalFilmMode;
-import cn.partytime.logic.danmu.ProtocolCommandModel;
-import cn.partytime.logic.danmu.ProtocolModel;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -25,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Administrator on 2017/1/11.

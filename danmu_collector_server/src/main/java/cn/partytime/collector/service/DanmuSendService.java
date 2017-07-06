@@ -1,12 +1,11 @@
 package cn.partytime.collector.service;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
+import cn.partytime.collector.model.ProtocolDanmuModel;
+import cn.partytime.collector.model.ProtocolModel;
 import cn.partytime.common.cachekey.ScreenClientCacheKey;
 import cn.partytime.common.constants.*;
 import cn.partytime.common.util.*;
-import cn.partytime.logic.danmu.DanmuClientModel;
-import cn.partytime.logic.danmu.ProtocolDanmuModel;
-import cn.partytime.logic.danmu.ProtocolModel;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -29,19 +28,10 @@ public class DanmuSendService {
     private static final Logger logger = LoggerFactory.getLogger(DanmuSendService.class);
 
     @Autowired
-    private DanmuChannelRepository danmuChannelRepository;
-
-    @Autowired
     private ClientCacheService clientCacheService;
 
     @Autowired
     private ClientPreDanmuService clientPreDanmuService;
-
-    @Autowired
-    private PreDanmuLogicService preDanmuService;
-
-    @Autowired
-    private RedisService redisService;
 
     @Autowired
     private ClientChannelService clientChannelService;
@@ -84,7 +74,6 @@ public class DanmuSendService {
         String type = protocolModel.getType();
         logger.info("当前接收的协议类型是{}",type);
 
-
         if(ProtocolConst.PROTOCOL_COMMAND.equals(type)){
             //获取的是命令。直接广播给所有屏幕
             pubDanmuToAllScreenClient(addressId, protocolModel);
@@ -92,7 +81,6 @@ public class DanmuSendService {
             Map<String,Object> map = (Map<String,Object>)JSON.parse(String.valueOf(object));
             String danmuType = (String)map.get("type");
             logger.info("向所有屏幕广播弹幕:{}",danmuType);
-
             sendMessageToAllClient(addressId,object);
 
         }

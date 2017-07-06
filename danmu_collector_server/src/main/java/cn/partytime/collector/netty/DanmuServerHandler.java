@@ -1,8 +1,7 @@
 package cn.partytime.collector.netty;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
-import cn.partytime.logic.danmu.DanmuClientModel;
-import cn.partytime.logic.danmu.ProtocolModel;
+import cn.partytime.collector.model.DanmuClientModel;
 import cn.partytime.collector.service.PotocolService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;

@@ -1,16 +1,12 @@
 package cn.partytime.collector.service;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
+import cn.partytime.collector.dataService.*;
+import cn.partytime.collector.model.*;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.DateUtils;
-import cn.partytime.logic.danmu.DanmuClientModel;
-import cn.partytime.logic.danmu.PartyLogicModel;
-import cn.partytime.model.client.DanmuClient;
-import cn.partytime.model.manager.DanmuAddress;
-import cn.partytime.model.wechat.WechatUser;
-import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -35,13 +31,20 @@ public class ClientLoginService {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientLoginService.class);
 
+    @Autowired
+    private WechatUserService wechatUserService;
 
     @Autowired
     private DanmuChannelRepository danmuChannelRepository;
 
+    @Autowired
+    private DanmuAddressLogicService danmuAddressLogicService;
 
     @Autowired
-    private ClientScreenService clientScreenService;
+    private PartyLogicService partyLogicService;
+
+    @Autowired
+    private DanmuClientService danmuClientService;
 
     @Autowired
     private RedisService redisService;
@@ -49,6 +52,8 @@ public class ClientLoginService {
     @Autowired
     private ClientChannelService clientChannelService;
 
+    @Autowired
+    private WechatUserInfoService wechatUserInfoService;
 
     @Autowired
     private ScreenDanmuService screenDanmuService;
@@ -101,7 +106,7 @@ public class ClientLoginService {
 
             //获取活动信息
             String commandType = PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS;
-            PartyLogicModel party = null;
+            PartyLogicModel party = partyLogicService.findPartyAddressId(danmuClientModel.getAddressId());
             //只有是活动场的情况下，此处才有效果
             if (party != null) {
                 try{
@@ -150,20 +155,20 @@ public class ClientLoginService {
             channel.close();
         }
         //判断微信用户是否合法
-        WechatUser wechatUser = null;
+        WechatUser wechatUser = wechatUserService.findByOpenId(openId);
         logger.info("当前登录的手机用户信息:{}", JSON.toJSONString(wechatUser));
         if (wechatUser == null) {
             logger.info("通过openId:{}获取的微信用户信息为空,用户为非法用户", openId);
             channel.close();
         }
 
-        WechatUserInfo wechatUserInfo = null;
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
         if (wechatUserInfo == null) {
             logger.info("通过wechatId:{}获取的微信用户地理位置为空,用户为非法用户", wechatUserInfo);
             channel.close();
         }
 
-        DanmuAddress danmuAddress = null;
+        DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
         logger.info("通过经纬度:{},{}获取地址信息",wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude(),JSON.toJSONString(danmuAddress));
         //如果查询不到场地
         if (danmuAddress == null) {
@@ -172,7 +177,7 @@ public class ClientLoginService {
         String addressId = danmuAddress.getId();
         logger.info("手机获取的地址信息：{}",addressId);
 
-        PartyLogicModel party = null;
+        PartyLogicModel party = partyLogicService.findPartyAddressId(addressId);
 
         logger.info("活动信息：{}",JSON.toJSONString(party));
         //如果活动不存在，不做任何处理
@@ -226,7 +231,7 @@ public class ClientLoginService {
 
             //获取活动信息
             String commandType = PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS;
-            PartyLogicModel party = null;
+            PartyLogicModel party = partyLogicService.findPartyAddressId(danmuClientModel.getAddressId());
             //只有是活动场的情况下，此处才有效果
             if (party != null) {
                 try{
@@ -269,22 +274,9 @@ public class ClientLoginService {
 
 
     public DanmuClient findDanmuClientInfo(String danmuClientCode) {
-        DanmuClient danmuClient = null;
+        DanmuClient danmuClient = danmuClientService.findByRegistCode(danmuClientCode);
         logger.info("通过注册码：{},获取客户端信息:{}", danmuClientCode, JSON.toJSONString(danmuClient));
         if (danmuClient != null) {
-            int screenId = 0;
-            String addressId = danmuClient.getAddressId();
-            //获取最大屏幕编号
-            screenId = danmuClient.getScreenId();
-            if (screenId == 0) {
-                logger.info("当前客户端的屏幕编号为:{},第一次使用", screenId);
-                screenId = clientScreenService.getMaxScreenId(addressId);
-
-                logger.info("为当前屏幕指定编号{}", screenId);
-                danmuClient.setScreenId(screenId);
-
-                logger.info("将客户端信息保存到数据", danmuClientCode, JSON.toJSONString(danmuClient));
-            }
             return danmuClient;
         }
         return null;

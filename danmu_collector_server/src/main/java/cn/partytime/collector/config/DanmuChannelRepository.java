@@ -1,22 +1,12 @@
 package cn.partytime.collector.config;
 
-
-import cn.partytime.common.util.ListUtils;
-import cn.partytime.logic.danmu.DanmuClientModel;
-import cn.partytime.model.danmu.TimerDanmu;
-import com.alibaba.fastjson.JSON;
+import cn.partytime.collector.model.DanmuClientModel;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 /**

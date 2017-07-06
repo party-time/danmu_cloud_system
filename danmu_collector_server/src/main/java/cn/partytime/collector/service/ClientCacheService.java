@@ -1,10 +1,10 @@
 package cn.partytime.collector.service;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
+import cn.partytime.collector.model.DanmuClientModel;
+import cn.partytime.common.cachekey.DanmuCacheKey;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.logic.danmu.DanmuClientModel;
-import cn.partytime.common.cachekey.DanmuCacheKey;
 import cn.partytime.redis.service.RedisService;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
@@ -12,7 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by lENOVO on 2016/9/7.

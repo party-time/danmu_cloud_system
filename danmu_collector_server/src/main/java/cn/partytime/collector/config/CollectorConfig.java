@@ -3,12 +3,13 @@ package cn.partytime.collector.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by lENOVO on 2016/10/9.
  */
 
-@Configuration
+@Component
 public class CollectorConfig {
 
 

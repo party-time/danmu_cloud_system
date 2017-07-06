@@ -1,5 +1,6 @@
 package cn.partytime.controller;
 
+import cn.partytime.logicService.MobileLoginService;
 import cn.partytime.model.ResultInfo;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,16 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/distribute/mobile/client")
 public class MobileClientLoginController {
 
+    @Autowired
+    private MobileLoginService mobileLoginService;
 
+    @RequestMapping(value = "/login/{code}" ,method = RequestMethod.GET)
+    public String view(HttpServletRequest request, @PathVariable("code") String openId) {
+        //return clientLogicService.findDanmuServerInfo(code);
+        ResultInfo resultInfo = mobileLoginService.findCollectorInfo(openId);
+        if (resultInfo != null) {
+            return JSON.toJSONString(resultInfo);
+        }
+        return null;
+    }
 }

@@ -1,15 +1,12 @@
 package cn.partytime.collector.service;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
+import cn.partytime.collector.model.DanmuClientModel;
+import cn.partytime.collector.model.ProtocolModel;
 import cn.partytime.common.cachekey.ClientCommandCacheKey;
 import cn.partytime.common.constants.ClientConst;
-import cn.partytime.logic.danmu.DanmuClientModel;
-import cn.partytime.logic.danmu.ProtocolDanmuModel;
-import cn.partytime.logic.danmu.ProtocolModel;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +42,6 @@ public class ClientCommandService {
                         Channel channel = entry.getKey();
                         String message = JSON.toJSONString(protocolModel);
                         channel.writeAndFlush(new TextWebSocketFrame(message));
-                        //ByteBuf resp = Unpooled.copiedBuffer(message.getBytes());
-                        //channel.write(resp);
                     }
                 }
             }
