@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
  */
 public class ItemAddress {
 
-    @Field("_id")
     private String id;
 
     private String itemId;

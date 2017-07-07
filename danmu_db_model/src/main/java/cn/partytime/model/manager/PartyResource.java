@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Document(collection = "party_resource")
 public class PartyResource extends BaseModel{
-    @Field("_id")
+
     private String id;
 
     private String partyId;

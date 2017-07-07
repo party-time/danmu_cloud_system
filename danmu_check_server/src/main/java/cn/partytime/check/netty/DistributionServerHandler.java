@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.Map;
+
 /**
  * Created by user on 2016/6/15.
  */
@@ -50,9 +52,9 @@ public class DistributionServerHandler extends SimpleChannelInboundHandler<TextW
         if (StringUtils.isEmpty(msg.text())) {
             return;
         }
-        //Map<String, Object> map = (Map<String, Object>) JSON.parse(msg.text());
-        CommandModel commandModel = JSON.parseObject(msg.text(),CommandModel.class);
-        commandHanderService.commandHandler(commandModel, channel);
+        Map<String, Object> map = (Map<String, Object>) JSON.parse(msg.text());
+        //CommandModel commandModel = JSON.parseObject(msg.text(),CommandModel.class);
+        commandHanderService.commandHandler(map, channel);
     }
 
     @Override

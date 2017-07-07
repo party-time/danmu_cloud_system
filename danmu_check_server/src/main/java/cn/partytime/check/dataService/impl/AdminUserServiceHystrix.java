@@ -14,4 +14,9 @@ public class AdminUserServiceHystrix implements AdminUserService {
     public AdminUser getAdminUser(String authKey) {
         return null;
     }
+
+    @Override
+    public Boolean checkAuthKey(String authKey) {
+        return false;
+    }
 }

@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "party_address_ad_relation")
 public class PartyAddressAdRelation extends BaseModel {
 
-    @Field("_id")
+
     private String id;
 
     private String partyId;

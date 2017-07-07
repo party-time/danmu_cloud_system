@@ -13,7 +13,6 @@ import java.util.List;
 @Document(collection = "danmu_client_group")
 public class DanmuClientGroup extends BaseModel{
 
-    @Field("_id")
     private String id;
 
     private List<String> danmuClientIdList;

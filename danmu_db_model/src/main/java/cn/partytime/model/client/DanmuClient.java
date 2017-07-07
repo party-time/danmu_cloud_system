@@ -13,7 +13,6 @@ import java.util.Date;
 @Document(collection = "danmu_client")
 public class DanmuClient extends BaseModel{
 
-    @Field("_id")
     private String id;
 
     /*客户端名称*/

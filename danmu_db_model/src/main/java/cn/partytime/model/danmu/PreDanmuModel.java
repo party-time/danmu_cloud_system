@@ -15,7 +15,6 @@ import java.util.Map;
 @Document(collection = "pre_danmu")
 public class PreDanmuModel extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     /**

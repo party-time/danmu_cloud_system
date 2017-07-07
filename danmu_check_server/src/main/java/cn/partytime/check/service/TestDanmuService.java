@@ -96,7 +96,7 @@ public class TestDanmuService {
                 dataMap.put("dataType",cmdTempComponentData.getType());
                 dataMap.put("danmuType",cmdTempComponentData.getComponentId());
                 map.put("data",dataMap);
-                List<Channel> channelList = danmuChannelRepository.getManagerChannelList(partyId);
+                List<Channel> channelList = danmuChannelRepository.findChannelListByPartyId(partyId);
 
                 if (ListUtils.checkListIsNotNull(channelList)) {
                     for (Channel channel : channelList) {

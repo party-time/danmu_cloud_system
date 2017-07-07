@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "userPrize")
 public class UserPrize extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     private String openId;

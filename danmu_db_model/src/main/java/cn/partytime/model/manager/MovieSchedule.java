@@ -12,7 +12,6 @@ import java.util.Date;
 @Document(collection = "movie_schedule")
 public class MovieSchedule extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     /**

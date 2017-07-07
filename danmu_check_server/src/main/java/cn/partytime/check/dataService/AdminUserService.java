@@ -18,5 +18,9 @@ public interface AdminUserService {
 
     @RequestMapping(value = "/adminUserService/getAdminUser" ,method = RequestMethod.GET)
     public AdminUser getAdminUser(@RequestParam(value = "authKey") String authKey);
+
+
+    @RequestMapping(value = "/adminUserService/checkAuthKey" ,method = RequestMethod.GET)
+    public Boolean checkAuthKey(@RequestParam(value = "authKey") String authKey);
     
 }

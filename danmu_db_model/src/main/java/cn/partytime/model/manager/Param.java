@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
  */
 public class Param extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     //参数的名称

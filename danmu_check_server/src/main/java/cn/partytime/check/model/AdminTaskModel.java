@@ -11,6 +11,8 @@ public class AdminTaskModel {
 
     private String adminName;
 
+    private Integer partyType;
+
     /**
      *  秘钥
      */
@@ -28,8 +30,8 @@ public class AdminTaskModel {
     /*任务数*/
     private int count;
 
-    /*通道**/
     private Channel channel;
+
 
     public String getAdminId() {
         return adminId;
@@ -45,14 +47,6 @@ public class AdminTaskModel {
 
     public void setCount(int count) {
         this.count = count;
-    }
-
-    public Channel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(Channel channel) {
-        this.channel = channel;
     }
 
     public String getPartyId() {
@@ -94,5 +88,21 @@ public class AdminTaskModel {
 
     public void setAdminName(String adminName) {
         this.adminName = adminName;
+    }
+
+    public Integer getPartyType() {
+        return partyType;
+    }
+
+    public void setPartyType(Integer partyType) {
+        this.partyType = partyType;
+    }
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
     }
 }

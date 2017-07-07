@@ -32,7 +32,7 @@ public class RealTimeDanmuMessageListener implements MessageListener {
         if (message != null) {
             String partyId = JSON.parseObject(String.valueOf(message), String.class).replace("'", "");
             logger.info("处理活动{}弹幕",partyId);
-            List<Channel> channelList = danmuChannelRepository.getManagerChannelList(partyId);
+            List<Channel> channelList = danmuChannelRepository.findChannelListByPartyId(partyId);
             if(!ListUtils.checkListIsNotNull(channelList)){
                 logger.info("本服务器不处理此活动的弹幕!");
             }

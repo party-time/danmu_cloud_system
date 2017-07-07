@@ -13,7 +13,6 @@ import java.util.Map;
 @Document(collection = "timer_danmu")
 public class TimerDanmu extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     /**活动编号*/

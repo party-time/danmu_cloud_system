@@ -13,7 +13,6 @@ import java.io.Serializable;
 @Document(collection = "timerDanmu_file")
 public class TimerDanmuFile extends BaseModel implements Serializable {
 
-    @Field("_id")
     private String id;
 
 

@@ -13,7 +13,6 @@ import java.util.List;
 @Document(collection = "update_plan")
 public class UpdatePlan extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     private String addressId;

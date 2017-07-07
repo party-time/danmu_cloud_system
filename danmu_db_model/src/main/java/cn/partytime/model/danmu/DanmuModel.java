@@ -13,7 +13,6 @@ import java.util.Map;
 @Document(collection = "danmu")
 public class DanmuModel extends BaseModel{
 
-    @Field("_id")
     private String id;
     /**
      * 弹幕内容

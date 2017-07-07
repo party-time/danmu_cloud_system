@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "cmd_param_temp")
 public class CmdJsonParam extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     //关联的cmd json的模版

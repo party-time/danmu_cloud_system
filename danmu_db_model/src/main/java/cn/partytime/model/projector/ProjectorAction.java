@@ -13,7 +13,6 @@ import java.util.Date;
 @Document(collection = "projector_action")
 public class ProjectorAction extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     /**

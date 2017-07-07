@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "danmu_check_config")
 public class DanmuCheckConfig extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     private String pooId;

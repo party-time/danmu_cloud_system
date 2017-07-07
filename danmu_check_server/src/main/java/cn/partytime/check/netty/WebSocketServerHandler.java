@@ -1,7 +1,6 @@
 package cn.partytime.check.netty;
 
-import cn.partytime.check.service.CommandHanderService;
-import cn.partytime.check.service.UserSessionService;
+import cn.partytime.check.service.AdminLoginService;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
@@ -34,7 +33,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<FullHttp
     private WebSocketServerHandshaker handshaker;
 
     @Autowired
-    private UserSessionService userSessionService;
+    private AdminLoginService adminLoginService;
 
 
     @Override
@@ -56,6 +55,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<FullHttp
         }
         //获取key
         String key = parameters.get("key").get(0);
+        String partyType = parameters.get("partyType").get(0);
         if(StringUtils.isEmpty(key)){
             logger.info("唯一标识key不能为空");
             sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));
@@ -69,23 +69,10 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<FullHttp
             WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
         } else {
             ChannelFuture channelFuture = handshaker.handshake(ctx.channel(), req);
-
-
-
             //判断session是否存在，如果不存在就下线
-            if (userSessionService.checkAuthKey(key)) {
-                userSessionService.addSessionTime(key);
-
-                //存储session
-                /*String socketSessionKey = AdminUserCacheKey.ADMIN_USER_SESSION_SOCKET_CACHE_KEY+key;
-                Object object = redisService.get(socketSessionKey);
-                if(object!=null){
-                    sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));
-                    return;
-                }else{
-                    redisService.set(socketSessionKey,1);
-                    redisService.expire(socketSessionKey,60*60*3);
-                }*/
+            if(adminLoginService.isLogin(key)){
+                //userSessionService.addSessionTime(key);
+                adminLoginService.adminLogin(key,channelFuture.channel(),Integer.parseInt(partyType));
 
             } else {
                 sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));

@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "danmu_address")
 public class DanmuAddress extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     //地址别名

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.swing.plaf.PanelUI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,93 +25,83 @@ public class DanmuChannelRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(DanmuChannelRepository.class);
 
-    private  ConcurrentHashMap<Channel, AdminTaskModel> channelConcurrentHashMap = new ConcurrentHashMap<Channel, AdminTaskModel>();
-    //屏幕与通道的关系
-    private ConcurrentHashMap<String, List<Channel>> managerConcurrentHashMap = new ConcurrentHashMap<String, List<Channel>>();
 
+    private  ConcurrentHashMap<Channel, AdminTaskModel> channelPartyConcurrentHashMap = new ConcurrentHashMap<Channel, AdminTaskModel>();
 
-    public void set(Channel channel, AdminTaskModel adminTaskModel) {
-        channelConcurrentHashMap.put(channel, adminTaskModel);
-    }
-
-    public AdminTaskModel get(Channel channel) {
-        return channelConcurrentHashMap.get(channel);
-    }
-
-
-    public ConcurrentHashMap<Channel, AdminTaskModel> findAdminTaskModelConcurrentHashMap(){
-        return channelConcurrentHashMap;
-    }
-
-
-    public void remove(Channel channel) {
-
-        channelConcurrentHashMap.remove(channel);
-    }
-
-
-
-
-    public int size() {
-        return channelConcurrentHashMap.size();
-    }
+    private  ConcurrentHashMap<Channel, AdminTaskModel> channelFilmConcurrentHashMap = new ConcurrentHashMap<Channel, AdminTaskModel>();
 
     /**
-     * 保存管理员与活动的关系
-     *
-     * @param partyId
+     * 保存通道与管理员的关系
+     * @param partyTpe
      * @param channel
+     * @param adminTaskModel
      */
-    public void setManagerChannelIntoList(String partyId, Channel channel) {
-
-        List<Channel> channelList = managerConcurrentHashMap.get(partyId);
-        if (!ListUtils.checkListIsNotNull(channelList)) {
-            channelList = new ArrayList<Channel>();
+    public void saveChannelAdminRelation(int partyTpe,Channel channel,AdminTaskModel adminTaskModel){
+        //活动编号
+        if(partyTpe==0){
+            channelPartyConcurrentHashMap.put(channel,adminTaskModel);
+        }else{
+            channelFilmConcurrentHashMap.put(channel,adminTaskModel);
         }
-        channelList.add(channel);
-        managerConcurrentHashMap.put(partyId, channelList);
-
-
     }
 
-    /**
-     * 获取本活动下管理员的通道
-     *
-     * @param partyId
-     * @return
-     */
-    public List<Channel> getManagerChannelList(String partyId) {
-        return managerConcurrentHashMap.get(partyId);
+
+    public List<Channel> findChannelListByPartyId(String partyId){
+        return findChannelbyMapAndPartyId(channelPartyConcurrentHashMap,partyId);
     }
 
-    /**
-     * 获取活动下所有管理员
-     *
-     * @return
-     */
-    public List<String> getManagerAddressList() {
-        Iterator<Map.Entry<String, List<Channel>>> it = managerConcurrentHashMap.entrySet().iterator();
-        List<String> partyIdList = new ArrayList<String>();
-        while (it.hasNext()) {
-            Map.Entry<String, List<Channel>> entry = it.next();
-            partyIdList.add(entry.getKey());
-        }
-        return partyIdList;
-    }
 
-    /**
-     * 移除管理员与活动的关系
-     *
-     * @param channel
-     */
-    public void removeManagerChannel(String partyId, Channel channel) {
 
-        List<Channel> channelList = managerConcurrentHashMap.get(partyId);
-        if (ListUtils.checkListIsNotNull(channelList) && channelList.contains(channel)) {
-            channelList.remove(channel);
-            managerConcurrentHashMap.put(partyId, channelList);
+
+
+
+    public List<Channel> findAdminTaskModelChnnelListByPartyId(int partyType,String partyId) {
+        ConcurrentHashMap<Channel, AdminTaskModel> adminTaskModelConcurrentHashMap = new ConcurrentHashMap<Channel, AdminTaskModel>();
+        if(partyType==0){
+            adminTaskModelConcurrentHashMap = channelPartyConcurrentHashMap;
+        }else{
+            adminTaskModelConcurrentHashMap = channelFilmConcurrentHashMap;
         }
 
+        return findChannelbyMapAndPartyId(adminTaskModelConcurrentHashMap,partyId);
     }
+
+    public List<Channel> findChannelbyMapAndPartyId(ConcurrentHashMap<Channel, AdminTaskModel> map ,String partyId){
+        List<Channel> channelList = new ArrayList<>();
+        Iterator<Map.Entry<Channel, AdminTaskModel>> entries = map.entrySet().iterator();
+        while (entries.hasNext()) {
+            Map.Entry<Channel, AdminTaskModel> entry = entries.next();
+            if(partyId.equals(entry.getValue().getPartyId())){
+                channelList.add(entry.getKey());
+            }
+        }
+        return channelList;
+    }
+
+
+
+
+    public AdminTaskModel  findAdminTaskModel(int partyType,Channel channel) {
+        if(partyType==0){
+            return channelPartyConcurrentHashMap.get(channel);
+        }else{
+            return channelFilmConcurrentHashMap.get(channel);
+        }
+    }
+
+    public AdminTaskModel  findAdminTaskModel(Channel channel) {
+        AdminTaskModel adminTaskModel = channelPartyConcurrentHashMap.get(channel);
+
+        if(adminTaskModel==null){
+            adminTaskModel = channelFilmConcurrentHashMap.get(channel);
+        }
+        return adminTaskModel;
+    }
+
+    public void remove(Channel channel){
+        channelPartyConcurrentHashMap.remove(channel);
+        channelFilmConcurrentHashMap.remove(channel);
+    }
+
 
 }

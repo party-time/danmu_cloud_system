@@ -85,7 +85,9 @@ public class AdminUserService {
      * @param authKey
      * @return
      */
-    public Boolean checkAuthKey(String authKey){
+
+    @RequestMapping(value = "/checkAuthKey" ,method = RequestMethod.GET)
+    public Boolean checkAuthKey(@RequestParam String authKey){
         String key = AdminUserCacheKey.ADMIN_USER_CACHE_KEY+authKey;
         return redisService.isEXIST(key);
     }
@@ -96,7 +98,6 @@ public class AdminUserService {
      * @param authKey
      * @return
      */
-
     @RequestMapping(value = "/getAdminUser" ,method = RequestMethod.GET)
     public AdminUser getAdminUser(@RequestParam String authKey){
         String key = AdminUserCacheKey.ADMIN_USER_CACHE_KEY+authKey;

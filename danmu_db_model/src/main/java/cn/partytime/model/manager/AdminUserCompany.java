@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "admin_user_company")
 public class AdminUserCompany extends BaseModel{
 
-    @Field("_id")
     private String id;
 
     private String name;

@@ -10,7 +10,6 @@ import java.util.Date;
  */
 public class RegistCode {
 
-    @Field("_id")
     private String id;
 
     private String registCode;

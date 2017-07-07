@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
  */
 public class CmdComponentValue extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     //组件的id

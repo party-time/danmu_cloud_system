@@ -11,7 +11,6 @@ import java.util.Date;
 @Document(collection = "wechat_user")
 public class WechatUser {
 
-    @Field("_id")
     private String id;
 
     /**

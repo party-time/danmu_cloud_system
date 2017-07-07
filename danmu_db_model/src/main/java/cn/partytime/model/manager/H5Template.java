@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "h5_template")
 public class H5Template extends BaseModel{
 
-    @Field("_id")
     private String id;
 
     /**

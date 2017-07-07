@@ -37,7 +37,7 @@ public class RealTimeDanmuService {
 
     public void pushDanmuToManager(String partyId) {
 
-        List<Channel> channelList = danmuChannelRepository.getManagerChannelList(partyId);
+        List<Channel> channelList = danmuChannelRepository.findChannelListByPartyId(partyId);
         if (!ListUtils.checkListIsNotNull(channelList)) {
             return;
         }
@@ -61,7 +61,7 @@ public class RealTimeDanmuService {
         logger.info("开始给管理员分配任务");
         List<AdminTaskModel> adminTaskModelList = new ArrayList<AdminTaskModel>();
         for (Channel channel : channelList) {
-            AdminTaskModel adminTaskModel = danmuChannelRepository.get(channel);
+            AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(channel);
             String channelId = channel.id().asLongText();
             adminTaskModel.setAdminId(channelId);
             adminTaskModel.setChannel(channel);

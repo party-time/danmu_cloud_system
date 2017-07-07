@@ -13,7 +13,6 @@ import java.util.Map;
 @Document(collection = "ad_timer_danmu")
 public class AdTimerDanmu extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     /**

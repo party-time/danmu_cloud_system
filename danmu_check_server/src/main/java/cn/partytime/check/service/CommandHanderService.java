@@ -10,6 +10,7 @@ import cn.partytime.check.util.CommandTypeConst;
 import cn.partytime.common.cachekey.*;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
+import cn.partytime.common.util.BooleanUtils;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.common.util.ListUtils;
@@ -82,47 +83,49 @@ public class CommandHanderService {
     private AdminUserService adminUserService;
 
 
-    public void commandHandler(CommandModel commandModel, Channel channel) {
+    public void commandHandler(Map<String, Object> map, Channel channel) {
         //类型
-        String type = commandModel.getType();
+        String type = String.valueOf(map.get("type"));
         //秘钥
-        String key = commandModel.getKey();
-        String partyId = commandModel.getPartyId();
-        String addressId = commandModel.getAddressId();
+        String key = String.valueOf(map.get("key"));
+        String partyId = String.valueOf(map.get("partyId"));
+        String addressId = String.valueOf(map.get("addressId"));
+        int partyType = IntegerUtils.objectConvertToInt(map.get("partyType"));
+        Object object = map.get("data");
 
         if (CommandTypeConst.PARTY_STATUS.equals(type)) {
             //设置电影开始
-            partyStauts(type, partyId, addressId, commandModel.getPartyCtrl(), channel);
+            partyStauts(type, partyId, addressId,object , channel,partyType);
         } else if (CommandTypeConst.INIT.equals(type)) {
             //初始化
-            initHandler(type, partyId, addressId, channel,key);
+            initHandler(type, partyId, addressId, channel,key,partyType);
         } else if (CommandTypeConst.PRE_DANMU.equals(type)) {
             //预制弹幕处理
-            preDanmuHandler(type, partyId, addressId, commandModel.getPreDanmu(), channel);
+            preDanmuHandler(type, partyId, addressId, object, channel,partyType);
         } else if (CommandTypeConst.BLOCK_DANMU.equals(type)) {
             //屏蔽弹幕处理
-            blockDanmuHandler(commandModel.getBlockDanmu(),channel);
+            blockDanmuHandler(object,channel,partyType);
         } else if (CommandTypeConst.NORMAL_DANMU.equals(type)) {
             //普通弹幕处理
-            normalOrtestDanmuDanmuHandler(type, partyId, addressId, commandModel.getDanmu(),channel);
+            normalOrtestDanmuDanmuHandler(type, partyId, addressId, object,channel,partyType);
         } else if (CommandTypeConst.TEST_DANMU.equals(type)) {
             //测试弹幕处理
-            normalOrtestDanmuDanmuHandler(type, partyId, addressId, commandModel.getDanmu(),channel);
+            normalOrtestDanmuDanmuHandler(type, partyId, addressId, object,channel,partyType);
         } else if (CommandTypeConst.SPECIAL_MOV.equals(type)) {
             //动画特效
-            specialMovHandler(type, partyId, addressId, commandModel.getVideo(), channel);
+            specialMovHandler(type, partyId, addressId, object, channel,partyType);
         }else if (CommandTypeConst.DELAY_SECOND.equals(type)) {
             //是否开启延迟时间
-            delayTimeHandler(partyId, commandModel.getDelayTime(), channel);
+            delayTimeHandler(partyId,object, channel,partyType);
         } else if (CommandTypeConst.TEST_MODEL.equals(type)) {
             //是否开启测试模式
-            testModelHander(partyId, addressId, commandModel.getTestDanmu(), channel);
+            testModelHander(partyId, addressId, object, channel,partyType);
         } else if (CommandTypeConst.FIND_CLIENTLIST.equals(type)) {
             //查找客户端数量
-            findClientList(type, addressId, channel);
+            findClientList(type, addressId, channel,partyType);
         } else if (CommandTypeConst.DANMU_DENSITY.equals(type)) {
             //设置弹幕密度
-            setDanmuDensity(type, addressId, partyId, commandModel.getDensity(), channel);
+            setDanmuDensity(type, addressId, partyId, object, channel,partyType);
         }
     }
 
@@ -133,9 +136,12 @@ public class CommandHanderService {
      *
      * @param channel
      */
-    public void setDanmuDensity(String type, String addressId, String partyId, DanmuDensityComModel danmuDensityComModel, Channel channel) {
+    public void setDanmuDensity(String type, String addressId, String partyId, Object object, Channel channel,int partyType) {
 
-        int danmuDensity = danmuDensityComModel.getDanmuDensity();
+
+
+        Map<String,Object> map = convertObjectToMap(object);
+        int danmuDensity = Integer.parseInt(String.valueOf(map.get("danmuDensity")));
 
         //将弹幕密度存入缓存
         String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId;
@@ -148,7 +154,7 @@ public class CommandHanderService {
         }
         String msg = JSON.toJSONString(setObjectToBms(type, danmuDensity));
         logger.info("反馈给管理员的消息,{}", msg);
-        pushCommandToPartyAdmin(partyId, type, msg);
+        pushCommandToPartyAdmin(partyType,partyId, type, msg);
     }
 
 
@@ -157,7 +163,7 @@ public class CommandHanderService {
      *
      * @param channel
      */
-    public void findClientList(String type, String addressId, Channel channel) {
+    public void findClientList(String type, String addressId, Channel channel,int partyType) {
         logger.info("获取在线客户端");
         try {
             logger.info("获取地址{}客户端信息", addressId);
@@ -176,11 +182,13 @@ public class CommandHanderService {
     /**
      * 测试模式的开启
      */
-    private void testModelHander(String partyId, String addressId, TestDanmuComModel testDanmuComModel, Channel channel) {
+    private void testModelHander(String partyId, String addressId, Object object, Channel channel,int partyType) {
         logger.info("测试模式操作");
         try {
+
+            Map<String,Object> map = convertObjectToMap(object);
             //测试模式的开启状
-            boolean status = testDanmuComModel.getStatus();
+            boolean status = BooleanUtils.objectConvertToBoolean(map.get("status"));
             logger.info("活动:{},测试模式开启状态:{}", partyId, status);
             String key = FunctionControlCacheKey.FUNCITON_CONTROL_TESTMODEL + partyId;
             if (status) {
@@ -195,7 +203,7 @@ public class CommandHanderService {
 
             String msg = JSON.toJSONString(setObjectToBms(CommandTypeConst.TEST_MODEL, status));
             logger.info("反馈给管理员的消息:" + msg);
-            pushCommandToPartyAdmin(partyId, CommandTypeConst.TEST_MODEL, msg);
+            pushCommandToPartyAdmin(partyType,partyId, CommandTypeConst.TEST_MODEL, msg);
         } catch (Exception e) {
             logger.info("测试模式操作异常,{}", e.getMessage());
         }
@@ -204,18 +212,19 @@ public class CommandHanderService {
     /**
      * 延迟时间的开启处理
      */
-    private void delayTimeHandler(String partyId, DelayTimeComModel delayTimeComModel, Channel channel) {
+    private void delayTimeHandler(String partyId, Object object, Channel channel,int partyType) {
         logger.info("延迟时间操作");
         try {
-            boolean status = delayTimeComModel.getStatus();
+            Map<String,Object> map = convertObjectToMap(object);
+            boolean status = BooleanUtils.objectConvertToBoolean(map.get("status"));
             logger.info("活动:{},延迟时间操作状态:{}", partyId, status);
             String key = FunctionControlCacheKey.FUNCITON_CONTROL_DELAYSECOND + partyId;
             if (status) {
                 redisService.incrKey(key, 1);
                 redisService.expire(key,60*60*24*7);
             } else {
-                Object object = redisService.get(key);
-                if (object != null && IntegerUtils.objectConvertToInt(object) < 1) {
+                Object delayObject = redisService.get(key);
+                if (delayObject != null && IntegerUtils.objectConvertToInt(delayObject) < 1) {
                     redisService.set(key, 0);
                     redisService.expire(key,60*60*24*7);
                 } else {
@@ -225,7 +234,7 @@ public class CommandHanderService {
             }
             String msg = JSON.toJSONString(setObjectToBms(CommandTypeConst.DELAY_SECOND, redisService.get(key)));
             logger.info("反馈给管理员的消息:" + msg);
-            pushCommandToPartyAdmin(partyId, CommandTypeConst.DELAY_SECOND, msg);
+            pushCommandToPartyAdmin(partyType,partyId, CommandTypeConst.DELAY_SECOND, msg);
 
         } catch (Exception e) {
             logger.info("延迟时间操作异常,{}", e.getMessage());
@@ -241,11 +250,12 @@ public class CommandHanderService {
     /**
      * 动画特效处理
      */
-    private void specialMovHandler(String type, String partyId, String addressId, VideoComModel videoComModel, Channel channel) {
+    private void specialMovHandler(String type, String partyId, String addressId, Object datObject, Channel channel,int partyType) {
         Map<String, Object> result = new HashMap<String, Object>();
 
-        String id = videoComModel.getId();
-        int status = videoComModel.getStatus();
+        Map<String,Object> map = convertObjectToMap(datObject);
+        String id = String.valueOf(map.get("id"));
+        int status = IntegerUtils.objectConvertToInt(map.get("status"));
 
         //清除动画特效缓存
         String key = FunctionControlCacheKey.FUNCITON_CONTROL_SPECIALMOV + partyId;
@@ -259,7 +269,7 @@ public class CommandHanderService {
             result.put("status", status);
 
             //广播命令给所有管理员
-            pushCommandToPartyAdmin(partyId, type, JSON.toJSONString(setObjectToBms(type, result)));
+            pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, result)));
 
 
 
@@ -290,7 +300,7 @@ public class CommandHanderService {
                 result.put("id", id);
                 result.put("status", status);
                 //广播命令给所有管理员
-                pushCommandToPartyAdmin(partyId, type, JSON.toJSONString(setObjectToBms(type, result)));
+                pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, result)));
 
 
 
@@ -318,7 +328,7 @@ public class CommandHanderService {
                 result.put("id", id);
                 result.put("status", status);
                 //广播命令给所有管理员
-                pushCommandToPartyAdmin(partyId, type, JSON.toJSONString(setObjectToBms(type, result)));
+                pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, result)));
 
 
 
@@ -354,20 +364,24 @@ public class CommandHanderService {
     /**
      * 普通弹幕处理
      */
-    public void normalOrtestDanmuDanmuHandler(String type, String partyId, String addressId, DanmuComModel danmuComModel, Channel channel) {
+    public void normalOrtestDanmuDanmuHandler(String type, String partyId, String addressId, Object datObject, Channel channel,int partyType) {
         logger.info("向客户端广播弹幕");
         try {
-            String color = danmuComModel.getColor();
-            String msg = danmuComModel.getMessage();
-            String openId = danmuComModel.getOpenId();
+            Map<String,Object> map = convertObjectToMap(datObject);
+
+
+            String color = String.valueOf(map.get("color"));
+            String msg = String.valueOf(map.get("message"));
+            String openId = String.valueOf(map.get("openId"));
+            String id = String.valueOf(map.get("id"));
             logger.info("向客户端广播弹幕，活动:{}，地址:{},消息:{},颜色:{},openId:{}", partyId, addressId, msg, color, openId);
 
             //获取管理员通道
-            AdminTaskModel adminTaskModel = danmuChannelRepository.get(channel);
+            AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(partyType,channel);
 
             if(CommandTypeConst.NORMAL_DANMU.equals(type)){
 
-                DanmuLog danmuLog = danmuLogService.findDanmuLogById(danmuComModel.getId());
+                DanmuLog danmuLog = danmuLogService.findDanmuLogById(id);
                 CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(danmuLog.getTemplateId());
 
                 //更新弹幕状态
@@ -400,7 +414,7 @@ public class CommandHanderService {
                 pubDanmuToUserCachList(partyId, addressId, commandObject);
             }else{
 
-                DanmuModel danmuLog = danmuService.findById(danmuComModel.getId());
+                DanmuModel danmuLog = danmuService.findById(id);
                 CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(danmuLog.getTemplateId());
 
                 Map<String,Object> commandObject = new HashMap<String,Object>();
@@ -454,13 +468,15 @@ public class CommandHanderService {
     /**
      * 屏蔽弹幕处理
      */
-    public void blockDanmuHandler(BlockDanmuComModel blockDanmuComModel,Channel channel) {
+    public void blockDanmuHandler(Object datObject,Channel channel,int partyType) {
         logger.info("屏幕弹幕操作");
         try {
 
-            AdminTaskModel adminTaskModel = danmuChannelRepository.get(channel);
+            Map<String,Object> map = convertObjectToMap(datObject);
+            String id= String.valueOf(map.get("id"));
+            AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(partyType,channel);
             AdminUser adminUser =  adminUserService.getAdminUser(adminTaskModel.getAuthKey());
-            DanmuLog danmuLog =danmuLogService.findDanmuLogById(blockDanmuComModel.getId());
+            DanmuLog danmuLog =danmuLogService.findDanmuLogById(id);
             danmuLog.setCheckUserId(adminUser.getId());
             danmuLog.setBlocked(true);
             danmuLog.setViewFlg(true);
@@ -489,12 +505,13 @@ public class CommandHanderService {
      *
      * @return
      */
-    private void preDanmuHandler(String type, String partyId, String addressId, PreDanmuComModel preDanmuComModel, Channel channel) {
+    private void preDanmuHandler(String type, String partyId, String addressId, Object object, Channel channel,int partyType) {
         logger.info("预制弹幕处理操作");
         try {
             //活动编号
+            Map<String,Object> map = convertObjectToMap(object);
             Map<String, Object> result = new HashMap<String, Object>();
-            boolean status = preDanmuComModel.getStatus();
+            boolean status = BooleanUtils.objectConvertToBoolean(map.get("status"));
             logger.info("预制弹幕处理操作,接收参数,活动:{},状态:{},类型:{}", partyId, status, type);
             String key = FunctionControlCacheKey.FUNCITON_CONTROL_PREDANMU + partyId;
             String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
@@ -528,7 +545,7 @@ public class CommandHanderService {
             //sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
 
             //命令广播给活动下的所有管理员
-            pushCommandToPartyAdmin(partyId, type, JSON.toJSONString(setObjectToBms(type, result)));
+            pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, result)));
 
         } catch (Exception e) {
             logger.error("预制弹幕处理异常:{}", e.getMessage());
@@ -544,14 +561,17 @@ public class CommandHanderService {
      * @param partyComModel
      * @param channel
      */
-    private void partyStauts(String type, String partyId, String addressId, PartyComModel partyComModel, Channel channel) {
+    private void partyStauts(String type, String partyId, String addressId, Object object, Channel channel,int partyType) {
         Map<String, Object> map = new HashMap<String, Object>();
         DanmuResult danmuResult = new DanmuResult();
         danmuResult.setType(type);
         Date now = DateUtils.getCurrentDate();
         Party party = partyService.findById(partyId);
+
+
         //活动状态
-        int status = partyComModel.getStatus();
+        Map<String,Object> dataMap = convertObjectToMap(object);
+        int status = IntegerUtils.objectConvertToInt(dataMap.get("status"));
         map.put("status", status);
         //活动结束
         if (status == 3) {
@@ -576,13 +596,13 @@ public class CommandHanderService {
             party.setUpdateTime(now);
             party.setStatus(status);
             partyService.updateParty(party);
-            pushCommandToPartyAdmin(partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
+            pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
 
         } else if (status == 2) {
             //如果电影开始过
             if (party.getStatus() == 2) {
                 map.put("status", party.getStatus());
-                pushCommandToPartyAdmin(partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
+                pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
                 return;
             }
             //判断当前场地是否有其他活动正在进行
@@ -610,7 +630,7 @@ public class CommandHanderService {
             party.setActivityStartTime(now);
             party.setStatus(status);
             partyService.updateParty(party);
-            pushCommandToPartyAdmin(partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
+            pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
 
         } else if (status == 1) {
 
@@ -618,7 +638,7 @@ public class CommandHanderService {
             if (party.getStatus() == 1) {
                 //活动已将开始
                 map.put("status", party.getStatus());
-                pushCommandToPartyAdmin(partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
+                pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
                 return;
             }
 
@@ -634,7 +654,7 @@ public class CommandHanderService {
             }else if (progressParty != null && progressParty.getId().equals(partyId)) {
                 //通知bms
                 map.put("status", progressParty.getStatus());
-                pushCommandToPartyAdmin(partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
+                pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
                 return;
             }
 
@@ -652,7 +672,7 @@ public class CommandHanderService {
                 party.setStartTime(now);
                 party.setUpdateTime(now);
                 party.setStatus(status);
-                pushCommandToPartyAdmin(partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
+                pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
                 partyService.updateParty(party);
             }
         }
@@ -684,7 +704,7 @@ public class CommandHanderService {
      * @return
      */
 
-    private void initHandler(String type, String partyId, String addressId, Channel channel,String key) {
+    private void initHandler(String type, String partyId, String addressId, Channel channel,String key,int partyType) {
         logger.info("初始化连接，活动:{}，地址:{}", partyId, addressId);
 
         //ConcurrentHashMap<Channel, AdminTaskModel> adminTaskModelConcurrentHashMap = danmuChannelRepository.findAdminTaskModelConcurrentHashMap();
@@ -727,49 +747,56 @@ public class CommandHanderService {
 
 
         //缓存管理员与通道的关系
-        AdminTaskModel adminTaskModel = new AdminTaskModel();
-        adminTaskModel.setPartyId(partyId);
+        /*AdminTaskModel adminTaskModel = new AdminTaskModel();
+
         adminTaskModel.setAuthKey(key);
-        adminTaskModel.setAdminId(channel.id().asLongText());
-        adminTaskModel.setAddressId(addressId);
+
+
         adminTaskModel.setAdminName(adminUser.getUserName());
-        danmuChannelRepository.set(channel, adminTaskModel);
+        danmuChannelRepository.saveChannelAdminRelation(partyType,channel, adminTaskModel);*/
+        AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(partyType,channel);
+        adminTaskModel.setAdminId(channel.id().asLongText());
+        adminTaskModel.setPartyId(partyId);
+        adminTaskModel.setPartyType(partyType);
+        adminTaskModel.setAddressId(addressId);
 
+        danmuChannelRepository.saveChannelAdminRelation(partyType,channel, adminTaskModel);
 
-
-
-
-        danmuChannelRepository.setManagerChannelIntoList(partyId, channel);
-        //获取活动信息
-        Party party = partyService.findById(partyId);
-        //判断活动是否结束
-        boolean partyIsOver = false;
-        if (party.getStatus() > 2) {
-            partyIsOver = false;
+        if(partyType==0){
+            //获取活动信息
+            Party party = partyService.findById(partyId);
+            //判断活动是否结束
+            boolean partyIsOver = false;
+            if (party.getStatus() > 2) {
+                partyIsOver = false;
+            }
+            //设置活动的开始时间
+            if (party.getActivityStartTime() != null) {
+                //设置电影时间
+                result.put("time", party.getActivityStartTime().getTime());
+            }
+            //设置活动状态
+            result.put(CommandTypeConst.PARTY_STATUS, party.getStatus());
+            //延迟时间
+            result.put("delaySecond", functionService.getDelayTime(partyId));
+            //预置弹幕是否开启
+            result.put(CommandTypeConst.PRE_DANMU, functionService.getpreDanmuStatus(partyId));
+            //测试模式是否开启
+            result.put("testIsOpen", functionService.testModeIsOpen(partyId));
+            //特效视频
+            result.put("specialVideo", functionService.getSpecialMovStatus(partyId));
+            //弹幕密度
+            result.put("danmuDensity", functionService.getDanmuDensity(partyId));
+            //活动名称
+            result.put("partyName", party.getName());
+            //初始化内容发送个管理界面
+            sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
         }
-        //设置活动的开始时间
-        if (party.getActivityStartTime() != null) {
-            //设置电影时间
-            result.put("time", party.getActivityStartTime().getTime());
-        }
-        //设置活动状态
-        result.put(CommandTypeConst.PARTY_STATUS, party.getStatus());
-        //延迟时间
-        result.put("delaySecond", functionService.getDelayTime(partyId));
-        //预置弹幕是否开启
-        result.put(CommandTypeConst.PRE_DANMU, functionService.getpreDanmuStatus(partyId));
-        //测试模式是否开启
-        result.put("testIsOpen", functionService.testModeIsOpen(partyId));
-        //特效视频
-        result.put("specialVideo", functionService.getSpecialMovStatus(partyId));
-        //弹幕密度
-        result.put("danmuDensity", functionService.getDanmuDensity(partyId));
-        //活动名称
-        result.put("partyName", party.getName());
-        //初始化内容发送个管理界面
-        sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
+
+
+
         //推送给所有管理员信息
-        pushCommandToPartyAdmin(partyId, CommandTypeConst.ONLINE_AMDIN_COUNT, null);
+        pushCommandToPartyAdmin(partyType,partyId, CommandTypeConst.ONLINE_AMDIN_COUNT, null);
     }
 
 
@@ -830,7 +857,7 @@ public class CommandHanderService {
      */
     public void forceLogout(Channel channel) {
         //移除弹幕池与通道的关系
-        AdminTaskModel adminTaskModel = danmuChannelRepository.get(channel);
+        AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(channel);
 
         //清除客户端缓存信息
         clearClientCacheData(adminTaskModel, channel);
@@ -851,9 +878,9 @@ public class CommandHanderService {
 
             redisService.expire(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+adminTaskModel.getAuthKey(),0);
 
-            danmuChannelRepository.removeManagerChannel(partyId, channel);
+            danmuChannelRepository.remove(channel);
 
-            pushCommandToPartyAdmin(partyId, CommandTypeConst.ONLINE_AMDIN_COUNT, null);
+             pushCommandToPartyAdmin(adminTaskModel.getPartyType(),partyId, CommandTypeConst.ONLINE_AMDIN_COUNT, null);
         }
     }
 
@@ -891,15 +918,15 @@ public class CommandHanderService {
      * @param commandType
      * @param message
      */
-    private void pushCommandToPartyAdmin(String partyId, String commandType, String message) {
+    private void pushCommandToPartyAdmin(int partyType,String partyId, String commandType, String message) {
         logger.info("获取当前活动下管理员数量");
         try {
-            List<Channel> channelList = danmuChannelRepository.getManagerChannelList(partyId);
+            List<Channel> channelList = danmuChannelRepository.findAdminTaskModelChnnelListByPartyId(partyType,partyId);
             List<String> managerNameList = new ArrayList<>();
             if (ListUtils.checkListIsNotNull(channelList)) {
                 if (CommandTypeConst.ONLINE_AMDIN_COUNT.equals(commandType)) {
                     for (Channel channel : channelList) {
-                        AdminTaskModel adminTaskModel = danmuChannelRepository.get(channel);
+                        AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(channel);
                         managerNameList.add(adminTaskModel.getAdminName());
 
                     }
@@ -910,15 +937,6 @@ public class CommandHanderService {
                     sendMessageToBMS(channel, message);
                 }
 
-                /*for (Channel channel : channelList) {
-                    if (CommandTypeConst.ONLINE_AMDIN_COUNT.equals(commandType)) {
-                        //在线管理员数量
-                        message = JSON.toJSONString(setObjectToBms(commandType, channelList.size()));
-                    }
-                    logger.info("发送的消息:" + message);
-                    sendMessageToBMS(channel, message);
-                    logger.info("反馈给管理员的消息,{}", message);
-                }*/
             }
 
         } catch (Exception e) {
@@ -926,4 +944,9 @@ public class CommandHanderService {
         }
     }
 
+
+    private Map<String,Object> convertObjectToMap(Object object){
+        Map<String, Object> map = (Map<String, Object>) JSON.parse(String.valueOf(object));
+        return map;
+    }
 }
