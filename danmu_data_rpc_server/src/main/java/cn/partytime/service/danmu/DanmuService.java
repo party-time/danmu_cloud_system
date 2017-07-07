@@ -14,9 +14,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -27,7 +25,7 @@ import java.util.Map;
  * Created by liuwei on 16/6/15.
  */
 
-@Controller
+@RestController
 @RequestMapping("/danmu")
 public class DanmuService {
 
@@ -37,7 +35,9 @@ public class DanmuService {
     @Autowired
     private DanmuRepository danmuRepository;
 
-    public DanmuModel save(DanmuModel danmuModel) {
+
+    @RequestMapping(value = "/save" ,method = RequestMethod.POST)
+    public DanmuModel save(@RequestBody  DanmuModel danmuModel) {
         return danmuRepository.save(danmuModel);
     }
 
@@ -52,10 +52,6 @@ public class DanmuService {
         return danmuRepository.findById(id);
     }
 
-
-
-
-
     public List<DanmuModel> findByDanmuPoolId(String danmuPoolId) {
         return danmuRepository.findByDanmuPoolId(danmuPoolId);
     }
@@ -66,10 +62,14 @@ public class DanmuService {
         return danmuRepository.findAll(pageRequest);
     }
 
-    public Page<DanmuModel> findDanmuByIsBlocked(int page, int size, boolean isBlocked){
+
+
+    @RequestMapping(value = "/findDanmuByIsBlocked" ,method = RequestMethod.GET)
+    public List<DanmuModel> findDanmuByIsBlocked(@RequestParam int page, @RequestParam int size, @RequestParam boolean isBlocked){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
-        return danmuRepository.findByIsBlocked(isBlocked,pageRequest);
+        Page<DanmuModel> danmuModelPage = danmuRepository.findByIsBlocked(isBlocked,pageRequest);
+        return danmuModelPage.getContent();
     }
 
 

@@ -1,7 +1,7 @@
 package cn.partytime.check.netty;
 
-import cn.partytime.danmu.distribution.model.command.CommandModel;
-import cn.partytime.danmu.distribution.service.CommandHanderService;
+import cn.partytime.check.model.command.CommandModel;
+import cn.partytime.check.service.CommandHanderService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;

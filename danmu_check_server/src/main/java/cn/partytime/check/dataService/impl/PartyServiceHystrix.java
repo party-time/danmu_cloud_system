@@ -14,4 +14,9 @@ public class PartyServiceHystrix implements PartyService {
     public Party findById(String partyId) {
         return null;
     }
+
+    @Override
+    public void updateParty(Party party) {
+
+    }
 }

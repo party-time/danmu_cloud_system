@@ -6,6 +6,7 @@ import cn.partytime.check.model.CmdTempAllData;
 import cn.partytime.check.model.DanmuLog;
 import cn.partytime.common.util.ServerConst;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,4 +20,8 @@ public interface DanmuLogService {
 
     @RequestMapping(value = "/danmuLog/findDanmuLogById" ,method = RequestMethod.GET)
     public DanmuLog findDanmuLogById(@RequestParam(value = "id") String id);
+
+
+    @RequestMapping(value = "/danmuLog/save" ,method = RequestMethod.POST)
+    public DanmuLog save(DanmuLog danmuLog);
 }

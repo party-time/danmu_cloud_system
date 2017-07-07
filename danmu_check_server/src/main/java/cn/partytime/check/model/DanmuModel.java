@@ -45,6 +45,8 @@ public class DanmuModel{
 
     private Date updateTime;
 
+    private Date createTime;
+
 
     public String getId() {
         return id;
@@ -132,5 +134,13 @@ public class DanmuModel{
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

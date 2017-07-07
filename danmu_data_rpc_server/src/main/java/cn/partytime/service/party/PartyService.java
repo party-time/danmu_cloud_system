@@ -15,8 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ import java.util.List;
  */
 
 
-@Controller
+@RestController
 @RequestMapping("/party")
 public class PartyService {
 
@@ -103,7 +102,9 @@ public class PartyService {
         return partyRepository.findByIdIn(partyIds);
     }
 
-    public void updateParty(Party party) {
+
+    @RequestMapping(value = "/updateParty" ,method = RequestMethod.POST)
+    public void updateParty(@RequestBody Party party) {
         if (party == null) {
             throw new IllegalArgumentException("活动不存在");
         }

@@ -22,6 +22,10 @@ public class UserSessionService {
      */
     public Boolean checkAuthKey(String cookieValue){
         String key = AdminUserCacheKey.ADMIN_USER_CACHE_KEY+cookieValue;
+        System.out.println("key======================="+redisService.get(key.replace(" ","")));
+
+        redisService.set("ppppppppppppppp","234234234324");
+        System.out.println("=================>"+redisService.get("mykey"));
         return redisService.isEXIST(key);
     }
 

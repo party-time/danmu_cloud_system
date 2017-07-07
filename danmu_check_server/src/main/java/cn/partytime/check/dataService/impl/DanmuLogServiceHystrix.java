@@ -16,4 +16,9 @@ public class DanmuLogServiceHystrix implements DanmuLogService {
     public DanmuLog findDanmuLogById(String id) {
         return null;
     }
+
+    @Override
+    public DanmuLog save(DanmuLog danmuLog) {
+        return null;
+    }
 }

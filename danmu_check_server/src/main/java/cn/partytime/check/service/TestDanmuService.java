@@ -1,13 +1,15 @@
 package cn.partytime.check.service;
 
+import cn.partytime.check.config.DanmuChannelRepository;
+import cn.partytime.check.dataService.CmdLogicService;
+import cn.partytime.check.dataService.DanmuService;
+import cn.partytime.check.handlerThread.TestDanmuHandler;
+import cn.partytime.check.model.CmdTempAllData;
+import cn.partytime.check.model.CmdTempComponentData;
+import cn.partytime.check.model.DanmuModel;
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
 import cn.partytime.common.util.BooleanUtils;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.danmu.distribution.config.DanmuChannelRepository;
-import cn.partytime.danmu.distribution.handlerThread.TestDanmuHandler;
-import cn.partytime.logic.cmdCommand.CmdTempAllData;
-import cn.partytime.logic.cmdCommand.CmdTempComponentData;
-import cn.partytime.model.danmu.DanmuModel;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -15,7 +17,6 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class TestDanmuService {
 
 
     public void sendTestDanmu(String addressId, String partyId) {
-        Page<DanmuModel> danmuModelPage = danmuService.findDanmuByIsBlocked(0, 200, false);
+        List<DanmuModel> danmuModelPage = danmuService.findDanmuByIsBlocked(0, 200, false);
         Iterator<DanmuModel> danmuModelIterator = danmuModelPage.iterator();
         int count = 0;
         while (danmuModelIterator.hasNext()) {

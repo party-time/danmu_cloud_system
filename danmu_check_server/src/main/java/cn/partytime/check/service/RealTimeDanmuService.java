@@ -1,9 +1,9 @@
 package cn.partytime.check.service;
 
+import cn.partytime.check.config.DanmuChannelRepository;
+import cn.partytime.check.model.AdminTaskModel;
 import cn.partytime.common.cachekey.DanmuCacheKey;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.danmu.distribution.config.DanmuChannelRepository;
-import cn.partytime.danmu.distribution.model.AdminTaskModel;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -34,10 +34,6 @@ public class RealTimeDanmuService {
     @Autowired
     private ManagerCachService managerCachService;
 
-
-    @Value("${task.danmu.count}")
-    @NonNull
-    private int taskCount;
 
     public void pushDanmuToManager(String partyId) {
 

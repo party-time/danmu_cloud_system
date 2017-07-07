@@ -1,7 +1,7 @@
 package cn.partytime.check.netty;
 
-import cn.partytime.danmu.distribution.service.CommandHanderService;
-import cn.partytime.danmu.distribution.service.UserSessionService;
+import cn.partytime.check.service.CommandHanderService;
+import cn.partytime.check.service.UserSessionService;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
@@ -29,7 +29,7 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 @Qualifier("webSocketServerHandler")
 @ChannelHandler.Sharable
 public class WebSocketServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
-    private static final Logger logger = LoggerFactory.getLogger(CommandHanderService.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketServerHandler.class);
 
     private WebSocketServerHandshaker handshaker;
 

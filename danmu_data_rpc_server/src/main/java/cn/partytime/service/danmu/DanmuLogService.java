@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +26,8 @@ public class DanmuLogService {
     private DanmuLogRepository danmuLogRepository;
 
 
-    public DanmuLog save(DanmuLog danmuLog){
+    @RequestMapping(value = "/save" ,method = RequestMethod.POST)
+    public DanmuLog save(@RequestBody DanmuLog danmuLog){
         return  danmuLogRepository.save(danmuLog);
     }
 
