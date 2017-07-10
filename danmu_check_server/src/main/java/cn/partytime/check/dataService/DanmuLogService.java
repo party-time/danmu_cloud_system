@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = ServerConst.SERVER_NAME_DATASERVER,fallback = DanmuLogServiceHystrix.class)
 public interface DanmuLogService {
 
-    @RequestMapping(value = "/danmuLog/findDanmuLogById" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcDanmu/findDanmuLogById" ,method = RequestMethod.GET)
     public DanmuLog findDanmuLogById(@RequestParam(value = "id") String id);
 
 
-    @RequestMapping(value = "/danmuLog/save" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/rpcDanmu/danmuLogSave" ,method = RequestMethod.POST)
     public DanmuLog save(DanmuLog danmuLog);
 }

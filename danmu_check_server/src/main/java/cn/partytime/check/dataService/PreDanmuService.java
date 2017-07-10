@@ -17,6 +17,6 @@ import java.util.List;
 @FeignClient(value = ServerConst.SERVER_NAME_DATASERVER,fallback = PreDanmuServiceHystrix.class)
 public interface PreDanmuService {
 
-    @RequestMapping(value = "/preDanmu/findByPartyId" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcRepDanmu/findByPartyId" ,method = RequestMethod.GET)
     public List<PreDanmuModel> findByPartyId(@RequestParam(value = "partyId") String partyId);
 }

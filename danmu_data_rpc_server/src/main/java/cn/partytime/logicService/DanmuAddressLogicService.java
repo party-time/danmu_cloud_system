@@ -4,34 +4,33 @@ import cn.partytime.common.constants.DistanceConst;
 import cn.partytime.common.util.DistanceUtil;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.model.manager.DanmuAddress;
-import cn.partytime.service.address.DanmuAddressService;
+import cn.partytime.redis.service.RedisService;
+import cn.partytime.service.DanmuAddressService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by lENOVO on 2016/10/24.
+ * Created by dm on 2017/7/10.
  */
-@RestController
-@RequestMapping("/danmuAddressLogic")
+
+@Service
 public class DanmuAddressLogicService {
 
     private static final Logger logger = LoggerFactory.getLogger(DanmuAddressLogicService.class);
     @Autowired
     private DanmuAddressService danmuAddressService;
 
+    @Autowired
+    private RedisService redisService;
 
 
-    @RequestMapping(value = "/findAddressByLonLat" ,method = RequestMethod.GET)
-    public DanmuAddress findAddressByLonLat(@RequestParam Double longitude, @RequestParam Double latitude) {
+    public DanmuAddress findAddressByLonLat(Double longitude, Double latitude) {
 
         List<String> addressList = danmuAddressService.findAddressIdList(longitude, latitude, DistanceConst.WEChAT_CLIENT_DISTANCE);
         List<DanmuAddress> resultList = new ArrayList<DanmuAddress>();
@@ -56,7 +55,6 @@ public class DanmuAddressLogicService {
         }
         return null;
     }
-
 
 
 }

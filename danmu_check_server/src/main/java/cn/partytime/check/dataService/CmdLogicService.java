@@ -19,7 +19,7 @@ import java.util.List;
 @FeignClient(value = ServerConst.SERVER_NAME_DATASERVER,fallback = CmdLogicServiceHystrix.class)
 public interface CmdLogicService {
 
-    @RequestMapping(value = "/cmdLogic/findCmdTempAllDataByIdFromCache" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcCmd/findCmdTempAllDataByIdFromCache" ,method = RequestMethod.GET)
     public CmdTempAllData findCmdTempAllDataByIdFromCache(@RequestParam(value = "templateId") String templateId);
 
 

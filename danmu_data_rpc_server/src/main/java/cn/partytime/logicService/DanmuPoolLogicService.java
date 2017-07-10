@@ -3,9 +3,9 @@ package cn.partytime.logicService;
 import cn.partytime.model.danmu.DanmuModel;
 import cn.partytime.model.danmu.DanmuPool;
 import cn.partytime.model.manager.PartyAddressRelation;
-import cn.partytime.service.danmu.DanmuPoolService;
-import cn.partytime.service.danmu.DanmuService;
-import cn.partytime.service.party.PartyAddressRelationService;
+import cn.partytime.service.DanmuPoolService;
+import cn.partytime.service.DanmuService;
+import cn.partytime.service.PartyAddressRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

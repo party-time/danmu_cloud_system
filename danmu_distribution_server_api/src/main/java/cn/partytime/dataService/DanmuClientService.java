@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = ServerConst.SERVER_NAME_DATASERVER,fallback = DanmuClientServiceHystrix.class)
 public interface DanmuClientService {
 
-    @RequestMapping(value = "/danmuClient/findByRegistCode" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcDanmuClient/findByRegistCode" ,method = RequestMethod.GET)
     public DanmuClient findByRegistCode(@RequestParam(value = "registCode") String registCode);
 
 }

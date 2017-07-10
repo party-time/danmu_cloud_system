@@ -1,9 +1,8 @@
 package cn.partytime.collector.service;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
-import cn.partytime.collector.dataService.PartyLogicService;
-import cn.partytime.collector.dataService.WechatUserInfoService;
-import cn.partytime.collector.dataService.WechatUserService;
+import cn.partytime.collector.dataService.PartyService;
+import cn.partytime.collector.dataService.WechatService;
 import cn.partytime.collector.model.DanmuClientModel;
 import cn.partytime.collector.model.PartyLogicModel;
 import cn.partytime.collector.model.WechatUser;
@@ -20,7 +19,6 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -50,14 +48,11 @@ public class PotocolService {
 
 
     @Autowired
-    private WechatUserService wechatUserService;
-
-    @Autowired
-    private WechatUserInfoService wechatUserInfoService;
+    private WechatService wechatService;
 
 
     @Autowired
-    private PartyLogicService partyLogicService;
+    private PartyService partyService;
 
     /**
      * 协议处理
@@ -87,10 +82,10 @@ public class PotocolService {
                 forceLogout(channel);
             }
             //判断微信用户是否合法
-            WechatUser wechatUser = wechatUserService.findByOpenId(openId);
+            WechatUser wechatUser = wechatService.findByOpenId(openId);
             logger.info("当前登录的手机用户信息:{}", JSON.toJSONString(wechatUser));
-            WechatUserInfo wechatuserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
-            PartyLogicModel partyLogicModel = partyLogicService.findPartyByLonLat(wechatuserInfo.getLastLongitude(), wechatuserInfo.getLastLatitude());
+            WechatUserInfo wechatuserInfo = wechatService.findByWechatId(wechatUser.getId());
+            PartyLogicModel partyLogicModel = partyService.findPartyByLonLat(wechatuserInfo.getLastLongitude(), wechatuserInfo.getLastLatitude());
             //如果活动不存在，不做任何处理
             if (partyLogicModel == null) {
                 forceLogout(channel);

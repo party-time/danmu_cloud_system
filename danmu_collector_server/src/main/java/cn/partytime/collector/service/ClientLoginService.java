@@ -31,17 +31,15 @@ public class ClientLoginService {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientLoginService.class);
 
-    @Autowired
-    private WechatUserService wechatUserService;
 
     @Autowired
     private DanmuChannelRepository danmuChannelRepository;
 
     @Autowired
-    private DanmuAddressLogicService danmuAddressLogicService;
+    private DanmuAddressService danmuAddressService;
 
     @Autowired
-    private PartyLogicService partyLogicService;
+    private PartyService partyService;
 
     @Autowired
     private DanmuClientService danmuClientService;
@@ -53,7 +51,7 @@ public class ClientLoginService {
     private ClientChannelService clientChannelService;
 
     @Autowired
-    private WechatUserInfoService wechatUserInfoService;
+    private WechatService wechatService;
 
     @Autowired
     private ScreenDanmuService screenDanmuService;
@@ -106,7 +104,7 @@ public class ClientLoginService {
 
             //获取活动信息
             String commandType = PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS;
-            PartyLogicModel party = partyLogicService.findPartyAddressId(danmuClientModel.getAddressId());
+            PartyLogicModel party = partyService.findPartyAddressId(danmuClientModel.getAddressId());
             //只有是活动场的情况下，此处才有效果
             if (party != null) {
                 try{
@@ -155,20 +153,20 @@ public class ClientLoginService {
             channel.close();
         }
         //判断微信用户是否合法
-        WechatUser wechatUser = wechatUserService.findByOpenId(openId);
+        WechatUser wechatUser = wechatService.findByOpenId(openId);
         logger.info("当前登录的手机用户信息:{}", JSON.toJSONString(wechatUser));
         if (wechatUser == null) {
             logger.info("通过openId:{}获取的微信用户信息为空,用户为非法用户", openId);
             channel.close();
         }
 
-        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
+        WechatUserInfo wechatUserInfo = wechatService.findByWechatId(wechatUser.getId());
         if (wechatUserInfo == null) {
             logger.info("通过wechatId:{}获取的微信用户地理位置为空,用户为非法用户", wechatUserInfo);
             channel.close();
         }
 
-        DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+        DanmuAddress danmuAddress = danmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
         logger.info("通过经纬度:{},{}获取地址信息",wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude(),JSON.toJSONString(danmuAddress));
         //如果查询不到场地
         if (danmuAddress == null) {
@@ -177,7 +175,7 @@ public class ClientLoginService {
         String addressId = danmuAddress.getId();
         logger.info("手机获取的地址信息：{}",addressId);
 
-        PartyLogicModel party = partyLogicService.findPartyAddressId(addressId);
+        PartyLogicModel party = partyService.findPartyAddressId(addressId);
 
         logger.info("活动信息：{}",JSON.toJSONString(party));
         //如果活动不存在，不做任何处理
@@ -231,7 +229,7 @@ public class ClientLoginService {
 
             //获取活动信息
             String commandType = PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS;
-            PartyLogicModel party = partyLogicService.findPartyAddressId(danmuClientModel.getAddressId());
+            PartyLogicModel party = partyService.findPartyAddressId(danmuClientModel.getAddressId());
             //只有是活动场的情况下，此处才有效果
             if (party != null) {
                 try{

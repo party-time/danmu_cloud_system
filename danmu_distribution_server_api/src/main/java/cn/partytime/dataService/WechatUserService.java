@@ -17,13 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = ServerConst.SERVER_NAME_DATASERVER,fallback = WechatUserServiceHystrix.class)
 public interface WechatUserService {
 
-    /***
-     *     @RequestMapping(value = "/findByRegistCode" ,method = RequestMethod.GET)
-    public WechatUser findByOpenId(@RequestParam String openId) {
-    return wechatUserRepository.findByOpenId(openId);
-    }
-     */
-
-    @RequestMapping(value = "/wechatUserService/findByOpenId" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcWechat/findByOpenId" ,method = RequestMethod.GET)
     public WechatUser findByOpenId(@RequestParam(value = "openId") String openId);
 }

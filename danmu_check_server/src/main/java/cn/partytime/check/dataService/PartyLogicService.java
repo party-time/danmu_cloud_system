@@ -17,10 +17,10 @@ import java.util.List;
 @FeignClient(value = ServerConst.SERVER_NAME_DATASERVER,fallback = PartyLogicServiceHystrix.class)
 public interface PartyLogicService {
 
-    @RequestMapping(value = "/partyLogic/findAddressIdListByPartyId" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcParty/findAddressIdListByPartyId" ,method = RequestMethod.GET)
     public List<String> findAddressIdListByPartyId(@RequestParam(value = "partyId") String partyId);
 
 
-    @RequestMapping(value = "/partyLogic/getPartyId" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcParty/getPartyId" ,method = RequestMethod.GET)
     public Party getPartyId(@RequestParam(value = "addressId") String addressId);
 }

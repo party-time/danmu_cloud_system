@@ -19,14 +19,14 @@ import java.util.List;
 @FeignClient(value = ServerConst.SERVER_NAME_DATASERVER,fallback = DanmuServiceHystrix.class)
 public interface DanmuService {
 
-    @RequestMapping(value = "/danmu/findById" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcDanmu/findDanmuById" ,method = RequestMethod.GET)
     public DanmuModel findById(@RequestParam(value = "id") String id);
 
 
-    @RequestMapping(value = "/danmu/save" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/rpcDanmu/danmuSave" ,method = RequestMethod.POST)
     public DanmuModel save(DanmuModel danmuModel);
 
 
-    @RequestMapping(value = "/danmu/findDanmuByIsBlocked" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcDanmu/findDanmuByIsBlocked" ,method = RequestMethod.GET)
     public List<DanmuModel> findDanmuByIsBlocked(@RequestParam(value = "page") int page, @RequestParam(value = "size") int size, @RequestParam(value = "isBlocked") boolean isBlocked);
 }

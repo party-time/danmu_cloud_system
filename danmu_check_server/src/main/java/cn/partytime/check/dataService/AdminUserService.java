@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = ServerConst.SERVER_NAME_DATASERVER,fallback = AdminUserServiceHystrix.class)
 public interface AdminUserService {
 
-    @RequestMapping(value = "/adminUserService/getAdminUser" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcAdmin/getAdminUser" ,method = RequestMethod.GET)
     public AdminUser getAdminUser(@RequestParam(value = "authKey") String authKey);
 
 
-    @RequestMapping(value = "/adminUserService/checkAuthKey" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcAdmin/checkAuthKey" ,method = RequestMethod.GET)
     public Boolean checkAuthKey(@RequestParam(value = "authKey") String authKey);
     
 }

@@ -96,6 +96,19 @@ public class ResourceFileService {
         return resourceFileModel;
     }
 
+    /**
+     *
+     * @param fileName
+     * @return
+     */
+    public ResourceFile save(String fileName){
+        ResourceFile resourceFileModel = new ResourceFile();
+        resourceFileModel.setOriginalName(fileName);
+        resourceFileModel.setFileType(Const.RESOURCE_SHOP_IMG);
+        resourceFileModel = resourceFileRepository.save(resourceFileModel);
+        return resourceFileModel;
+    }
+
     public ResourceFile updateSmallFile(String id, String smallFileUrl, Long smallFileSize){
         ResourceFile resourceFile = resourceFileRepository.findOne(id);
         if( null != resourceFile){

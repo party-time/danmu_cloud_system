@@ -1,5 +1,6 @@
 package cn.partytime.collector.service;
 
+import cn.partytime.collector.dataService.PartyService;
 import cn.partytime.collector.model.PartyLogicModel;
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
 import cn.partytime.common.cachekey.PreDanmuCacheKey;
@@ -27,6 +28,9 @@ public class ClientPreDanmuService {
     @Autowired
     private ClientCacheService clientCacheService;
 
+    @Autowired
+    private PartyService partyService;
+
 
     /**
      * @param addressId
@@ -46,7 +50,7 @@ public class ClientPreDanmuService {
      * @return
      */
     public Object findPreDanmu(String addressId, Date nowDate, String partyId) {
-        PartyLogicModel party = null;
+        PartyLogicModel party = partyService.findPartyAddressId(addressId);
         //logger.info("预制弹幕获取：当前活动信息:{}", JSON.toJSONString(party));
         if (party != null) {
             partyId = party.getPartyId();

@@ -1,5 +1,6 @@
 package cn.partytime.collector.service;
 
+import cn.partytime.collector.dataService.PartyService;
 import cn.partytime.collector.model.PartyLogicModel;
 import cn.partytime.common.cachekey.PartyCacheKey;
 import cn.partytime.redis.service.RedisService;
@@ -18,6 +19,9 @@ public class ClientPartyService {
     @Autowired
     private RedisService redisService;
 
+    @Autowired
+    private PartyService partyService;
+
 
     public String findCurrentPatyId(String addressId){
 
@@ -26,7 +30,7 @@ public class ClientPartyService {
         if(object!=null){
             return String.valueOf(object);
         }else{
-            PartyLogicModel partyLogicModel =  null;
+            PartyLogicModel partyLogicModel =  partyService.findPartyAddressId(addressId);
             if(partyLogicModel!=null){
                 String partyId = partyLogicModel.getPartyId();
                 redisService.set(key,partyId);

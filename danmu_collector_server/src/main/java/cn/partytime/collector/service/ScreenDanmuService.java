@@ -1,5 +1,6 @@
 package cn.partytime.collector.service;
 
+import cn.partytime.collector.dataService.PartyService;
 import cn.partytime.common.cachekey.ScreenClientCacheKey;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
@@ -20,6 +21,9 @@ public class ScreenDanmuService {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private PartyService partyService;
 
     public void addScreenDanmuCount(String addressId){
         String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;
@@ -69,7 +73,7 @@ public class ScreenDanmuService {
      * @return
      */
     public int danmuCount(String addressId,int danmuCount,String partyId) {
-        int danmuDensity = 10;
+        int danmuDensity = partyService.getPartyDmDensity(addressId,partyId);
         logger.info("当前活动{}的弹幕密度是:{}",partyId,danmuDensity);
         if (danmuCount < danmuDensity) {
             return danmuDensity - danmuCount;

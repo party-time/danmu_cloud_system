@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = ServerConst.SERVER_NAME_DATASERVER,fallback = DanmuLibraryPartyServiceHystrix.class)
 public interface DanmuLibraryPartyService  {
 
-    @RequestMapping(value = "/danmuLibraryParty/findByPartyId" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcDanmuLibraryParty/findByPartyId" ,method = RequestMethod.GET)
     public DanmuLibraryParty findByPartyId(@RequestParam(value = "partyId") String partyId);
 
 }

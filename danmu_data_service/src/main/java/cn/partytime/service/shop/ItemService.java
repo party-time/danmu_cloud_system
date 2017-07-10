@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by administrator on 2017/6/26.
  */
@@ -39,6 +41,11 @@ public class ItemService {
 
     public void delById(String id){
         itemRepository.delete(id);
+    }
+
+    public List<Item> findByIds(List<String> idList){
+
+        return itemRepository.findByIdIn(idList);
     }
 
 
