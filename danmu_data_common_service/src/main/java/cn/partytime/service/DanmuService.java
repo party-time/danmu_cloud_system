@@ -1,6 +1,7 @@
 package cn.partytime.service;
 
 import cn.partytime.model.danmu.DanmuModel;
+import cn.partytime.model.danmu.PreDanmuModel;
 import cn.partytime.repository.danmu.DanmuRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by liuwei on 16/6/15.
@@ -57,6 +60,29 @@ public class DanmuService {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuRepository.findByIsBlocked(isBlocked,pageRequest);
+    }
+
+
+    public List<DanmuModel> findDanmuListByMsgLike(String msg, int page, int size){
+        Criteria criteria = new Criteria();
+        criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"));
+        Map<String, Object> result = new HashMap<>();
+        Query query = new Query(criteria);
+        query.skip(page * size);
+        query.limit(size);
+        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
+        return this.danmuMongoTemplate.find(query, DanmuModel.class);
+    }
+
+    public long findDanmuCountByMsgLike(String msg, int page, int size){
+        Criteria criteria = new Criteria();
+        criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"));
+        Map<String, Object> result = new HashMap<>();
+        Query query = new Query(criteria);
+        query.skip(page * size);
+        query.limit(size);
+        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
+        return this.danmuMongoTemplate.count(query, DanmuModel.class);
     }
 
 

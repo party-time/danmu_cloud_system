@@ -67,7 +67,7 @@ public class RpcCmdService {
     }
 
 
-
+    @RequestMapping(value = "/findCmdTempAllDataById" ,method = RequestMethod.GET)
     public CmdTempAllData findCmdTempAllDataById(String id){
         CmdTempAllData cmdTempAllData = new CmdTempAllData();
         CmdTemp cmdTemp = cmdTempService.findById(id);

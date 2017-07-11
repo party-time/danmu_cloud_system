@@ -142,6 +142,32 @@ public class PreDanmuService {
         return preDanmuRepository.findByDanmuLibraryId(dlId,pageRequest);
     }
 
+
+
+    public List<PreDanmuModel> findByDanmuLibraryIdAndMsgLike(int page, int size, String dlId, String msg){
+        Criteria criteria = new Criteria();
+        criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"), Criteria.where("danmuLibraryId").is(dlId));
+        Map<String, Object> result = new HashMap<>();
+        Query query = new Query(criteria);
+        query.skip(page * size);
+        query.limit(size);
+        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
+        List<PreDanmuModel> list = this.managerMongoTemplate.find(query, PreDanmuModel.class);
+        return list;
+    }
+
+    public long findByDanmuCountLibraryIdAndMsgLike(int page, int size, String dlId, String msg){
+        Criteria criteria = new Criteria();
+        criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"), Criteria.where("danmuLibraryId").is(dlId));
+        Map<String, Object> result = new HashMap<>();
+        Query query = new Query(criteria);
+        query.skip(page * size);
+        query.limit(size);
+        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
+        long count = this.managerMongoTemplate.count(query, PreDanmuModel.class);
+        return count;
+    }
+
     /*public PageResultModel<PreDanmuModel> findByDanmuLibraryIdAndMsgLike(int page, int size, String dlId, String msg){
 
         Criteria criteria = new Criteria();

@@ -7,25 +7,19 @@ import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.logic.danmu.PartyLogicModel;
 import cn.partytime.logicService.DanmuAddressLogicService;
-import cn.partytime.logicService.DanmuPoolLogicService;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.MovieSchedule;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.PartyAddressRelation;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.repository.manager.PartyRepository;
-import cn.partytime.service.DanmuAddressService;
-import cn.partytime.service.MovieScheduleService;
-import cn.partytime.service.PartyAddressRelationService;
-import cn.partytime.service.PartyService;
+import cn.partytime.service.*;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import sun.dc.pr.PRError;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,14 +60,11 @@ public class RpcPartyService {
     private PartyRepository partyRepository;
 
 
-
     @RequestMapping(value = "/findAddressIdListByPartyId" ,method = RequestMethod.GET)
     public List<String> findAddressIdListByPartyId(@RequestParam String partyId){
         List<PartyAddressRelation> partyAddressRelationList = partyAddressRelationService.findByPartyId(partyId);
 
         if(ListUtils.checkListIsNotNull(partyAddressRelationList)){
-            //
-
             List<String> addressIdList = new ArrayList<>();
             partyAddressRelationList.forEach(object -> addressIdList.add(object.getAddressId()));
             return addressIdList;
@@ -127,6 +118,8 @@ public class RpcPartyService {
      *
      * @param partyId
      */
+
+    @RequestMapping(value = "/deleteParty" ,method = RequestMethod.GET)
     public void deleteParty(String partyId) {
         //删除活动
         partyService.deleteById(partyId);
@@ -149,7 +142,9 @@ public class RpcPartyService {
      * @param party 活动
      * @return
      */
-    public boolean checkPartyIsOver(Party party) {
+
+    @RequestMapping(value = "/checkPartyIsOver" ,method = RequestMethod.POST)
+    public boolean checkPartyIsOver(@RequestBody Party party) {
         if (party.getStatus() >2) {
             return true;
         }
@@ -198,7 +193,9 @@ public class RpcPartyService {
     }
 
 
-    public PartyLogicModel findTemporaryParty(String addressId){
+
+    @RequestMapping(value = "/findTemporaryParty" ,method = RequestMethod.GET)
+    public PartyLogicModel findTemporaryParty(@RequestParam String addressId){
         PartyLogicModel partyLogicModel = null;
         Party party = getPartyId(addressId);
         //如果是电影场，获取的是活动信息
@@ -282,14 +279,13 @@ public class RpcPartyService {
                 partyLogicModel.setH5TempId(party.getH5TempId());
                 partyLogicModel.setDmDensity(party.getDmDensity());
 
-
-                /*String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyLogicModel.getPartyId();
+                String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyLogicModel.getPartyId();
                 Object object = redisService.get(key);
                 if(object!=null){
                     partyLogicModel.setDmDensity(IntegerUtils.objectConvertToInt(object));
                 }else{
                     partyLogicModel.setDmDensity(party.getDmDensity());
-                }*/
+                }
 
             }
             //int status = party.getStatus();

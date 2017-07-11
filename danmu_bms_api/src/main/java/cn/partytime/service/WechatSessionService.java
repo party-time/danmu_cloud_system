@@ -1,7 +1,7 @@
-package cn.partytime.service.wechatSession;
+package cn.partytime.service;
 
 import cn.partytime.common.cachekey.WechatSessionKey;
-import cn.partytime.logic.wechat.WechatSession;
+import cn.partytime.model.wechat.WechatSession;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
