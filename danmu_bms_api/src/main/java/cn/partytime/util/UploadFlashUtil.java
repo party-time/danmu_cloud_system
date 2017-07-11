@@ -2,7 +2,9 @@ package cn.partytime.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,14 +13,17 @@ import java.io.InputStreamReader;
 /**
  * Created by administrator on 2017/2/14.
  */
+@Component
 @Slf4j
-@ConfigurationProperties(prefix = "uploadClient")
 public class UploadFlashUtil {
 
+    @Value("${uploadClient.uploadPath}")
     private String uploadPath;
 
+    @Value("${uploadClient.downloadPath}")
     private String downloadPath;
 
+    @Value("${uploadClient.backupPath}")
     private String backupPath;
 
     public String getUploadPath() {

@@ -1,17 +1,22 @@
 package cn.partytime.util;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by liuwei on 2016/10/31.
  */
-@ConfigurationProperties(prefix = "partyTime")
+@Component
 public class PartyTimeConfig {
 
+    @Value("${partyTime.url}")
     private String url;
 
+    @Value("${partyTime.appId}")
     private String appId;
 
+    @Value("${partyTime.appSecret}")
     private String appSecret;
 
     public String getUrl() {
