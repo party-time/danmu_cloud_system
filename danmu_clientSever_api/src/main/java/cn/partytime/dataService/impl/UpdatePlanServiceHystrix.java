@@ -1,7 +1,10 @@
 package cn.partytime.dataService.impl;
 
 import cn.partytime.dataService.UpdatePlanService;
+import cn.partytime.model.UpdatePlan;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Created by dm on 2017/7/11.
@@ -9,4 +12,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UpdatePlanServiceHystrix implements UpdatePlanService {
+    @Override
+    public List<UpdatePlan> findByAddressId(String addressId) {
+        return null;
+    }
+
+    @Override
+    public void update(String id, Integer status, String machineNum) {
+
+    }
 }

@@ -4,6 +4,7 @@ import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.model.shop.Item;
+import cn.partytime.service.ResourceFileService;
 import cn.partytime.service.shop.ItemService;
 import cn.partytime.util.FileUploadUtil;
 import lombok.extern.slf4j.Slf4j;

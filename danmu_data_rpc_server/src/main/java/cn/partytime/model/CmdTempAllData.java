@@ -1,6 +1,5 @@
 package cn.partytime.model;
 
-import cn.partytime.logic.cmdCommand.CmdTempComponentData;
 
 import java.util.List;
 

@@ -3,6 +3,7 @@ package cn.partytime.service.cms;
 import cn.partytime.model.cms.*;
 import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.model.shop.Item;
+import cn.partytime.service.ResourceFileService;
 import cn.partytime.service.shop.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
