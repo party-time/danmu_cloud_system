@@ -7,7 +7,6 @@ import cn.partytime.model.danmu.AdDanmuLibrary;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.PartyAddressAdRelation;
 import cn.partytime.service.adDanmu.AdDanmuLibraryService;
-import cn.partytime.service.adDanmu.PartyAddressAdRelationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -35,8 +35,6 @@
         <module>danmu_db_model</module>
         <module>danmu_data_service</module>
 
-        <module>danmu_logic_model</module>
-
         <module>danmu_log_server_api</module>
         <module>danmu_common</module>
         <module>danmu_redis_server</module>

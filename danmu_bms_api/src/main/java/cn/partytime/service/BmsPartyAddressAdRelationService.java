@@ -4,7 +4,6 @@ import cn.partytime.common.util.DateUtils;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.PartyAddressAdRelation;
 import cn.partytime.service.adDanmu.AdDanmuLibraryService;
-import cn.partytime.service.adDanmu.PartyAddressAdRelationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

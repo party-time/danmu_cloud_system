@@ -10,7 +10,7 @@ public class ProtocolConst {
     /**客户端控制*/
     public static final String PROTOCOL_CLIENT_COMMAND="clientCommand";
 
-    /**协议*/
+    /**宣传片指令*/
     public static final String PROTOCOL_PROMOTIONALFILM="promotionalFilm";
 
 

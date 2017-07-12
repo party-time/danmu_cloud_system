@@ -31,8 +31,17 @@ public class RpcDanmuAddressService {
     @Autowired
     private DanmuAddressLogicService danmuAddressLogicService;
 
+    @Autowired
+    private DanmuAddressService danmuAddressService;
+
+
     @RequestMapping(value = "/findAddressByLonLat" ,method = RequestMethod.GET)
     public DanmuAddress findAddressByLonLat(@RequestParam Double longitude, @RequestParam Double latitude) {
         return danmuAddressLogicService.findAddressByLonLat(longitude,latitude);
+    }
+
+    @RequestMapping(value = "/findById" ,method = RequestMethod.GET)
+    public DanmuAddress findById(@RequestParam String id) {
+        return danmuAddressService.findById(id);
     }
 }
