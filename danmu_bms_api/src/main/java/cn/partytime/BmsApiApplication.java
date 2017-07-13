@@ -4,16 +4,12 @@ package cn.partytime;
 
 
 import cn.partytime.util.FileUploadUtil;
-import cn.partytime.util.H5TempUtil;
-import cn.partytime.util.PartyTimeConfig;
-import cn.partytime.util.UploadFlashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.embedded.MultipartConfigFactory;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
@@ -25,7 +21,7 @@ import javax.servlet.MultipartConfigElement;
 @EnableDiscoveryClient
 @EnableFeignClients
 @RefreshScope
-public class Application extends SpringBootServletInitializer {
+public class BmsApiApplication extends SpringBootServletInitializer {
 
 
 	@Autowired
@@ -33,12 +29,12 @@ public class Application extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(Application.class);
+		return application.sources(BmsApiApplication.class);
 	}
 
 
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(BmsApiApplication.class, args);
 	}
 
 	@Bean

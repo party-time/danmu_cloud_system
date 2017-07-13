@@ -14,11 +14,6 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
-        <dependency>
-            <groupId>cn.party-time</groupId>
-            <artifactId>danmu_model</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
 
         <dependency>
             <groupId>cn.party-time</groupId>

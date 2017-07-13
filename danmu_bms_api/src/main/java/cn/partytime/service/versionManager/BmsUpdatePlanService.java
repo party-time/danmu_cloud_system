@@ -5,6 +5,7 @@ import cn.partytime.model.manager.UpdatePlan;
 import cn.partytime.model.manager.Version;
 import cn.partytime.model.versionManager.JavaUpdatePlanResult;
 import cn.partytime.model.versionManager.UpdatePlanResult;
+import cn.partytime.service.UpdatePlanService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

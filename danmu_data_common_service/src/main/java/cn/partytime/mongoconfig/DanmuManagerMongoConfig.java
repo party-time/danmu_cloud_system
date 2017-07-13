@@ -25,7 +25,7 @@ public class DanmuManagerMongoConfig {
     @Bean(name = "managerMongoTemplate")
     public MongoTemplate managerMongoTemplate() throws Exception {
         MongoProperties mongoProperties = managerMongoProperties();
-        MongoClient mongoClient = mongoProperties.createMongoClient(null);
+        MongoClient mongoClient = mongoProperties.createMongoClient(null,null);
         return new MongoTemplate(mongoClient, mongoProperties.getDatabase());
     }
 

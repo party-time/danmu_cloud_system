@@ -25,7 +25,7 @@ public class UserMongoConfig {
     @Bean(name = "userMongoTemplate")
     public MongoTemplate userMongoTemplate() throws Exception {
         MongoProperties mongoProperties = userMongoProperties();
-        MongoClient mongoClient = mongoProperties.createMongoClient(null);
+        MongoClient mongoClient = mongoProperties.createMongoClient(null,null);
         return new MongoTemplate(mongoClient, mongoProperties.getDatabase());
     }
 

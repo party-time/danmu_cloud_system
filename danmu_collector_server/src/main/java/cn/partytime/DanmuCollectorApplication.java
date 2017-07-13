@@ -12,7 +12,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @EnableDiscoveryClient
 @EnableFeignClients
 @RefreshScope
-public class CollectorApplication {
+public class DanmuCollectorApplication {
 
     /*public static void main(String[] args) throws Exception {
         //SpringApplication.run(Application.class, args);
@@ -21,7 +21,7 @@ public class CollectorApplication {
         app.run(args);
     }*/
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(CollectorApplication.class, args);
+        SpringApplication.run(DanmuCollectorApplication.class, args);
     }
 
 

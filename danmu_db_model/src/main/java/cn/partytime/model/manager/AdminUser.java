@@ -14,7 +14,6 @@ import java.util.Date;
 @Document(collection = "admin_user")
 public class AdminUser extends BaseModel {
 
-
     private String id;
 
     private String userName;
