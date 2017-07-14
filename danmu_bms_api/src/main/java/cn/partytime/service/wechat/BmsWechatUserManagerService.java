@@ -1,6 +1,6 @@
 package cn.partytime.service.wechat;
 
-import cn.partytime.dataService.DanmuAddressLogicService;
+import cn.partytime.rpcService.DanmuAddressLogicService;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.wechat.WechatUser;

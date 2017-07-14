@@ -1,7 +1,7 @@
 package cn.partytime.logicService;
 
 import cn.partytime.common.cachekey.CollectorServerCacheKey;
-import cn.partytime.dataService.WechatUserService;
+import cn.partytime.rpcService.WechatUserService;
 import cn.partytime.model.DanmuCollectorInfo;
 import cn.partytime.model.ResultInfo;
 import cn.partytime.model.ServerInfo;

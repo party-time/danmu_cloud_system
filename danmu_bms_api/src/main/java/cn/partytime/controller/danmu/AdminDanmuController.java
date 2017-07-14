@@ -1,7 +1,7 @@
 package cn.partytime.controller.danmu;
 
 import cn.partytime.controller.base.BaseAdminController;
-import cn.partytime.dataService.CmdLogicService;
+import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.danmuCmdJson.CmdTemp;

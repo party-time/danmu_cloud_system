@@ -1,7 +1,7 @@
 package cn.partytime.service;
 
 import cn.partytime.common.util.*;
-import cn.partytime.dataService.CmdLogicService;
+import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.RestResultModel;

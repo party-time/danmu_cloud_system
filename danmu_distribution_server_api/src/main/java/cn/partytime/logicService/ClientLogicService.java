@@ -1,7 +1,7 @@
 package cn.partytime.logicService;
 
 import cn.partytime.common.cachekey.CollectorServerCacheKey;
-import cn.partytime.dataService.DanmuClientService;
+import cn.partytime.rpcService.DanmuClientService;
 import cn.partytime.model.DanmuClient;
 import cn.partytime.model.DanmuCollectorInfo;
 import cn.partytime.model.ResultInfo;

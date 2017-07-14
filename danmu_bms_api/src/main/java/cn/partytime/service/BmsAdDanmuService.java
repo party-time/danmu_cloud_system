@@ -4,7 +4,7 @@ import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.CacheDataRepository;
-import cn.partytime.dataService.CmdLogicService;
+import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.model.*;
 import cn.partytime.model.danmu.AdDanmuLibrary;
 import cn.partytime.model.danmu.AdTimerDanmu;

@@ -2,7 +2,7 @@ package cn.partytime.handlerThread;
 
 import cn.partytime.common.cachekey.PreDanmuCacheKey;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.dataService.CmdLogicService;
+import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.danmu.PreDanmuModel;

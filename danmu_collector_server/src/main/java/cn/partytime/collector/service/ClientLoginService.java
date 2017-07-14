@@ -1,7 +1,7 @@
 package cn.partytime.collector.service;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
-import cn.partytime.collector.dataService.*;
+import cn.partytime.collector.rpcService.*;
 import cn.partytime.collector.model.*;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.PotocolComTypeConst;

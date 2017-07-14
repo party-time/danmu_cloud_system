@@ -1,6 +1,6 @@
 package cn.partytime.controller.wechat;
 
-import cn.partytime.dataService.DanmuAddressLogicService;
+import cn.partytime.rpcService.DanmuAddressLogicService;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.cms.ItemResult;
 import cn.partytime.model.cms.PageColumn;

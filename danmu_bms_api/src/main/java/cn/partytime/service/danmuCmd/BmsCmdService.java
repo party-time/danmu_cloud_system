@@ -1,7 +1,7 @@
 package cn.partytime.service.danmuCmd;
 
 import cn.partytime.common.cachekey.CmdTempCacheKey;
-import cn.partytime.dataService.CmdLogicService;
+import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.danmucmd.CmdComponentJson;
 import cn.partytime.model.danmucmd.CmdTempJson;

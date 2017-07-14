@@ -2,7 +2,7 @@ package cn.partytime.service;
 
 import cn.partytime.baseModel.GropCountModel;
 import cn.partytime.common.util.*;
-import cn.partytime.dataService.CmdLogicService;
+import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.model.*;
 import cn.partytime.model.danmu.TimerDanmu;
 import cn.partytime.model.danmu.TimerDanmuModel;

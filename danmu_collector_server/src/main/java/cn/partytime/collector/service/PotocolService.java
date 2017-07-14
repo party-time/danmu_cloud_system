@@ -1,8 +1,8 @@
 package cn.partytime.collector.service;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
-import cn.partytime.collector.dataService.PartyService;
-import cn.partytime.collector.dataService.WechatService;
+import cn.partytime.collector.rpcService.PartyService;
+import cn.partytime.collector.rpcService.WechatService;
 import cn.partytime.collector.model.DanmuClientModel;
 import cn.partytime.collector.model.PartyLogicModel;
 import cn.partytime.collector.model.WechatUser;

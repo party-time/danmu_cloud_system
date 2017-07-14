@@ -1,10 +1,9 @@
 package cn.partytime.check.service;
 
 import cn.partytime.check.config.DanmuChannelRepository;
-import cn.partytime.check.dataService.AdminUserService;
+import cn.partytime.check.rpcService.AdminUserService;
 import cn.partytime.check.model.AdminTaskModel;
 import cn.partytime.check.model.AdminUser;
-import cn.partytime.redis.service.RedisService;
 import io.netty.channel.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

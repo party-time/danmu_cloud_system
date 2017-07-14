@@ -3,7 +3,7 @@ package cn.partytime.service;
 import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.PartyTypeEnmu;
-import cn.partytime.dataService.PartyLogicService;
+import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.handlerThread.PreDanmuHandler;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.RestResultModel;

@@ -1,11 +1,10 @@
 package cn.partytime.check.service;
 
 import cn.partytime.check.config.DanmuChannelRepository;
-import cn.partytime.check.dataService.*;
+import cn.partytime.check.rpcService.*;
 import cn.partytime.check.handlerThread.PreDanmuHandler;
 import cn.partytime.check.handlerThread.TestDanmuHandler;
 import cn.partytime.check.model.*;
-import cn.partytime.check.model.command.*;
 import cn.partytime.check.util.CommandTypeConst;
 import cn.partytime.common.cachekey.*;
 import cn.partytime.common.constants.PotocolComTypeConst;

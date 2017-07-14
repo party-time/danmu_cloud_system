@@ -1,6 +1,6 @@
 package cn.partytime.service;
 
-import cn.partytime.dataService.PartyLogicService;
+import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.PartyResult;

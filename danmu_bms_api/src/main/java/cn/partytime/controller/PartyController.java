@@ -1,7 +1,7 @@
 package cn.partytime.controller;
 
 import cn.partytime.controller.base.BaseAdminController;
-import cn.partytime.dataService.PartyLogicService;
+import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.RestResultModel;

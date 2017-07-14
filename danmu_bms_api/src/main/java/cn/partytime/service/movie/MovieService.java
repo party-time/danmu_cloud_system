@@ -5,7 +5,7 @@ import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.dataService.PartyLogicService;
+import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.handlerThread.PreDanmuHandler;
 
 import cn.partytime.model.PartyLogicModel;
