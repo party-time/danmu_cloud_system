@@ -1,4 +1,4 @@
-package cn.partytime.service;
+package cn.partytime.service.timerDanmu;
 
 import cn.partytime.model.danmu.TimerDanmu;
 import cn.partytime.repository.danmu.TimerDanmuRepository;

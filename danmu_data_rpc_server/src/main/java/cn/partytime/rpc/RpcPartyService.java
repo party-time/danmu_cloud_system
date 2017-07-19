@@ -58,6 +58,14 @@ public class RpcPartyService {
     private PartyLogicService partyLogicService;
 
 
+
+    @RequestMapping(value = "/findByMovieAliasOnLine" ,method = RequestMethod.GET)
+    public Party findByMovieAliasOnLine(@RequestParam String command){
+        return partyService.findByMovieAliasOnLine(command);
+
+    }
+
+
     @RequestMapping(value = "/findAddressIdListByPartyId" ,method = RequestMethod.GET)
     public List<String> findAddressIdListByPartyId(@RequestParam String partyId){
         List<PartyAddressRelation> partyAddressRelationList = partyAddressRelationService.findByPartyId(partyId);
@@ -77,9 +85,16 @@ public class RpcPartyService {
      * @param addressId
      * @return
      */
-    @RequestMapping(value = "/getPartyId" ,method = RequestMethod.GET)
-    public Party getPartyId(@RequestParam String addressId) {
+    @RequestMapping(value = "/getPartyByAddressId" ,method = RequestMethod.GET)
+    public Party getPartyByAddressId(@RequestParam String addressId) {
         return partyLogicService.getPartyId(addressId);
+    }
+
+
+
+    @RequestMapping(value = "/getPartyByPartyId" ,method = RequestMethod.GET)
+    public Party getPartyByPartyId(@RequestParam String partyId) {
+        return partyService.findById(partyId);
     }
 
 

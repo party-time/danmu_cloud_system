@@ -10,6 +10,7 @@ import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.TimerDanmuFile;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.service.danmuCmd.BmsCmdService;
+import cn.partytime.service.timerDanmu.TimerDanmuService;
 import com.alibaba.fastjson.JSON;
 import com.mongodb.BasicDBList;
 import com.mongodb.DBObject;
@@ -62,15 +63,8 @@ public class BmsTimerDanmuService {
 
 
     @Autowired
-    private BmsCmdService bmsCmdService;
-
-
-    @Autowired
     private DanmuCommonService danmuCommonService;
 
-
-    @Autowired
-    private RedisService redisService;
 
     @Autowired
     private BmsColorService bmsColorService;

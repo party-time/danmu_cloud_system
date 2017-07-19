@@ -1,4 +1,4 @@
-package cn.partytime.service;
+package cn.partytime.service.movie;
 
 import cn.partytime.model.manager.MovieSchedule;
 import cn.partytime.repository.manager.MovieScheduleRepository;
@@ -25,6 +25,9 @@ public class MovieScheduleService {
 
     @Resource(name = "managerMongoTemplate")
     private MongoTemplate managerMongoTemplate;
+
+
+
 
 
     public void insertMovieSchedule(MovieSchedule movieSchedule){

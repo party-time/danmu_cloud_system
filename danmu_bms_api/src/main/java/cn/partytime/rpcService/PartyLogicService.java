@@ -22,25 +22,25 @@ public interface PartyLogicService {
     public List<String> findAddressIdListByPartyId(@RequestParam(value = "partyId") String partyId);
 
 
-    @RequestMapping(value = "/rpcParty/getPartyId" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcParty/getPartyByAddressId" ,method = RequestMethod.GET)
     public Party getPartyId(@RequestParam(value = "addressId") String addressId);
 
 
-    @RequestMapping(value = "/findPartyAddressId" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcParty/findPartyAddressId" ,method = RequestMethod.GET)
     public PartyLogicModel findPartyAddressId(@RequestParam(value = "addressId") String addressId);
 
 
-    @RequestMapping(value = "/findPartyByLonLat" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcParty/findPartyByLonLat" ,method = RequestMethod.GET)
     public PartyLogicModel findPartyByLonLat(@RequestParam(value = "longitude") Double longitude, @RequestParam(value = "latitude") Double latitude);
 
 
-    @RequestMapping(value = "/findTemporaryParty" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcParty/findTemporaryParty" ,method = RequestMethod.GET)
     public PartyLogicModel findTemporaryParty(@RequestParam(value = "addressId") String addressId);
 
 
-    @RequestMapping(value = "/checkPartyIsOver" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/rpcParty/checkPartyIsOver" ,method = RequestMethod.POST)
     public boolean checkPartyIsOver(Party party);
 
-    @RequestMapping(value = "/deleteParty" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcParty/deleteParty" ,method = RequestMethod.GET)
     public void deleteParty(String partyId);
 }

@@ -4,6 +4,7 @@ import cn.partytime.model.MovieScheduleResult;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.MovieSchedule;
+import cn.partytime.service.movie.MovieScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;

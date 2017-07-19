@@ -3,7 +3,7 @@ package cn.partytime.controller;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.service.BmsMovieScheduleService;
-import cn.partytime.service.MovieScheduleService;
+import cn.partytime.service.movie.MovieScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

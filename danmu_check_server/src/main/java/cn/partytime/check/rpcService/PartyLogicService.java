@@ -21,6 +21,6 @@ public interface PartyLogicService {
     public List<String> findAddressIdListByPartyId(@RequestParam(value = "partyId") String partyId);
 
 
-    @RequestMapping(value = "/rpcParty/getPartyId" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcParty/getPartyByAddressId" ,method = RequestMethod.GET)
     public Party getPartyId(@RequestParam(value = "addressId") String addressId);
 }

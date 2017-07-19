@@ -13,7 +13,6 @@ import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.MovieSchedule;
 import cn.partytime.model.manager.Party;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.service.MovieScheduleService;
 import cn.partytime.service.PartyService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;

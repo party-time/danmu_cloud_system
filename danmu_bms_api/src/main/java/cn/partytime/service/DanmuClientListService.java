@@ -23,8 +23,6 @@ public class DanmuClientListService {
     private DanmuClientService danmuClientService;
     @Autowired
     private RegistCodeService registCodeService;
-    @Autowired
-    private ParamTemplateService paramTemplateService;
 
 
     public List<DanmuClientListResult> findByAddressId(String addressId){

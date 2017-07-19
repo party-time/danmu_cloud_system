@@ -1,6 +1,8 @@
 package cn.partytime.controller;
 
+import cn.partytime.common.cachekey.FunctionControlCacheKey;
 import cn.partytime.controller.base.BaseAdminController;
+import cn.partytime.redis.service.RedisService;
 import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.PartyLogicModel;
@@ -48,6 +50,9 @@ public class PartyController extends BaseAdminController {
 
     @Autowired
     private PartyLogicService partyLogicService;
+
+    @Autowired
+    private  RedisService redisService;
 
     /**
      *
@@ -148,6 +153,10 @@ public class PartyController extends BaseAdminController {
             }else{
                 party = partyService.update(id,name,type,movieAlias,danmuLibraryId,dmDensity);
             }
+
+            String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();
+            redisService.set(key,dmDensity);
+
 
             if(!StringUtils.isEmpty(addressIds)){
                 if(addressIds.indexOf(",")!=-1){

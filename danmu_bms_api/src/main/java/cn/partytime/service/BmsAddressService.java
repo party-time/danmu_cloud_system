@@ -28,13 +28,6 @@ public class BmsAddressService {
     @Autowired
     private DanmuAddressService danmuAddressService;
 
-
-    @Autowired
-    private PartyAddressRelationService partyAddressRelationService;
-
-    @Autowired
-    private BmsPartyAddressAdRelationService bmsPartyAddressAdRelationService;
-
     @Autowired
     private AdDanmuLibraryService adDanmuLibraryService;
 

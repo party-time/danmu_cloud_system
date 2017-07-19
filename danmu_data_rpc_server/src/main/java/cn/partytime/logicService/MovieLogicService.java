@@ -10,7 +10,7 @@ import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.MovieSchedule;
 import cn.partytime.model.manager.Party;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.service.MovieScheduleService;
+import cn.partytime.service.movie.MovieScheduleService;
 import cn.partytime.service.PartyService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -37,9 +37,6 @@ public class MovieLogicService {
     private RedisService redisService;
 
     @Autowired
-    private PartyService partyService;
-
-    @Autowired
     private RedisTemplate redisTemplate;
 
     @Autowired
@@ -52,23 +49,6 @@ public class MovieLogicService {
     @Autowired
     private PartyLogicService partyLogicService;
 
-
-    /*public RestResultModel movieHandler(String movieStartCommand,String command,String addressId){
-        Party party = partyService.findByMovieAliasOnLine(movieStartCommand);
-        RestResultModel restResultModel = new RestResultModel();
-        restResultModel = checkPartyIsOk(party);
-        if(restResultModel!=null){
-            return restResultModel;
-        }
-        if(command.startsWith("danmu-start")){
-            return danmuStart(party,addressId);
-        }else if("movie-start".equals(command)){
-            return movieStart(party,addressId);
-        }else if("movie-close".equals(command)){
-            return movieStop(party,addressId);
-        }
-        return null;
-    }*/
 
     public RestResultModel danmuStart(String  partyId, String addressId, long clientTime){
 
@@ -349,45 +329,4 @@ public class MovieLogicService {
         preDanmuLogicService.danmuListenHandler(partyId);
     }
 
-    /**
-     * 插入活动时间
-     * @param partyId
-     * @param addressId
-     */
-    private void insertmovieScheduleByMoviceStop(String partyId, String addressId) {
-        MovieSchedule movieSchedule = new MovieSchedule();
-        Date date = DateUtils.getCurrentDate();
-        movieSchedule.setPartyId(partyId);
-        //结束时间
-        movieSchedule.setEndTime(date);
-        movieSchedule.setAddressId(addressId);
-        movieSchedule.setCreateTime(date);
-        movieSchedule.setUpdateTime(date);
-        movieScheduleService.insertMovieSchedule(movieSchedule);
-    }
-
-    private RestResultModel checkPartyIsOk(Party party){
-        RestResultModel restResultModel = new RestResultModel();
-        if (party == null) {
-            logger.info("电影不存在");
-            restResultModel.setResult(404);
-            restResultModel.setResult_msg("活动不存在");
-            return restResultModel;
-        }
-        if (party.getType() == 0) {
-            logger.info("不是电影场");
-            restResultModel.setResult(405);
-            restResultModel.setResult_msg("此活动不是电影场");
-            return restResultModel;
-        }
-
-        if (party.getStatus() == 4) {
-            logger.info("电影已经下线");
-            restResultModel.setResult(406);
-            restResultModel.setResult_msg("活动已经下线");
-            return restResultModel;
-        }
-
-        return null;
-    }
 }

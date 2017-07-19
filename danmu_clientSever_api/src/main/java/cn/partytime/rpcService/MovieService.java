@@ -16,18 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface MovieService {
 
 
-    @RequestMapping(value = "/rpcMovie/partyStatus" ,method = RequestMethod.GET)
-    public RestResultModel partyStatus(@RequestParam(value = "registCode") String registCode);
-
 
     @RequestMapping(value = "/rpcMovie/partyStart" ,method = RequestMethod.GET)
-    public RestResultModel partyStart(@RequestParam(value = "registCode") String registCode,@RequestParam(value = "command") String command, @RequestParam(value = "clientTime") long clientTime);
+    public RestResultModel partyStart(@RequestParam(value = "partyId") String partyId,@RequestParam(value = "addressId") String addressId, @RequestParam(value = "clientTime") long clientTime);
 
 
     @RequestMapping(value = "/rpcMovie/moviceStart" ,method = RequestMethod.GET)
-    public RestResultModel moviceStart(@RequestParam(value = "partyId") String partyId,@RequestParam(value = "registCode") String registCode,@RequestParam(value = "clientTime") long clientTime);
+    public RestResultModel movieStart(@RequestParam(value = "partyId") String partyId,@RequestParam(value = "addressId") String addressId,@RequestParam(value = "clientTime") long clientTime);
 
 
     @RequestMapping(value = "/rpcMovie/moviceStop" ,method = RequestMethod.GET)
-    public RestResultModel moviceStop(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "registCode") String registCode,@RequestParam(value = "clientTime") long clientTime);
+    public RestResultModel movieStop(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId,@RequestParam(value = "clientTime") long clientTime);
 }

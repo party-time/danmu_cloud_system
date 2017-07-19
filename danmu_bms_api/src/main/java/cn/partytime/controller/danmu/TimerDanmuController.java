@@ -6,7 +6,7 @@ import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.danmu.TimerDanmu;
 import cn.partytime.service.BmsTimerDanmuService;
-import cn.partytime.service.TimerDanmuService;
+import cn.partytime.service.timerDanmu.TimerDanmuService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;

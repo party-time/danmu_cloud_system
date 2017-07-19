@@ -50,10 +50,6 @@ public class BmsPreDanmuService {
 
 
     @Autowired
-    private BmsCmdService bmsCmdService;
-
-
-    @Autowired
     private DanmuCommonService danmuCommonService;
 
 

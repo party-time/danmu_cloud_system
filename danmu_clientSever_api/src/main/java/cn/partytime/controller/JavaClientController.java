@@ -4,7 +4,9 @@ package cn.partytime.controller;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.rpcService.*;
 import cn.partytime.model.*;
+import cn.partytime.service.MovieLogicService;
 import cn.partytime.service.ParamLogicService;
+import cn.partytime.service.PartyLogicService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,6 +73,13 @@ public class JavaClientController {
 
     @Autowired
     private DanmuAddressService danmuAddressService;
+
+
+    @Autowired
+    private PartyLogicService partyLogicService;
+
+    @Autowired
+    private MovieLogicService movieLogicService;
 
     /**
      * 查找最近的所有的活动
@@ -202,26 +211,26 @@ public class JavaClientController {
     @RequestMapping(value = "/danmu-start/{code}/{command}/{clientTime}", method = RequestMethod.GET)
     public RestResultModel partyStart(@PathVariable("code")String code , @PathVariable("command")String command, @PathVariable("clientTime")Long clientTime){
         //验证客户端类型
-        return  movieService.partyStart(code,command,clientTime);
+        return  movieLogicService.partyStart(code,command,clientTime);
     }
 
     @RequestMapping(value = "/movie-start/{code}/{command}/{partyId}/{clientTime}", method = RequestMethod.GET)
     public RestResultModel filmStart(@PathVariable("code")String code , @PathVariable("command")String command , @PathVariable("partyId")String partyId, @PathVariable("clientTime")Long clientTime){
         //验证客户端是否合法
-        return  movieService.moviceStart(partyId,code,clientTime);
+        return  movieLogicService.moviceStart(partyId,code,clientTime);
     }
 
     @RequestMapping(value = "/movie-close/{code}/{command}/{partyId}/{clientTime}", method = RequestMethod.GET)
     public RestResultModel filmStop(@PathVariable("code")String code , @PathVariable("command")String command , @PathVariable("partyId")String partyId, @PathVariable("clientTime")Long clientTime){
         RestResultModel restResultModel = new RestResultModel();
         //验证客户端是否合法
-        return  movieService.moviceStop(partyId,code,clientTime);
+        return  movieLogicService.moviceStop(partyId,code,clientTime);
     }
     @RequestMapping(value = "/partyStatus/{code}/{clientType}", method = RequestMethod.GET)
     public RestResultModel partyStatus(@PathVariable("code") String code, @PathVariable("clientType")Integer clientType){
         RestResultModel restResultModel = new RestResultModel();
         //验证客户端是否合法
-        return  movieService.partyStatus(code);
+        return  partyLogicService.partyStatus(code);
     }
 
     @RequestMapping(value = "/ad-start/{code}/{status}/{name}", method = RequestMethod.GET)

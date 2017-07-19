@@ -10,23 +10,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MovieServiceHystrix implements MovieService {
+
+
     @Override
-    public RestResultModel partyStatus(String registCode) {
+    public RestResultModel partyStart(String partyId, String addressId, long clientTime) {
         return null;
     }
 
     @Override
-    public RestResultModel partyStart(String registCode, String command, long clientTime) {
+    public RestResultModel movieStart(String partyId, String registCode, long clientTime) {
         return null;
     }
 
     @Override
-    public RestResultModel moviceStart(String partyId, String registCode, long clientTime) {
+    public RestResultModel movieStop(String partyId, String registCode, long clientTime) {
         return null;
     }
 
-    @Override
-    public RestResultModel moviceStop(String partyId, String registCode, long clientTime) {
-        return null;
-    }
 }
