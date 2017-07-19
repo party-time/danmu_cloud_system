@@ -92,8 +92,8 @@ public class JavaClientController {
 
             partyResourceResultList1 = partyResourceResultService.findLatelyParty();
             partyResourceResultList2 = partyResourceResultService.findLatelyPartyByAddressIdAndType(addressId,0);
-            log.info("全部电影"+partyResourceResultList1.size());
-            log.info("该场地下的活动"+partyResourceResultList2.size());
+            //log.info("全部电影"+partyResourceResultList1.size());
+            //log.info("该场地下的活动"+partyResourceResultList2.size());
         //如果是临时场地，只下载活动
         }else if( danmuAddress.getType() == 1){
             partyResourceResultList1 = new ArrayList<>();

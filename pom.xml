@@ -41,6 +41,7 @@
 
         <module>danmu_data_common_service</module>
         <module>danmu_message_notice_server</module>
+        <module>danmu_message_handler</module>
 
 
 

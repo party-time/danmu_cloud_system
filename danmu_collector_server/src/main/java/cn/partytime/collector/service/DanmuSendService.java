@@ -6,6 +6,8 @@ import cn.partytime.collector.model.ProtocolModel;
 import cn.partytime.common.cachekey.ScreenClientCacheKey;
 import cn.partytime.common.constants.*;
 import cn.partytime.common.util.*;
+import cn.partytime.message.bean.MessageObject;
+import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +43,13 @@ public class DanmuSendService {
     @Autowired
     private ScreenDanmuService screenDanmuService;
 
+    @Autowired
+    private MessageHandlerService messageHandlerService;
+
+    @Autowired
+    private PreDanmuMessageService preDanmuMessageService;
+
+
 
     /**
      * 发送预制弹幕
@@ -51,6 +61,8 @@ public class DanmuSendService {
         Object preObject = clientPreDanmuService.getPreDanmu(addressId,nowDate,partyId);
         logger.info("获取的预制弹幕信息：{}",JSON.toJSONString(preObject));
         if (preObject == null) {
+            Map<String,Object> map = new HashMap<String,Object>();
+            messageHandlerService.messageHandler(preDanmuMessageService, new MessageObject<Map<String,Object>>(LogCodeConst.DanmuLogCode.PREDANMU_ISNULL_CODE,map));
             return;
         }
         String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;

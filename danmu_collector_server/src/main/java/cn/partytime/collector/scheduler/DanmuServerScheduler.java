@@ -74,7 +74,6 @@ public class DanmuServerScheduler {
         logger.info("存入服务器的地址:{},端口:{}",host,port);
         danmuCollectorInfo.setIp(host);
         danmuCollectorInfo.setPort(port);
-        danmuCollectorInfo.setCount(size);
         //将客户端信息写入到缓存中
         String key = CollectorServerCacheKey.COLLECTOR_SERVERLIST_CACHE_KEY;
         redisService.setSortSet(key, size, JSON.toJSONString(danmuCollectorInfo));
