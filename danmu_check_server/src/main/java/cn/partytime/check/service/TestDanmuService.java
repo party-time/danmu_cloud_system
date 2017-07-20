@@ -1,8 +1,8 @@
 package cn.partytime.check.service;
 
 import cn.partytime.check.config.DanmuChannelRepository;
-import cn.partytime.check.rpcService.CmdLogicService;
-import cn.partytime.check.rpcService.DanmuService;
+import cn.partytime.check.rpcService.dataRpc.CmdLogicService;
+import cn.partytime.check.rpcService.dataRpc.DanmuService;
 import cn.partytime.check.handlerThread.TestDanmuHandler;
 import cn.partytime.check.model.CmdTempAllData;
 import cn.partytime.check.model.CmdTempComponentData;

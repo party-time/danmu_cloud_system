@@ -26,29 +26,6 @@ public class DanmuCollectorInfo implements Serializable {
     /**
      * 连接数
      */
-    private int count;
+    private Integer count;
 
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
 }

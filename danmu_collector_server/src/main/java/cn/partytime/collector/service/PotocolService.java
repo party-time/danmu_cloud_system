@@ -1,8 +1,8 @@
 package cn.partytime.collector.service;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
-import cn.partytime.collector.rpcService.PartyService;
-import cn.partytime.collector.rpcService.WechatService;
+import cn.partytime.collector.rpcService.dataRpcService.PartyService;
+import cn.partytime.collector.rpcService.dataRpcService.WechatService;
 import cn.partytime.collector.model.DanmuClientModel;
 import cn.partytime.collector.model.PartyLogicModel;
 import cn.partytime.collector.model.WechatUser;
@@ -53,6 +53,10 @@ public class PotocolService {
 
     @Autowired
     private PartyService partyService;
+
+
+    @Autowired
+    private ClientCacheService clientCacheService;
 
     /**
      * 协议处理
@@ -167,9 +171,17 @@ public class PotocolService {
      * @param channel
      */
     public void forceLogout(Channel channel) {
+        DanmuClientModel danmuClientModel = danmuChannelRepository.get(channel);
+
+        if(danmuClientModel!=null && danmuClientModel.getClientType()==0){
+            String addressId = danmuClientModel.getAddressId();
+            clientCacheService.removeClientFromCache(addressId,danmuClientModel.getRegistCode());
+            clientCacheService.setClientOffineLineTime(addressId);
+        }
 
         //清除用户状态
         danmuChannelRepository.remove(channel);
+
         //关闭通道
         channel.close();
     }

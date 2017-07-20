@@ -6,18 +6,18 @@ package cn.partytime.common.constants;
 public interface LogCodeConst {
 
     public class DanmuLogCode{
-        public static final String DANMU_ISNULL_CODE="0100";
-        public static final String DANMU_ISMORE_EXCEPTION="0101";
+        public static final String CLIENT_DANMU_ISNULL="0100";
+        public static final String CLIENT_DANMU_ISMORE="0101";
         public static final String DANMU_IS_OK="0102";
 
-        public static final String PREDANMU_ISNULL_CODE = "0200";
-        public static final String HISTORYDANMU_ISNULL_CODE = "0300";
-        public static final String TIMERDANMU_ISNULL_CODE = "0400";
+        public static final String PREDANMU_ISNULL = "0200";
+        public static final String CLIENT_HISTORYDANMU_ISNULL = "0300";
+        public static final String CLIENT_TIMERDANMU_ISNULL = "0400";
     }
 
     public class PartyLogCode{
-        public static final String MOVIE_TIME_MORE_THAN_150="1000";
-        public static final String MOVIE_TIME_LESS_THAN_60="1001";
+        public static final String MOVIE_TIME_TOO_LONG="1000";
+        public static final String MOVIE_TIME_TOO_SHORT="1001";
 
     }
 
@@ -29,6 +29,8 @@ public interface LogCodeConst {
 
     public class CLientLogCode{
         public static final String FLASH_NETWORK_EXCEPTION="3000";
+
+        public static final String BULB_LIFE_TIME="3001";
     }
 
     public class ResourceLogCode{
@@ -36,7 +38,7 @@ public interface LogCodeConst {
     }
 
     public class AdminLogCode{
-
+        public static final String ADMIN_ONLINE_COUNT_ZERO="4000";
     }
 
     public class MoneyLogCode{

@@ -1,8 +1,12 @@
 package cn.partytime.collector.service;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
-import cn.partytime.collector.rpcService.*;
 import cn.partytime.collector.model.*;
+import cn.partytime.collector.rpcService.dataRpcService.DanmuAddressService;
+import cn.partytime.collector.rpcService.dataRpcService.DanmuClientService;
+import cn.partytime.collector.rpcService.dataRpcService.PartyService;
+import cn.partytime.collector.rpcService.dataRpcService.WechatService;
+import cn.partytime.common.cachekey.ClientCacheKey;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
@@ -45,9 +49,6 @@ public class ClientLoginService {
     private DanmuClientService danmuClientService;
 
     @Autowired
-    private RedisService redisService;
-
-    @Autowired
     private ClientChannelService clientChannelService;
 
     @Autowired
@@ -55,6 +56,9 @@ public class ClientLoginService {
 
     @Autowired
     private ScreenDanmuService screenDanmuService;
+
+    @Autowired
+    private ClientCacheService clientCacheService;
 
 
     /**
@@ -75,7 +79,6 @@ public class ClientLoginService {
         } else if (ClientConst.CLIENT_TYPE_JAVACLIENT.equals(clientType)) {
             //移动端弹幕处理
             logger.info("java{}端触发登录", code);
-            //moblieClientLogin(code, channel, clientType);
             javaClientLogin(code, channel, clientType);
         }
     }
@@ -218,16 +221,14 @@ public class ClientLoginService {
             danmuClientModel.setClientType(Integer.parseInt(clientType));
             danmuClientModel.setDanmuCount(0);
             danmuClientModel.setLastTime(DateUtils.getCurrentDate().getTime());
-
-
-
             screenDanmuService.setScreenDanmuCount(danmuClient.getAddressId(),0);
-
-
             logger.info("绑定通道与客户端对象的关系");
             danmuChannelRepository.set(channel, danmuClientModel);
 
-            //获取活动信息
+            //将当前客户端的信息存入缓
+            clientCacheService.setClientIdIntoCache(danmuClient.getAddressId(),danmuClient.getRegistCode());
+
+            // 获取活动信息
             String commandType = PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS;
             PartyLogicModel party = partyService.findPartyAddressId(danmuClientModel.getAddressId());
             //只有是活动场的情况下，此处才有效果
@@ -235,17 +236,12 @@ public class ClientLoginService {
                 try{
                     int status = party.getStatus();
                     logger.info("commandType:{},partyId:{},activeTime:{},status:{}",commandType,party.getPartyId(),party.getActiveTime(),status);
-                    //ProtocolModel protocolModel = ProtocolUtil.setCommandFilmStartProtocolModel(commandType, party.getPartyId(), party.getStartTime(),party.getActiveTime(),status+"");
-
                     Map<String,Object> commandObject = new HashMap<String,Object>();
                     commandObject.put("type", ProtocolConst.PROTOCOL_COMMAND);
-
                     Map<String,Object> dataMap = new HashMap<String,Object>();
                     dataMap.put("type",commandType);
                     dataMap.put("status",status);
-
                     dataMap.put("partyId",party.getPartyId());
-
                     if(party.getStartTime()!=null){
                         dataMap.put("partyTime",party.getStartTime().getTime());
                     }
@@ -253,9 +249,6 @@ public class ClientLoginService {
                         dataMap.put("movieTime",party.getActiveTime().getTime());
                     }
                     commandObject.put("data",dataMap);
-
-
-
                     String message = JSON.toJSONString(commandObject);
                     logger.info("下发消息给客户端:{}",message);
                     channel.writeAndFlush(new TextWebSocketFrame(message));

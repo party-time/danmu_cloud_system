@@ -1,6 +1,6 @@
 package cn.partytime.collector.service;
 
-import cn.partytime.collector.rpcService.PartyService;
+import cn.partytime.collector.rpcService.dataRpcService.PartyService;
 import cn.partytime.common.cachekey.ScreenClientCacheKey;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;

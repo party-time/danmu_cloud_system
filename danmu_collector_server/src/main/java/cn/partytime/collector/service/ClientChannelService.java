@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -25,6 +27,19 @@ public class ClientChannelService {
     @Autowired
     private DanmuChannelRepository danmuChannelRepository;
 
+    public Set<String> findClientAddressSet(int clientType){
+        Set<String> addressSet = new HashSet<String>();
+        ConcurrentHashMap<Channel,DanmuClientModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
+        if (channelConcurrentHashMap != null && channelConcurrentHashMap.size() > 0) {
+            for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : channelConcurrentHashMap.entrySet()) {
+                DanmuClientModel danmuClientModel = entry.getValue();
+                if(danmuClientModel.getClientType()==clientType){
+                    addressSet.add(danmuClientModel.getAddressId());
+                }
+            }
+        }
+        return addressSet;
+    }
 
     public int findDanmuClientCountByAddressIdAndClientType(String addressId,int clientType){
         int count = 0;

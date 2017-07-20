@@ -1,7 +1,7 @@
 package cn.partytime.check.handlerThread;
 
-import cn.partytime.check.rpcService.CmdLogicService;
-import cn.partytime.check.rpcService.PreDanmuService;
+import cn.partytime.check.rpcService.dataRpc.CmdLogicService;
+import cn.partytime.check.rpcService.dataRpc.PreDanmuService;
 import cn.partytime.check.model.CmdTempAllData;
 import cn.partytime.check.model.CmdTempComponentData;
 import cn.partytime.check.model.PreDanmuModel;

@@ -1,10 +1,10 @@
 package cn.partytime.check.service;
 
 import cn.partytime.check.config.DanmuChannelRepository;
-import cn.partytime.check.rpcService.*;
 import cn.partytime.check.handlerThread.PreDanmuHandler;
 import cn.partytime.check.handlerThread.TestDanmuHandler;
 import cn.partytime.check.model.*;
+import cn.partytime.check.rpcService.dataRpc.*;
 import cn.partytime.check.util.CommandTypeConst;
 import cn.partytime.common.cachekey.*;
 import cn.partytime.common.constants.PotocolComTypeConst;
@@ -49,10 +49,6 @@ public class CommandHanderService {
     @Autowired
     private FunctionService functionService;
 
-
-    @Autowired
-    private CacheDataService cacheDataService;
-
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -81,6 +77,9 @@ public class CommandHanderService {
     @Autowired
     private AdminUserService adminUserService;
 
+
+    @Autowired
+    private CacheDataService cacheDataService;
 
     public void commandHandler(Map<String, Object> map, Channel channel) {
         //类型
@@ -557,7 +556,6 @@ public class CommandHanderService {
      * @param type
      * @param partyId
      * @param addressId
-     * @param partyComModel
      * @param channel
      */
     private void partyStauts(String type, String partyId, String addressId, Object object, Channel channel,int partyType) {
@@ -678,9 +676,6 @@ public class CommandHanderService {
     }
 
 
-    private void PartyStartLogic(){
-
-    }
 
     public Map<String,Object> getPartyCommandMap(Party party,int status){
         Map<String,Object> dataObject = new HashMap<String,Object>();
@@ -705,27 +700,6 @@ public class CommandHanderService {
 
     private void initHandler(String type, String partyId, String addressId, Channel channel,String key,int partyType) {
         logger.info("初始化连接，活动:{}，地址:{}", partyId, addressId);
-
-        //ConcurrentHashMap<Channel, AdminTaskModel> adminTaskModelConcurrentHashMap = danmuChannelRepository.findAdminTaskModelConcurrentHashMap();
-
-        //Iterator entries = adminTaskModelConcurrentHashMap.entrySet().iterator();
-
-        /*boolean isNotlogin = false;
-        while (entries.hasNext()) {
-            Map.Entry entry = (Map.Entry) entries.next();
-            AdminTaskModel adminTaskModel = (AdminTaskModel)entry.getValue();
-            if(key.equals(adminTaskModel.getAuthKey())){
-                isNotlogin = true;
-                break;
-            }
-        }
-
-
-        if(isNotlogin){
-            result.put("message","审核界面已经打开过!");
-            sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms("isRepeateLogin", result)));
-        }*/
-
         Map<String, Object> result = new HashMap<String, Object>();
 
         AdminUser adminUser =  adminUserService.getAdminUser(key);
@@ -740,19 +714,7 @@ public class CommandHanderService {
             redisService.expire(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+key,60*5);
         }
 
-
-
-
-
-
         //缓存管理员与通道的关系
-        /*AdminTaskModel adminTaskModel = new AdminTaskModel();
-
-        adminTaskModel.setAuthKey(key);
-
-
-        adminTaskModel.setAdminName(adminUser.getUserName());
-        danmuChannelRepository.saveChannelAdminRelation(partyType,channel, adminTaskModel);*/
         AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(partyType,channel);
         adminTaskModel.setAdminId(channel.id().asLongText());
         adminTaskModel.setPartyId(partyId);
@@ -880,6 +842,7 @@ public class CommandHanderService {
             danmuChannelRepository.remove(channel);
 
              pushCommandToPartyAdmin(adminTaskModel.getPartyType(),partyId, CommandTypeConst.ONLINE_AMDIN_COUNT, null);
+
         }
     }
 
@@ -927,7 +890,6 @@ public class CommandHanderService {
                     for (Channel channel : channelList) {
                         AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(channel);
                         managerNameList.add(adminTaskModel.getAdminName());
-
                     }
                     message = JSON.toJSONString(setObjectToBms(commandType, managerNameList));
                 }
@@ -935,6 +897,11 @@ public class CommandHanderService {
                 for (Channel channel : channelList) {
                     sendMessageToBMS(channel, message);
                 }
+
+                cacheDataService.setAdminOnlineCount(partyType,channelList.size());
+            }else{
+                cacheDataService.setAdminOnlineCount(partyType,0);
+                //管理员掉线告警
 
             }
 

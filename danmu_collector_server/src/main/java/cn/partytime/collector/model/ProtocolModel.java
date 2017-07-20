@@ -49,4 +49,63 @@ public class ProtocolModel<T> implements Serializable {
     T data;
 
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Integer getMessageSrc() {
+        return messageSrc;
+    }
+
+    public void setMessageSrc(Integer messageSrc) {
+        this.messageSrc = messageSrc;
+    }
+
+    public String getClientType() {
+        return clientType;
+    }
+
+    public void setClientType(String clientType) {
+        this.clientType = clientType;
+    }
+
+    public Integer getScreenId() {
+        return screenId;
+    }
+
+    public void setScreenId(Integer screenId) {
+        this.screenId = screenId;
+    }
+
+    public String getPartyId() {
+        return partyId;
+    }
+
+    public void setPartyId(String partyId) {
+        this.partyId = partyId;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
 }

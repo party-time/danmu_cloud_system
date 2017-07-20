@@ -1,6 +1,7 @@
 package cn.partytime.check.service;
 
 import cn.partytime.check.model.DanmuClientModel;
+import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.cachekey.ClientCacheKey;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
@@ -24,6 +25,16 @@ public class CacheDataService {
 
 
 
+
+    public void setAdminOnlineCount(int partyType,int count){
+        String key = AdminUserCacheKey.ADMIN_ONLINE_COUNT+partyType;
+        if(count==0){
+            redisService.set(key,count);
+        }else{
+            redisService.expire(key,0);
+        }
+
+    }
 
     /**
      * 获取缓存中存的客户端

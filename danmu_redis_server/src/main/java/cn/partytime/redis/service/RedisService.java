@@ -244,6 +244,10 @@ public class RedisService {
         return redisTemplate.opsForZSet().rangeByScore(key, minScore, maxScore);
     }
 
+    public long findSortSetSize(String key){
+        return redisTemplate.opsForZSet().size(key);
+    }
+
 
     /**
      * 通过范围获取sortSet集合数据

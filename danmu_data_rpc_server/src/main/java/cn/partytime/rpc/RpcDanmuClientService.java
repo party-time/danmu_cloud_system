@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * Created by dm on 2017/7/10.
  */
@@ -26,4 +28,8 @@ public class RpcDanmuClientService {
         return danmuClientService.findByRegistCode(registCode);
     }
 
+    @RequestMapping(value = "/findByAddressId" ,method = RequestMethod.GET)
+    public List<DanmuClient> findByAddressId(String addressId){
+        return danmuClientService.findByAddressId(addressId);
+    }
 }

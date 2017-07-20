@@ -13,6 +13,9 @@ public class ClientCacheKey {
     public static final String CLIENT_CACHE_ID_SORTSET = "client:id:sortset:";
 
 
+    public static final String ClIENT_OFFLINE_TIME="client:client:offline:time:";
+
+
     /**
      * 客户端弹幕缓存
      */

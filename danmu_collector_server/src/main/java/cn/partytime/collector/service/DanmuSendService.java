@@ -1,14 +1,11 @@
 package cn.partytime.collector.service;
 
-import cn.partytime.collector.config.DanmuChannelRepository;
 import cn.partytime.collector.model.ProtocolDanmuModel;
 import cn.partytime.collector.model.ProtocolModel;
+import cn.partytime.collector.rpcService.alarmRpcService.DanmuService;
 import cn.partytime.common.cachekey.ScreenClientCacheKey;
 import cn.partytime.common.constants.*;
 import cn.partytime.common.util.*;
-import cn.partytime.message.bean.MessageObject;
-import cn.partytime.message.proxy.MessageHandlerService;
-import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -43,13 +40,9 @@ public class DanmuSendService {
     @Autowired
     private ScreenDanmuService screenDanmuService;
 
-    @Autowired
-    private MessageHandlerService messageHandlerService;
 
     @Autowired
-    private PreDanmuMessageService preDanmuMessageService;
-
-
+    private DanmuService danmuService;
 
     /**
      * 发送预制弹幕
@@ -62,7 +55,8 @@ public class DanmuSendService {
         logger.info("获取的预制弹幕信息：{}",JSON.toJSONString(preObject));
         if (preObject == null) {
             Map<String,Object> map = new HashMap<String,Object>();
-            messageHandlerService.messageHandler(preDanmuMessageService, new MessageObject<Map<String,Object>>(LogCodeConst.DanmuLogCode.PREDANMU_ISNULL_CODE,map));
+            //messageHandlerService.messageHandler(preDanmuMessageService, new MessageObject<Map<String,Object>>(LogCodeConst.DanmuLogCode.PREDANMU_ISNULL_CODE,map));
+            danmuService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,"");
             return;
         }
         String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;

@@ -39,6 +39,10 @@ public class PartyService {
     @Autowired
     private DanmuLibraryPartyService danmuLibraryPartyService;
 
+
+    public Party save(Party party){
+       return partyRepository.save(party);
+    }
     public Party save(String name, Integer type , String movieAlias, Date startTime, Date endTime,
                       String shortName, String danmuLibraryId, Integer dmDensity) {
         /**

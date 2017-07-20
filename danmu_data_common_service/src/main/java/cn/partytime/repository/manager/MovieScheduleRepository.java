@@ -23,4 +23,7 @@ public interface MovieScheduleRepository extends MongoRepository<MovieSchedule,S
 
     Page<MovieSchedule> findByPartyIdAndAddressId(String partyId, String addressId, Pageable pageable);
 
+
+
+
 }

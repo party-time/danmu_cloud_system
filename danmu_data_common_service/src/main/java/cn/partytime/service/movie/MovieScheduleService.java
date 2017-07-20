@@ -26,16 +26,12 @@ public class MovieScheduleService {
     @Resource(name = "managerMongoTemplate")
     private MongoTemplate managerMongoTemplate;
 
-
-
-
-
     public void insertMovieSchedule(MovieSchedule movieSchedule){
         movieScheduleRepository.insert(movieSchedule);
     }
 
-    public void updateMovieSchedule(MovieSchedule movieSchedule){
-        movieScheduleRepository.save(movieSchedule);
+    public MovieSchedule updateMovieSchedule(MovieSchedule movieSchedule){
+       return movieScheduleRepository.save(movieSchedule);
     }
 
     public List<MovieSchedule> findByPartyIdAndAddressId(String partyId, String addressId){
@@ -73,4 +69,5 @@ public class MovieScheduleService {
     public void del(String id){
         movieScheduleRepository.delete(id);
     }
+
 }

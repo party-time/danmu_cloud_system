@@ -1,7 +1,7 @@
 package cn.partytime.check.service;
 
 import cn.partytime.check.config.DanmuChannelRepository;
-import cn.partytime.check.rpcService.AdminUserService;
+import cn.partytime.check.rpcService.dataRpc.AdminUserService;
 import cn.partytime.check.model.AdminTaskModel;
 import cn.partytime.check.model.AdminUser;
 import io.netty.channel.Channel;

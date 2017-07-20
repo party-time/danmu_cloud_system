@@ -2,6 +2,7 @@ package cn.partytime.collector.scheduler;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
 import cn.partytime.collector.model.DanmuCollectorInfo;
+import cn.partytime.collector.rpcService.alarmRpcService.ClientAalarmRpcService;
 import cn.partytime.collector.service.*;
 import cn.partytime.common.cachekey.CollectorServerCacheKey;
 import cn.partytime.common.cachekey.CommandCacheKey;
@@ -15,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -51,9 +51,9 @@ public class DanmuServerScheduler {
     @Autowired
     private PreDanmuLogicService preDanmuLogicService;
 
-    @Autowired
-    private ClientChannelService clientChannelService;
 
+    @Autowired
+    private ClientCacheService clientCacheService;
 
     @Autowired
     private ScreenDanmuService screenDanmuService;
@@ -65,18 +65,44 @@ public class DanmuServerScheduler {
     @Autowired
     private DanmuSendService danmuSendService;
 
+    @Autowired
+    private ClientChannelService clientChannelService;
+
+    @Autowired
+    private ClientAalarmRpcService clientAalarmRpcService;
+
+
+    @Scheduled(cron = "0/10 * * * * *")
+    public void clientOffLineScheduler() {
+        Set<String> clientAddressSet = clientChannelService.findClientAddressSet(2);
+        if(clientAddressSet!=null && clientAddressSet.size()>0){
+            for(String addressId:clientAddressSet){
+                long size =clientCacheService.getClientSize(addressId);
+                if(size<2){
+                    long currentTime = DateUtils.getCurrentDate().getTime();
+                    long offlineTime = clientCacheService.getClientOfflineTime(addressId);
+                    long  subMinute = (currentTime - offlineTime)/1000/60;
+                    if(subMinute>5){
+                        clientAalarmRpcService.clientNetError(addressId);
+                    }
+                }
+            }
+        }
+    }
+
     @Scheduled(cron = "0/30 * * * * *")
     public void reportCurrentByCron() {
-        logger.info("将连接的客户端数量入缓存------------>start");
         int size = danmuChannelRepository.size();
         logger.info("当前服务器连接的客户端数量:" + size);
         DanmuCollectorInfo danmuCollectorInfo = new DanmuCollectorInfo();
-        logger.info("存入服务器的地址:{},端口:{}",host,port);
+
         danmuCollectorInfo.setIp(host);
         danmuCollectorInfo.setPort(port);
         //将客户端信息写入到缓存中
         String key = CollectorServerCacheKey.COLLECTOR_SERVERLIST_CACHE_KEY;
-        redisService.setSortSet(key, size, JSON.toJSONString(danmuCollectorInfo));
+        String message = JSON.toJSONString(danmuCollectorInfo);
+        logger.info("存入服务器的地址:{},端口:{},服务器客户端数量:{}",host,port,size);
+        redisService.setSortSet(key, size, message);
         redisService.expire(key, 60);
         logger.info("将连接的客户端数量入缓存------------>end");
     }

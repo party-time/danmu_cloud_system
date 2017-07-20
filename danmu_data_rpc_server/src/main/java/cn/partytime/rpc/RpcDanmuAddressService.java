@@ -4,12 +4,16 @@ import cn.partytime.common.constants.DistanceConst;
 import cn.partytime.common.util.DistanceUtil;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.logicService.DanmuAddressLogicService;
+import cn.partytime.model.client.DanmuClient;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.service.DanmuAddressService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,4 +48,11 @@ public class RpcDanmuAddressService {
     public DanmuAddress findById(@RequestParam String id) {
         return danmuAddressService.findById(id);
     }
+
+
+    @RequestMapping(value = "/findAddressListByType" ,method = RequestMethod.GET)
+    public List<DanmuAddress> findByType(Integer type){
+        return danmuAddressService.findByType(type);
+    }
+
 }

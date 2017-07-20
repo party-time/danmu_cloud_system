@@ -1,7 +1,7 @@
 package cn.partytime.rpcService;
 
 import cn.partytime.common.util.ServerConst;
-import cn.partytime.rpcService.impl.DanmuAddressServiceHystrix;
+import cn.partytime.rpcService.dataRpcService.impl.DanmuAddressServiceHystrix;
 import cn.partytime.model.manager.DanmuAddress;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;

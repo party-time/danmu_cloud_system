@@ -2,8 +2,9 @@ package cn.partytime.controller;
 
 
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.rpcService.*;
 import cn.partytime.model.*;
+import cn.partytime.rpcService.alarmRpcService.BulbService;
+import cn.partytime.rpcService.dataRpcService.*;
 import cn.partytime.service.MovieLogicService;
 import cn.partytime.service.ParamLogicService;
 import cn.partytime.service.PartyLogicService;
@@ -48,11 +49,6 @@ public class JavaClientController {
     @Autowired
     private ParamService paramService;
 
-
-    @Autowired
-    private MovieService movieService;
-
-
     @Autowired
     private PromoService promoService;
 
@@ -80,6 +76,9 @@ public class JavaClientController {
 
     @Autowired
     private MovieLogicService movieLogicService;
+
+    @Autowired
+    private BulbService bulbService;
 
     /**
      * 查找最近的所有的活动
@@ -142,7 +141,6 @@ public class JavaClientController {
 
 
     @RequestMapping(value = "/findHistoryDanmu", method = RequestMethod.GET)
-    @ResponseBody
     public RestResultModel BmsHistoryDanmuService(String partyId, Integer time, Integer count, Integer clientType, String code){
         //http://localhost:8780/v1/api/javaClient/findHistoryDanmu?partyId=59098703f0b071b95ac9bb7f&time=0&count=200&clientType=0&code=123456
         RestResultModel restResultModel = new RestResultModel();
@@ -326,13 +324,21 @@ public class JavaClientController {
                 projectorAction.setEndTime(nowDate);
                 projectorAction.setRegisterCode(code);
                 projectorService.saveProjectAction(projectorAction);
-                long userdTime = 0;
+
+                long usedTime = 0;
                 Date start = projectorAction.getStartTime();
                 long time = nowDate.getTime() - start.getTime();
-                userdTime = time + projector.getUsedTime();
-                projector.setUsedTime(userdTime);
+                usedTime = time + projector.getUsedTime();
+                projector.setUsedTime(usedTime);
                 projector.setUpdateTime(nowDate);
                 projectorService.saveProjector(projector);
+
+                long usedHour = usedTime/1000/60/60;
+                if(usedHour> 2000*0.8){
+                    //rpc告警
+                    bulbService.partyStart(code);
+                }
+
                 restResultModel.setResult(200);
                 restResultModel.setResult_msg("OK");
                 return restResultModel;

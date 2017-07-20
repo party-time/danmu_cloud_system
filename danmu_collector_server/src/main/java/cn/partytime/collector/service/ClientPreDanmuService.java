@@ -1,6 +1,6 @@
 package cn.partytime.collector.service;
 
-import cn.partytime.collector.rpcService.PartyService;
+import cn.partytime.collector.rpcService.dataRpcService.PartyService;
 import cn.partytime.collector.model.PartyLogicModel;
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
 import cn.partytime.common.cachekey.PreDanmuCacheKey;
@@ -65,7 +65,6 @@ public class ClientPreDanmuService {
             logger.info("获取活动{}预制弹幕",party.getPartyId());
             Object object = redisService.popFromList(PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + party.getPartyId());
             if (object != null) {
-                String danmuStr = String.valueOf(object + "");
                 return object;
             }
         }

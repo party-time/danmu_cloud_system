@@ -62,10 +62,7 @@ public class RpcPartyService {
     @RequestMapping(value = "/findByMovieAliasOnLine" ,method = RequestMethod.GET)
     public Party findByMovieAliasOnLine(@RequestParam String command){
         return partyService.findByMovieAliasOnLine(command);
-
     }
-
-
     @RequestMapping(value = "/findAddressIdListByPartyId" ,method = RequestMethod.GET)
     public List<String> findAddressIdListByPartyId(@RequestParam String partyId){
         List<PartyAddressRelation> partyAddressRelationList = partyAddressRelationService.findByPartyId(partyId);
@@ -76,8 +73,9 @@ public class RpcPartyService {
             return addressIdList;
         }
         return null;
-
     }
+
+
 
     /**
      * 通过地址和活动列表获取当前的活动
@@ -155,8 +153,6 @@ public class RpcPartyService {
     public PartyLogicModel findPartyAddressId(@RequestParam String addressId){
         return partyLogicService.findPartyAddressId(addressId);
     }
-
-
 
     @RequestMapping(value = "/findTemporaryParty" ,method = RequestMethod.GET)
     public PartyLogicModel findTemporaryParty(@RequestParam String addressId){

@@ -1,18 +1,21 @@
 package cn.partytime.service;
 
-import cn.partytime.model.DanmuClient;
-import cn.partytime.model.Party;
-import cn.partytime.model.RestResultModel;
-import cn.partytime.rpcService.DanmuClientService;
-import cn.partytime.rpcService.MovieService;
-import cn.partytime.rpcService.PartyService;
+import cn.partytime.common.util.DateUtils;
+import cn.partytime.common.util.ListUtils;
+import cn.partytime.model.*;
+import cn.partytime.rpcService.alarmRpcService.ProjectorAlarmService;
+import cn.partytime.rpcService.dataRpcService.DanmuClientService;
+import cn.partytime.rpcService.dataRpcService.MovieService;
+import cn.partytime.rpcService.dataRpcService.PartyService;
+import cn.partytime.rpcService.dataRpcService.ProjectorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * Created by dm on 2017/7/19.
@@ -25,14 +28,21 @@ public class MovieLogicService {
     private static final Logger logger = LoggerFactory.getLogger(MovieLogicService.class);
 
     @Autowired
-    private DanmuClientService danmuClientService;
-
-
-    @Autowired
     private PartyService partyService;
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private ProjectorService projectorService;
+
+
+    @Autowired
+    private DanmuClientService danmuClientService;
+
+    @Autowired
+    private ProjectorAlarmService projectorAlarmService;
+
 
 
     public RestResultModel partyStart(String registCode,String command,long clientTime) {
@@ -49,8 +59,41 @@ public class MovieLogicService {
             return restResultModel;
         }
         String addressId = danmuClient.getAddressId();
-        return movieService.partyStart(party.getId(),addressId,clientTime);
+        restResultModel  = movieService.partyStart(party.getId(),addressId,clientTime);
+        firstDanmuStartCommandHandler(registCode);
+
+        return restResultModel;
     }
+
+    public void firstDanmuStartCommandHandler(String registCode){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DanmuClient danmuClient =  danmuClientService.findByRegistCode(registCode);
+                String addressId = danmuClient.getAddressId();
+                List<DanmuClient> danmuClientList = danmuClientService.findByAddressId(addressId);
+                if(ListUtils.checkListIsNotNull(danmuClientList)){
+                    for(DanmuClient tempDanmuClient:danmuClientList){
+                        PageResultModel<ProjectorAction> projectorActions =  projectorService.findProjectorActionPage(registCode,0,1);
+                        List<ProjectorAction> projectorActionList =projectorActions.getRows();
+                        if(ListUtils.checkListIsNotNull(projectorActionList)){
+                            for(ProjectorAction projectorAction :projectorActionList){
+                                if(projectorAction.getEndTime()!=null){
+                                    projectorAlarmService.projectorOpen(registCode);
+                                }
+                                if(projectorAction.getCreateTime().before(DateUtils.getCurrentDate())){
+                                    projectorAlarmService.projectorOpen(registCode);
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
+        }).start();
+    }
+
 
 
     public RestResultModel moviceStart(String partyId,String registCode,long clientTime) {

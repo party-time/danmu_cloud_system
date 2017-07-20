@@ -49,6 +49,10 @@ public class MovieLogicService {
     @Autowired
     private PartyLogicService partyLogicService;
 
+    @Autowired
+    private PartyService partyService;
+
+
 
     public RestResultModel danmuStart(String  partyId, String addressId, long clientTime){
 
@@ -173,7 +177,7 @@ public class MovieLogicService {
 
                     movieSchedule.setClientEndTime(clientTime);
 
-                    movieScheduleService.updateMovieSchedule(movieSchedule);
+                    stopMovie(movieSchedule);
 
                     redisService.expire(FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId,0);
                     //清空预置弹幕
@@ -190,8 +194,8 @@ public class MovieLogicService {
                     movieSchedule.setUpdateTime(DateUtils.getCurrentDate());
 
                     movieSchedule.setClientEndTime(clientTime);
-                    movieScheduleService.updateMovieSchedule(movieSchedule);
 
+                    stopMovie(movieSchedule);
 
                     redisService.expire(FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId,0);
 
@@ -210,6 +214,19 @@ public class MovieLogicService {
             restResultModel.setResult_msg("活动已经结束");
             return restResultModel;
         }
+    }
+
+    private void stopMovie(MovieSchedule movieSchedule){
+        movieSchedule = movieScheduleService.updateMovieSchedule(movieSchedule);
+
+        long time = movieSchedule.getClientEndTime() - movieSchedule.getClientMoviceStartTime();
+        Party party =partyService.findById(movieSchedule.getPartyId());
+        if(party!=null && party.getMovieTime()!=0){
+            party.setMovieTime(time);
+            party =partyService.save(party);
+
+        }
+
     }
 
     private void clearPreDanmu(String addressId,String partyId ){
