@@ -42,5 +42,5 @@ public interface PartyLogicService {
     public boolean checkPartyIsOver(Party party);
 
     @RequestMapping(value = "/rpcParty/deleteParty" ,method = RequestMethod.GET)
-    public void deleteParty(String partyId);
+    public void deleteParty(@RequestParam(value = "partyId") String partyId);
 }
