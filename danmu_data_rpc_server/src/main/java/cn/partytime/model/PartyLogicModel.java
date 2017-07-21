@@ -1,11 +1,15 @@
 package cn.partytime.model;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Administrator on 2016/12/28.
  */
+
+@Data
 public class PartyLogicModel implements Serializable {
 
     private String partyId;
@@ -55,93 +59,6 @@ public class PartyLogicModel implements Serializable {
     private Integer dmDensity;
 
 
+    private Long movieTime;
 
-    public String getPartyId() {
-        return partyId;
-    }
-
-    public void setPartyId(String partyId) {
-        this.partyId = partyId;
-    }
-
-    public String getPartyName() {
-        return partyName;
-    }
-
-    public void setPartyName(String partyName) {
-        this.partyName = partyName;
-    }
-
-    public String getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(String addressId) {
-        this.addressId = addressId;
-    }
-
-    public Date getActiveTime() {
-        return activeTime;
-    }
-
-    public void setActiveTime(Date activeTime) {
-        this.activeTime = activeTime;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getH5TempId() {
-        return h5TempId;
-    }
-
-    public void setH5TempId(String h5TempId) {
-        this.h5TempId = h5TempId;
-    }
-
-
-    public Integer getDmDensity() {
-        return dmDensity;
-    }
-
-    public void setDmDensity(Integer dmDensity) {
-        this.dmDensity = dmDensity;
-    }
-
-    public int getAddressType() {
-        return addressType;
-    }
-
-    public void setAddressType(int addressType) {
-        this.addressType = addressType;
-    }
 }
