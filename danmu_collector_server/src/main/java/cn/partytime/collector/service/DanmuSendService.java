@@ -2,7 +2,7 @@ package cn.partytime.collector.service;
 
 import cn.partytime.collector.model.ProtocolDanmuModel;
 import cn.partytime.collector.model.ProtocolModel;
-import cn.partytime.collector.rpcService.alarmRpcService.DanmuService;
+import cn.partytime.collector.rpcService.alarmRpc.DanmuService;
 import cn.partytime.common.cachekey.ScreenClientCacheKey;
 import cn.partytime.common.constants.*;
 import cn.partytime.common.util.*;

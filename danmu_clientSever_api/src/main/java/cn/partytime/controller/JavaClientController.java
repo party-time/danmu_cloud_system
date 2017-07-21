@@ -3,8 +3,8 @@ package cn.partytime.controller;
 
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.model.*;
-import cn.partytime.rpcService.alarmRpcService.BulbService;
-import cn.partytime.rpcService.dataRpcService.*;
+import cn.partytime.rpcService.alarmRpc.BulbService;
+import cn.partytime.rpcService.dataRpc.*;
 import cn.partytime.service.MovieLogicService;
 import cn.partytime.service.ParamLogicService;
 import cn.partytime.service.PartyLogicService;

@@ -1,6 +1,6 @@
 package cn.partytime.collector.service;
 
-import cn.partytime.collector.rpcService.dataRpcService.PartyService;
+import cn.partytime.collector.rpcService.dataRpc.PartyService;
 import cn.partytime.collector.model.PartyLogicModel;
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
 import cn.partytime.common.cachekey.PreDanmuCacheKey;

@@ -2,7 +2,7 @@ package cn.partytime.collector.scheduler;
 
 import cn.partytime.collector.config.DanmuChannelRepository;
 import cn.partytime.collector.model.DanmuCollectorInfo;
-import cn.partytime.collector.rpcService.alarmRpcService.ClientAalarmRpcService;
+import cn.partytime.collector.rpcService.alarmRpc.ClientAalarmRpcService;
 import cn.partytime.collector.service.*;
 import cn.partytime.common.cachekey.CollectorServerCacheKey;
 import cn.partytime.common.cachekey.CommandCacheKey;

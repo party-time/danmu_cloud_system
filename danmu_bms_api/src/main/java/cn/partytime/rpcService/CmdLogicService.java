@@ -1,7 +1,7 @@
 package cn.partytime.rpcService;
 
 import cn.partytime.common.util.ServerConst;
-import cn.partytime.rpcService.dataRpcService.impl.CmdLogicServiceHystrix;
+import cn.partytime.rpcService.dataRpc.impl.CmdLogicServiceHystrix;
 import cn.partytime.model.CmdTempAllData;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
