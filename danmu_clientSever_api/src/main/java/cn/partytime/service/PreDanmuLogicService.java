@@ -1,12 +1,13 @@
-package cn.partytime.logicService;
+package cn.partytime.service;
 
 import cn.partytime.common.cachekey.PreDanmuCacheKey;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
-import cn.partytime.model.danmu.PreDanmuModel;
+import cn.partytime.model.PreDanmuModel;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.service.PreDanmuService;
+import cn.partytime.rpcService.dataRpc.CmdService;
+import cn.partytime.rpcService.dataRpc.PreDanmuService;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class PreDanmuLogicService {
 
 
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private CmdService cmdService;
 
     @Autowired
     private PreDanmuService preDanmuService;
@@ -43,7 +44,7 @@ public class PreDanmuLogicService {
                 Map<String,Object> preDanmuMap = new HashMap<String,Object>();
                 String templateId = preDanmuModel.getTemplateId();
                 Map<String,Object> contentMap = preDanmuModel.getContent();
-                CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+                CmdTempAllData cmdTempAllData = cmdService.findCmdTempAllDataByIdFromCache(templateId);
                 List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();
                 if(ListUtils.checkListIsNotNull(cmdTempComponentDataList)){
                     for(CmdTempComponentData cmdTempComponentData:cmdTempComponentDataList){

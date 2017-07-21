@@ -19,14 +19,15 @@ public interface PartyService {
     @RequestMapping(value = "/rpcParty/findPartyAddressId" ,method = RequestMethod.GET)
     public PartyLogicModel findPartyAddressId(@RequestParam(value = "addressId") String addressId);
 
-
-
-
     @RequestMapping(value = "/rpcParty/findByMovieAliasOnLine" ,method = RequestMethod.GET)
     public Party findByMovieAliasOnLine(@RequestParam(value = "command") String command);
 
-
-
     @RequestMapping(value = "/rpcParty/getPartyByPartyId" ,method = RequestMethod.GET)
     public Party getPartyByPartyId(@RequestParam(value = "partyId") String partyId);
+
+    @RequestMapping(value = "/rpcParty/findTemporaryParty" ,method = RequestMethod.GET)
+    public PartyLogicModel findTemporaryParty(@RequestParam(value = "addressId") String addressId);
+
+    @RequestMapping(value = "/rpcParty/saveParty" ,method = RequestMethod.POST)
+    public Party saveParty(Party party);
 }

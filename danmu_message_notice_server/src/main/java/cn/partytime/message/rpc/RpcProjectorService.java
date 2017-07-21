@@ -1,7 +1,9 @@
 package cn.partytime.message.rpc;
 
 import cn.partytime.message.messageHandlerService.ProjectorCloseAlarmService;
+import cn.partytime.message.model.DanmuClient;
 import cn.partytime.message.model.Party;
+import cn.partytime.message.rpcService.dataRpcService.DanmuClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +25,20 @@ public class RpcProjectorService {
     @Autowired
     private ProjectorCloseAlarmService projectorCloseAlarmService;
 
+    @Autowired
+    private DanmuClientService danmuClientService;
+
+
     @RequestMapping(value = "/projectorOpen" ,method = RequestMethod.GET)
     public void projectorOpen(@RequestParam String registCode) {
-
+        DanmuClient danmuClient = danmuClientService.findByRegistCode(registCode);
+        logger.info("projector:{} is not open",danmuClient.getName());
     }
 
     @RequestMapping(value = "/projectorClose" ,method = RequestMethod.GET)
     public void projectorClose(@RequestParam String registCode) {
-
+        DanmuClient danmuClient = danmuClientService.findByRegistCode(registCode);
+        logger.info("projector:{} is not close",danmuClient.getName());
     }
 
 }

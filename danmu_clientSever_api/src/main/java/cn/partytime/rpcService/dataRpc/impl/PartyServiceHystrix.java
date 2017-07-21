@@ -26,4 +26,15 @@ public class PartyServiceHystrix implements PartyService {
     public Party getPartyByPartyId(String partyId) {
         return null;
     }
+
+    @Override
+    public PartyLogicModel findTemporaryParty(String addressId) {
+        return null;
+    }
+
+    @Override
+    public Party saveParty(Party party) {
+        return null;
+    }
+
 }

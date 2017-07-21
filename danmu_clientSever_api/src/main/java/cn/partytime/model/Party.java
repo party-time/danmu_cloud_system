@@ -1,5 +1,7 @@
 package cn.partytime.model;
 
+import lombok.Data;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,6 +10,8 @@ import java.util.Date;
  * Created by liuwei on 16/6/12.
  * 弹幕活动
  */
+
+@Data
 public class Party{
 
     private String id;
@@ -73,147 +77,11 @@ public class Party{
     private Integer dmDensity;
 
 
+    /**
+     * 电影总时长
+     */
+    private long movieTime;
 
-    public String getJsonStartTime(){
-        if( null != this.startTime){
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(this.startTime);
-            return "{\"year\":"+calendar.get(Calendar.YEAR)+",\"month\":"+(calendar.get(Calendar.MONTH)+1)+",\"day\":"+calendar.get(Calendar.DAY_OF_MONTH)+
-                    ",\"hour\":"+calendar.get(Calendar.HOUR_OF_DAY)+",\"minute\":"+calendar.get(Calendar.MINUTE)+"}";
-        }
-        return null;
-    }
 
-    public String getJsonEndTime(){
-        if( null != this.endTime){
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(this.endTime);
-            return "{\"year\":"+calendar.get(Calendar.YEAR)+",\"month\":"+(calendar.get(Calendar.MONTH)+1)+",\"day\":"+calendar.get(Calendar.DAY_OF_MONTH)+
-                    ",\"hour\":"+calendar.get(Calendar.HOUR_OF_DAY)+",\"minute\":"+calendar.get(Calendar.MINUTE)+"}";
-        }
-        return null;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-    
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
-    public long getDanmuStartTime() {
-        return danmuStartTime;
-    }
-
-    public void setDanmuStartTime(long danmuStartTime) {
-        this.danmuStartTime = danmuStartTime;
-    }
-
-    public String getStartTimeStr() {
-        if( null != this.getStartTime()){
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(this.getStartTime());
-        }else{
-            return this.startTimeStr;
-        }
-
-    }
-
-    public String getEndTimeStr() {
-        if( null != this.getEndTime()){
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(this.getEndTime());
-        }else{
-            return this.endTimeStr;
-        }
-
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
-
-    public Date getLastUpdateResourceTime() {
-        return lastUpdateResourceTime;
-    }
-
-    public void setLastUpdateResourceTime(Date lastUpdateResourceTime) {
-        this.lastUpdateResourceTime = lastUpdateResourceTime;
-    }
-
-    public Date getActivityStartTime() {
-        return activityStartTime;
-    }
-
-    public void setActivityStartTime(Date activityStartTime) {
-        this.activityStartTime = activityStartTime;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getMovieAlias() {
-        return movieAlias;
-    }
-
-    public void setMovieAlias(String movieAlias) {
-        this.movieAlias = movieAlias;
-    }
-
-    public String getH5TempId() {
-        return h5TempId;
-    }
-
-    public void setH5TempId(String h5TempId) {
-        this.h5TempId = h5TempId;
-    }
-
-    public Integer getDmDensity() {
-        return dmDensity;
-    }
-
-    public void setDmDensity(Integer dmDensity) {
-        this.dmDensity = dmDensity;
-    }
 }
 

@@ -38,10 +38,6 @@ public class PartyLogicService {
     private PartyService partyService;
 
     @Autowired
-    private PartyAddressRelationService partyAddressRelationService;
-
-
-    @Autowired
     private MovieScheduleService movieScheduleService;
 
     @Autowired
@@ -52,32 +48,9 @@ public class PartyLogicService {
 
     public Party getPartyId(String addressId) {
         Party partyResult = null;
-        //通过日期查找活动
         List<Party> partyList = partyService.findPartyByTime(0);
-        if (partyList == null || partyList.isEmpty()) {
-            return null;
-        }
-        List<Party> listTemp = new ArrayList<Party>();
-        for (Party party : partyList) {
-            if (party.getStatus() != 3) {
-                listTemp.add(party);
-            }
-        }
-        if (ListUtils.checkListIsNull(listTemp)) {
-            return null;
-        }
-        //通过地点与活动来决定唯一性
-        List<String> partyIdList = new ArrayList<String>();
-        listTemp.stream().forEach(party -> partyIdList.add(party.getId()));
-        PartyAddressRelation partyAddressRelation = partyAddressRelationService.findByAddressIdANDPartyIdWithin(addressId, partyIdList);
-        if (partyAddressRelation == null) {
-            return null;
-        }
-        for (Party party : listTemp) {
-            if (party.getId().equals(partyAddressRelation.getPartyId())) {
-                partyResult = party;
-                break;
-            }
+        if(ListUtils.checkListIsNotNull(partyList)){
+            return partyList.get(0);
         }
         return partyResult;
     }

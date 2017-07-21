@@ -75,35 +75,21 @@ public class RpcPartyService {
         return null;
     }
 
-
-
-    /**
-     * 通过地址和活动列表获取当前的活动
-     *
-     * @param addressId
-     * @return
-     */
+    /**通过地址NO获取当前的活动*/
     @RequestMapping(value = "/getPartyByAddressId" ,method = RequestMethod.GET)
     public Party getPartyByAddressId(@RequestParam String addressId) {
         return partyLogicService.getPartyId(addressId);
     }
 
-
-
+    /**通过活动NO获取当前的活动*/
     @RequestMapping(value = "/getPartyByPartyId" ,method = RequestMethod.GET)
     public Party getPartyByPartyId(@RequestParam String partyId) {
         return partyService.findById(partyId);
     }
 
-
-    /**
-     * 删除活动
-     *
-     * @param partyId
-     */
-
+    /**删除活动 @param partyId*/
     @RequestMapping(value = "/deleteParty" ,method = RequestMethod.GET)
-    public void deleteParty(String partyId) {
+    public void deleteParty(@RequestParam  String partyId) {
         //删除活动
         partyService.deleteById(partyId);
         //删除活动后同时删除活动与场地的关联表
@@ -119,13 +105,7 @@ public class RpcPartyService {
         }
     }
 
-    /**
-     * 验证活动是否结束
-     *
-     * @param party 活动
-     * @return
-     */
-
+    /*验证活动是否结束*/
     @RequestMapping(value = "/checkPartyIsOver" ,method = RequestMethod.POST)
     public boolean checkPartyIsOver(@RequestBody Party party) {
         if (party.getStatus() >2) {
@@ -145,7 +125,6 @@ public class RpcPartyService {
             return null;
         }
         String addressId = danmuAddress.getId();
-
         return findPartyAddressId(addressId);
     }
 
@@ -170,30 +149,15 @@ public class RpcPartyService {
         }else{
             PartyLogicModel partyLogicModel =  findPartyAddressId(addressId);
             if(partyLogicModel!=null){
-                logger.info("partyLogicModel============>{}",JSON.toJSONString(partyLogicModel));
                 return partyLogicModel.getDmDensity();
             }
         }
         return danmuDensity;
     }
 
-
-    @RequestMapping(value = "/findById" ,method = RequestMethod.GET)
-    public Party findById(String partyId) {
-        return partyService.findById(partyId);
-    }
-
-    public List<Party> findByIds(List<String> partyIds) {
-        return partyService.findByIds(partyIds);
-    }
-
-
-    @RequestMapping(value = "/updateParty" ,method = RequestMethod.POST)
-    public void updateParty(@RequestBody Party party) {
-        if (party == null) {
-            throw new IllegalArgumentException("活动不存在");
-        }
-        partyRepository.save(party);
+    @RequestMapping(value = "/saveParty" ,method = RequestMethod.POST)
+    public Party updateParty(@RequestBody Party party) {
+        return partyRepository.save(party);
     }
 
 }

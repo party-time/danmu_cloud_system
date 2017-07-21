@@ -4,6 +4,7 @@ import cn.partytime.check.config.DanmuChannelRepository;
 import cn.partytime.check.handlerThread.PreDanmuHandler;
 import cn.partytime.check.handlerThread.TestDanmuHandler;
 import cn.partytime.check.model.*;
+import cn.partytime.check.rpcService.alarmRpc.AdminAlarmService;
 import cn.partytime.check.rpcService.dataRpc.*;
 import cn.partytime.check.util.CommandTypeConst;
 import cn.partytime.common.cachekey.*;
@@ -80,6 +81,9 @@ public class CommandHanderService {
 
     @Autowired
     private CacheDataService cacheDataService;
+
+    @Autowired
+    private AdminAlarmService adminAlarmService;
 
     public void commandHandler(Map<String, Object> map, Channel channel) {
         //类型
@@ -902,6 +906,7 @@ public class CommandHanderService {
             }else{
                 cacheDataService.setAdminOnlineCount(partyType,0);
                 //管理员掉线告警
+                adminAlarmService.admiOffLine();
 
             }
 

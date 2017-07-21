@@ -45,7 +45,7 @@ public class RpcAdminService {
 
     @RequestMapping(value = "/admiOffLine" ,method = RequestMethod.GET)
     public void admiOffLine() {
-        List<DanmuAddress> danmuAddressList = danmuAddressService.findByType(1);
+        List<DanmuAddress> danmuAddressList = danmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
             for(DanmuAddress danmuAddress:danmuAddressList){
                 PartyLogicModel partyLogicModel =partyService.findPartyAddressId(danmuAddress.getId());

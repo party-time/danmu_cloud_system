@@ -37,7 +37,7 @@ public class ClientScheduler {
     @Scheduled(cron = "0 5 2 * * ?")
     private void projectorCloseCommandListener(){
 
-        List<DanmuAddress> danmuAddressList = danmuAddressService.findByType(1);
+        List<DanmuAddress> danmuAddressList = danmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
             for(DanmuAddress danmuAddress:danmuAddressList){
                 List<DanmuClient>  danmuClientList = danmuClientService.findByAddressId(danmuAddress.getId());

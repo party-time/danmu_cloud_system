@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-@RequestMapping("/pcProjector")
+@RequestMapping("/rpcProjector")
 public class RpcProjectorService {
 
     @Autowired

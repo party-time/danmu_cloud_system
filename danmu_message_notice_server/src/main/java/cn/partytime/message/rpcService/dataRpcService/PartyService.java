@@ -2,6 +2,7 @@ package cn.partytime.message.rpcService.dataRpcService;
 
 
 import cn.partytime.common.util.ServerConst;
+import cn.partytime.message.model.Party;
 import cn.partytime.message.model.PartyLogicModel;
 import cn.partytime.message.rpcService.dataRpcService.impl.DanmuAddressServiceHystrix;
 import cn.partytime.message.rpcService.dataRpcService.impl.PartyServiceHystrix;
@@ -15,5 +16,9 @@ public interface PartyService {
 
     @RequestMapping(value = "/rpcParty/findPartyAddressId" ,method = RequestMethod.GET)
     public PartyLogicModel findPartyAddressId(@RequestParam(value = "addressId") String addressId);
+
+    @RequestMapping(value = "/rpcParty/getPartyByPartyId" ,method = RequestMethod.GET)
+    public Party getPartyByPartyId(@RequestParam(value = "partyId") String partyId);
+
 
 }

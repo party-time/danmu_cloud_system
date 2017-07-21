@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = ServerConst.SERVER_NAME_DATASERVER,fallback = PartyServiceHystrix.class)
 public interface PartyService {
 
-    @RequestMapping(value = "/rpcParty/findById" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcParty/getPartyByPartyId" ,method = RequestMethod.GET)
     public Party findById(@RequestParam(value = "partyId") String partyId);
 
-
-    @RequestMapping(value = "/rpcParty/updateParty" ,method = RequestMethod.POST)
-    public void updateParty(Party party);
+    @RequestMapping(value = "/rpcParty/saveParty" ,method = RequestMethod.POST)
+    public Party updateParty(Party party);
 
 
 }

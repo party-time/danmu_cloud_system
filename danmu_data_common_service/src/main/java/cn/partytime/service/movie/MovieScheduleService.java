@@ -26,8 +26,8 @@ public class MovieScheduleService {
     @Resource(name = "managerMongoTemplate")
     private MongoTemplate managerMongoTemplate;
 
-    public void insertMovieSchedule(MovieSchedule movieSchedule){
-        movieScheduleRepository.insert(movieSchedule);
+    public MovieSchedule insertMovieSchedule(MovieSchedule movieSchedule){
+        return movieScheduleRepository.insert(movieSchedule);
     }
 
     public MovieSchedule updateMovieSchedule(MovieSchedule movieSchedule){

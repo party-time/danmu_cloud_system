@@ -16,7 +16,8 @@ public class PartyServiceHystrix implements PartyService {
     }
 
     @Override
-    public void updateParty(Party party) {
-
+    public Party updateParty(Party party) {
+        return null;
     }
+
 }
