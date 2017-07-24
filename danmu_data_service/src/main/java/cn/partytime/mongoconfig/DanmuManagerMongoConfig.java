@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 /**
  * Created by liuwei on 16/6/15.
  */
-@Configuration
 @EnableMongoRepositories(basePackages = "cn.partytime.repository.manager", mongoTemplateRef = "managerMongoTemplate")
 public class DanmuManagerMongoConfig {
 

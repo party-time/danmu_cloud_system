@@ -91,7 +91,7 @@ public class PartyLogicService {
             partyLogicModel.setActiveTime(party.getActivityStartTime());
             partyLogicModel.setShortName(party.getShortName());
             partyLogicModel.setH5TempId(party.getH5TempId());
-            partyLogicModel.setMovieTime(party.getMovieTime());
+            //partyLogicModel.setMovieTime(party.getMovieTime());
 
             String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyLogicModel.getPartyId();
             Object object = redisService.get(key);
