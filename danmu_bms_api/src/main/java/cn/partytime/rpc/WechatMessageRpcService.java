@@ -75,14 +75,12 @@ public class WechatMessageRpcService {
             for(String id : ids){
                 AdminUser adminUser =  adminUserService.findById(id);
                 WechatUser wechatUser = wechatUserService.findById(adminUser.getWechatId());
-                sendTmpl(wechatUser.getOpenId(),monitor.get,msg);
+                sendTmpl(wechatUser.getOpenId(),monitor.getWechatTempId(),msg);
             }
-
-
         }else{
             AdminUser adminUser = adminUserService.findById(monitor.getAdminUserIds());
             WechatUser wechatUser = wechatUserService.findById(adminUser.getWechatId());
-            sendTmpl(wechatUser.getOpenId(),,msg);
+            sendTmpl(wechatUser.getOpenId(),monitor.getWechatTempId(),msg);
         }
     }
 
@@ -96,7 +94,7 @@ public class WechatMessageRpcService {
 
         Map<String,ValueTmpl> content = new HashMap<String,ValueTmpl>();
         ValueTmpl valueTmpl = new ValueTmpl();
-        valueTmpl.setValue("有人购买商品");
+        valueTmpl.setValue("报警");
         content.put("first",valueTmpl);
 
         ValueTmpl valueTmpl1 = new ValueTmpl();
@@ -105,16 +103,12 @@ public class WechatMessageRpcService {
         content.put("keyword1",valueTmpl1);
 
         ValueTmpl valueTmpl2 = new ValueTmpl();
-        valueTmpl2.setValue("电商系统");
+        valueTmpl2.setValue("enterX系统");
         content.put("keyword2",valueTmpl2);
 
         ValueTmpl valueTmpl5 = new ValueTmpl();
-        DanmuAddress danmuAddress = danmuAddressService.findById(order.getAddressId());
-        if( null != danmuAddress){
-            valueTmpl5.setValue("有人在"+danmuAddress.getName()+"购买了"+item.getName()+"*"+order.getNum()+"，请与星美生活工作人员联系");
-        }else{
-            valueTmpl5.setValue("有人购买了"+item.getName()+"*"+order.getNum()+"，请与星美生活工作人员联系");
-        }
+        valueTmpl5.setValue(msg);
+
         content.put("remark",valueTmpl5);
         msgTmpl.setData(content);
 
