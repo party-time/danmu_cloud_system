@@ -14,6 +14,9 @@ public interface MonitorRepository extends MongoRepository<Monitor,String> {
     Integer countByKey(String key);
 
 
+    Monitor findByKey(String key);
+
+
 
 
 }

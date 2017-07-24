@@ -38,9 +38,10 @@ public class MonitorService {
 
     public Monitor findById(String id){
         return monitorRepository.findOne(id);
-
     }
 
-
+    public Monitor findByKey(String key){
+        return monitorRepository.findByKey(key);
+    }
 
 }
