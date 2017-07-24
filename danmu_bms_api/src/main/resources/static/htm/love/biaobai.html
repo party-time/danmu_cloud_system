@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>聚时代-表白</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="x5-orientation" content="portrait">
+    <script src="/js/wechat/jquery.min.js"></script>
+</head>
+<body>
+<div style="position:absolute;left:0;right:0;top:0;bottom:0;overflow:hidden;z-index:3;">
+    <image id="bg" src="/images/wechat/love/biaobai/biaobai1.jpg" style="position:absolute;height:100%;width:100%;overflow:hidden;"/>
+    <div style="position:absolute;top:73%;width:100%;background:url('/images/wechat/love/biaobai/input.png') no-repeat;background-position:center;background-size:95% 100%;">
+        <div style="margin-top:5px;text-align:center;">
+            <input type="text" style="width:35%;border:0px;background:none;font-size:21px;color:#44BBEE" value="昵称" onfocus="javascript:if(this.value=='昵称'){this.value=''};" onblur="javascript:if(this.value==''){this.value='昵称'};" maxlength="4"/>
+            <input type="text" style="margin-left:10px;width:35%;border:0px;background:none;font-size:21px;color:#44BBEE" value="昵称" onfocus="javascript:if(this.value=='昵称'){this.value=''};" onblur="javascript:if(this.value==''){this.value='昵称'};" maxlength="4"/>
+        </div>
+        <div>
+            <input type="text" style="width:68%;height:1.5em;font-size:16px;color:#44BBEE;border:0px;background:none;margin-left:40px;" value="请输入你的情话" onfocus="javascript:if(this.value=='请输入你的情话'){this.value=''};" onblur="javascript:if(this.value==''){this.value='请输入你的情话'};" maxlength="16"／>
+        </div>
+
+        <div style="text-align:right;margin-bottom:8px;">
+            <image src="/images/wechat/love/biaobai/next_btn.png" onclick="openNext()" style="margin-right:40px;"/>
+        </div>
+
+    </div>
+</div>
+<script>
+    var _bb;
+    var selectBiaobai = function(){
+        var url = location.href;
+        var bb = '';
+        if(url.indexOf('bb=')!=-1){
+           bb = url.substr(url.indexOf('=')+1);
+           if( bb == 1){
+            $('#bg').attr('src','/images/wechat/love/biaobai/biaobai1.jpg');
+           }else if( bb ==2 ){
+            $('#bg').attr('src','/images/wechat/love/biaobai/biaobai2.jpg');
+           }else if( bb ==3 ){
+            $('#bg').attr('src','/images/wechat/love/biaobai/biaobai3.jpg');
+           }else if( bb ==4 ){
+            $('#bg').attr('src','/images/wechat/love/biaobai/biaobai4.jpg');
+           }else if( bb ==5 ){
+            $('#bg').attr('src','/images/wechat/love/biaobai/biaobai5.jpg');
+           }
+           _bb = bb;
+        }
+    }
+
+    var openNext = function(){
+        window.location.href='/upload/h5html/biaobaipay.html?bb='+_bb;
+    }
+    selectBiaobai();
+</script>
+</body>
+</html>

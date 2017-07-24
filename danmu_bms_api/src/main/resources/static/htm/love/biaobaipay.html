@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>聚时代-表白</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="screen-orientation" content="portrait">
+    <meta name="x5-orientation" content="portrait">
+    <script src="/js/wechat/jquery.min.js"></script>
+</head>
+<body>
+<div style="position:absolute;left:0;right:0;top:0;bottom:0;overflow:hidden;z-index:3;">
+    <image src="/images/wechat/love/biaobai/pay.jpg" style="position:absolute;height:100%;width:100%;overflow:hidden;"/>
+    <div style="position:absolute;text-align:center;width:100%;top:10%;" id="money">
+
+    </div>
+</div>
+<script>
+    var payMoney = function(){
+        var url = location.href;
+        var bb = '';
+        if(url.indexOf('bb=')!=-1){
+           bb = url.substr(url.indexOf('=')+1);
+           if( bb == 1){
+            $('#money').html('<span style="font-size:150px">5.21</span><span style="font-size:40px">元</span>');
+           }else if( bb ==2 ){
+            $('#money').html('<span style="font-size:190px">9.9</span><span style="font-size:40px">元</span>');
+           }else if( bb ==3 ){
+            $('#money').html('<span style="font-size:190px">21</span><span style="font-size:40px">元</span>');
+           }else if( bb ==4 ){
+            $('#money').html('<span style="font-size:150px">52.1</span><span style="font-size:40px">元</span>');
+           }else if( bb ==5 ){
+            $('#money').html('<span style="font-size:190px">99</span><span style="font-size:40px">元</span>');
+           }
+        }
+    }
+    payMoney();
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+html,body,div,object{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background: url(/image/play/bg1.png) no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+}
+object{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.player{
+    position: absolute;
+}
+/*
+@media screen and (min-width:1400px)
+    body{
+
+    }
+    .player{
+        width:694px;
+        height:390px;
+        top: 348px;
+        left: 622px;
+    }*/
