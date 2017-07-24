@@ -30,18 +30,15 @@
         <module>danmu_collector_server</module>
         <module>danmu_check_server</module>
 
-
-
-        <module>danmu_db_model</module>
         <module>danmu_data_service</module>
 
         <module>danmu_log_server_api</module>
         <module>danmu_common</module>
         <module>danmu_redis_server</module>
 
-        <module>danmu_data_common_service</module>
         <module>danmu_message_notice_server</module>
         <module>danmu_message_handler</module>
+        <module>danmu_dto_model</module>
 
 
 

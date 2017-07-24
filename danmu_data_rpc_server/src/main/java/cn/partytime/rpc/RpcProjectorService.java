@@ -46,8 +46,8 @@ public class RpcProjectorService {
     public PageResultModel<ProjectorAction> findProjectorActionPage(@RequestParam String registorCode, @RequestParam int page, @RequestParam int size){
         Page<ProjectorAction> projectorActionPage = projectorActionService.findProjectorActionPage(registorCode,page,size);
         PageResultModel<ProjectorAction> projectorActionPageResultModel = new PageResultModel<ProjectorAction>();
-        projectorActionPageResultModel.setRows(projectorActionPageResultModel.getRows());
-        projectorActionPageResultModel.setTotal(projectorActionPageResultModel.getTotal());
+        projectorActionPageResultModel.setRows(projectorActionPage.getContent());
+        projectorActionPageResultModel.setTotal(projectorActionPage.getTotalElements());
         return projectorActionPageResultModel;
 
     }

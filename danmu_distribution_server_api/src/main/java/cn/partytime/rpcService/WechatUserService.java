@@ -1,8 +1,8 @@
 package cn.partytime.rpcService;
 
 import cn.partytime.common.util.ServerConst;
-import cn.partytime.rpcService.dataRpc.impl.WechatUserServiceHystrix;
 import cn.partytime.model.WechatUser;
+import cn.partytime.rpcService.dataRpc.impl.WechatUserServiceHystrix;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

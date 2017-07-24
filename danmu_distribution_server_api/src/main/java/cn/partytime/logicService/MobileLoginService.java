@@ -1,11 +1,11 @@
 package cn.partytime.logicService;
 
 import cn.partytime.common.cachekey.CollectorServerCacheKey;
+import cn.partytime.model.WechatUser;
 import cn.partytime.rpcService.WechatUserService;
 import cn.partytime.model.DanmuCollectorInfo;
 import cn.partytime.model.ResultInfo;
 import cn.partytime.model.ServerInfo;
-import cn.partytime.model.WechatUser;
 import cn.partytime.redis.service.RedisService;
 
 import com.alibaba.fastjson.JSON;

@@ -9,11 +9,9 @@ import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.MovieSchedule;
 import cn.partytime.model.manager.Party;
-import cn.partytime.model.manager.PartyAddressRelation;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.service.DanmuAddressService;
 import cn.partytime.service.movie.MovieScheduleService;
-import cn.partytime.service.PartyAddressRelationService;
 import cn.partytime.service.PartyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

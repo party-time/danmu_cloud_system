@@ -1,9 +1,8 @@
 package cn.partytime.message.rpc;
 
 import cn.partytime.message.messageHandlerService.ProjectorCloseAlarmService;
-import cn.partytime.message.model.DanmuClient;
-import cn.partytime.message.model.Party;
 import cn.partytime.message.rpcService.dataRpcService.DanmuClientService;
+import cn.partytime.model.DanmuClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

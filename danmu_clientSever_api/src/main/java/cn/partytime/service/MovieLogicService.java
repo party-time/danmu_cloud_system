@@ -108,6 +108,7 @@ public class MovieLogicService {
                     insertmovieSchedule(partyId, addressId,clientTime);
                     firstDanmuStartCommandHandler(registCode);
                     sendPartyStatusToClient(partyId,"1",addressId,clientTime);
+                    restResultModel = new RestResultModel();
                     restResultModel.setResult(200);
                     return restResultModel;
                 }
@@ -115,6 +116,7 @@ public class MovieLogicService {
         } else {
             insertmovieSchedule(partyId, addressId,clientTime);
             sendPartyStatusToClient(partyId,"1",addressId,clientTime);
+            restResultModel = new RestResultModel();
             restResultModel.setResult(200);
             return restResultModel;
         }
@@ -148,6 +150,7 @@ public class MovieLogicService {
                 logger.info("场地:{},活动:{} 请求活动开始");
                 insertmovieScheduleByMoviceStart(partyId, addressId,clientTime);
                 sendPartyStatusToClient(partyId,"2",addressId,clientTime);
+                restResultModel = new RestResultModel();
                 restResultModel.setResult(200);
                 return restResultModel;
             } else {
@@ -175,6 +178,7 @@ public class MovieLogicService {
                         movieSchedule.setUpdateTime(DateUtils.getCurrentDate());
                         moveScheduleService.updateMovieSchedule(movieSchedule);
                         sendPartyStatusToClient(partyId,"2",addressId,clientTime);
+                        restResultModel = new RestResultModel();
                         restResultModel.setResult(200);
                         return restResultModel;
                     }
@@ -190,6 +194,7 @@ public class MovieLogicService {
         } else {
             insertmovieScheduleByMoviceStart(partyId, addressId,clientTime);
             sendPartyStatusToClient(partyId,"2",addressId,clientTime);
+            restResultModel = new RestResultModel();
             restResultModel.setResult(200);
             return restResultModel;
         }
@@ -277,6 +282,7 @@ public class MovieLogicService {
             restResultModel.setResult_msg("活动已经结束");
             return restResultModel;
         }else{
+            restResultModel = new RestResultModel();
             restResultModel.setResult(406);
             restResultModel.setResult_msg("活动已经结束");
             return restResultModel;

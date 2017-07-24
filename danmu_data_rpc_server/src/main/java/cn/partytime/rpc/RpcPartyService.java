@@ -1,15 +1,12 @@
 package cn.partytime.rpc;
 
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
-import cn.partytime.common.constants.PartyConst;
-import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.logicService.DanmuAddressLogicService;
 import cn.partytime.logicService.PartyLogicService;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.manager.DanmuAddress;
-import cn.partytime.model.manager.MovieSchedule;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.PartyAddressRelation;
 import cn.partytime.redis.service.RedisService;
@@ -19,11 +16,9 @@ import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

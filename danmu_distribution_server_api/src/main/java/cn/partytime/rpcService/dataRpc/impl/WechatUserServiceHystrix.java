@@ -1,7 +1,7 @@
 package cn.partytime.rpcService.dataRpc.impl;
 
-import cn.partytime.rpcService.WechatUserService;
 import cn.partytime.model.WechatUser;
+import cn.partytime.rpcService.WechatUserService;
 import org.springframework.stereotype.Component;
 
 /**

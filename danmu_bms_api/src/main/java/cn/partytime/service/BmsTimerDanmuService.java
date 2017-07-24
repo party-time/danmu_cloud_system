@@ -8,8 +8,6 @@ import cn.partytime.model.danmu.TimerDanmu;
 import cn.partytime.model.danmu.TimerDanmuModel;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.TimerDanmuFile;
-import cn.partytime.redis.service.RedisService;
-import cn.partytime.service.danmuCmd.BmsCmdService;
 import cn.partytime.service.timerDanmu.TimerDanmuService;
 import com.alibaba.fastjson.JSON;
 import com.mongodb.BasicDBList;

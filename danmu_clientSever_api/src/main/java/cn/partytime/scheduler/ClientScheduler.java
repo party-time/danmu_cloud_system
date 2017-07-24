@@ -7,6 +7,8 @@ import cn.partytime.model.*;
 import cn.partytime.rpcService.alarmRpc.MovieAlarmService;
 import cn.partytime.rpcService.alarmRpc.ProjectorAlarmService;
 import cn.partytime.rpcService.dataRpc.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -20,6 +22,8 @@ import java.util.List;
 @EnableScheduling
 @RefreshScope
 public class ClientScheduler {
+
+    private static final Logger logger = LoggerFactory.getLogger(ClientScheduler.class);
 
     @Autowired
     private ProjectorAlarmService projectorAlarmService;
@@ -44,6 +48,7 @@ public class ClientScheduler {
 
     @Scheduled(cron = "0 0/5 * * * ?")
     private void moviePlayTimeListener(){
+        logger.info("movie time is too long listener");
         List<DanmuAddress> danmuAddressList = danmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
             for(DanmuAddress danmuAddress:danmuAddressList){
@@ -56,14 +61,16 @@ public class ClientScheduler {
                         MovieSchedule movieSchedule = movieScheduleList.get(0);
                         if(movieSchedule.getEndTime()==null){
                             Date currentDate = DateUtils.getCurrentDate();
-                            long time = currentDate.getTime() -movieSchedule.getMoviceStartTime().getTime();
-                            movieAlarmService.movieTime(partyId,addressId,time);
+                            Date danmuStartTime = movieSchedule.getStartTime();
+                            Date movieStartTime = movieSchedule.getMoviceStartTime();
+                            if(movieStartTime!=null){
+                                long time = currentDate.getTime() - movieStartTime.getTime();
+                                movieAlarmService.movieTime(partyId,addressId,time);
+                            }
                         }
                     }
                 }
-
             }
-
         }
     }
 

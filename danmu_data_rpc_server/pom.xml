@@ -57,13 +57,13 @@
 
         <dependency>
             <groupId>cn.party-time</groupId>
-            <artifactId>danmu_data_common_service</artifactId>
+            <artifactId>danmu_redis_server</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
+            <artifactId>danmu_data_service</artifactId>
             <groupId>cn.party-time</groupId>
-            <artifactId>danmu_redis_server</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

@@ -1,7 +1,7 @@
 package cn.partytime.message.rpcService.dataRpcService.impl;
 
-import cn.partytime.message.model.DanmuAddress;
 import cn.partytime.message.rpcService.dataRpcService.DanmuAddressService;
+import cn.partytime.model.DanmuAddress;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

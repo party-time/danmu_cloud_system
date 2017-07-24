@@ -3,7 +3,6 @@ package cn.partytime.rpc;
 import cn.partytime.model.PartyResourceResult;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.ResourceFile;
-import cn.partytime.repository.manager.PartyRepository;
 import cn.partytime.service.PartyService;
 import cn.partytime.service.ResourceFileService;
 import org.springframework.beans.factory.annotation.Autowired;

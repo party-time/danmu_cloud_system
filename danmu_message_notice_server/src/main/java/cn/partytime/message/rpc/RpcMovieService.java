@@ -3,9 +3,9 @@ package cn.partytime.message.rpc;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.messageHandlerService.MovieTimeAlaramService;
-import cn.partytime.message.model.Party;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.message.rpcService.dataRpcService.PartyService;
+import cn.partytime.model.Party;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,7 @@ public class RpcMovieService {
 
     @Autowired
     private PartyService partyService;
+
 
 
     @RequestMapping(value = "/movieTime" ,method = RequestMethod.GET)
