@@ -11,7 +11,8 @@ import cn.partytime.model.manager.AdTimerDanmuFile;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.PartyAddressAdRelation;
 import cn.partytime.model.manager.ResourceFile;
-import cn.partytime.service.*;
+import cn.partytime.service.PartyService;
+import cn.partytime.service.ResourceFileService;
 import cn.partytime.service.adDanmu.AdTimerDanmuFileService;
 import cn.partytime.service.adDanmu.AdTimerDanmuService;
 import cn.partytime.service.adDanmu.PartyAddressAdRelationService;
@@ -122,7 +123,8 @@ public class RpcAdTimerService {
                         resultResourceFileList.add(resourceFile);
                     }
                 }
-                adTimerResource.setResourceFileList(resultResourceFileList);
+                //TODO 需要恢复
+                //adTimerResource.setResourceFileList(resultResourceFileList);
             }
             for(TimerDanmuFileLogicModel timerDanmuFile :timerDanmuFileLogicModelList){
                 timerDanmuFile.setPath(map.get(timerDanmuFile.getPoolId()));

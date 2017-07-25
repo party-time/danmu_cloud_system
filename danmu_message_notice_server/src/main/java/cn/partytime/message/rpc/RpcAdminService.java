@@ -7,7 +7,7 @@ import cn.partytime.message.messageHandlerService.AdminIsOnLineAlarmService;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.message.rpcService.dataRpcService.DanmuAddressService;
 import cn.partytime.message.rpcService.dataRpcService.PartyService;
-import cn.partytime.model.DanmuAddress;
+import cn.partytime.model.DanmuAddressDTO;
 import cn.partytime.model.PartyLogicModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,9 +43,9 @@ public class RpcAdminService {
 
     @RequestMapping(value = "/admiOffLine" ,method = RequestMethod.GET)
     public void admiOffLine() {
-        List<DanmuAddress> danmuAddressList = danmuAddressService.findByType(0);
+        List<DanmuAddressDTO> danmuAddressList = danmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
-            for(DanmuAddress danmuAddress:danmuAddressList){
+            for(DanmuAddressDTO danmuAddress:danmuAddressList){
                 PartyLogicModel partyLogicModel =partyService.findPartyAddressId(danmuAddress.getId());
                 if(partyLogicModel!=null){
                     Map<String,Object> map = new HashMap<>();

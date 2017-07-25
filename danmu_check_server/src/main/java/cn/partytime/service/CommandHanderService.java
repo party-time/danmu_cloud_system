@@ -567,7 +567,7 @@ public class CommandHanderService {
         DanmuResult danmuResult = new DanmuResult();
         danmuResult.setType(type);
         Date now = DateUtils.getCurrentDate();
-        Party party = partyService.findById(partyId);
+        PartyDTO party = partyService.findById(partyId);
 
 
         //活动状态
@@ -607,7 +607,7 @@ public class CommandHanderService {
                 return;
             }
             //判断当前场地是否有其他活动正在进行
-            Party progressParty = partyLogicService.getPartyId(addressId);
+            PartyDTO progressParty = partyLogicService.getPartyId(addressId);
             // 活动存在，并且与partyId 不一致，其他活动正在进行
             if (progressParty != null && !progressParty.getId().equals(partyId)) {
                 //当前本场地有活动正在进行
@@ -644,7 +644,7 @@ public class CommandHanderService {
             }
 
             //判断当前场地是否有其他活动正在进行
-            Party progressParty = partyLogicService.getPartyId(addressId);
+            PartyDTO progressParty = partyLogicService.getPartyId(addressId);
             // 活动存在，并且与partyId 不一致，其他活动正在进行
             if (progressParty != null && !progressParty.getId().equals(partyId)) {
                 //当前本场地有活动正在进行
@@ -681,7 +681,7 @@ public class CommandHanderService {
 
 
 
-    public Map<String,Object> getPartyCommandMap(Party party, int status){
+    public Map<String,Object> getPartyCommandMap(PartyDTO party, int status){
         Map<String,Object> dataObject = new HashMap<String,Object>();
         dataObject.put("type", PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS);
         dataObject.put("partyId",party.getId());
@@ -729,7 +729,7 @@ public class CommandHanderService {
 
         if(partyType==0){
             //获取活动信息
-            Party party = partyService.findById(partyId);
+            PartyDTO party = partyService.findById(partyId);
             //判断活动是否结束
             boolean partyIsOver = false;
             if (party.getStatus() > 2) {

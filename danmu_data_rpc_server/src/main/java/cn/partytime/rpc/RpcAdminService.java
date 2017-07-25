@@ -3,7 +3,6 @@ package cn.partytime.rpc;
 import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.model.manager.AdminUser;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.repository.manager.AdminUserRepository;
 import cn.partytime.service.AdminUserService;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RpcAdminService {
 
     @Autowired
-    private AdminUserService  adminUserService;
+    private AdminUserService adminUserService;
 
     @Autowired
     private RedisService redisService;

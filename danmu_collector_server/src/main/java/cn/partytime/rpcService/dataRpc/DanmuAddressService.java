@@ -1,7 +1,7 @@
 package cn.partytime.rpcService.dataRpc;
 
+import cn.partytime.model.DanmuAddressDTO;
 import cn.partytime.rpcService.dataRpc.impl.DanmuAddressServiceHystrix;
-import cn.partytime.model.DanmuAddress;
 import cn.partytime.common.util.ServerConst;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +17,6 @@ public interface DanmuAddressService {
 
 
     @RequestMapping(value = "/rpcDanmuAddress/findAddressByLonLat" ,method = RequestMethod.GET)
-    public DanmuAddress findAddressByLonLat(@RequestParam(value = "longitude") Double longitude, @RequestParam(value = "latitude") Double latitude);
+    public DanmuAddressDTO findAddressByLonLat(@RequestParam(value = "longitude") Double longitude, @RequestParam(value = "latitude") Double latitude);
 
 }

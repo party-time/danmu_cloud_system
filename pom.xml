@@ -24,9 +24,6 @@
 
         <module>danmu_distribution_server_api</module>
 
-
-        <module>danmu_data_rpc_server</module>
-
         <module>danmu_collector_server</module>
         <module>danmu_check_server</module>
 

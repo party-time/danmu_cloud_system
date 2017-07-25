@@ -4,15 +4,15 @@ import java.util.List;
 
 public class PartyResourceResult {
 
-    private Party party;
+    private PartyDTO party;
 
     private List<ResourceFile> resourceFileList;
 
-    public Party getParty() {
+    public PartyDTO getParty() {
         return party;
     }
 
-    public void setParty(Party party) {
+    public void setParty(PartyDTO party) {
         this.party = party;
     }
 

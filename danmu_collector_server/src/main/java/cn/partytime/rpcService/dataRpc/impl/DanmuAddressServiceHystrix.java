@@ -1,7 +1,7 @@
 package cn.partytime.rpcService.dataRpc.impl;
 
+import cn.partytime.model.DanmuAddressDTO;
 import cn.partytime.rpcService.dataRpc.DanmuAddressService;
-import cn.partytime.model.DanmuAddress;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class DanmuAddressServiceHystrix implements DanmuAddressService {
 
     @Override
-    public DanmuAddress findAddressByLonLat(Double longitude, Double latitude) {
+    public DanmuAddressDTO findAddressByLonLat(Double longitude, Double latitude) {
         return null;
     }
 }

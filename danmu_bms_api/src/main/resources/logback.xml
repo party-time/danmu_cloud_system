@@ -5,7 +5,7 @@
             <pattern>%d [%thread] %-5level %40logger{40} - %msg%n</pattern>
         </encoder>
     </appender>
-    <root level="info">
+    <root level="debug">
         <appender-ref ref="Console" />
     </root>
 </configuration>

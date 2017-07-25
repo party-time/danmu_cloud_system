@@ -43,8 +43,6 @@ public class RpcPartyService {
     @Autowired
     private DanmuAddressLogicService danmuAddressLogicService;
 
-    @Autowired
-    private DanmuPoolLogicService danmuPoolLogicService;
 
     @Autowired
     private PartyRepository partyRepository;
@@ -94,8 +92,8 @@ public class RpcPartyService {
                 String relationId = partyAddressRelation.getId();
                 //删除关系
                 partyAddressRelationService.del(relationId);
-                //删除弹幕池
-                danmuPoolLogicService.deleteDanmuPool(relationId);
+                //TODO 删除弹幕池
+                //danmuPoolLogicService.deleteDanmuPool(relationId);
             }
         }
     }

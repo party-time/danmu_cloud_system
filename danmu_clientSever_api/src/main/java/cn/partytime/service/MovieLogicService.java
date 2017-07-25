@@ -62,7 +62,7 @@ public class MovieLogicService {
     private MovieAlarmService movieAlarmService;
 
     public RestResultModel partyStart(String registCode,String command,long clientTime) {
-        Party party = partyService.findByMovieAliasOnLine(command);
+        PartyDTO party = partyService.findByMovieAliasOnLine(command);
         logger.info("弹幕开始请求：指令编号：{},registCode:{}", command, registCode);
         RestResultModel restResultModel = new RestResultModel();
         DanmuClient danmuClient = danmuClientService.findByRegistCode(registCode);
@@ -131,7 +131,7 @@ public class MovieLogicService {
         if(restResultModel!=null){
             return restResultModel;
         }
-        Party party = partyService.getPartyByPartyId(partyId);
+        PartyDTO party = partyService.getPartyByPartyId(partyId);
         restResultModel = checkPartyIsOk(party);
         if(restResultModel!=null){
             return restResultModel;
@@ -215,7 +215,7 @@ public class MovieLogicService {
         if(restResultModel!=null){
             return restResultModel;
         }
-        Party party = partyService.getPartyByPartyId(partyId);
+        PartyDTO party = partyService.getPartyByPartyId(partyId);
         restResultModel = checkPartyIsOk(party);
         if(restResultModel!=null){
             return restResultModel;
@@ -336,7 +336,7 @@ public class MovieLogicService {
         return null;
     }
 
-    private RestResultModel checkPartyIsOk(Party party){
+    private RestResultModel checkPartyIsOk(PartyDTO party){
         RestResultModel restResultModel = new RestResultModel();
         if (party == null) {
             logger.info("电影不存在");
@@ -450,7 +450,7 @@ public class MovieLogicService {
         redisTemplate.convertAndSend("client:command", addressId);
     }
 
-    private void stopMovie(MovieSchedule movieSchedule,Party party){
+    private void stopMovie(MovieSchedule movieSchedule,PartyDTO party){
         movieSchedule = moveScheduleService.updateMovieSchedule(movieSchedule);
         long time = movieSchedule.getEndTime().getTime()-movieSchedule.getMoviceStartTime().getTime();
         if(party!=null && party.getMovieTime()==0){

@@ -1,8 +1,10 @@
 package cn.partytime.filter;
 
+import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.constants.CommonConst;
 import cn.partytime.controller.base.BaseAdminController;
 import cn.partytime.model.manager.AdminUser;
+import cn.partytime.redis.service.RedisService;
 import cn.partytime.service.AdminUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Autowired
     private AdminUserService adminUserService;
+
+    @Autowired
+    private RedisService redisService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
@@ -45,7 +50,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                             return false;
                         } else {
                             //每次操作后增加session时间
-                            adminUserService.addSessionTime(cookieValue, response);
+                            addSessionTime(cookieValue, response);
                         }
                     } else {
                         response.setStatus(444);
@@ -81,6 +86,17 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+
+    }
+
+    private void addSessionTime(String cookieValue,HttpServletResponse response){
+        String key = AdminUserCacheKey.ADMIN_USER_CACHE_KEY+cookieValue;
+        redisService.expire(key,3600*3);
+
+        Cookie authKeyCookie = new Cookie(CommonConst.COOKIE_AUTH_KEY, cookieValue);
+        authKeyCookie.setMaxAge(3600*3);
+        authKeyCookie.setPath("/");
+        response.addCookie(authKeyCookie);
 
     }
 }

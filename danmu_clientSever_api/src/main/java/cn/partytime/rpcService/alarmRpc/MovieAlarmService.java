@@ -2,8 +2,6 @@ package cn.partytime.rpcService.alarmRpc;
 
 
 import cn.partytime.common.util.ServerConst;
-import cn.partytime.model.Party;
-import cn.partytime.rpcService.alarmRpc.impl.DanmuAlarmServiceHystrix;
 import cn.partytime.rpcService.alarmRpc.impl.MovieAlarmServiceHystrix;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,7 +1,7 @@
 package cn.partytime.rpcService.dataRpc;
 
 import cn.partytime.common.util.ServerConst;
-import cn.partytime.model.Party;
+import cn.partytime.model.PartyDTO;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.rpcService.dataRpc.impl.PartyServiceHystrix;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -20,14 +20,14 @@ public interface PartyService {
     public PartyLogicModel findPartyAddressId(@RequestParam(value = "addressId") String addressId);
 
     @RequestMapping(value = "/rpcParty/findByMovieAliasOnLine" ,method = RequestMethod.GET)
-    public Party findByMovieAliasOnLine(@RequestParam(value = "command") String command);
+    public PartyDTO findByMovieAliasOnLine(@RequestParam(value = "command") String command);
 
     @RequestMapping(value = "/rpcParty/getPartyByPartyId" ,method = RequestMethod.GET)
-    public Party getPartyByPartyId(@RequestParam(value = "partyId") String partyId);
+    public PartyDTO getPartyByPartyId(@RequestParam(value = "partyId") String partyId);
 
     @RequestMapping(value = "/rpcParty/findTemporaryParty" ,method = RequestMethod.GET)
     public PartyLogicModel findTemporaryParty(@RequestParam(value = "addressId") String addressId);
 
     @RequestMapping(value = "/rpcParty/saveParty" ,method = RequestMethod.POST)
-    public Party saveParty(Party party);
+    public PartyDTO saveParty(PartyDTO party);
 }

@@ -1,6 +1,6 @@
 package cn.partytime.rpcService.dataRpc.impl;
 
-import cn.partytime.model.Party;
+import cn.partytime.model.PartyDTO;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.rpcService.dataRpc.PartyService;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,12 @@ public class PartyServiceHystrix implements PartyService {
     }
 
     @Override
-    public Party findByMovieAliasOnLine(String command) {
+    public PartyDTO findByMovieAliasOnLine(String command) {
         return null;
     }
 
     @Override
-    public Party getPartyByPartyId(String partyId) {
+    public PartyDTO getPartyByPartyId(String partyId) {
         return null;
     }
 
@@ -33,7 +33,7 @@ public class PartyServiceHystrix implements PartyService {
     }
 
     @Override
-    public Party saveParty(Party party) {
+    public PartyDTO saveParty(PartyDTO party) {
         return null;
     }
 

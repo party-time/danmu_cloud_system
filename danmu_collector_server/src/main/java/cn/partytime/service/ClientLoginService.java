@@ -167,7 +167,7 @@ public class ClientLoginService {
             channel.close();
         }
 
-        DanmuAddress danmuAddress = danmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+        DanmuAddressDTO danmuAddress = danmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
         logger.info("通过经纬度:{},{}获取地址信息",wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude(),JSON.toJSONString(danmuAddress));
         //如果查询不到场地
         if (danmuAddress == null) {

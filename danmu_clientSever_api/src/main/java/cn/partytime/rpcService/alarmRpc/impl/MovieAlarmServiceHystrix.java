@@ -1,6 +1,5 @@
 package cn.partytime.rpcService.alarmRpc.impl;
 
-import cn.partytime.model.Party;
 import cn.partytime.rpcService.alarmRpc.MovieAlarmService;
 import org.springframework.stereotype.Service;
 

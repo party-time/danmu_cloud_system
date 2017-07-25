@@ -1,7 +1,7 @@
 package cn.partytime.message.rpcService.dataRpcService.impl;
 
 import cn.partytime.message.rpcService.dataRpcService.PartyService;
-import cn.partytime.model.Party;
+import cn.partytime.model.PartyDTO;
 import cn.partytime.model.PartyLogicModel;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class PartyServiceHystrix implements PartyService {
     }
 
     @Override
-    public Party getPartyByPartyId(String partyId) {
+    public PartyDTO getPartyByPartyId(String partyId) {
         return null;
     }
 }

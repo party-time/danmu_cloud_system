@@ -1,7 +1,7 @@
 package cn.partytime.rpcService.dataRpc;
 
+import cn.partytime.model.PartyDTO;
 import cn.partytime.rpcService.dataRpc.impl.PartyLogicServiceHystrix;
-import cn.partytime.model.Party;
 import cn.partytime.common.util.ServerConst;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,5 +22,5 @@ public interface PartyLogicService {
 
 
     @RequestMapping(value = "/rpcParty/getPartyByAddressId" ,method = RequestMethod.GET)
-    public Party getPartyId(@RequestParam(value = "addressId") String addressId);
+    public PartyDTO getPartyId(@RequestParam(value = "addressId") String addressId);
 }

@@ -12,7 +12,7 @@ import java.util.Date;
  */
 
 @Data
-public class Party{
+public class PartyDTO {
 
     private String id;
 

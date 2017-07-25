@@ -2,7 +2,10 @@ package cn.partytime.util;
 
 
 import cn.partytime.common.constants.Const;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,38 +15,49 @@ import java.io.File;
  * Created by liuwei on 2016/8/19.
  */
 
-@ConfigurationProperties(prefix = "fileUpload")
+@Service
 public class FileUploadUtil {
 
     //当上传文件超过限制时设定的临时文件位置，注意是绝对路径
+    @Value("${fileUpload.tempPath}")
     private String tempPath;
 
     //文件上传目标目录，注意是绝对路径
+    @Value("${fileUpload.dstPath}")
     private String dstPath;
 
     //设置允许用户上传文件大小,单位:字节)
+    @Value("${fileUpload.maxSize}")
     private String maxSize;
 
     //H5背景图保存路径
+    @Value("${fileUpload.h5BackgroundPath}")
     private String h5BackgroundPath;
 
     //表情包大图保存路径
+    @Value("${fileUpload.expressionsPath}")
     private String expressionsPath;
 
     //特效图片保存路径
+    @Value("${fileUpload.specialImagesPath}")
     private String specialImagesPath;
 
     //特效视频保存路径
+    @Value("${fileUpload.specialVideosPath}")
     private String specialVideosPath;
 
     //商店图片保存路径
+    @Value("${fileUpload.shopImagePath}")
     private String shopImagePath;
 
     //文件访问地址
+    @Value("${fileUpload.url}")
     private String url;
+
 
     private String h5FileName = "h5Background";
 
+    @Value("${fileUpload.screenSavePath}")
     private String screenSavePath;
 
 
