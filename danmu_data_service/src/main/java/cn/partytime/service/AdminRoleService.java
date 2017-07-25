@@ -28,6 +28,9 @@ public class AdminRoleService {
         return adminRoleRepository.findAll();
     }
 
+    public AdminRole findById(String id){
+        return adminRoleRepository.findOne(id);
+    }
 
 
 }
