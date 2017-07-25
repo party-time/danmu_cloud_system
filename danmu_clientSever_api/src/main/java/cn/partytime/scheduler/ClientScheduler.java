@@ -49,9 +49,9 @@ public class ClientScheduler {
     @Scheduled(cron = "0 0/5 * * * ?")
     private void moviePlayTimeListener(){
         logger.info("movie time is too long listener");
-        List<DanmuAddress> danmuAddressList = danmuAddressService.findByType(0);
+        List<DanmuAddressDTO> danmuAddressList = danmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
-            for(DanmuAddress danmuAddress:danmuAddressList){
+            for(DanmuAddressDTO danmuAddress:danmuAddressList){
                 String addressId = danmuAddress.getId();
                 PartyLogicModel partyLogicModel  = partyService.findPartyAddressId(addressId);
                 if(partyLogicModel!=null){
@@ -77,14 +77,14 @@ public class ClientScheduler {
     @Scheduled(cron = "0 5 2 * * ?")
     private void projectorCloseCommandListener(){
 
-        List<DanmuAddress> danmuAddressList = danmuAddressService.findByType(0);
+        List<DanmuAddressDTO> danmuAddressList = danmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
-            for(DanmuAddress danmuAddress:danmuAddressList){
+            for(DanmuAddressDTO danmuAddress:danmuAddressList){
                 List<DanmuClient>  danmuClientList = danmuClientService.findByAddressId(danmuAddress.getId());
                 if(ListUtils.checkListIsNotNull(danmuClientList)){
                     for(DanmuClient danmuClient:danmuClientList){
                         String regsitrorCode = danmuClient.getRegistCode();
-                        PageResultModel<ProjectorAction> projectorActions =  projectorService.findProjectorActionPage(regsitrorCode,0,1);
+                        PageResultDTO<ProjectorAction> projectorActions =  projectorService.findProjectorActionPage(regsitrorCode,0,1);
                         List<ProjectorAction> projectorActionList = projectorActions.getRows();
                         if(projectorActionList!=null){
                             ProjectorAction projectorAction = projectorActionList.get(0);

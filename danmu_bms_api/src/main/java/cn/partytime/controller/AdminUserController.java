@@ -1,7 +1,7 @@
 package cn.partytime.controller;
 
 import cn.partytime.controller.base.BaseAdminController;
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.AdminRole;
 import cn.partytime.model.manager.AdminUser;
@@ -32,7 +32,7 @@ public class AdminUserController extends BaseAdminController{
     private AdminRoleService adminRoleService;
 
     @RequestMapping(value = "/page", method = RequestMethod.GET)
-    public PageResultModel findAll(Integer pageNumber,Integer pageSize){
+    public PageResultModel findAll(Integer pageNumber, Integer pageSize){
         /**
         if( !"admin".equals(getAdminUser().getUserName()) ){
             throw new IllegalArgumentException("只有管理员才可以使用");

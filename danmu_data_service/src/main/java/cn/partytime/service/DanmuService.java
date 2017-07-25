@@ -1,6 +1,8 @@
 package cn.partytime.service;
 
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.danmu.DanmuModel;
+import cn.partytime.model.danmu.PreDanmuModel;
 import cn.partytime.repository.danmu.DanmuRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,38 +57,19 @@ public class DanmuService {
         return danmuRepository.findAll(pageRequest);
     }
 
-    public Page<DanmuModel> findDanmuByIsBlocked(int page, int size, boolean isBlocked){
+    public Page<DanmuModel> findDanmuByIsBlocked(int page, int size,boolean isBlocked){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuRepository.findByIsBlocked(isBlocked,pageRequest);
     }
 
 
-    public List<DanmuModel> findDanmuListByMsgLike(String msg, int page, int size){
+    public PageResultModel<DanmuModel> findByMsgLike(String msg,int page,int size){
+        /*Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        PageRequest pageRequest = new PageRequest(page, size, sort);
+        return danmuRepository.findByMsgLike(msg,pageRequest);*/
         Criteria criteria = new Criteria();
-        criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"));
-        Map<String, Object> result = new HashMap<>();
-        Query query = new Query(criteria);
-        query.skip(page * size);
-        query.limit(size);
-        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
-        return this.danmuMongoTemplate.find(query, DanmuModel.class);
-    }
-
-    public long findDanmuCountByMsgLike(String msg, int page, int size){
-        Criteria criteria = new Criteria();
-        criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"));
-        Map<String, Object> result = new HashMap<>();
-        Query query = new Query(criteria);
-        query.skip(page * size);
-        query.limit(size);
-        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
-        return this.danmuMongoTemplate.count(query, DanmuModel.class);
-    }
-
-
-    /*public PageResultModel<DanmuModel> findByMsgLike(String msg, int page, int size){
-        Criteria criteria = new Criteria();
+        //criteria.where("content.message").regex("/^111*/");
         criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"));
         Map<String, Object> result = new HashMap<>();
         Query query = new Query(criteria);
@@ -96,16 +79,20 @@ public class DanmuService {
         List<DanmuModel> list = this.danmuMongoTemplate.find(query, DanmuModel.class);
         long count = this.danmuMongoTemplate.count(query, PreDanmuModel.class);
 
+        //pageResultModel<PreDanmuModel>
+        //result.put("datas", list);
+        //result.put("size", count);
+
         PageResultModel<DanmuModel> preDanmuModelPageResultModel = new PageResultModel<>();
         preDanmuModelPageResultModel.setTotal(count);
         preDanmuModelPageResultModel.setRows(list);
         return preDanmuModelPageResultModel;
-    }*/
+    }
 
 
 
 
-    public List<DanmuModel> findDanmuListByPartyIdAndTimeAndDanmuPool(String partyId, int time, List<String>danmuPoolIdList, int limit){
+    public List<DanmuModel> findDanmuListByPartyIdAndTimeAndDanmuPool(String partyId,int time,List<String>danmuPoolIdList,int limit){
         Query query = new Query();
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("danmuPoolId").in(danmuPoolIdList),
@@ -122,21 +109,21 @@ public class DanmuService {
 
 
 
-    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrc(int page, int size, String danmuPoolId, boolean isBlocked, int danmuSrc) {
+    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrc(int page, int size, String danmuPoolId,boolean isBlocked, int danmuSrc) {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuRepository.findByDanmuPoolIdAndDanmuSrcAndIsBlocked(danmuPoolId,danmuSrc,isBlocked,pageRequest);
     }
 
 
-    public Page<DanmuModel> findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(int danmuSrc, boolean isBlocked, boolean viewFlg, Integer page, Integer size, List<String> danmuPoolIdList) {
+    public Page<DanmuModel> findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(int danmuSrc,boolean isBlocked,boolean viewFlg,Integer page,Integer size,List<String> danmuPoolIdList) {
         Sort sort = new Sort(Sort.Direction.ASC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuRepository.findByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(danmuPoolIdList,danmuSrc,isBlocked,viewFlg,pageRequest);
     }
 
 
-    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId, int danmuSrc, boolean isBlocked, boolean viewFlg, Integer page, Integer size) {
+    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId,int danmuSrc,boolean isBlocked,boolean viewFlg,Integer page,Integer size) {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuRepository.findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(danmuPoolId,danmuSrc,isBlocked,viewFlg,pageRequest);

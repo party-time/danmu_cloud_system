@@ -1,6 +1,6 @@
 package cn.partytime.service;
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.client.DanmuClient;
 import cn.partytime.model.DanmuClientListResult;
 import cn.partytime.model.manager.RegistCode;

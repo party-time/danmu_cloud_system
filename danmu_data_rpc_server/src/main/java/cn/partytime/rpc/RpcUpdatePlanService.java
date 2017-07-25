@@ -1,7 +1,7 @@
 package cn.partytime.rpc;
 
 import cn.partytime.model.manager.UpdatePlan;
-import cn.partytime.service.UpdatePlanService;
+import cn.partytime.service.versionManager.UpdatePlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

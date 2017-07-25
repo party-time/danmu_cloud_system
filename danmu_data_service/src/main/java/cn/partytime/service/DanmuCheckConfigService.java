@@ -1,5 +1,7 @@
 package cn.partytime.service;
+import cn.partytime.repository.manager.DanmuCheckConfigRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**

@@ -23,7 +23,7 @@ public class VersionService {
 
 
 
-    public Version save(String name, String versionNum, String describe, Integer type){
+    public Version save(String name,String versionNum,String describe,Integer type){
         Version version = new Version();
         version.setName(name);
         version.setVersion(versionNum);
@@ -42,7 +42,7 @@ public class VersionService {
         return versionRepository.findAll(pageRequest);
     }
 
-    public List<Version> findByVersionAndType(String version, Integer type){
+    public List<Version> findByVersionAndType(String version,Integer type){
         return versionRepository.findByVersionAndType(version,type);
     }
 
@@ -55,7 +55,7 @@ public class VersionService {
         return versionRepository.findOne(id);
     }
 
-    public Page<Version> findByIdNotIn(List<String> idList, int page, int size){
+    public Page<Version> findByIdNotIn(List<String> idList,int page, int size){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return versionRepository.findByIdNotIn(idList,pageRequest);

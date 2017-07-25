@@ -1,10 +1,7 @@
 package cn.partytime.service;
 
-import cn.partytime.common.cachekey.FunctionControlCacheKey;
-import cn.partytime.common.util.DateUtils;
-import cn.partytime.logic.danmu.PartyLogicModel;
-import cn.partytime.logicService.PartyLogicService;
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
+import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.PartyResult;
 import cn.partytime.model.UpdatePartyModel;
 import cn.partytime.model.danmu.DanmuLibraryParty;
@@ -15,6 +12,7 @@ import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.repository.user.WechatUserRepository;
+import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.service.wechat.WechatUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -25,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -86,7 +83,7 @@ public class BmsPartyService {
      * type 1：活动  2：电影
      *
      */
-    public PageResultModel findAllByPage(Integer pageNo, Integer pageSize ,Integer type,Integer status){
+    public PageResultModel findAllByPage(Integer pageNo, Integer pageSize , Integer type, Integer status){
         Page<Party> partyPage = null;
         if( type == -1){
             partyPage = partyService.findAllPageByStatus(pageNo,pageSize,status);

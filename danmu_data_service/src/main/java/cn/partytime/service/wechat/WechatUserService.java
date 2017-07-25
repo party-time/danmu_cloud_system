@@ -1,5 +1,7 @@
 package cn.partytime.service.wechat;
 
+import cn.partytime.common.util.DateUtils;
+import cn.partytime.common.util.ListUtils;
 import cn.partytime.model.user.User;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.repository.user.WechatUserRepository;
@@ -59,7 +61,7 @@ public class WechatUserService {
             return wechatUserRepository.save(oldWebchatUser);
         } else {
             //保存用户信息
-            Date date = new Date();
+            Date date = DateUtils.getCurrentDate();
             User user = new User();
             user.setLastLoginTime(date);
             user.setCreateTime(date);
@@ -111,7 +113,7 @@ public class WechatUserService {
      * @return
      */
     public List<WechatUser> findWechatUserByUserIdList(List<String> userIdList) {
-        if (userIdList!=null && userIdList.size()>0) {
+        if (ListUtils.checkListIsNotNull(userIdList)) {
             Criteria criteria = new Criteria().andOperator(
                     Criteria.where("userId").in(userIdList));
             Query query = new Query(criteria);
@@ -153,7 +155,7 @@ public class WechatUserService {
     public long countBySubscribeTimeBetween(long from,long to){
         return wechatUserRepository.countBySubscribeTimeBetween(from,to);
     }
-    public Page<WechatUser> findBySubscribeTimeBetween(long from, long to, int page, int size) {
+    public Page<WechatUser> findBySubscribeTimeBetween(long from,long to,int page,int size) {
         Sort sort = new Sort(Sort.Direction.DESC, "subscribeTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return wechatUserRepository.findBySubscribeTimeBetween(from,to, pageRequest);

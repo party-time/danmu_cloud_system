@@ -1,6 +1,6 @@
 package cn.partytime.controller.shop;
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.service.shop.BmsOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

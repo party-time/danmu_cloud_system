@@ -19,7 +19,7 @@ public class CmdComponentValueService {
     @Autowired
     private CmdComponentValueRepository cmdComponentValueRepository;
 
-    public CmdComponentValue save(String name, String value, String compmnentId){
+    public CmdComponentValue save(String name,String value,String compmnentId){
         CmdComponentValue cmdComponentValue = new CmdComponentValue();
         cmdComponentValue.setName(name);
         cmdComponentValue.setValue(value);

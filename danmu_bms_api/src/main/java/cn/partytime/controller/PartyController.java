@@ -1,24 +1,25 @@
 package cn.partytime.controller;
 
-import cn.partytime.common.util.DateUtils;
 import cn.partytime.controller.base.BaseAdminController;
-import cn.partytime.logic.danmu.PartyLogicModel;
-import cn.partytime.logicService.PartyLogicService;
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
+import cn.partytime.model.PartyLogicModel;
+import cn.partytime.model.RestResultModel;
 import cn.partytime.model.UpdatePartyModel;
 import cn.partytime.model.manager.MovieAlias;
 import cn.partytime.model.manager.Party;
-import cn.partytime.model.RestResultModel;
-import cn.partytime.service.*;
+import cn.partytime.rpcService.PartyLogicService;
+import cn.partytime.service.BmsPartyService;
+import cn.partytime.service.BmsTimerDanmuService;
+import cn.partytime.service.PartyAddressRelationService;
+import cn.partytime.service.PartyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.parser.Part;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +57,7 @@ public class PartyController extends BaseAdminController {
      * @return
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public PageResultModel partyList(Integer pageNumber, Integer pageSize,Integer type,Integer status) {
+    public PageResultModel partyList(Integer pageNumber, Integer pageSize, Integer type, Integer status) {
 
         pageNumber = pageNumber -1;
         if( null == type ){
@@ -269,7 +270,7 @@ public class PartyController extends BaseAdminController {
 
     @RequestMapping(value = "/currentParty", method = RequestMethod.GET)
     public RestResultModel currentParty(String addressId) {
-        PartyLogicModel partyLogicModel = partyLogicService.findPartyAddressIdAndDate(addressId);
+        PartyLogicModel partyLogicModel = partyLogicService.findPartyAddressId(addressId);
         RestResultModel restResultModel = new RestResultModel();
         restResultModel.setData(partyLogicModel);
         return restResultModel;

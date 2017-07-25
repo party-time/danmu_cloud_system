@@ -2,7 +2,7 @@ package cn.partytime.service;
 
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.model.DanmuAddressModel;
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.danmu.AdDanmuLibrary;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.PartyAddressAdRelation;
@@ -80,7 +80,7 @@ public class BmsAddressService {
 
 
     public PageResultModel findAddressByPartyId(String partyId, Integer pageNumber, Integer pageSize){
-        PageResultModel  pageResultModel = new PageResultModel();
+        PageResultModel pageResultModel = new PageResultModel();
         List<String> addressList =  danmuAddressService.findAddress(partyId);
         if(!ListUtils.checkListIsNotNull(addressList)){
             //活动下没有场地

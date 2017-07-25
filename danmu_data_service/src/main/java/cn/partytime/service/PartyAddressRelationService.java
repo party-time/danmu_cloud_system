@@ -88,7 +88,7 @@ public class PartyAddressRelationService {
     }
 
 
-    public List<PartyAddressRelation> findByPartyIdAndAddressList(String partyId, List<String>addressList) {
+    public List<PartyAddressRelation> findByPartyIdAndAddressList(String partyId,List<String>addressList) {
         return partyAddressRelationRepository.findByPartyIdAndAddressIdIn(partyId,addressList);
     }
 

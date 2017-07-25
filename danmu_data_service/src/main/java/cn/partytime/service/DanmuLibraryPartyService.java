@@ -17,7 +17,7 @@ public class DanmuLibraryPartyService {
     @Autowired
     private DanmuLibraryPartyRepository danmuLibraryPartyRepository;
 
-    public DanmuLibraryParty save(String danmuLibraryId, String partyId){
+    public DanmuLibraryParty save(String danmuLibraryId,String partyId){
         DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyRepository.findByPartyId(partyId);
         if( null == danmuLibraryParty) {
             danmuLibraryParty = new DanmuLibraryParty();

@@ -1,12 +1,11 @@
 package cn.partytime.controller.danmu;
 
 import cn.partytime.controller.base.BaseAdminController;
-import cn.partytime.logicService.CmdLogicService;
+import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.RestResultModel;
-import cn.partytime.logic.cmdCommand.CmdTempAllData;
 import cn.partytime.model.manager.danmuCmdJson.CmdTemp;
+import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.BmsDanmuService;
-import cn.partytime.service.danmuCmd.BmsCmdService;
 import cn.partytime.service.danmuCmdJson.CmdTempService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

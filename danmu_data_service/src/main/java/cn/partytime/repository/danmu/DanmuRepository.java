@@ -29,7 +29,7 @@ public interface DanmuRepository extends MongoRepository<DanmuModel, String> {
      * @param pageable
      * @return
      */
-    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrcAndIsBlocked(String danmuPoolId, int danmuSrc, boolean isBlocked, Pageable pageable);
+    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrcAndIsBlocked(String danmuPoolId,int danmuSrc,boolean isBlocked,Pageable pageable);
 
     /**
      * 通过弹幕池编号 与弹幕来源获取弹幕列表
@@ -38,15 +38,15 @@ public interface DanmuRepository extends MongoRepository<DanmuModel, String> {
      * @param pageable
      * @return
      */
-    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrc(String danmuPoolId, int danmuSrc, Pageable pageable);
+    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrc(String danmuPoolId,int danmuSrc,Pageable pageable);
 
 
-    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId, int danmuSrc, boolean isBlocked, boolean viewFlg, Pageable pageable);
+    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId,int danmuSrc,boolean isBlocked,boolean viewFlg,Pageable pageable);
 
-    public Page<DanmuModel> findByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(List<String> danmuPoolIdList, int danmuSrc, boolean isBlocked, boolean viewFlg, Pageable pageable);
+    public Page<DanmuModel> findByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(List<String> danmuPoolIdList,int danmuSrc,boolean isBlocked,boolean viewFlg,Pageable pageable);
 
-    public long countByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId, int danmuSrc, boolean isBlocked, boolean viewFlg);
+    public long countByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId,int danmuSrc,boolean isBlocked,boolean viewFlg);
 
-    public long countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(List<String> danmuPoolIdList, int danmuSrc, boolean isBlocked, boolean viewFlg);
+    public long countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(List<String> danmuPoolIdList,int danmuSrc,boolean isBlocked,boolean viewFlg);
 
 }

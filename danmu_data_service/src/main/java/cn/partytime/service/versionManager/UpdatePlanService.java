@@ -1,4 +1,4 @@
-package cn.partytime.service;
+package cn.partytime.service.versionManager;
 
 import cn.partytime.model.manager.UpdatePlan;
 import cn.partytime.model.manager.UpdatePlanMachine;
@@ -25,7 +25,7 @@ public class UpdatePlanService {
     private UpdatePlanRepository updatePlanRepository;
 
 
-    public UpdatePlan save(String addressId, String versionId, Date updateTime){
+    public UpdatePlan save(String addressId,String versionId,Date updateTime){
         UpdatePlan updatePlan = new UpdatePlan();
         updatePlan.setAddressId(addressId);
         updatePlan.setVersionId(versionId);
@@ -37,7 +37,7 @@ public class UpdatePlanService {
         updatePlanRepository.delete(id);
     }
 
-    public Page<UpdatePlan> findByAddressId(String addressId, int page, int size){
+    public Page<UpdatePlan> findByAddressId(String addressId,int page,int size){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return updatePlanRepository.findByAddressId(addressId,pageRequest);
@@ -47,7 +47,7 @@ public class UpdatePlanService {
         return updatePlanRepository.findByAddressId(addressId);
     }
 
-    public List<UpdatePlan> findByAddressIdAndStatus(String addressId, Integer status){
+    public List<UpdatePlan> findByAddressIdAndStatus(String addressId,Integer status){
         List<UpdatePlan> updatePlanList = updatePlanRepository.findByAddressId(addressId);
         List<UpdatePlan> updatePlanResultList = new ArrayList<>();
         if(null != updatePlanList){
@@ -81,7 +81,7 @@ public class UpdatePlanService {
      * @param status
      * @return
      */
-    public List<UpdatePlan> findByAddressIdAndStatusNot(String addressId, Integer status){
+    public List<UpdatePlan> findByAddressIdAndStatusNot(String addressId,Integer status){
         List<UpdatePlan> updatePlanList = updatePlanRepository.findByAddressId(addressId);
         List<UpdatePlan> updatePlanResultList = new ArrayList<>();
         if(null != updatePlanList){

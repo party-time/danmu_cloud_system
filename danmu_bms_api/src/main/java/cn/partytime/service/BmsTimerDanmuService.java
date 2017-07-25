@@ -1,24 +1,15 @@
 package cn.partytime.service;
 
 import cn.partytime.baseModel.GropCountModel;
-import cn.partytime.common.cachekey.CmdTempCacheKey;
 import cn.partytime.common.util.*;
-import cn.partytime.common.util.FileUtils;
-import cn.partytime.logic.danmu.PotocolTimerDanmu;
-import cn.partytime.logic.danmu.ProtocolModel;
-import cn.partytime.logic.danmu.PageResultModel;
-import cn.partytime.logicService.CmdLogicService;
-import cn.partytime.model.RestResultModel;
-import cn.partytime.model.TimerDanmuFileLogicModel;
+import cn.partytime.model.*;
 import cn.partytime.model.danmu.TimerDanmu;
 import cn.partytime.model.danmu.TimerDanmuModel;
-import cn.partytime.logic.cmdCommand.CmdTempAllData;
-import cn.partytime.logic.cmdCommand.CmdTempComponentData;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.TimerDanmuFile;
 import cn.partytime.redis.service.RedisService;
+import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.danmuCmd.BmsCmdService;
-import cn.partytime.common.util.ComponentKeyConst;
 import com.alibaba.fastjson.JSON;
 import com.mongodb.BasicDBList;
 import com.mongodb.DBObject;
@@ -574,18 +565,6 @@ public class BmsTimerDanmuService {
 
     }
 
-
-    public List<ProtocolModel<PotocolTimerDanmu>> findProtocolModelList(List<TimerDanmu> timerDanmuList){
-        Integer direction = -1;
-        List<ProtocolModel<PotocolTimerDanmu>> potocolTimerDanmuList = new ArrayList<ProtocolModel<PotocolTimerDanmu> >();
-        if(ListUtils.checkListIsNotNull(timerDanmuList)){
-            for(int i=0; i<timerDanmuList.size(); i++){
-                TimerDanmu timerDanmu = timerDanmuList.get(i);
-                PotocolTimerDanmu potocolTimerDanmu = new PotocolTimerDanmu();
-            }
-        }
-        return potocolTimerDanmuList;
-    }
 
 
     public List<TimerDanmuFileLogicModel> findTimerDanmuFileList(String addressId) {

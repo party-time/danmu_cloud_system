@@ -1,7 +1,7 @@
 package cn.partytime.service;
 
 import cn.partytime.model.MovieScheduleResult;
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.MovieSchedule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class BmsMovieScheduleService {
     @Autowired
     private DanmuAddressService danmuAddressService;
 
-    public PageResultModel findByPartyIdAndAddressId(String partyId,String addressId,Integer pageNo,Integer pageSize){
+    public PageResultModel findByPartyIdAndAddressId(String partyId, String addressId, Integer pageNo, Integer pageSize){
         Page<MovieSchedule> movieSchedulePage = null;
         if(StringUtils.isEmpty(addressId) || "0".equals(addressId) || "-1".equals(addressId)){
             movieSchedulePage = movieScheduleService.findAll(partyId,pageSize,pageNo);

@@ -1,5 +1,7 @@
 package cn.partytime.service;
 
+
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.danmu.DanmuLibrary;
 import cn.partytime.model.danmu.DanmuLibraryParty;
 import cn.partytime.model.danmu.PreDanmuModel;
@@ -142,36 +144,21 @@ public class PreDanmuService {
         return preDanmuRepository.findByDanmuLibraryId(dlId,pageRequest);
     }
 
-
-
-    public List<PreDanmuModel> findByDanmuLibraryIdAndMsgLike(int page, int size, String dlId, String msg){
+    public PageResultModel<PreDanmuModel> findByDanmuLibraryIdAndMsgLike(int page, int size, String dlId, String msg){
+        //Sort sort = new Sort(Sort.Direction.DESC,"createTime");
+        //PageRequest pageRequest = new PageRequest(page,size,sort);
+        //return preDanmuRepository.findByDanmuLibraryIdAndMsgLike(dlId,msg,pageRequest);
+        /*CommandResult commandResult=managerMongoTemplate.executeCommand(jsonSql);
+        System.out.println();
+        BasicDBList list = (BasicDBList)commandResult.get("values");
+        for (int i = 0; i < list.size(); i ++) {
+            System.out.println(list.get(i));
+        }
+        System.out.println();
+        return null;*/
         Criteria criteria = new Criteria();
-        criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"), Criteria.where("danmuLibraryId").is(dlId));
-        Map<String, Object> result = new HashMap<>();
-        Query query = new Query(criteria);
-        query.skip(page * size);
-        query.limit(size);
-        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
-        List<PreDanmuModel> list = this.managerMongoTemplate.find(query, PreDanmuModel.class);
-        return list;
-    }
-
-    public long findByDanmuCountLibraryIdAndMsgLike(int page, int size, String dlId, String msg){
-        Criteria criteria = new Criteria();
-        criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"), Criteria.where("danmuLibraryId").is(dlId));
-        Map<String, Object> result = new HashMap<>();
-        Query query = new Query(criteria);
-        query.skip(page * size);
-        query.limit(size);
-        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
-        long count = this.managerMongoTemplate.count(query, PreDanmuModel.class);
-        return count;
-    }
-
-    /*public PageResultModel<PreDanmuModel> findByDanmuLibraryIdAndMsgLike(int page, int size, String dlId, String msg){
-
-        Criteria criteria = new Criteria();
-        criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"), Criteria.where("danmuLibraryId").is(dlId));
+        //criteria.where("content.message").regex("/^111*/");
+        criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"),Criteria.where("danmuLibraryId").is(dlId));
         Map<String, Object> result = new HashMap<>();
         Query query = new Query(criteria);
         query.skip(page * size);
@@ -179,12 +166,16 @@ public class PreDanmuService {
         query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
         List<PreDanmuModel> list = this.managerMongoTemplate.find(query, PreDanmuModel.class);
         long count = this.managerMongoTemplate.count(query, PreDanmuModel.class);
+
+        //pageResultModel<PreDanmuModel>
+        //result.put("datas", list);
+        //result.put("size", count);
 
         PageResultModel<PreDanmuModel> preDanmuModelPageResultModel = new PageResultModel<>();
         preDanmuModelPageResultModel.setTotal(count);
         preDanmuModelPageResultModel.setRows(list);
         return preDanmuModelPageResultModel;
-    }*/
+    }
 
     /**
      * 通过活动编号查询预制弹幕数

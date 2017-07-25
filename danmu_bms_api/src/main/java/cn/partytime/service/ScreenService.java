@@ -4,12 +4,12 @@ import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.PartyTypeEnmu;
 import cn.partytime.handlerThread.PreDanmuHandler;
-import cn.partytime.logic.danmu.PartyLogicModel;
-import cn.partytime.logicService.PartyLogicService;
+import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.client.DanmuClient;
 import cn.partytime.model.manager.Party;
 import cn.partytime.redis.service.RedisService;
+import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.service.movie.MovieService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -70,7 +70,7 @@ public class ScreenService {
         }
 
         String addressId = danmuClient.getAddressId();
-        PartyLogicModel partyLogicModel = partyLogicService.findPartyAddressIdAndDate(addressId);
+        PartyLogicModel partyLogicModel = partyLogicService.findPartyAddressId(addressId);
         if(partyLogicModel!=null){
             Map<String,Object> map = new HashMap<String,Object>();
             map.put("partyId",partyLogicModel.getPartyId());

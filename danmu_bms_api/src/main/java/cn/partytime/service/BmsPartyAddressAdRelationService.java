@@ -1,34 +1,16 @@
 package cn.partytime.service;
 
-import cn.partytime.common.constants.ProtocolConst;
-import cn.partytime.common.util.*;
-import cn.partytime.logic.danmu.PotocolTimerDanmu;
-import cn.partytime.logic.danmu.ProtocolModel;
+import cn.partytime.common.util.DateUtils;
 import cn.partytime.model.RestResultModel;
-import cn.partytime.model.danmu.AdDanmuLibrary;
-import cn.partytime.model.danmu.AdTimerDanmu;
-import cn.partytime.model.danmu.TimerDanmu;
-import cn.partytime.model.manager.AdTimerDanmuFile;
 import cn.partytime.model.manager.PartyAddressAdRelation;
-import cn.partytime.model.manager.PartyAddressRelation;
-import cn.partytime.model.manager.TimerDanmuFile;
-import cn.partytime.repository.manager.AdTimerDanmuFileRepository;
 import cn.partytime.service.adDanmu.AdDanmuLibraryService;
-import cn.partytime.service.adDanmu.AdTimerDanmuFileService;
-import cn.partytime.service.adDanmu.AdTimerDanmuService;
 import cn.partytime.service.adDanmu.PartyAddressAdRelationService;
-import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Administrator on 2017/1/18.

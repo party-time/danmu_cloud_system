@@ -1,11 +1,12 @@
 package cn.partytime.service.wechat;
 
-import cn.partytime.logicService.DanmuAddressLogicService;
-import cn.partytime.logic.danmu.PageResultModel;
+
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.model.wechat.WechatUserListModel;
+import cn.partytime.rpcService.DanmuAddressLogicService;
 import cn.partytime.service.DanmuAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

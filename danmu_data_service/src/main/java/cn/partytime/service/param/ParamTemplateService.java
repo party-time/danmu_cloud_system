@@ -28,13 +28,13 @@ public class ParamTemplateService {
         return paramTemplateRepository.save(paramTemplate);
     }
 
-    public ParamTemplate update(String id, String name){
+    public ParamTemplate update(String id,String name){
         ParamTemplate paramTemplate = paramTemplateRepository.findOne(id);
         paramTemplate.setName(name);
         return paramTemplateRepository.save(paramTemplate);
     }
 
-    public Page<ParamTemplate> findAll(Integer page, Integer size){
+    public Page<ParamTemplate> findAll(Integer page,Integer size){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return paramTemplateRepository.findAll(pageRequest);

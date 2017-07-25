@@ -2,7 +2,6 @@ package cn.partytime.service.adDanmu;
 
 import cn.partytime.model.danmu.AdDanmuLibrary;
 import cn.partytime.repository.danmu.AdDanmuLibraryRepository;
-import cn.partytime.service.AdTimerDanmuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -48,7 +47,7 @@ public class AdDanmuLibraryService {
         }
     }
 
-    public Page<AdDanmuLibrary> findByIsDeleteLessThan(int page, int size, int isDelete){
+    public Page<AdDanmuLibrary> findByIsDeleteLessThan(int page, int size,int isDelete){
         Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return  adDanmuLibraryRepository.findByIsDeleteLessThanEqual(isDelete,pageRequest);

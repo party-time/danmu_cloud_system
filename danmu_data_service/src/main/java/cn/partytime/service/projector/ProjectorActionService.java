@@ -1,5 +1,7 @@
 package cn.partytime.service.projector;
 
+import cn.partytime.model.manager.DanmuAddress;
+import cn.partytime.model.manager.PartyAddressRelation;
 import cn.partytime.model.projector.ProjectorAction;
 import cn.partytime.repository.manager.Projector.ProjectorActionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

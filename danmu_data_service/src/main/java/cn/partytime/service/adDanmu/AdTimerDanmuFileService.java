@@ -1,4 +1,4 @@
-package cn.partytime.service;
+package cn.partytime.service.adDanmu;
 
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.model.manager.AdTimerDanmuFile;

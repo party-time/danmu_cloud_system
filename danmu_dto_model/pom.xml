@@ -9,6 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+
+
     <groupId>cn.party-time</groupId>
     <artifactId>danmu_dto_model</artifactId>
     <packaging>jar</packaging>

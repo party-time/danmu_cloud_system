@@ -1,6 +1,7 @@
 package cn.partytime.repository.manager;
 
 import cn.partytime.model.manager.AdTimerDanmuFile;
+import cn.partytime.model.manager.PartyAddressAdRelation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 

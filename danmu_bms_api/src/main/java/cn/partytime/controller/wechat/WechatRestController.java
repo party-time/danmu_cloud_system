@@ -1,6 +1,6 @@
 package cn.partytime.controller.wechat;
 
-import cn.partytime.logic.danmu.PartyLogicModel;
+import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.manager.AdminUser;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.H5Template;

@@ -1,12 +1,12 @@
 package cn.partytime.service;
 
 import cn.partytime.common.util.*;
-import cn.partytime.logic.cmdCommand.CmdTempAllData;
-import cn.partytime.logic.cmdCommand.CmdTempComponentData;
-import cn.partytime.logicService.CmdLogicService;
+import cn.partytime.model.CmdTempAllData;
+import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.danmu.DanmuModel;
 import cn.partytime.model.danmu.PreDanmuModel;
+import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.danmuCmd.BmsCmdService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;

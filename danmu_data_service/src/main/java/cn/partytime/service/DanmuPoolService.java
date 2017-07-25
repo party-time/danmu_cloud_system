@@ -156,7 +156,7 @@ public class DanmuPoolService {
         return danmuPoolRepository.findByPartyAddressRelationIdInAndIsDelete(partyAddressRelationIds, 0);
     }
 
-    public List<DanmuPool> findByPartyIdAndAddressList(String partyId, List<String> addressList) {
+    public List<DanmuPool> findByPartyIdAndAddressList(String partyId,List<String> addressList) {
         List<PartyAddressRelation> partyAddressRelationList = partyAddressRelationService.findByPartyIdAndAddressList(partyId,addressList);
         List<String> partyAddressRelationIds = new ArrayList<String>();
         if (null != partyAddressRelationList && partyAddressRelationList.size() > 0) {

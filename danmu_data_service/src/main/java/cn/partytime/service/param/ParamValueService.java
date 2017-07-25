@@ -19,7 +19,7 @@ public class ParamValueService {
     @Autowired
     private ParamValueRepository paramValueRepository;
 
-    public ParamValue save(String objId, String paramId, String value){
+    public ParamValue save(String objId,String paramId,String value){
         ParamValue paramValue = new ParamValue();
         paramValue.setObjId(objId);
         paramValue.setParamId(paramId);
@@ -36,11 +36,11 @@ public class ParamValueService {
     }
 
 
-    public List<ParamValue> findByObjIdAndTypeAndParamId(String objId, Integer type, String paramId){
+    public List<ParamValue> findByObjIdAndTypeAndParamId(String objId,Integer type,String paramId){
         return paramValueRepository.findByObjIdAndTypeAndParamId(objId,type,paramId);
     }
 
-    public List<ParamValue> findByObjIdAndTypeAndParamIdList(String objId, Integer type, List<String> paramIdList){
+    public List<ParamValue> findByObjIdAndTypeAndParamIdList(String objId,Integer type,List<String> paramIdList){
         return paramValueRepository.findByObjIdAndTypeAndParamIdIn(objId,type,paramIdList);
     }
 
@@ -52,7 +52,7 @@ public class ParamValueService {
         paramValueRepository.delete(id);
     }
 
-    public ParamValue update(String id, String value){
+    public ParamValue update(String id,String value){
         ParamValue paramValue = findById(id);
         paramValue.setValue(value);
         return paramValueRepository.save(paramValue);

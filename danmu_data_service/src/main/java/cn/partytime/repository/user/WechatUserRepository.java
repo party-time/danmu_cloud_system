@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import java.util.List;
+
 /**
  * Created by liuwei on 16/7/21.
  */
@@ -17,11 +19,11 @@ public interface WechatUserRepository extends MongoRepository<WechatUser, String
 
     public Page<WechatUser> findAll(Pageable pageable);
 
-    public Page<WechatUser> findByNickLike(String nick, Pageable pageable);
+    public Page<WechatUser> findByNickLike(String nick,Pageable pageable);
 
     public long countBySubscribeTimeBetween(long from, long to);
 
-    public Page<WechatUser> findBySubscribeTimeBetween(long from, long to, Pageable pageable);
+    public Page<WechatUser> findBySubscribeTimeBetween(long from, long to,Pageable pageable);
 
     public WechatUser findByUserId(String userId);
 

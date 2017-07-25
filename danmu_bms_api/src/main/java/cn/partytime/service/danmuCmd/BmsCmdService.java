@@ -1,16 +1,15 @@
 package cn.partytime.service.danmuCmd;
 
 import cn.partytime.common.cachekey.CmdTempCacheKey;
-import cn.partytime.logicService.CmdLogicService;
+import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.danmucmd.CmdComponentJson;
-import cn.partytime.logic.cmdCommand.CmdTempAllData;
-import cn.partytime.logic.cmdCommand.CmdTempComponentData;
 import cn.partytime.model.danmucmd.CmdTempJson;
 import cn.partytime.model.manager.danmuCmdJson.CmdComponent;
 import cn.partytime.model.manager.danmuCmdJson.CmdComponentValue;
 import cn.partytime.model.manager.danmuCmdJson.CmdJsonParam;
 import cn.partytime.model.manager.danmuCmdJson.CmdTemp;
 import cn.partytime.redis.service.RedisService;
+import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.danmuCmdJson.CmdComponentValueService;
 import cn.partytime.service.danmuCmdJson.CmdJsonComponentService;
 import cn.partytime.service.danmuCmdJson.CmdJsonParamService;
@@ -21,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

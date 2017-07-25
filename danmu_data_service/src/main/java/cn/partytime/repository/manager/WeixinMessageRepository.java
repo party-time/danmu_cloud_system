@@ -14,7 +14,7 @@ public interface WeixinMessageRepository extends MongoRepository<WeixinMessage,S
 
     Page<WeixinMessage> findAll(Pageable pageable);
 
-    Page<WeixinMessage> findByWordsLike(String words, Pageable pageable);
+    Page<WeixinMessage> findByWordsLike(String words,Pageable pageable);
 
     List<WeixinMessage> findByWords(String words);
 

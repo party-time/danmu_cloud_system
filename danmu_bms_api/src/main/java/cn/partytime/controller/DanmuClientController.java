@@ -1,7 +1,7 @@
 package cn.partytime.controller;
 
 import cn.partytime.common.util.DateUtils;
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.client.DanmuClient;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.service.DanmuClientService;

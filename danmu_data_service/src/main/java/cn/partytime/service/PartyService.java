@@ -1,7 +1,9 @@
 package cn.partytime.service;
 
+import cn.partytime.common.cachekey.FunctionControlCacheKey;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.PartyAddressRelation;
+import cn.partytime.redis.service.RedisService;
 import cn.partytime.repository.manager.PartyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +41,11 @@ public class PartyService {
     @Autowired
     private DanmuLibraryPartyService danmuLibraryPartyService;
 
+    @Autowired
+    private RedisService redisService;
 
-    public Party save(Party party){
-       return partyRepository.save(party);
-    }
     public Party save(String name, Integer type , String movieAlias, Date startTime, Date endTime,
-                      String shortName, String danmuLibraryId, Integer dmDensity) {
+                      String shortName,String danmuLibraryId,Integer dmDensity) {
         /**
         if (!StringUtils.isEmpty(shortName)) {
             Party party = findByShortName(shortName);
@@ -65,8 +66,8 @@ public class PartyService {
         partyModel.setDmDensity(dmDensity);
         Party party = partyRepository.insert(partyModel);
 
-        //String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();
-        //redisService.set(key,dmDensity);
+        String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();
+        redisService.set(key,dmDensity);
 
 
         danmuLibraryPartyService.save(danmuLibraryId,partyModel.getId());
@@ -74,7 +75,7 @@ public class PartyService {
     }
 
 
-    public Party update(String id , String name, Integer type , String movieAlias, String danmuLibraryId, Integer dmDensity){
+    public Party update(String id ,String name, Integer type , String movieAlias, String danmuLibraryId,Integer dmDensity){
         Party party = this.findById(id);
         if( null != party){
             party.setName(name);
@@ -84,8 +85,8 @@ public class PartyService {
             danmuLibraryPartyService.save(danmuLibraryId,party.getId());
             partyRepository.save(party);
 
-            //String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();
-            //redisService.set(key,dmDensity);
+            String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();
+            redisService.set(key,dmDensity);
         }
 
         return party;
@@ -112,7 +113,7 @@ public class PartyService {
         return partyRepository.findAll(pageRequest);
     }
 
-    public Page<Party> findPageByTypeAndStatus(int page, int pageSize , Integer type , Integer status ) {
+    public Page<Party> findPageByTypeAndStatus(int page, int pageSize , Integer type ,Integer status ) {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, pageSize, sort);
         return partyRepository.findByTypeAndStatus(type,status,pageRequest);
@@ -218,7 +219,7 @@ public class PartyService {
      * @param type
      * @return
      */
-    public List<Party> findByTypeAndStatus(Integer type, Integer status){
+    public List<Party> findByTypeAndStatus(Integer type,Integer status){
         return partyRepository.findByTypeAndStatusLessThan(type,status);
     }
 

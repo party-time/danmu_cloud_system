@@ -14,6 +14,6 @@ public interface DeviceIpInfoRepository extends MongoRepository<DeviceIpInfo,Str
 
     List<DeviceIpInfo> findByAddressId(String addressId);
 
-    List<DeviceIpInfo> findByAddressIdAndType(String addressId, Integer type);
+    List<DeviceIpInfo> findByAddressIdAndType(String addressId,Integer type);
 
 }

@@ -1,7 +1,9 @@
 package cn.partytime.service;
 
 import cn.partytime.model.manager.PartyResource;
+import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.repository.manager.PartyResourceRepository;
+import cn.partytime.repository.manager.ResourceFileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ public class PartyResourceService {
         return partyResourceRepository.findByResourceId(resourceId);
     }
 
-    public List<PartyResource> findByPartyIdAndFileType(String partyId, Integer fileType){
+    public List<PartyResource> findByPartyIdAndFileType(String partyId,Integer fileType){
         return partyResourceRepository.findByPartyIdAndFileType(partyId,fileType);
     }
 
@@ -37,7 +39,7 @@ public class PartyResourceService {
         return partyResourceRepository.save(partyResource);
     }
 
-    public PartyResource save(String partyId, String resourceId, Integer fileType){
+    public PartyResource save(String partyId,String resourceId,Integer fileType){
         PartyResource partyResource = new PartyResource();
         partyResource.setPartyId(partyId);
         partyResource.setResourceId(resourceId);

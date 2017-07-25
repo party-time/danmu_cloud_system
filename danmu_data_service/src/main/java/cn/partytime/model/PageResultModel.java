@@ -1,5 +1,6 @@
 package cn.partytime.model;
 
+
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -14,15 +15,16 @@ public class PageResultModel<T> {
     public PageResultModel() {
     }
 
+    public PageResultModel(long total, List<T> rows) {
+        this.total = total;
+        this.rows = rows;
+    }
+
     public PageResultModel(Page<T> page) {
         this.total = page.getTotalElements();
         this.rows = page.getContent();
     }
 
-    public PageResultModel(long total, List<T> rows) {
-        this.total = total;
-        this.rows = rows;
-    }
 
     public long getTotal() {
         return total;

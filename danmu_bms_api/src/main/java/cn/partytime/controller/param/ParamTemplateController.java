@@ -1,6 +1,6 @@
 package cn.partytime.controller.param;
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.ParamTemplate;
 import cn.partytime.model.manager.ParamValue;

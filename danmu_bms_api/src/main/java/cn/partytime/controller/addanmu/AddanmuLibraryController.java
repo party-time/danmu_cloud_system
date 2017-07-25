@@ -1,7 +1,7 @@
 package cn.partytime.controller.addanmu;
 
 import cn.partytime.controller.base.BaseAdminController;
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.danmu.AdDanmuLibrary;
 import cn.partytime.service.BmsAdDanmuService;
@@ -38,7 +38,7 @@ public class AddanmuLibraryController extends BaseAdminController {
 
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public PageResultModel list(Integer pageNumber, Integer pageSize,int flg) {
+    public PageResultModel list(Integer pageNumber, Integer pageSize, int flg) {
         pageNumber = pageNumber -1;
         /*return bmsPartyService.findAllByPage(pageNumber, pageSize,type);*/
         return  bmsAdDanmuService.findAdDanmuLibraryPageResultModel(pageNumber,pageSize,flg);

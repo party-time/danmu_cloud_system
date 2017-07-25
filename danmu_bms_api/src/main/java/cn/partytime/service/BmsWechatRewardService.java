@@ -1,6 +1,6 @@
 package cn.partytime.service;
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.WechatRewardResult;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.H5Template;

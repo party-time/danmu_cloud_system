@@ -1,6 +1,6 @@
 package cn.partytime.service.versionManager;
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.manager.UpdatePlan;
 import cn.partytime.model.manager.Version;
 import cn.partytime.model.versionManager.JavaUpdatePlanResult;

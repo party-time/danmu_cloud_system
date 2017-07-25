@@ -14,7 +14,7 @@ import java.util.List;
 @EnableMongoRepositories(mongoTemplateRef = "managerMongoTemplate")
 public interface UpdatePlanRepository extends MongoRepository<UpdatePlan,String> {
 
-    Page<UpdatePlan> findByAddressId(String addressId, Pageable pageable);
+    Page<UpdatePlan> findByAddressId(String addressId,Pageable pageable);
 
     List<UpdatePlan> findByAddressId(String addressId);
 

@@ -1,9 +1,8 @@
 package cn.partytime.service.shop;
 
-import cn.partytime.logic.danmu.PageResultModel;
-import cn.partytime.logic.danmu.PartyLogicModel;
-import cn.partytime.logicService.PartyLogicService;
 import cn.partytime.model.OrderItem;
+import cn.partytime.model.PageResultModel;
+import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.manager.AdminUser;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.monitor.Monitor;
@@ -13,6 +12,7 @@ import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.model.wechatMsgTmpl.MsgTmpl;
 import cn.partytime.model.wechatMsgTmpl.ValueTmpl;
+import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.service.AdminUserService;
 import cn.partytime.service.BmsWechatUserService;
 import cn.partytime.service.DanmuAddressService;

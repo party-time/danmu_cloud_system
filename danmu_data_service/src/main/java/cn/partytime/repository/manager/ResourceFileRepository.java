@@ -20,9 +20,9 @@ public interface ResourceFileRepository extends MongoRepository<ResourceFile, St
 
     Page<ResourceFile> findByFileType(Integer fileType, Pageable pageable);
 
-    Page<ResourceFile> findByFileTypeAndResourceNameLike(Integer fileType, String resourceName, Pageable pageable);
+    Page<ResourceFile> findByFileTypeAndResourceNameLike(Integer fileType, String resourceName,Pageable pageable);
 
-    List<ResourceFile> findByIdIn(List<String> idList);
+    List<ResourceFile> findByIdIn(List<String> idList );
 
 
 

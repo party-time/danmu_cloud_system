@@ -3,7 +3,7 @@ package cn.partytime.service;
 
 import cn.partytime.common.cachekey.LoginCodeCacheKey;
 import cn.partytime.common.cachekey.WechatCacheKey;
-import cn.partytime.logic.danmu.PartyLogicModel;
+import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.wechat.MaterialListJson;
 import cn.partytime.model.wechat.MaterlListPageResultJson;
 import cn.partytime.model.wechat.WechatUser;

@@ -1,7 +1,10 @@
 package cn.partytime.service.danmuCmdJson;
 
+import cn.partytime.common.cachekey.CmdTempCacheKey;
 import cn.partytime.model.manager.danmuCmdJson.CmdTemp;
+import cn.partytime.redis.service.RedisService;
 import cn.partytime.repository.manager.danmuCmdJson.CmdJsonTempRepository;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +25,10 @@ public class CmdTempService {
     @Autowired
     private CmdJsonTempRepository cmdJsonTempRepository;
 
-    public CmdTemp save(String name, String key, Integer isInDanmuLib, Integer isSendH5, Integer sort, Integer show){
+    @Autowired
+    private RedisService redisService;
+
+    public CmdTemp save(String name, String key,Integer isInDanmuLib,Integer isSendH5,Integer sort,Integer show){
         CmdTemp cmdTemp = new CmdTemp();
         cmdTemp.setName(name);
         cmdTemp.setKey(key);
@@ -33,7 +39,7 @@ public class CmdTempService {
         return cmdJsonTempRepository.save(cmdTemp);
     }
 
-    public CmdTemp update(String id, String name, Integer isInDanmuLib, Integer isSendH5, Integer sort, Integer show){
+    public CmdTemp update(String id,String name,Integer isInDanmuLib,Integer isSendH5,Integer sort,Integer show){
         CmdTemp cmdTemp = cmdJsonTempRepository.findOne(id);
         if( null != cmdTemp) {
             cmdTemp.setName(name);
@@ -54,6 +60,8 @@ public class CmdTempService {
 
     public void del(String id){
 
+        String key = CmdTempCacheKey.CMD_TEMP_CACHE_KEY+id;
+        redisService.expire(key,0);
         cmdJsonTempRepository.delete(id);
     }
 

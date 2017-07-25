@@ -18,7 +18,7 @@ public class DeviceIpInfoService {
     @Autowired
     private DeviceIpInfoRepository deviceIpInfoRepository;
 
-    public DeviceIpInfo save(String addressId, String ip, Integer port, Integer type){
+    public DeviceIpInfo save(String addressId,String ip,Integer port,Integer type){
         DeviceIpInfo deviceIpInfo = new DeviceIpInfo();
         deviceIpInfo.setAddressId(addressId);
         deviceIpInfo.setIp(ip);
@@ -35,7 +35,7 @@ public class DeviceIpInfoService {
         deviceIpInfoRepository.save(deviceIpInfos);
     }
 
-    public List<DeviceIpInfo> findByAddressIdAndType(String addressId, Integer type){
+    public List<DeviceIpInfo> findByAddressIdAndType(String addressId,Integer type){
         return deviceIpInfoRepository.findByAddressIdAndType(addressId,type);
     }
 

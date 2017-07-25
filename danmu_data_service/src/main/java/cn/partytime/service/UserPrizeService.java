@@ -38,7 +38,7 @@ public class UserPrizeService {
      * @param openId
      * @return
      */
-    public UserPrize findByDanmuIdAndOpenId(String danmuId, String openId) {
+    public UserPrize findByDanmuIdAndOpenId(String danmuId,String openId) {
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("openId").is(openId),
                 Criteria.where("danmuId").is(danmuId)

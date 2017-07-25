@@ -1,6 +1,6 @@
 package cn.partytime.controller;
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.service.BmsMovieScheduleService;
 import cn.partytime.service.MovieScheduleService;
@@ -25,7 +25,7 @@ public class MovieScheduleController {
     private BmsMovieScheduleService bmsMovieScheduleService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public PageResultModel getPage(String partyId,String addressId,Integer pageNumber, Integer pageSize){
+    public PageResultModel getPage(String partyId, String addressId, Integer pageNumber, Integer pageSize){
         pageNumber = pageNumber -1;
         return bmsMovieScheduleService.findByPartyIdAndAddressId(partyId,addressId,pageNumber,pageSize);
     }

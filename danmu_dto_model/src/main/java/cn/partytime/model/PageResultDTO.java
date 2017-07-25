@@ -3,19 +3,21 @@ package cn.partytime.model;
 import java.util.List;
 
 /**
- * Created by lENOVO on 2016/11/7.
+ * Created by administrator on 2017/7/25.
  */
-public class PageResultModel<T> {
+public class PageResultDTO<T> {
+
     private long total = 0;
     private List<T> rows;
 
-    public PageResultModel() {
+    public PageResultDTO() {
     }
 
-    public PageResultModel(long total, List<T> rows) {
+    public PageResultDTO(long total, List<T> rows) {
         this.total = total;
         this.rows = rows;
     }
+
 
     public long getTotal() {
         return total;
@@ -33,3 +35,4 @@ public class PageResultModel<T> {
         this.rows = rows;
     }
 }
+

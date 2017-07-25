@@ -2,13 +2,16 @@ package cn.partytime.controller.danmu;
 
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.controller.base.BaseAdminController;
-import cn.partytime.logic.danmu.PageResultModel;
-import cn.partytime.logicService.CmdLogicService;
-import cn.partytime.model.danmu.*;
+import cn.partytime.model.CmdTempAllData;
+import cn.partytime.model.CmdTempComponentData;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
-import cn.partytime.logic.cmdCommand.CmdTempAllData;
-import cn.partytime.logic.cmdCommand.CmdTempComponentData;
-import cn.partytime.service.*;
+import cn.partytime.model.danmu.*;
+import cn.partytime.rpcService.CmdLogicService;
+import cn.partytime.service.BmsPreDanmuService;
+import cn.partytime.service.DanmuCommonService;
+import cn.partytime.service.DanmuService;
+import cn.partytime.service.PreDanmuService;
 import cn.partytime.service.danmuCmd.BmsCmdService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -80,7 +83,7 @@ public class PreDmController  extends BaseAdminController {
 
 
     @RequestMapping(value = "/admin/historyDMList", method = RequestMethod.GET)
-    public PageResultModel historyDMList(String msg,Integer pageNumber, Integer pageSize) {
+    public PageResultModel historyDMList(String msg, Integer pageNumber, Integer pageSize) {
         pageNumber = pageNumber -1;
         Page<DanmuModel> danmuModelPage = null;
 

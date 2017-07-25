@@ -20,7 +20,7 @@ public class CmdJsonParamService {
     private CmdJsonParamRepository cmdJsonParamRepository;
 
 
-    public CmdJsonParam save(String cmdJsonTempId, String componentId, String key, String defaultValue , Integer isCheck, Integer type, String checkRule){
+    public CmdJsonParam save(String cmdJsonTempId,String componentId, String key, String defaultValue ,Integer isCheck,Integer type,String checkRule){
         CmdJsonParam param = new CmdJsonParam();
         param.setCmdJsonTempId(cmdJsonTempId);
         param.setType(type);
@@ -32,7 +32,7 @@ public class CmdJsonParamService {
         return cmdJsonParamRepository.save(param);
     }
 
-    public CmdJsonParam save(CmdJsonParam param ){
+    public CmdJsonParam save( CmdJsonParam param ){
         return cmdJsonParamRepository.save(param);
     }
 

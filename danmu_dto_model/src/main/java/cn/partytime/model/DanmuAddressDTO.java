@@ -4,7 +4,7 @@ package cn.partytime.model;
  * Created by liuwei on 16/6/12.
  * 弹幕活动的地址
  */
-public class DanmuAddress{
+public class DanmuAddressDTO{
 
     private String id;
 
@@ -48,6 +48,9 @@ public class DanmuAddress{
 
     //场地类型 0 固定场地  1 临时场地
     private Integer type;
+
+
+
 
     public String getId() {
         return id;

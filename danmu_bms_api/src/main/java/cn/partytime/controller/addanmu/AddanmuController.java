@@ -1,7 +1,7 @@
 package cn.partytime.controller.addanmu;
 
 import cn.partytime.controller.base.BaseAdminController;
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.service.BmsAdDanmuService;
 import org.eclipse.jetty.util.StringUtil;

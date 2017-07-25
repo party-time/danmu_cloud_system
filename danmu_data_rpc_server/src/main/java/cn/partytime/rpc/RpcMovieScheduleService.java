@@ -2,7 +2,7 @@ package cn.partytime.rpc;
 
 
 import cn.partytime.model.manager.MovieSchedule;
-import cn.partytime.service.movie.MovieScheduleService;
+import cn.partytime.service.MovieScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

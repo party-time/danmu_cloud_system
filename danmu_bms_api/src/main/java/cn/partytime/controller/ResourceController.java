@@ -1,7 +1,7 @@
 package cn.partytime.controller;
 
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.PartyResourceFileResult;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.Party;
@@ -63,7 +63,7 @@ public class ResourceController {
     }
 
     @RequestMapping(value = "/page", method = RequestMethod.GET)
-    public PageResultModel resourceFilePage(Integer fileType, String resourceName,Integer pageNo, Integer pageSize){
+    public PageResultModel resourceFilePage(Integer fileType, String resourceName, Integer pageNo, Integer pageSize){
         pageNo = pageNo-1;
         Page<ResourceFile> resourceFilePage = null;
         if(StringUtils.isEmpty(resourceName)){

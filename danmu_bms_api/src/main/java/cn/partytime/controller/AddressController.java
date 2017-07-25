@@ -1,6 +1,6 @@
 package cn.partytime.controller;
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.LocationModel;
 import cn.partytime.model.RestResultModel;

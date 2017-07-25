@@ -2,6 +2,7 @@ package cn.partytime.service;
 
 import cn.partytime.model.manager.H5Template;
 import cn.partytime.repository.manager.H5TemplateRepository;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by administrator on 2017/4/28.
@@ -22,8 +28,8 @@ public class H5TemplateService {
 
 
 
-    public H5Template save(String tempTitle, String h5Url, String html, Integer isIndex, Integer type,
-                           Integer isBase, Integer payMoney, String payTitle){
+    public H5Template save(String tempTitle,String h5Url,String html,Integer isIndex,Integer type,
+                           Integer isBase,Integer payMoney,String payTitle){
         if(!StringUtils.isEmpty(h5Url)){
             H5Template h5Template = findByH5Url(h5Url);
             if( null != h5Template){
@@ -100,7 +106,7 @@ public class H5TemplateService {
     }
 
 
-    public Page<H5Template> findByIsIndex(Integer isIndex, Integer page, Integer size){
+    public Page<H5Template> findByIsIndex(Integer isIndex,Integer page, Integer size){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return h5TemplateRepository.findByIsIndex(isIndex,pageRequest);

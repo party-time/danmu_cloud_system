@@ -2,6 +2,7 @@ package cn.partytime.service.wechat;
 
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
+import cn.partytime.redis.service.RedisService;
 import cn.partytime.repository.user.WechatUserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class WechatUserInfoService {
     private WechatUserInfoRepository wechatUserInfoRepository;
     @Autowired
     private WechatUserService wechatUserService;
+    @Autowired
+    private RedisService redisService;
 
     public void saveOrUpdate(String wechatId,Double longitude,Double latitude){
         WechatUserInfo wechatUserInfo = wechatUserInfoRepository.findByWechatId(wechatId);

@@ -17,13 +17,13 @@ public interface DanmuAddressRepository extends MongoRepository<DanmuAddress,Str
 
     public DanmuAddress findById(String Id);
 
-    Page<DanmuAddress> findByIdNotIn(List<String> addressIds, Pageable pageable);
+    Page<DanmuAddress> findByIdNotIn(List<String> addressIds , Pageable pageable);
 
     List<DanmuAddress> findByIdIn(List<String> ids);
 
     Page<DanmuAddress> findByIdIn(List<String> ids, Pageable pageable);
 
-    Page<DanmuAddress> findByType(Integer type, Pageable pageable);
+    Page<DanmuAddress> findByType(Integer type,Pageable pageable);
 
     List<DanmuAddress> findByType(Integer type);
 

@@ -7,29 +7,21 @@ import cn.partytime.common.util.ComponentKeyConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.CacheDataRepository;
-import cn.partytime.logic.danmu.PageResultModel;
-import cn.partytime.logic.danmu.PartyLogicModel;
-import cn.partytime.logic.danmu.QueueDanmuModel;
-import cn.partytime.logicService.CmdLogicService;
-import cn.partytime.logicService.PartyLogicService;
 import cn.partytime.model.*;
 import cn.partytime.model.danmu.DanmuLog;
 import cn.partytime.model.danmu.DanmuModel;
 import cn.partytime.model.danmu.DanmuPool;
-import cn.partytime.logic.cmdCommand.CmdTempAllData;
-import cn.partytime.logic.cmdCommand.CmdTempComponentData;
-import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.danmuCmdJson.CmdTemp;
 import cn.partytime.model.user.UserPrize;
 import cn.partytime.model.wechat.WechatUser;
-import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.redis.service.RedisService;
+import cn.partytime.rpcService.CmdLogicService;
+import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.service.danmu.DanmuLogService;
-import cn.partytime.service.danmuCmd.BmsCmdService;
 import cn.partytime.service.danmuCmdJson.CmdTempService;
-import cn.partytime.service.wechat.WechatUserInfoService;
 import cn.partytime.service.wechat.WechatUserService;
-import cn.partytime.util.*;
+import cn.partytime.util.CommonUtils;
+import cn.partytime.util.DanmuCheckUtil;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -315,7 +307,7 @@ public class BmsDanmuService {
         }
 
         Date date = DateUtils.getCurrentDate();
-        PartyLogicModel party = partyLogicService.findPartyAddressIdAndDate(addressId);
+        PartyLogicModel party = partyLogicService.findPartyAddressId(addressId);
         int time = 0;
         if(party!=null){
             logger.info("当前场地没有活动正在进行");
@@ -455,7 +447,7 @@ public class BmsDanmuService {
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
         Date date = DateUtils.getCurrentDate();
 
-        PartyLogicModel party = partyLogicService.findPartyAddressIdAndDate(addressId);
+        PartyLogicModel party = partyLogicService.findPartyAddressId(addressId);
         if(party==null){
             logger.info("当前场地没有活动正在进行");
             restResultModel.setResult(404);
@@ -634,7 +626,7 @@ public class BmsDanmuService {
         //是否入弹幕库 0入库  1不入库
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
         Date date = DateUtils.getCurrentDate();
-        PartyLogicModel party = partyLogicService.findPartyAddressIdAndDate(addressId);
+        PartyLogicModel party = partyLogicService.findPartyAddressId(addressId);
         if(party==null){
             logger.info("当前场地没有活动正在进行");
             restResultModel.setResult(404);

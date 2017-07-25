@@ -1,8 +1,8 @@
 package cn.partytime.rpcService.dataRpc;
 
 import cn.partytime.common.util.ServerConst;
+import cn.partytime.model.PageResultDTO;
 import cn.partytime.rpcService.dataRpc.impl.ProjectorServiceHystrix;
-import cn.partytime.model.PageResultModel;
 import cn.partytime.model.Projector;
 import cn.partytime.model.ProjectorAction;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -27,5 +27,5 @@ public interface ProjectorService {
     public void saveProjector(Projector projector);
 
     @RequestMapping(value = "/rpcProjector/findProjectorActionPage" ,method = RequestMethod.GET)
-    public PageResultModel<ProjectorAction> findProjectorActionPage(@RequestParam(value = "registorCode") String registorCode, @RequestParam(value = "page")int page, @RequestParam(value = "size") int size);
+    public PageResultDTO<ProjectorAction> findProjectorActionPage(@RequestParam(value = "registorCode") String registorCode, @RequestParam(value = "page")int page, @RequestParam(value = "size") int size);
 }

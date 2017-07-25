@@ -1,6 +1,7 @@
-package cn.partytime.service;
+package cn.partytime.service.adDanmu;
 
 import cn.partytime.model.manager.PartyAddressAdRelation;
+import cn.partytime.model.manager.PartyAddressRelation;
 import cn.partytime.repository.manager.PartyAddressAdRelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -24,17 +25,17 @@ public class PartyAddressAdRelationService {
     @Resource(name = "managerMongoTemplate")
     private MongoTemplate managerMongoTemplate;
 
-    public PartyAddressAdRelation findPartyAddressAdRelationByPartyIdAndAddressId(String partyId, String addressId){
+    public PartyAddressAdRelation findPartyAddressAdRelationByPartyIdAndAddressId(String partyId,String addressId){
         return partyAddressAdRelationRepository.findByPartyIdAndAddressId(partyId,addressId);
     }
-    public List<PartyAddressAdRelation> findPartyAddressAdRelationByPartyIdAndAddressIdList(String partyId, List<String> addList){
+    public List<PartyAddressAdRelation> findPartyAddressAdRelationByPartyIdAndAddressIdList(String partyId,List<String> addList){
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("partyId").is(partyId),
                 Criteria.where("addressId").in(addList));
         Query query = new Query(criteria);
         return managerMongoTemplate.find(query, PartyAddressAdRelation.class);
     }
-    public List<PartyAddressAdRelation> findPartyAddressAdRelationByAddressIdAndPartyIdList(String addressId, List<String> partyIdList){
+    public List<PartyAddressAdRelation> findPartyAddressAdRelationByAddressIdAndPartyIdList(String addressId,List<String> partyIdList){
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("addressId").is(addressId),
                 Criteria.where("partyId").in(partyIdList));

@@ -14,7 +14,7 @@ public interface PartyAddressRelationRepository extends MongoRepository<PartyAdd
 
     List<PartyAddressRelation> findByPartyId(String partyId);
 
-    List<PartyAddressRelation> findByPartyIdAndAddressIdIn(String partyId, List<String> addressIdList);
+    List<PartyAddressRelation> findByPartyIdAndAddressIdIn(String partyId,List<String> addressIdList);
 
     List<PartyAddressRelation> findByAddressId(String addressId);
 
@@ -26,6 +26,6 @@ public interface PartyAddressRelationRepository extends MongoRepository<PartyAdd
 
     List<PartyAddressRelation> findByPartyIdIn(List<String> partyIds);
 
-    PartyAddressRelation findByPartyIdAndAddressId(String partyId, String addressId);
+    PartyAddressRelation findByPartyIdAndAddressId(String partyId,String addressId);
 
 }

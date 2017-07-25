@@ -17,7 +17,7 @@ public class WechatRewardService {
     @Autowired
     private WechatRewardRepository wechatRewardRepository;
 
-    public WechatReward save(String partyId , String addressId , String openId, String timestamp, Integer total_fee, String h5TempId ){
+    public WechatReward save(String partyId , String addressId ,String openId,String timestamp, Integer total_fee,String h5TempId ){
         WechatReward wechatReward = new WechatReward();
         wechatReward.setPartyId(partyId);
         wechatReward.setAddressId(addressId);

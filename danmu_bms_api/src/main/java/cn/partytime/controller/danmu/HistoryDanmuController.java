@@ -3,7 +3,7 @@ package cn.partytime.controller.danmu;
 import cn.partytime.common.util.ComponentKeyConst;
 import cn.partytime.common.util.FileUtils;
 import cn.partytime.controller.base.BaseAdminController;
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.danmu.DanmuModel;
 import cn.partytime.model.danmu.DanmuPool;

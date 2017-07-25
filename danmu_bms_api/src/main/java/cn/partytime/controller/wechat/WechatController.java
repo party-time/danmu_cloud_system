@@ -1,14 +1,14 @@
 package cn.partytime.controller.wechat;
 
-import cn.partytime.logic.danmu.PartyLogicModel;
-import cn.partytime.logicService.DanmuAddressLogicService;
+import cn.partytime.model.PartyLogicModel;
+import cn.partytime.model.WechatSession;
 import cn.partytime.model.cms.ItemResult;
 import cn.partytime.model.cms.PageColumn;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.H5Template;
-import cn.partytime.logic.wechat.WechatSession;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
+import cn.partytime.rpcService.DanmuAddressLogicService;
 import cn.partytime.service.BmsColorService;
 import cn.partytime.service.BmsWechatUserService;
 import cn.partytime.service.H5TemplateService;

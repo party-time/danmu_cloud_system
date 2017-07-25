@@ -1,7 +1,7 @@
 package cn.partytime.controller;
 
-import cn.partytime.logicService.PartyAddressRelationLogicService;
 import cn.partytime.model.RestResultModel;
+import cn.partytime.service.PartyAddressRelationLogicService;
 import cn.partytime.service.PartyAddressRelationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

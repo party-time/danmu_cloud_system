@@ -302,7 +302,7 @@ public class MovieLogicService {
                 if(ListUtils.checkListIsNotNull(danmuClientList)){
                     for(DanmuClient tempDanmuClient:danmuClientList){
                         String code = tempDanmuClient.getRegistCode();
-                        PageResultModel<ProjectorAction> projectorActions =  projectorService.findProjectorActionPage(code,0,1);
+                        PageResultDTO<ProjectorAction> projectorActions =  projectorService.findProjectorActionPage(code,0,1);
                         List<ProjectorAction> projectorActionList =projectorActions.getRows();
                         if(ListUtils.checkListIsNotNull(projectorActionList)){
                             for(ProjectorAction projectorAction :projectorActionList){

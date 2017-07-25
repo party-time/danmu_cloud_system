@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by liuwei on 16/6/15.
@@ -73,7 +75,7 @@ public class DanmuAddressService {
         return danmuAddressRepository.findAll(pageRequest);
     }
 
-    public Page<DanmuAddress> findPageByType(Integer type, int page, int size) {
+    public Page<DanmuAddress> findPageByType(Integer type,int page, int size) {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuAddressRepository.findByType(type,pageRequest);
@@ -142,7 +144,7 @@ public class DanmuAddressService {
         return addressIds;
     }
 
-    public Page<DanmuAddress> findAddressByPartyId(List<String> addressIds, int page, int size){
+    public Page<DanmuAddress>  findAddressByPartyId(List<String> addressIds,int page, int size){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuAddressRepository.findByIdIn(addressIds,pageRequest);
@@ -193,7 +195,7 @@ public class DanmuAddressService {
     }
 
 
-    public Page<DanmuAddress> findDanmuAddressByPartyId(String partyId, Integer pageNum , Integer pageSize){
+    public Page<DanmuAddress> findDanmuAddressByPartyId(String partyId,Integer pageNum ,Integer pageSize){
         Party party = partyService.findById(partyId);
         if( null == party){
             return null;
@@ -208,5 +210,40 @@ public class DanmuAddressService {
         }
 
     }
+
+    /**
+     * 更新影院店铺状态
+     * @param id
+     * @param shopStatus
+     */
+    public void updateShopStatus(String id,Integer shopStatus){
+        DanmuAddress danmuAddress = danmuAddressRepository.findById(id);
+        if( null!= danmuAddress){
+            danmuAddress.setShopStatus(shopStatus);
+            danmuAddressRepository.save(danmuAddress);
+        }
+    }
+
+    public void updateControlerStatus(String id,String key,Integer status){
+        DanmuAddress danmuAddress = danmuAddressRepository.findById(id);
+        if( null != danmuAddress ){
+            Map<String,Integer> map = danmuAddress.getControlerStatus();
+            if( null == map){
+                map = new HashMap<>();
+            }
+            map.put(key,status);
+            danmuAddress.setControlerStatus(map);
+            danmuAddressRepository.save(danmuAddress);
+        }
+    }
+
+    public void updateControlerStatus(String id,Map<String,Integer> map){
+        DanmuAddress danmuAddress = danmuAddressRepository.findById(id);
+        if( null != danmuAddress ){
+            danmuAddress.setControlerStatus(map);
+            danmuAddressRepository.save(danmuAddress);
+        }
+    }
+
 
 }

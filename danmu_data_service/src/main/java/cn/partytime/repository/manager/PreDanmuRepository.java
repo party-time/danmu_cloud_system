@@ -20,7 +20,7 @@ public interface PreDanmuRepository extends MongoRepository<PreDanmuModel,String
 
     public List<PreDanmuModel> findByDanmuLibraryId(String danmuLibraryId);
 
-    public List<PreDanmuModel> findByDanmuLibraryId(String danmuLibraryId, Sort sort);
+    public List<PreDanmuModel> findByDanmuLibraryId(String danmuLibraryId,Sort sort);
 
     public Page<PreDanmuModel> findByDanmuLibraryId(String danmuLibraryId, Pageable pageable);
 

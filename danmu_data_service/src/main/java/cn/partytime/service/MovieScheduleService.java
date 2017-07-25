@@ -1,6 +1,8 @@
-package cn.partytime.service.movie;
+package cn.partytime.service;
 
+import cn.partytime.model.manager.MovieAlias;
 import cn.partytime.model.manager.MovieSchedule;
+import cn.partytime.model.manager.PartyAddressRelation;
 import cn.partytime.repository.manager.MovieScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,12 +29,13 @@ public class MovieScheduleService {
     @Resource(name = "managerMongoTemplate")
     private MongoTemplate managerMongoTemplate;
 
-    public MovieSchedule insertMovieSchedule(MovieSchedule movieSchedule){
-        return movieScheduleRepository.insert(movieSchedule);
+
+    public void insertMovieSchedule(MovieSchedule movieSchedule){
+        movieScheduleRepository.insert(movieSchedule);
     }
 
-    public MovieSchedule updateMovieSchedule(MovieSchedule movieSchedule){
-       return movieScheduleRepository.save(movieSchedule);
+    public void updateMovieSchedule(MovieSchedule movieSchedule){
+        movieScheduleRepository.save(movieSchedule);
     }
 
     public List<MovieSchedule> findByPartyIdAndAddressId(String partyId, String addressId){
@@ -44,19 +48,19 @@ public class MovieScheduleService {
         return managerMongoTemplate.find(query, MovieSchedule.class);
     }
 
-    public Page<MovieSchedule> findAllByAddressId(String addressId, int pageSize, int pageNo){
+    public Page<MovieSchedule> findAllByAddressId(String addressId,int pageSize,int pageNo){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(pageNo, pageSize, sort);
         return movieScheduleRepository.findByAddressId(addressId,pageRequest);
     }
 
-    public Page<MovieSchedule> findAll(String partyId, int pageSize , int pageNo){
+    public Page<MovieSchedule> findAll(String partyId,int pageSize , int pageNo){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(pageNo, pageSize, sort);
         return movieScheduleRepository.findByPartyId(partyId,pageRequest);
     }
 
-    public Page<MovieSchedule> findPageByPartyIdAndAddressIs(String partyId, String addressId, int pageSize, int pageNo){
+    public Page<MovieSchedule> findPageByPartyIdAndAddressIs(String partyId,String addressId,int pageSize,int pageNo){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(pageNo, pageSize, sort);
         return movieScheduleRepository.findByPartyIdAndAddressId(partyId,addressId,pageRequest);
@@ -69,5 +73,4 @@ public class MovieScheduleService {
     public void del(String id){
         movieScheduleRepository.delete(id);
     }
-
 }

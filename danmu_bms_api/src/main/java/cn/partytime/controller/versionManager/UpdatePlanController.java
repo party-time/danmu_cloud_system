@@ -1,6 +1,6 @@
 package cn.partytime.controller.versionManager;
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.UpdatePlan;
 import cn.partytime.model.manager.Version;

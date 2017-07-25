@@ -22,14 +22,14 @@ public class CmdJsonComponentService {
     @Autowired
     private CmdJsonComponentRepository cmdJsonComponentRepository;
 
-    public CmdComponent save(String name, Integer type){
+    public CmdComponent save(String name,Integer type){
         CmdComponent cmdComponent = new CmdComponent();
         cmdComponent.setName(name);
         cmdComponent.setType(type);
         return cmdJsonComponentRepository.save(cmdComponent);
     }
 
-    public CmdComponent update(String id, String name, Integer type){
+    public CmdComponent update(String id,String name,Integer type){
         CmdComponent cmdComponent = findById(id);
         if( null != cmdComponent){
             cmdComponent.setName(name);

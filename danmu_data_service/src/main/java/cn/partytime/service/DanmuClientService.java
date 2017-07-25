@@ -48,7 +48,7 @@ public class DanmuClientService {
      * @param name
      * @return
      */
-    public DanmuClient save(String addressId, Date overdue, String name, String paramTemplateId) {
+    public DanmuClient save(String addressId,Date overdue,String name,String paramTemplateId) {
 
         DanmuClient danmuClient = new DanmuClient();
         danmuClient.setAddressId(addressId);
@@ -75,7 +75,7 @@ public class DanmuClientService {
      * @param name
      * @return
      */
-    public DanmuClient findDanmuClientByAddressIdAndName(String addressId, String name){
+    public DanmuClient findDanmuClientByAddressIdAndName(String addressId,String name){
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("addressId").is(addressId),
                 Criteria.where("name").is(name)
@@ -115,7 +115,7 @@ public class DanmuClientService {
         return danmuClientRepository.findByDanmuClientCode(danmuClientCode);
     }
 
-    public Page<DanmuClient> findClientListByAddressId(String addressId, int page, int size, String sortby) {
+    public Page<DanmuClient> findClientListByAddressId(String addressId, int page, int size,String sortby) {
         Sort sort = new Sort(Sort.Direction.DESC, sortby);
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuClientRepository.findByAddressId(pageRequest, addressId);
@@ -146,7 +146,7 @@ public class DanmuClientService {
         }
     }
 
-    public DanmuClient registClient(String danmuClientCode, String registCode){
+    public DanmuClient registClient(String danmuClientCode,String registCode){
         if( StringUtils.isEmpty(danmuClientCode) || StringUtils.isEmpty(registCode)){
             throw new IllegalArgumentException("客户端code或者注册码为空");
         }

@@ -1,8 +1,7 @@
 package cn.partytime.controller;
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
-import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.service.wechat.BmsWechatUserManagerService;
 import cn.partytime.service.wechat.WechatUserInfoService;

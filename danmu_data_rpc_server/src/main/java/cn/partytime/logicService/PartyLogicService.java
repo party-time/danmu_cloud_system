@@ -11,7 +11,7 @@ import cn.partytime.model.manager.MovieSchedule;
 import cn.partytime.model.manager.Party;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.service.DanmuAddressService;
-import cn.partytime.service.movie.MovieScheduleService;
+import cn.partytime.service.MovieScheduleService;
 import cn.partytime.service.PartyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

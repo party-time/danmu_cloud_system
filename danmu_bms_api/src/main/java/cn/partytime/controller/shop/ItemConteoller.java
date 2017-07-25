@@ -1,6 +1,6 @@
 package cn.partytime.controller.shop;
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.model.shop.Item;

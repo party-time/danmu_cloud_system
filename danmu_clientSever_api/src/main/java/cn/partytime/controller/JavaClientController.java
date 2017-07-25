@@ -88,7 +88,7 @@ public class JavaClientController {
     @RequestMapping(value = "/latelyParty", method = RequestMethod.GET)
     public RestResultModel latelyParty(String addressId){
         RestResultModel restResultModel = new RestResultModel();
-        DanmuAddress danmuAddress = danmuAddressService.findById(addressId);
+        DanmuAddressDTO danmuAddress = danmuAddressService.findById(addressId);
         if( null == danmuAddress){
             return restResultModel;
         }
@@ -263,7 +263,7 @@ public class JavaClientController {
             return restResultModel;
         }
         Date nowDate = new Date();
-        PageResultModel<ProjectorAction> projectorActions =  projectorService.findProjectorActionPage(code,0,1);
+        PageResultDTO<ProjectorAction> projectorActions =  projectorService.findProjectorActionPage(code,0,1);
         List<ProjectorAction> projectorActionList = projectorActions.getRows();
 
         if(ListUtils.checkListIsNotNull(projectorActionList)){
@@ -315,7 +315,7 @@ public class JavaClientController {
         Projector projector = projectorService.findByRegisterCode(code);
 
 
-        PageResultModel<ProjectorAction> projectorActions =  projectorService.findProjectorActionPage(code,0,1);
+        PageResultDTO<ProjectorAction> projectorActions =  projectorService.findProjectorActionPage(code,0,1);
         List<ProjectorAction> projectorActionList = projectorActions.getRows();
         if(ListUtils.checkListIsNotNull(projectorActionList)){
             ProjectorAction projectorAction = projectorActionList.get(0);

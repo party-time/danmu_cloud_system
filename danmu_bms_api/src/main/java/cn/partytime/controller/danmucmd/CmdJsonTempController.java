@@ -1,6 +1,6 @@
 package cn.partytime.controller.danmucmd;
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.danmucmd.CmdComponentJson;
 import cn.partytime.model.danmucmd.CmdTempJson;

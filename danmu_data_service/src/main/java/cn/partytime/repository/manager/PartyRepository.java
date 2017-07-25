@@ -25,39 +25,39 @@ public interface PartyRepository extends MongoRepository<Party,String> {
 
     List<Party> findByIdIn(List<String> ids);
 
-    List<Party> findByStartTimeBetweenAndStatusAndType(Date fromDate, Date toDate, Integer status, Integer type);
+    List<Party> findByStartTimeBetweenAndStatusAndType(Date fromDate,Date toDate,Integer status,Integer type);
 
-    List<Party> findByStartTimeBetweenAndStatus(Date fromDate, Date toDate, Integer status);
+    List<Party> findByStartTimeBetweenAndStatus(Date fromDate,Date toDate,Integer status);
 
-    List<Party> findByStatusAndType(Integer status, Integer type);
+    List<Party> findByStatusAndType(Integer status,Integer type);
 
-    List<Party> findByStartTimeBetween(Date fromDate, Date toDate);
+    List<Party> findByStartTimeBetween(Date fromDate,Date toDate);
     //List<Party> findByEndTimeGreaterThanEqualANDStartTimeLessThanEqual(Date date);
 
     Party findByName(String name);
 
 
-    List<Party> findByIdInAndStatusAndType(List<String> ids, Integer status, Integer type);
+    List<Party> findByIdInAndStatusAndType(List<String> ids,Integer status,Integer type);
 
-    List<Party> findByIdInAndStatusLessThanAndType(List<String> ids, Integer status, Integer type);
+    List<Party> findByIdInAndStatusLessThanAndType(List<String> ids,Integer status,Integer type);
 
     Page<Party> findByType(Integer type, Pageable pageable);
 
-    Page<Party> findByTypeAndStatus(Integer type, Integer status, Pageable pageable);
+    Page<Party> findByTypeAndStatus(Integer type, Integer status ,Pageable pageable);
 
-    Page<Party> findByStatusGreaterThan(Integer status, Pageable pageable);
+    Page<Party> findByStatusGreaterThan(Integer status,Pageable pageable);
 
-    List<Party> findByTypeAndStatusGreaterThan(Integer type, Integer status);
+    List<Party> findByTypeAndStatusGreaterThan(Integer type ,Integer status);
 
-    Page<Party> findByStatusLessThan(Integer status, Pageable pageable);
+    Page<Party> findByStatusLessThan(Integer status,Pageable pageable);
 
-    List<Party> findByTypeAndStatusLessThan(Integer type, Integer status);
+    List<Party> findByTypeAndStatusLessThan(Integer type,Integer status);
 
 
-    List<Party> findByMovieAliasAndStatusNot(String movieAlias, Integer status);
+    List<Party> findByMovieAliasAndStatusNot(String movieAlias,Integer status);
 
-    List<Party> findByTypeAndStatusNot(Integer type, Integer status);
+    List<Party> findByTypeAndStatusNot(Integer type,Integer status);
 
-    Party findByMovieAliasAndStatus(String movieAlias, Integer status);
+    Party findByMovieAliasAndStatus(String movieAlias,Integer status);
 
 }

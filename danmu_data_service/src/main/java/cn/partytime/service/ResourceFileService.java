@@ -6,6 +6,8 @@ import cn.partytime.model.manager.PartyResource;
 import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.repository.manager.ResourceFileRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -62,7 +64,7 @@ public class ResourceFileService {
     /**
      * 更新一个资源文件
      */
-    public ResourceFile update(String id , String resourceName , String fileUrl, String filePath , Long fileSize ){
+    public ResourceFile update(String id , String resourceName ,String fileUrl, String filePath , Long fileSize ){
         ResourceFile resourceFileModel = findById(id);
         resourceFileModel.setFileUrl(fileUrl);
         resourceFileModel.setFilePath(filePath);
@@ -87,7 +89,7 @@ public class ResourceFileService {
         return null;
     }
 
-    public ResourceFile save(String partyId, String fileName){
+    public ResourceFile save(String partyId,String fileName){
         ResourceFile resourceFileModel = new ResourceFile();
         resourceFileModel.setOriginalName(fileName);
         resourceFileModel.setFileType(getFileType(fileName));
@@ -109,7 +111,7 @@ public class ResourceFileService {
         return resourceFileModel;
     }
 
-    public ResourceFile updateSmallFile(String id, String smallFileUrl, Long smallFileSize){
+    public ResourceFile updateSmallFile(String id, String smallFileUrl,Long smallFileSize){
         ResourceFile resourceFile = resourceFileRepository.findOne(id);
         if( null != resourceFile){
             resourceFile.setSmallFileUrl(smallFileUrl);
@@ -162,7 +164,7 @@ public class ResourceFileService {
         return null;
     }
 
-    public List<ResourceFile> findByPartyIdAndfileType(String partyId, Integer fileType){
+    public List<ResourceFile> findByPartyIdAndfileType(String partyId,Integer fileType){
         Map<String,Object> map = this.findResourceMapByPartyId(partyId);
         if(fileType == Const.RESOURCE_H5_BACKGROUND ){
             return (List<ResourceFile>)map.get("h5Background");
@@ -210,13 +212,13 @@ public class ResourceFileService {
 
 
 
-    public Page<ResourceFile> findAllByType(int pageNo , int pageSize, int fileType){
+    public Page<ResourceFile> findAllByType(int pageNo , int pageSize,int fileType){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(pageNo, pageSize, sort);
         return resourceFileRepository.findByFileType(fileType,pageRequest);
     }
 
-    public Page<ResourceFile> findAllByType(int pageNo , int pageSize, int fileType, String resourceName){
+    public Page<ResourceFile> findAllByType(int pageNo , int pageSize,int fileType,String resourceName){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(pageNo, pageSize, sort);
         return resourceFileRepository.findByFileTypeAndResourceNameLike(fileType,resourceName,pageRequest);

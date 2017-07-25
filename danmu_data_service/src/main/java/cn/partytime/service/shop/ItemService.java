@@ -29,7 +29,7 @@ public class ItemService {
         itemRepository.save(item);
     }
 
-    public Page<Item> findAll(Integer pageNum, Integer pageSize){
+    public Page<Item> findAll(Integer pageNum,Integer pageSize){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(pageNum, pageSize, sort);
         return itemRepository.findAll(pageRequest);

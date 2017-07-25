@@ -1,7 +1,7 @@
 package cn.partytime.controller.danmu;
 
 import cn.partytime.controller.base.BaseAdminController;
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.danmu.TimerDanmu;
 import cn.partytime.service.BmsTimerDanmuService;

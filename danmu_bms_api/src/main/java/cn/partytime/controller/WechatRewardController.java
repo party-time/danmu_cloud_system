@@ -1,6 +1,6 @@
 package cn.partytime.controller;
 
-import cn.partytime.logic.danmu.PageResultModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.service.BmsWechatRewardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class WechatRewardController {
     private BmsWechatRewardService bmsWechatRewardService;
 
     @RequestMapping(value = "/page", method = RequestMethod.GET)
-    public PageResultModel findAll(Integer pageNumber,Integer pageSize){
+    public PageResultModel findAll(Integer pageNumber, Integer pageSize){
         pageNumber = pageNumber-1;
         return bmsWechatRewardService.findAll(pageNumber,pageSize);
 

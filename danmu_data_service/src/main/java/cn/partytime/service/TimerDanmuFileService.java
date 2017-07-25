@@ -1,6 +1,9 @@
 package cn.partytime.service;
 
 import cn.partytime.common.util.ListUtils;
+import cn.partytime.model.client.DanmuClient;
+import cn.partytime.model.manager.PartyResource;
+import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.model.manager.TimerDanmuFile;
 import cn.partytime.repository.manager.TimerDanmuFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +13,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lENOVO on 2016/11/28.

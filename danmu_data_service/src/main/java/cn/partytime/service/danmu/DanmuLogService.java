@@ -1,6 +1,7 @@
-package cn.partytime.service;
+package cn.partytime.service.danmu;
 
 import cn.partytime.model.danmu.DanmuLog;
+import cn.partytime.model.danmu.DanmuModel;
 import cn.partytime.repository.danmu.DanmuLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

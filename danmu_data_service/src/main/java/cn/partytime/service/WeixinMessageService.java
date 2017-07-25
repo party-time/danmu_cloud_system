@@ -5,6 +5,7 @@ import cn.partytime.repository.manager.WeixinMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -20,7 +21,7 @@ public class WeixinMessageService {
     @Autowired
     private WeixinMessageRepository weixinMessageRepository;
 
-    public WeixinMessage save(String words , String message, String mediaId, String mediaName){
+    public WeixinMessage save(String words , String message,String mediaId,String mediaName){
         WeixinMessage weixinMessage = new WeixinMessage();
         weixinMessage.setMessage(message);
         weixinMessage.setWords(words);

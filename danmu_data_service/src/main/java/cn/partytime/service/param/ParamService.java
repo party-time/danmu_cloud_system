@@ -19,7 +19,7 @@ public class ParamService {
     private ParamRepository paramRepository;
 
 
-    public Param save(String name, Integer valueType, String paramTemplateId, String des, String defaultValue ){
+    public Param save(String name,Integer valueType,String paramTemplateId,String des,String defaultValue ){
         Param param = new Param();
         param.setName(name);
         param.setValueType(valueType);
@@ -29,7 +29,7 @@ public class ParamService {
         return paramRepository.save(param);
     }
 
-    public Param save(Param param ){
+    public Param save( Param param ){
         return paramRepository.save(param);
     }
 
