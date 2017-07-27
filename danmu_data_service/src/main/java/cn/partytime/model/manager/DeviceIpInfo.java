@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
  */
 public class DeviceIpInfo extends BaseModel {
 
-    @Field("_id")
     private String id;
 
     /**

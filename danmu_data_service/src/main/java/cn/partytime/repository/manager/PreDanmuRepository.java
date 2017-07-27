@@ -1,6 +1,6 @@
 package cn.partytime.repository.manager;
 
-import cn.partytime.model.danmu.PreDanmuModel;
+import cn.partytime.model.danmu.PreDanmu;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,16 +14,16 @@ import java.util.List;
  */
 
 @EnableMongoRepositories(mongoTemplateRef = "managerMongoTemplate")
-public interface PreDanmuRepository extends MongoRepository<PreDanmuModel,String> {
+public interface PreDanmuRepository extends MongoRepository<PreDanmu,String> {
 
-    //public PreDanmuModel findByMsg(String msg);
+    //public PreDanmu findByMsg(String msg);
 
-    public List<PreDanmuModel> findByDanmuLibraryId(String danmuLibraryId);
+    public List<PreDanmu> findByDanmuLibraryId(String danmuLibraryId);
 
-    public List<PreDanmuModel> findByDanmuLibraryId(String danmuLibraryId,Sort sort);
+    public List<PreDanmu> findByDanmuLibraryId(String danmuLibraryId, Sort sort);
 
-    public Page<PreDanmuModel> findByDanmuLibraryId(String danmuLibraryId, Pageable pageable);
+    public Page<PreDanmu> findByDanmuLibraryId(String danmuLibraryId, Pageable pageable);
 
-    //public Page<PreDanmuModel> findByDanmuLibraryIdAndMsgLike(String danmuLibraryId,String msg, Pageable pageable);
+    //public Page<PreDanmu> findByDanmuLibraryIdAndMsgLike(String danmuLibraryId,String msg, Pageable pageable);
 
 }

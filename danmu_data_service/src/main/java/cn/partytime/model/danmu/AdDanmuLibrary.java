@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "ad_danmu_library")
 public class AdDanmuLibrary extends BaseModel {
 
-    @Field("_id")
+
     private String id;
 
     private String name;

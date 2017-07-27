@@ -1,8 +1,8 @@
 package cn.partytime.controller;
 
+import cn.partytime.model.RestResultModel;
 import cn.partytime.model.client.DanmuClient;
 import cn.partytime.model.ResourceConfigJson;
-import cn.partytime.model.RestResultModel;
 import cn.partytime.service.DanmuClientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class FlashController {
     }
 
     @RequestMapping(value = "/regist", method = RequestMethod.GET)
-    public RestResultModel regist(String danmuClientCode,String registCode){
+    public RestResultModel regist(String danmuClientCode, String registCode){
         RestResultModel restResultModel = new RestResultModel();
         try {
             danmuClientService.registClient(danmuClientCode, registCode);

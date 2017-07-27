@@ -2,8 +2,8 @@ package cn.partytime.controller;
 
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.model.PageResultModel;
-import cn.partytime.model.client.DanmuClient;
 import cn.partytime.model.RestResultModel;
+import cn.partytime.model.client.DanmuClient;
 import cn.partytime.service.DanmuClientService;
 import cn.partytime.service.DanmuClientListService;
 import lombok.extern.slf4j.Slf4j;
@@ -80,7 +80,7 @@ public class DanmuClientController {
     }
 
     @RequestMapping(value = "/selectParam", method = RequestMethod.GET)
-    public RestResultModel selectParam(String id,String paramTemplateId){
+    public RestResultModel selectParam(String id, String paramTemplateId){
         RestResultModel restResultModel = new RestResultModel();
         danmuClientService.selectParamTemplate(id,paramTemplateId);
         restResultModel.setResult(200);

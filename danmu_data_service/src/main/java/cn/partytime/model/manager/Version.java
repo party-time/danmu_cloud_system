@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "client_version")
 public class Version extends BaseModel {
 
-    @Field("_id")
+
     private String id;
 
     private String name;

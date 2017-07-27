@@ -15,7 +15,7 @@ import java.util.Date;
 @Document(collection = "party")
 public class Party extends BaseModel {
 
-    @Field("_id")
+
     private String id;
 
     private String name;

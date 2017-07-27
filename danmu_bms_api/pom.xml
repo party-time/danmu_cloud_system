@@ -139,7 +139,7 @@
 
         <dependency>
             <groupId>cn.party-time</groupId>
-            <artifactId>danmu_server_redis</artifactId>
+            <artifactId>danmu_redis_server</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
@@ -185,12 +185,6 @@
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.3m</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.party-time</groupId>
-            <artifactId>danmu_admin_user</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>

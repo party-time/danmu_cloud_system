@@ -132,8 +132,8 @@ public class WechatController {
             wechatSession = new WechatSession();
             wechatSession.setOpenId(openId);
             wechatSession.setPartyLogicModel(party);
-            DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
-            wechatSession.setDanmuAddress(danmuAddress);
+            //DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+            //wechatSession.setDanmuAddress(danmuAddress);
         }
 
         wechatSessionService.addSession(wechatSession);

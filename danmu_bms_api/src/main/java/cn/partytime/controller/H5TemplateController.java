@@ -43,11 +43,14 @@ public class H5TemplateController {
             pageNumber = pageNumber-1;
         }
         Page<H5Template> h5TemplatePage = h5TemplateService.findAll(pageNumber,pageSize);
-        return new PageResultModel(h5TemplatePage);
+        PageResultModel pageResultModel = new PageResultModel();
+        pageResultModel.setRows(h5TemplatePage.getContent());
+        pageResultModel.setTotal(h5TemplatePage.getTotalElements());
+        return pageResultModel;
     }
 
     @RequestMapping(value = "/pageByParty", method = RequestMethod.GET)
-    public PageResultModel findByIsIndexAndPartyId(String partyId,Integer pageNumber,Integer pageSize){
+    public PageResultModel findByIsIndexAndPartyId(String partyId, Integer pageNumber, Integer pageSize){
         if( null == pageNumber){
             pageNumber = 0;
         }else{
@@ -62,14 +65,18 @@ public class H5TemplateController {
             }
         }
         Page<H5Template> h5TemplatePage = h5TemplateService.findByIsIndex(0,pageNumber,pageSize);
-        return new PageResultModel(h5TemplatePage);
+
+        PageResultModel pageResultModel = new PageResultModel();
+        pageResultModel.setTotal(h5TemplatePage.getTotalElements());
+        pageResultModel.setRows(h5TemplatePage.getContent());
+        return pageResultModel;
     }
 
 
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public RestResultModel save(String tempTitle,String h5Url,String html,Integer isIndex,Integer type,
-                                Integer isBase,Integer payMoney,String payTitle){
+    public RestResultModel save(String tempTitle, String h5Url, String html, Integer isIndex, Integer type,
+                                Integer isBase, Integer payMoney, String payTitle){
         RestResultModel restResultModel = new RestResultModel();
         bmsH5TempService.save(tempTitle,h5Url,html,isIndex,type,isBase,payMoney,payTitle);
         restResultModel.setResult(200);

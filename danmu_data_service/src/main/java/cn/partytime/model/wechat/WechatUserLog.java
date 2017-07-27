@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "wechat_user_log")
 public class WechatUserLog extends BaseModel{
 
-    @Field("_id")
+
     private String id;
 
     private String openId;

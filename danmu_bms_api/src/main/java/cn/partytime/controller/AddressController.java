@@ -1,9 +1,9 @@
 package cn.partytime.controller;
 
 import cn.partytime.model.PageResultModel;
-import cn.partytime.model.manager.DanmuAddress;
-import cn.partytime.model.manager.LocationModel;
 import cn.partytime.model.RestResultModel;
+import cn.partytime.model.manager.DanmuAddress;
+import cn.partytime.model.manager.Location;
 import cn.partytime.service.BmsAddressService;
 import cn.partytime.service.DanmuAddressService;
 import lombok.extern.slf4j.Slf4j;
@@ -38,17 +38,13 @@ public class AddressController {
     @RequestMapping(value = "/page", method = RequestMethod.GET)
     public PageResultModel addressPage(Integer pageNumber , Integer pageSize ){
         pageNumber = pageNumber-1;
-        Page<DanmuAddress> addressPage = danmuAddressService.findAll(pageNumber,pageSize);
-        PageResultModel pageResultModel = new PageResultModel();
-        pageResultModel.setTotal(addressPage.getTotalElements());
-        pageResultModel.setRows(addressPage.getContent());
-        return pageResultModel;
+        return  danmuAddressService.findAll(pageNumber,pageSize);
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public RestResultModel save(@ModelAttribute DanmuAddress address, HttpServletRequest request){
         RestResultModel restResultModel = new RestResultModel();
-        LocationModel locationModel = new LocationModel();
+        Location locationModel = new Location();
         List<Double> longilatiList = new ArrayList<Double>();
 
         double longitude = Double.parseDouble(request.getParameter("longitude")+"");
@@ -101,7 +97,7 @@ public class AddressController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public RestResultModel update(@ModelAttribute DanmuAddress address,HttpServletRequest request){
         RestResultModel restResultModel = new RestResultModel();
-        LocationModel locationModel = new LocationModel();
+        Location locationModel = new Location();
         List<Double> longilatiList = new ArrayList<Double>();
         double longitude = Double.parseDouble(request.getParameter("longitude")+"");
         double latitude = Double.parseDouble(request.getParameter("latitude")+"");
@@ -151,7 +147,7 @@ public class AddressController {
         pageNumber = pageNumber-1;
 
         if(StringUtils.isEmpty(addressIds)){
-            return  new PageResultModel(danmuAddressService.findAll(pageNumber,pageSize));
+            return danmuAddressService.findAll(pageNumber,pageSize);
         }else{
             List<String> addressIdList = new ArrayList<>();
             if(addressIds.indexOf(",") != -1){
@@ -162,7 +158,7 @@ public class AddressController {
             }else{
                 addressIdList.add(addressIds);
             }
-            return  new PageResultModel(danmuAddressService.findAddressNotIn(addressIdList,pageNumber,pageSize));
+            return danmuAddressService.findAddressNotIn(addressIdList,pageNumber,pageSize);
         }
 
 
@@ -176,15 +172,13 @@ public class AddressController {
     }
 
     @RequestMapping(value = "/getPageByPartyId", method = RequestMethod.GET)
-    public PageResultModel getPageByPartyId(String partyId,Integer pageNumber, Integer pageSize  ){
+    public PageResultModel getPageByPartyId(String partyId, Integer pageNumber, Integer pageSize  ){
         pageNumber = pageNumber-1;
-        PageResultModel pageResultModel = new PageResultModel(danmuAddressService.findDanmuAddressByPartyId(partyId,pageNumber,pageSize));
-
-        return  pageResultModel;
+        return  danmuAddressService.findDanmuAddressByPartyId(partyId,pageNumber,pageSize);
     }
 
     @RequestMapping(value = "/setAddressControle", method = RequestMethod.GET)
-    public RestResultModel setAddressControle(String addressId,String keys){
+    public RestResultModel setAddressControle(String addressId, String keys){
         RestResultModel restResultModel = new RestResultModel();
         Map<String,Integer> map = new HashMap<>();
         for(String key:keys.split(",")){

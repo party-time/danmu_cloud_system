@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>danmu_system</artifactId>
+        <artifactId>danmu_cloud_system</artifactId>
         <groupId>cn.party-time</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -15,6 +15,15 @@
     <artifactId>danmu_dto_model</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.party-time</groupId>
+            <artifactId>danmu_logic_model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 
 </project>

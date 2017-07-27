@@ -1,8 +1,8 @@
 package cn.partytime.service;
 
-import cn.partytime.rpcService.dataRpc.PartyService;
-import cn.partytime.model.PartyLogicModel;
 import cn.partytime.common.cachekey.PartyCacheKey;
+import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.model.PartyLogicModel;
 import cn.partytime.redis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class ClientPartyService {
     private RedisService redisService;
 
     @Autowired
-    private PartyService partyService;
+    private RpcPartyService rpcPartyService;
 
 
     public String findCurrentPatyId(String addressId){
@@ -30,7 +30,7 @@ public class ClientPartyService {
         if(object!=null){
             return String.valueOf(object);
         }else{
-            PartyLogicModel partyLogicModel =  partyService.findPartyAddressId(addressId);
+            PartyLogicModel partyLogicModel =  rpcPartyService.findPartyAddressId(addressId);
             if(partyLogicModel!=null){
                 String partyId = partyLogicModel.getPartyId();
                 redisService.set(key,partyId);

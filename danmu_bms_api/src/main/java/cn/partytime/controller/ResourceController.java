@@ -168,7 +168,7 @@ public class ResourceController {
     }
 
     @RequestMapping(value = "/delPartyResource", method = RequestMethod.GET)
-    public RestResultModel delPartyResource(String partyId,String resourceId) {
+    public RestResultModel delPartyResource(String partyId, String resourceId) {
         RestResultModel restResultModel = new RestResultModel();
         partyResourceService.delByPartyIdAndResourceId(partyId,resourceId);
         restResultModel.setResult(200);

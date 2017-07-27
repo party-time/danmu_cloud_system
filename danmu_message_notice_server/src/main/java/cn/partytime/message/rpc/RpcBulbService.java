@@ -1,11 +1,11 @@
 package cn.partytime.message.rpc;
 
 import cn.partytime.common.constants.LogCodeConst;
+import cn.partytime.dataRpc.RpcDanmuClientService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.messageHandlerService.BulbLifeAlarmService;
 import cn.partytime.message.proxy.MessageHandlerService;
-import cn.partytime.message.rpcService.dataRpcService.DanmuClientService;
-import cn.partytime.model.DanmuClient;
+import cn.partytime.model.DanmuClientModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class RpcBulbService {
     private BulbLifeAlarmService bulbLifeAlarmService;
 
     @Autowired
-    private DanmuClientService danmuClientService;
+    private RpcDanmuClientService danmuClientService;
 
     @Autowired
     private MessageHandlerService messageHandlerService;
@@ -40,7 +40,7 @@ public class RpcBulbService {
 
     @RequestMapping(value = "/blubLife" ,method = RequestMethod.GET)
     public void partyStart(@RequestParam String registerCode) {
-        DanmuClient danmuClient = danmuClientService.findByRegistCode(registerCode);
+        DanmuClientModel danmuClient = danmuClientService.findByRegistCode(registerCode);
 
         Map<String,Object> map = new HashMap<>();
         MessageObject<Map<String,Object>> mapMessageObject = new MessageObject<Map<String,Object>>(LogCodeConst.CLientLogCode.BULB_LIFE_TIME,map);

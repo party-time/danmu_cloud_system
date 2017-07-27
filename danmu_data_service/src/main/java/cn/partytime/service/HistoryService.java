@@ -1,14 +1,8 @@
 package cn.partytime.service;
 
-import cn.partytime.common.util.ListUtils;
-import cn.partytime.model.danmu.DanmuModel;
 import cn.partytime.model.temp.BlockKeywordModel;
 import cn.partytime.model.temp.HistoryDanmuModel;
-import cn.partytime.repository.danmu.HistoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 

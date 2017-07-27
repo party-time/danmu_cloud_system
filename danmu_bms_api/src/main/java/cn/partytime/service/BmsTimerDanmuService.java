@@ -567,25 +567,6 @@ public class BmsTimerDanmuService {
 
 
 
-    public List<TimerDanmuFileLogicModel> findTimerDanmuFileList(String addressId) {
-        List<Party> partyList = partyService.findByTypeAndStatus(1, 2);
-        List<String> partyIdlList = new ArrayList<String>();
-        if (ListUtils.checkListIsNotNull(partyList)) {
-            partyList.stream().forEach(party -> partyIdlList.add(party.getId()));
-        }
-        List<TimerDanmuFile> timerDanmuFileList = timerDanmuFileService.findByPartyId(partyIdlList);
-        List<TimerDanmuFileLogicModel> timerDanmuFileLogicModelList = new ArrayList<TimerDanmuFileLogicModel>();
-        if (ListUtils.checkListIsNotNull(timerDanmuFileList)) {
-            for (TimerDanmuFile timerDanmuFile : timerDanmuFileList) {
-                TimerDanmuFileLogicModel timerDanmuFileLogicModel = new TimerDanmuFileLogicModel();
-                BeanUtils.copyProperties(timerDanmuFile, timerDanmuFileLogicModel);
-                timerDanmuFileLogicModelList.add(timerDanmuFileLogicModel);
-            }
-        }
-        return timerDanmuFileLogicModelList;
-    }
-
-
 
 
     public RestResultModel importDanmuDatoToDb(MultipartFile multipartFile, String partyId, String userId)  throws IOException {

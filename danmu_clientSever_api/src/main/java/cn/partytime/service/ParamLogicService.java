@@ -1,6 +1,6 @@
 package cn.partytime.service;
 
-import cn.partytime.model.ParamValueJson;
+import cn.partytime.model.ParamValueJsonModel;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -18,12 +18,12 @@ import java.util.List;
 @Service
 public class ParamLogicService {
 
-    public String createJson(List<ParamValueJson> paramValueJsonList){
+    public String createJson(List<ParamValueJsonModel> paramValueJsonList){
         if( null == paramValueJsonList){
             return null;
         }
         JSONObject jsonObject = new JSONObject(true);
-        for(ParamValueJson paramValueJson : paramValueJsonList){
+        for(ParamValueJsonModel paramValueJson : paramValueJsonList){
             if( !StringUtils.isEmpty(paramValueJson.getValue())){
                 //0数字 1布尔值 2字符串 3数组
                 if(paramValueJson.getType() == 0){

@@ -4,8 +4,8 @@ import cn.partytime.common.util.*;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.RestResultModel;
-import cn.partytime.model.danmu.DanmuModel;
-import cn.partytime.model.danmu.PreDanmuModel;
+import cn.partytime.model.danmu.Danmu;
+import cn.partytime.model.danmu.PreDanmu;
 import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.danmuCmd.BmsCmdService;
 import org.apache.commons.lang.StringUtils;
@@ -71,18 +71,18 @@ public class BmsPreDanmuService {
      */
     public void savePreDanmuFromHistoryDanmu(String id, String userId, String dlId) {
 
-        DanmuModel danmuModel = danmuService.findById(id);
+        Danmu danmuModel = danmuService.findById(id);
         if(danmuModel!=null){
             Date now = DateUtils.getCurrentDate();
-            PreDanmuModel preDanmuModel= new PreDanmuModel();
-            preDanmuModel.setContent(danmuModel.getContent());
-            preDanmuModel.setTemplateId(danmuModel.getTemplateId());
-            preDanmuModel.setDanmuLibraryId(dlId);
-            preDanmuModel.setCreateUserId(userId);
-            preDanmuModel.setUpdateUserId(userId);
-            preDanmuModel.setCreateTime(now);
-            preDanmuModel.setUpdateTime(now);
-            preDanmuService.save(preDanmuModel);
+            PreDanmu preDanmu = new PreDanmu();
+            preDanmu.setContent(danmuModel.getContent());
+            preDanmu.setTemplateId(danmuModel.getTemplateId());
+            preDanmu.setDanmuLibraryId(dlId);
+            preDanmu.setCreateUserId(userId);
+            preDanmu.setUpdateUserId(userId);
+            preDanmu.setCreateTime(now);
+            preDanmu.setUpdateTime(now);
+            preDanmuService.save(preDanmu);
         }
 
     }
@@ -158,17 +158,17 @@ public class BmsPreDanmuService {
 
 
 
-            PreDanmuModel preDanmuModel = new PreDanmuModel();
+            PreDanmu preDanmu = new PreDanmu();
             Date date = DateUtils.getCurrentDate();
-            preDanmuModel.setTemplateId(templateId);
-            preDanmuModel.setContent(map);
-            preDanmuModel.setDanmuLibraryId(danmuLibraryId);
+            preDanmu.setTemplateId(templateId);
+            preDanmu.setContent(map);
+            preDanmu.setDanmuLibraryId(danmuLibraryId);
 
-            preDanmuModel.setCreateUserId(userId);
-            preDanmuModel.setCreateTime(date);
-            preDanmuModel.setUpdateTime(date);
-            preDanmuModel.setUpdateUserId(userId);
-            preDanmuService.save(preDanmuModel);
+            preDanmu.setCreateUserId(userId);
+            preDanmu.setCreateTime(date);
+            preDanmu.setUpdateTime(date);
+            preDanmu.setUpdateUserId(userId);
+            preDanmuService.save(preDanmu);
         }
     }
 
@@ -212,7 +212,7 @@ public class BmsPreDanmuService {
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook(poifsFileSystem);
         HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(0);
         int maxUumber = hssfSheet.getLastRowNum();
-        List<PreDanmuModel> preDanmuModelList = new ArrayList<>();
+        List<PreDanmu> preDanmuList = new ArrayList<>();
 
         String templateId = ComponentKeyConst.P_DANMU;
         CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
@@ -268,28 +268,28 @@ public class BmsPreDanmuService {
                 contentMap.put("message",content);
 
 
-                PreDanmuModel preDanmuModel = new PreDanmuModel();
+                PreDanmu preDanmu = new PreDanmu();
                 Date now = DateUtils.getCurrentDate();
 
-                preDanmuModel.setContent(contentMap);
-                preDanmuModel.setDanmuLibraryId(libraryId);
-                preDanmuModel.setTemplateId(templateId);
-                //preDanmuModel.setColor(ColorEnmu.getValue(Integer.parseInt(color)));
-                preDanmuModel.setCreateTime(now);
-                preDanmuModel.setUpdateTime(now);
-                preDanmuModel.setIsDelete(0);
+                preDanmu.setContent(contentMap);
+                preDanmu.setDanmuLibraryId(libraryId);
+                preDanmu.setTemplateId(templateId);
+                //preDanmu.setColor(ColorEnmu.getValue(Integer.parseInt(color)));
+                preDanmu.setCreateTime(now);
+                preDanmu.setUpdateTime(now);
+                preDanmu.setIsDelete(0);
 
-                preDanmuModel.setCreateUserId(userId);
-                preDanmuModel.setCreateUserId(userId);
+                preDanmu.setCreateUserId(userId);
+                preDanmu.setCreateUserId(userId);
 
-                preDanmuModelList.add(preDanmuModel);
+                preDanmuList.add(preDanmu);
             }
         }
 
         FileUtils.deleteDir(tempFile);
-        if(ListUtils.checkListIsNotNull(preDanmuModelList)){
-            for(PreDanmuModel preDanmuModel:preDanmuModelList){
-                preDanmuService.save(preDanmuModel);
+        if(ListUtils.checkListIsNotNull(preDanmuList)){
+            for(PreDanmu preDanmu : preDanmuList){
+                preDanmuService.save(preDanmu);
             }
             restResultModel = new RestResultModel();
             restResultModel.setResult(200);

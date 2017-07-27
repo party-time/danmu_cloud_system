@@ -1,26 +1,18 @@
 package cn.partytime.model;
 
+import lombok.Data;
+
 import java.util.List;
 
+/**
+ * Created by liuwei on 2016/9/12.
+ * 用于表明活动与资源文件的关联
+ */
+
+@Data
 public class PartyResourceResult {
 
-    private PartyDTO party;
+    private PartyModel partyModel;
 
-    private List<ResourceFile> resourceFileList;
-
-    public PartyDTO getParty() {
-        return party;
-    }
-
-    public void setParty(PartyDTO party) {
-        this.party = party;
-    }
-
-    public List<ResourceFile> getResourceFileList() {
-        return resourceFileList;
-    }
-
-    public void setResourceFileList(List<ResourceFile> resourceFileList) {
-        this.resourceFileList = resourceFileList;
-    }
+    private List<ResourceFileModel> resourceFileList;
 }

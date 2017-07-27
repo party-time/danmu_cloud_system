@@ -13,7 +13,7 @@ import java.util.Date;
 
 @Document(collection = "admin_user")
 public class AdminUser extends BaseModel {
-    @Field("_id")
+
     private String id;
 
     private String userName;

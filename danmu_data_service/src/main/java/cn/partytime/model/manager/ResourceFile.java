@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 @Document(collection = "resource_file")
 public class ResourceFile extends BaseModel{
 
-    @Field("_id")
+
     private String id;
 
     /**

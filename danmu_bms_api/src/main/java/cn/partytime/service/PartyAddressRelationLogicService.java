@@ -4,7 +4,9 @@ import cn.partytime.model.manager.PartyAddressRelation;
 import cn.partytime.service.DanmuPoolLogicService;
 import cn.partytime.service.PartyAddressRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PartyAddressRelationLogicService {
 
     @Autowired

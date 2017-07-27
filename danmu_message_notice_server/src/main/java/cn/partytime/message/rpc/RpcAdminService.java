@@ -2,12 +2,12 @@ package cn.partytime.message.rpc;
 
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.util.ListUtils;
+import cn.partytime.dataRpc.RpcDanmuAddressService;
+import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.messageHandlerService.AdminIsOnLineAlarmService;
 import cn.partytime.message.proxy.MessageHandlerService;
-import cn.partytime.message.rpcService.dataRpcService.DanmuAddressService;
-import cn.partytime.message.rpcService.dataRpcService.PartyService;
-import cn.partytime.model.DanmuAddressDTO;
+import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.PartyLogicModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,19 +33,19 @@ public class RpcAdminService {
     private AdminIsOnLineAlarmService adminIsOnLineAlarmService;
 
     @Autowired
-    private DanmuAddressService danmuAddressService;
+    private RpcDanmuAddressService danmuAddressService;
 
     @Autowired
     private MessageHandlerService messageHandlerService;
 
     @Autowired
-    private PartyService partyService;
+    private RpcPartyService partyService;
 
     @RequestMapping(value = "/admiOffLine" ,method = RequestMethod.GET)
     public void admiOffLine() {
-        List<DanmuAddressDTO> danmuAddressList = danmuAddressService.findByType(0);
+        List<DanmuAddressModel> danmuAddressList = danmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
-            for(DanmuAddressDTO danmuAddress:danmuAddressList){
+            for(DanmuAddressModel danmuAddress:danmuAddressList){
                 PartyLogicModel partyLogicModel =partyService.findPartyAddressId(danmuAddress.getId());
                 if(partyLogicModel!=null){
                     Map<String,Object> map = new HashMap<>();

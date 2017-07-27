@@ -1,8 +1,8 @@
 package cn.partytime.service;
 
 import cn.partytime.model.PageResultModel;
-import cn.partytime.model.danmu.DanmuModel;
-import cn.partytime.model.danmu.PreDanmuModel;
+import cn.partytime.model.danmu.Danmu;
+import cn.partytime.model.danmu.PreDanmu;
 import cn.partytime.repository.danmu.DanmuRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class DanmuService {
     @Autowired
     private DanmuRepository danmuRepository;
 
-    public DanmuModel save(DanmuModel danmuModel) {
+    public Danmu save(Danmu danmuModel) {
         return danmuRepository.save(danmuModel);
     }
 
@@ -43,28 +43,28 @@ public class DanmuService {
         danmuRepository.delete(id);
     }
 
-    public DanmuModel findById(String id) {
+    public Danmu findById(String id) {
         return danmuRepository.findById(id);
     }
 
-    public List<DanmuModel> findByDanmuPoolId(String danmuPoolId) {
+    public List<Danmu> findByDanmuPoolId(String danmuPoolId) {
         return danmuRepository.findByDanmuPoolId(danmuPoolId);
     }
 
-    public Page<DanmuModel> findDanmuListByPage(int page, int size) {
+    public Page<Danmu> findDanmuListByPage(int page, int size) {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuRepository.findAll(pageRequest);
     }
 
-    public Page<DanmuModel> findDanmuByIsBlocked(int page, int size,boolean isBlocked){
+    public Page<Danmu> findDanmuByIsBlocked(int page, int size, boolean isBlocked){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuRepository.findByIsBlocked(isBlocked,pageRequest);
     }
 
 
-    public PageResultModel<DanmuModel> findByMsgLike(String msg,int page,int size){
+    public PageResultModel<Danmu> findByMsgLike(String msg, int page, int size){
         /*Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuRepository.findByMsgLike(msg,pageRequest);*/
@@ -76,14 +76,14 @@ public class DanmuService {
         query.skip(page * size);
         query.limit(size);
         query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
-        List<DanmuModel> list = this.danmuMongoTemplate.find(query, DanmuModel.class);
-        long count = this.danmuMongoTemplate.count(query, PreDanmuModel.class);
+        List<Danmu> list = this.danmuMongoTemplate.find(query, Danmu.class);
+        long count = this.danmuMongoTemplate.count(query, PreDanmu.class);
 
-        //pageResultModel<PreDanmuModel>
+        //pageResultModel<PreDanmu>
         //result.put("datas", list);
         //result.put("size", count);
 
-        PageResultModel<DanmuModel> preDanmuModelPageResultModel = new PageResultModel<>();
+        PageResultModel<Danmu> preDanmuModelPageResultModel = new PageResultModel<>();
         preDanmuModelPageResultModel.setTotal(count);
         preDanmuModelPageResultModel.setRows(list);
         return preDanmuModelPageResultModel;
@@ -92,7 +92,7 @@ public class DanmuService {
 
 
 
-    public List<DanmuModel> findDanmuListByPartyIdAndTimeAndDanmuPool(String partyId,int time,List<String>danmuPoolIdList,int limit){
+    public List<Danmu> findDanmuListByPartyIdAndTimeAndDanmuPool(String partyId, int time, List<String>danmuPoolIdList, int limit){
         Query query = new Query();
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("danmuPoolId").in(danmuPoolIdList),
@@ -103,27 +103,27 @@ public class DanmuService {
         Sort sort = new Sort(Sort.Direction.ASC, "time");
         query.addCriteria(criteria);
         query.with(sort).skip(0).limit(limit);
-        return danmuMongoTemplate.find(query,DanmuModel.class);
+        return danmuMongoTemplate.find(query,Danmu.class);
     }
 
 
 
 
-    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrc(int page, int size, String danmuPoolId,boolean isBlocked, int danmuSrc) {
+    public Page<Danmu> findByDanmuPoolIdAndDanmuSrc(int page, int size, String danmuPoolId, boolean isBlocked, int danmuSrc) {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuRepository.findByDanmuPoolIdAndDanmuSrcAndIsBlocked(danmuPoolId,danmuSrc,isBlocked,pageRequest);
     }
 
 
-    public Page<DanmuModel> findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(int danmuSrc,boolean isBlocked,boolean viewFlg,Integer page,Integer size,List<String> danmuPoolIdList) {
+    public Page<Danmu> findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(int danmuSrc, boolean isBlocked, boolean viewFlg, Integer page, Integer size, List<String> danmuPoolIdList) {
         Sort sort = new Sort(Sort.Direction.ASC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuRepository.findByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(danmuPoolIdList,danmuSrc,isBlocked,viewFlg,pageRequest);
     }
 
 
-    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId,int danmuSrc,boolean isBlocked,boolean viewFlg,Integer page,Integer size) {
+    public Page<Danmu> findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId, int danmuSrc, boolean isBlocked, boolean viewFlg, Integer page, Integer size) {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuRepository.findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(danmuPoolId,danmuSrc,isBlocked,viewFlg,pageRequest);
@@ -139,7 +139,7 @@ public class DanmuService {
      * @param id
      */
     public void blockDanmu(String id){
-        DanmuModel danmuModel = this.findById(id);
+        Danmu danmuModel = this.findById(id);
         if( null != danmuModel){
             danmuModel.setBlocked(true);
             danmuRepository.save(danmuModel);
@@ -152,7 +152,7 @@ public class DanmuService {
      * @param id
      */
     public void unblockDanmu(String id){
-        DanmuModel danmuModel = this.findById(id);
+        Danmu danmuModel = this.findById(id);
         if( null != danmuModel){
             danmuModel.setBlocked(false);
             danmuRepository.save(danmuModel);

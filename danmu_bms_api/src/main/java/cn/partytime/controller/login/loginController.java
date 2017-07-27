@@ -7,7 +7,6 @@ import cn.partytime.service.BmsAdminUserService;
 import cn.partytime.common.constants.CommonConst;
 import cn.partytime.service.BmsWechatUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +17,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by administrator on 2016/11/8.
@@ -112,7 +109,7 @@ public class loginController {
     }
 
     @RequestMapping(value = "/v1/getWeChatCode" , method = RequestMethod.GET)
-    public RestResultModel getWeChatCode(String userName,HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
+    public RestResultModel getWeChatCode(String userName, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         RestResultModel restResultModel = new RestResultModel();
         if(StringUtils.isEmpty(userName)){
             restResultModel.setResult(500);

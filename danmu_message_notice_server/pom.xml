@@ -67,7 +67,7 @@
         </dependency>
         <dependency>
             <groupId>cn.party-time</groupId>
-            <artifactId>danmu_dto_model</artifactId>
+            <artifactId>danmu_rpc_interface</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

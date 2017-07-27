@@ -1,13 +1,20 @@
 package cn.partytime.rpc;
 
+import cn.partytime.common.util.ListUtils;
 import cn.partytime.model.PageResultModel;
+import cn.partytime.model.ProjectorActionModel;
+import cn.partytime.model.ProjectorModel;
 import cn.partytime.model.projector.Projector;
 import cn.partytime.model.projector.ProjectorAction;
 import cn.partytime.service.projector.ProjectorActionService;
 import cn.partytime.service.projector.ProjectorService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dm on 2017/7/12.
@@ -26,8 +33,13 @@ public class RpcProjectorService {
 
 
     @RequestMapping(value = "/findByRegisterCode" ,method = RequestMethod.GET)
-    public Projector findByRegisterCode(@RequestParam String registorCode) {
-        return  projectorService.findByRegisterCode(registorCode);
+    public ProjectorModel findByRegisterCode(@RequestParam String registorCode) {
+        Projector projector =  projectorService.findByRegisterCode(registorCode);
+        ProjectorModel projectorModel = new ProjectorModel();
+        if(projector!=null){
+            BeanUtils.copyProperties(projector,projectorModel);
+        }
+        return  null;
     }
 
 
@@ -43,11 +55,24 @@ public class RpcProjectorService {
 
 
     @RequestMapping(value = "/findProjectorActionPage" ,method = RequestMethod.GET)
-    public PageResultModel<ProjectorAction> findProjectorActionPage(@RequestParam String registorCode, @RequestParam int page, @RequestParam int size){
+    public PageResultModel<ProjectorActionModel> findProjectorActionPage(@RequestParam String registorCode, @RequestParam int page, @RequestParam int size){
         Page<ProjectorAction> projectorActionPage = projectorActionService.findProjectorActionPage(registorCode,page,size);
-        PageResultModel<ProjectorAction> projectorActionPageResultModel = new PageResultModel<ProjectorAction>();
-        projectorActionPageResultModel.setRows(projectorActionPage.getContent());
+
+
+        PageResultModel<ProjectorActionModel> projectorActionPageResultModel = new PageResultModel<ProjectorActionModel>();
         projectorActionPageResultModel.setTotal(projectorActionPage.getTotalElements());
+        List<ProjectorAction> projectorActionList =  projectorActionPage.getContent();
+
+        List<ProjectorActionModel> projectorActionModelList = new ArrayList<>();
+        projectorActionList = projectorActionPage.getContent();
+        if(ListUtils.checkListIsNotNull(projectorActionList)){
+            for(ProjectorAction projectorAction:projectorActionList){
+                ProjectorActionModel projectorActionModel = new ProjectorActionModel();
+                BeanUtils.copyProperties(projectorAction,projectorActionModel);
+                projectorActionModelList.add(projectorActionModel);
+            }
+        }
+        projectorActionPageResultModel.setRows(projectorActionModelList);
         return projectorActionPageResultModel;
 
     }

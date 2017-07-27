@@ -12,7 +12,7 @@ import java.util.List;
 @Document(collection = "param_template")
 public class ParamTemplate extends BaseModel{
 
-    @Field("_id")
+
     private String id;
 
     private String name;

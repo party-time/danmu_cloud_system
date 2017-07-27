@@ -5,7 +5,7 @@ import cn.partytime.common.util.FileUtils;
 import cn.partytime.controller.base.BaseAdminController;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
-import cn.partytime.model.danmu.DanmuModel;
+import cn.partytime.model.danmu.Danmu;
 import cn.partytime.model.danmu.DanmuPool;
 import cn.partytime.model.manager.PartyAddressRelation;
 import cn.partytime.model.wechat.WechatUser;
@@ -21,11 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -142,9 +140,9 @@ public class HistoryDanmuController extends BaseAdminController {
 
     @RequestMapping(value = "/admin/historyDanmu/sendGift", method = RequestMethod.GET)
     @ResponseBody
-    public RestResultModel sendGift(String id,String msg) {
+    public RestResultModel sendGift(String id, String msg) {
         RestResultModel restResultModel = new RestResultModel();
-        DanmuModel danmuModel = danmuService.findById(id);
+        Danmu danmuModel = danmuService.findById(id);
         if( null != danmuModel){
             WechatUser wechatUser = wechatUserService.findByUserId(danmuModel.getCreateUserId());
             DanmuPool danmuPool = danmuPoolService.findById(danmuModel.getDanmuPoolId());

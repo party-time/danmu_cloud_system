@@ -1,12 +1,12 @@
 package cn.partytime.handlerThread;
 
-import cn.partytime.rpcService.dataRpc.CmdLogicService;
-import cn.partytime.rpcService.dataRpc.PreDanmuService;
+import cn.partytime.common.cachekey.PreDanmuCacheKey;
+import cn.partytime.common.util.ListUtils;
+import cn.partytime.dataRpc.RpcCmdService;
+import cn.partytime.dataRpc.RpcPreDanmuService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.PreDanmuModel;
-import cn.partytime.common.cachekey.PreDanmuCacheKey;
-import cn.partytime.common.util.ListUtils;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class PreDanmuHandler {
 
 
     @Autowired
-    private PreDanmuService preDanmuService;
+    private RpcPreDanmuService rpcPreDanmuService;
 
 
     @Autowired
@@ -43,7 +43,7 @@ public class PreDanmuHandler {
 
 
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private RpcCmdService rpcCmdService;
 
 
     public void danmuListenHandler(String partyId) {
@@ -56,13 +56,13 @@ public class PreDanmuHandler {
 
 
                     Map<String,Object> preDanmuMap = new HashMap<String,Object>();
-                    List<PreDanmuModel> preDanmuModelList = preDanmuService.findByPartyId(partyId);
+                    List<PreDanmuModel> preDanmuModelList = rpcPreDanmuService.findByPartyId(partyId);
                     if (ListUtils.checkListIsNotNull(preDanmuModelList)) {
 
                         for(PreDanmuModel preDanmuModel:preDanmuModelList){
                             String templateId = preDanmuModel.getTemplateId();
                             Map<String,Object> contentMap = preDanmuModel.getContent();
-                            CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+                            CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
                             List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();
                             if(ListUtils.checkListIsNotNull(cmdTempComponentDataList)){
                                 for(CmdTempComponentData cmdTempComponentData:cmdTempComponentDataList){

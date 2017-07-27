@@ -11,7 +11,7 @@ import java.util.List;
 @Document(collection = "page")
 public class Page {
 
-    @Field("_id")
+
     private String id;
 
     //页面标题

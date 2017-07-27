@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
  */
 public class ParamValue extends BaseModel {
 
-    @Field("_id")
+
     private String id;
 
     //关联的对象的主键

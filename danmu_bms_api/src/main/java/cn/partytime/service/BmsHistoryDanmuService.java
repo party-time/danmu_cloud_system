@@ -5,7 +5,7 @@ import cn.partytime.common.util.ListUtils;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.DanmuLogicModel;
-import cn.partytime.model.danmu.DanmuModel;
+import cn.partytime.model.danmu.Danmu;
 import cn.partytime.model.danmu.DanmuPool;
 import cn.partytime.model.user.UserPrize;
 import cn.partytime.model.wechat.WechatUser;
@@ -73,9 +73,9 @@ public class BmsHistoryDanmuService {
         if (ListUtils.checkListIsNotNull(danmuPoolList)) {
             List<String> poolIdList = new ArrayList<String>();
             danmuPoolList.forEach(e -> poolIdList.add(e.getId()));
-            List<DanmuModel> danmuModelList = danmuService.findDanmuListByPartyIdAndTimeAndDanmuPool(partyId, time, poolIdList, count);
+            List<Danmu> danmuModelList = danmuService.findDanmuListByPartyIdAndTimeAndDanmuPool(partyId, time, poolIdList, count);
             if (ListUtils.checkListIsNotNull(danmuModelList)) {
-                for (DanmuModel danmuModel : danmuModelList) {
+                for (Danmu danmuModel : danmuModelList) {
 
                     Map<String,Object> timerDanmuMap = new HashMap<String,Object>();
                     String templateId = danmuModel.getTemplateId();
@@ -172,16 +172,16 @@ public class BmsHistoryDanmuService {
         List<String> danmuIdList = new ArrayList<String>();
 
         List<DanmuLogicModel> danmuLogicModelList = new ArrayList<DanmuLogicModel>();
-        //Page<DanmuModel> danmuListByPage = danmuService.findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(poolId, 1, false, true, page, size);
-        Page<DanmuModel> danmuListByPage = danmuService.findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(1,false,true,page,size,danmuPoolIdLIST);
+        //Page<Danmu> danmuListByPage = danmuService.findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(poolId, 1, false, true, page, size);
+        Page<Danmu> danmuListByPage = danmuService.findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(1,false,true,page,size,danmuPoolIdLIST);
         long count = danmuListByPage.getTotalElements();
         if (count == 0) {
             return null;
         }
         CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(ComponentKeyConst.P_DANMU);
 
-        List<DanmuModel> timerDanmuList = danmuListByPage.getContent();
-        for (DanmuModel danmuModel : timerDanmuList) {
+        List<Danmu> timerDanmuList = danmuListByPage.getContent();
+        for (Danmu danmuModel : timerDanmuList) {
             userIdList.add(danmuModel.getCreateUserId());
             //danmuIdList.add(danmuModel.getId());
             //DanmuLogicModel danmuLogicModel = new DanmuLogicModel();

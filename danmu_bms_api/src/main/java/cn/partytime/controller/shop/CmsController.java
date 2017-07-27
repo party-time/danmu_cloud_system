@@ -3,7 +3,6 @@ package cn.partytime.controller.shop;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.cms.PageColumn;
 import cn.partytime.service.cms.BmsCmsService;
-import cn.partytime.service.cms.ColumnService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

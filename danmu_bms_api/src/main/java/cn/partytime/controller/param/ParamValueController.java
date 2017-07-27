@@ -29,7 +29,7 @@ public class ParamValueController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public RestResultModel update(String id,String value){
+    public RestResultModel update(String id, String value){
         RestResultModel restResultModel = new RestResultModel();
         paramValueService.update(id,value);
         restResultModel.setResult(200);

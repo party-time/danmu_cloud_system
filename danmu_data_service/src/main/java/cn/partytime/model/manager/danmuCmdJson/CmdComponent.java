@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "cmd_component")
 public class CmdComponent extends BaseModel {
 
-    @Field("_id")
+
     private String id;
 
     //组件的名称

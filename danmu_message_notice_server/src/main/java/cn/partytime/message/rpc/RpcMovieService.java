@@ -1,11 +1,11 @@
 package cn.partytime.message.rpc;
 
 import cn.partytime.common.constants.LogCodeConst;
+import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.messageHandlerService.MovieTimeAlaramService;
 import cn.partytime.message.proxy.MessageHandlerService;
-import cn.partytime.message.rpcService.dataRpcService.PartyService;
-import cn.partytime.model.PartyDTO;
+import cn.partytime.model.PartyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +33,14 @@ public class RpcMovieService {
     private MessageHandlerService messageHandlerService;
 
     @Autowired
-    private PartyService partyService;
+    private RpcPartyService partyService;
 
 
 
     @RequestMapping(value = "/movieTime" ,method = RequestMethod.GET)
     public void movieTime(@RequestParam String partyId,@RequestParam String addressId, @RequestParam long time) {
 
-        PartyDTO party = partyService.getPartyByPartyId(partyId);
+        PartyModel party = partyService.getPartyByPartyId(partyId);
 
         MessageObject<Map<String,Object>> mapMessageObject = null;
         Map<String,Object> map = new HashMap<String,Object>();

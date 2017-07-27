@@ -85,16 +85,16 @@ public class PreDmController  extends BaseAdminController {
     @RequestMapping(value = "/admin/historyDMList", method = RequestMethod.GET)
     public PageResultModel historyDMList(String msg, Integer pageNumber, Integer pageSize) {
         pageNumber = pageNumber -1;
-        Page<DanmuModel> danmuModelPage = null;
+        Page<Danmu> danmuModelPage = null;
 
         long count  = 0;
-        List<DanmuModel> danmuModelList = null;
+        List<Danmu> danmuModelList = null;
         if(StringUtils.isEmpty(msg)){
             danmuModelPage = danmuService.findDanmuListByPage(pageNumber, pageSize);
             danmuModelList = danmuModelPage.getContent();
             count = danmuModelPage.getTotalElements();
         }else{
-            PageResultModel<DanmuModel> danmuModelPageResultModel = danmuService.findByMsgLike(msg,pageNumber,pageSize);
+            PageResultModel<Danmu> danmuModelPageResultModel = danmuService.findByMsgLike(msg,pageNumber,pageSize);
             danmuModelList = danmuModelPageResultModel.getRows();
             count = danmuModelPageResultModel.getTotal();
         }
@@ -106,7 +106,7 @@ public class PreDmController  extends BaseAdminController {
          preDanmuModelList = preDanmuModelPage.getContent();
          count = preDanmuModelPage.getTotalPages();
          }else{
-         PageResultModel<PreDanmuModel> preDanmuModelPageResultModel= preDanmuService.findByDanmuLibraryIdAndMsgLike(pageNo, pageSize,dlId,msg);
+         PageResultModel<PreDanmu> preDanmuModelPageResultModel= preDanmuService.findByDanmuLibraryIdAndMsgLike(pageNo, pageSize,dlId,msg);
          preDanmuModelList = preDanmuModelPageResultModel.getRows();
          count = preDanmuModelPageResultModel.getTotal();
          }
@@ -114,7 +114,7 @@ public class PreDmController  extends BaseAdminController {
 
         List<HistoryDanmuModel> historyDanmuModelList = new ArrayList<HistoryDanmuModel>();
         if(ListUtils.checkListIsNotNull(danmuModelList)){
-            for(DanmuModel danmuModel:danmuModelList){
+            for(Danmu danmuModel:danmuModelList){
                 HistoryDanmuModel historyDanmuModel = new HistoryDanmuModel();
                 BeanUtils.copyProperties(danmuModel,historyDanmuModel);
 
@@ -192,27 +192,27 @@ public class PreDmController  extends BaseAdminController {
     public RestResultModel preDMList(Integer pageNo, Integer pageSize,String dlId,String msg) {
         pageNo = pageNo-1;
         RestResultModel restResultModel = new RestResultModel();
-        Page<PreDanmuModel> preDanmuModelPage = null;
-        List<PreDanmuModel> preDanmuModelList;
+        Page<PreDanmu> preDanmuModelPage = null;
+        List<PreDanmu> preDanmuList;
         long count  = 0;
         if( StringUtils.isEmpty(msg)){
             preDanmuModelPage =  preDanmuService.findPageByDLId(pageNo, pageSize,dlId);
-            preDanmuModelList = preDanmuModelPage.getContent();
+            preDanmuList = preDanmuModelPage.getContent();
             count = preDanmuModelPage.getTotalElements();
         }else{
-            PageResultModel<PreDanmuModel> preDanmuModelPageResultModel= preDanmuService.findByDanmuLibraryIdAndMsgLike(pageNo, pageSize,dlId,msg);
-            preDanmuModelList = preDanmuModelPageResultModel.getRows();
+            PageResultModel<PreDanmu> preDanmuModelPageResultModel= preDanmuService.findByDanmuLibraryIdAndMsgLike(pageNo, pageSize,dlId,msg);
+            preDanmuList = preDanmuModelPageResultModel.getRows();
             count = preDanmuModelPageResultModel.getTotal();
         }
 
 
         List<PreDanmuViewModel> preDanmuViewModelArrayList = new ArrayList<PreDanmuViewModel>();
-        if(ListUtils.checkListIsNotNull(preDanmuModelList)){
-            for(PreDanmuModel preDanmuModel:preDanmuModelList){
+        if(ListUtils.checkListIsNotNull(preDanmuList)){
+            for(PreDanmu preDanmu : preDanmuList){
                 PreDanmuViewModel preDanmuViewModel = new PreDanmuViewModel();
-                BeanUtils.copyProperties(preDanmuModel,preDanmuViewModel);
+                BeanUtils.copyProperties(preDanmu,preDanmuViewModel);
 
-                String templateId = preDanmuModel.getTemplateId();
+                String templateId = preDanmu.getTemplateId();
 
                 CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
 
@@ -342,7 +342,7 @@ public class PreDmController  extends BaseAdminController {
         return null;
     }
     @RequestMapping(value = "/admin/preDanmu/upload/{id}", method = RequestMethod.POST)
-    public RestResultModel uploadFile(@RequestParam("uploadFileName") MultipartFile multipartFile, @PathVariable("id") String id,HttpServletRequest request)  {
+    public RestResultModel uploadFile(@RequestParam("uploadFileName") MultipartFile multipartFile, @PathVariable("id") String id, HttpServletRequest request)  {
         RestResultModel restResultModel = new RestResultModel();
 
         try{

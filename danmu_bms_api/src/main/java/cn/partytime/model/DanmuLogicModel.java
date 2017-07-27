@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class DanmuLogicModel {
 
-    @Field("_id")
+
     private String id;
 
     private String color;

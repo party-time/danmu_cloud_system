@@ -34,7 +34,7 @@ public class WechatUserManagerController {
 
 
     @RequestMapping(value = "/page", method = RequestMethod.GET)
-    public PageResultModel findAll(String nick , int pageNumber,int pageSize){
+    public PageResultModel findAll(String nick , int pageNumber, int pageSize){
         PageResultModel pageResultModel = new PageResultModel();
         pageNumber = pageNumber-1;
         Page<WechatUser> page = null;

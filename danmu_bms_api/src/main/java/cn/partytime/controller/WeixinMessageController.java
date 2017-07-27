@@ -114,7 +114,7 @@ public class WeixinMessageController {
      * @return
      */
     @RequestMapping(value = "/findVoice", method = RequestMethod.GET)
-    public PageResultModel findVoice(int page,int size){
+    public PageResultModel findVoice(int page, int size){
         PageResultModel pageResultModel = new PageResultModel();
         MaterlListPageResultJson materlListPageResultJson = bmsWechatUserService.getVoice(page,size);
         pageResultModel.setRows(materlListPageResultJson.getItem());

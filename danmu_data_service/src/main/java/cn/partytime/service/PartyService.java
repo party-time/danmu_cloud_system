@@ -201,14 +201,14 @@ public class PartyService {
     }
 
 
-    public List<Party> findByType(String addressId , Integer type) {
+    public List<Party> findByAddressIdAndStatus(String addressId , Integer status) {
         List<PartyAddressRelation> partyAddressRelationList = partyAddressRelationService.findByAddressId(addressId);
         if( null != partyAddressRelationList && partyAddressRelationList.size() > 0){
             List<String> ids = new ArrayList<>();
             for(PartyAddressRelation partyAddressRelation : partyAddressRelationList){
                 ids.add(partyAddressRelation.getPartyId());
             }
-            return partyRepository.findByIdInAndStatusLessThanAndType(ids,2,type);
+            return partyRepository.findByIdInAndStatusLessThanAndType(ids,2,status);
         }else{
             return null;
         }

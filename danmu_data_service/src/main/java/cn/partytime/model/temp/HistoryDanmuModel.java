@@ -12,7 +12,7 @@ import java.util.Date;
 @Document(collection = "intranet_danmaku")
 public class HistoryDanmuModel {
 
-  @Field("_id")
+
   private String id;
   private String color;
   private String msg;

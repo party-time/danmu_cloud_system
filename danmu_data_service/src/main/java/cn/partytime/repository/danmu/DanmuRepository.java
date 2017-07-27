@@ -1,6 +1,6 @@
 package cn.partytime.repository.danmu;
 
-import cn.partytime.model.danmu.DanmuModel;
+import cn.partytime.model.danmu.Danmu;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -12,24 +12,15 @@ import java.util.List;
  * Created by liuwei on 16/6/15.
  */
 @EnableMongoRepositories(mongoTemplateRef = "danmuMongoTemplate")
-public interface DanmuRepository extends MongoRepository<DanmuModel, String> {
+public interface DanmuRepository extends MongoRepository<Danmu, String> {
 
-    public DanmuModel findById(String id);
+    public Danmu findById(String id);
 
-    public List<DanmuModel> findByDanmuPoolId(String danmuPoolId);
+    public List<Danmu> findByDanmuPoolId(String danmuPoolId);
 
 
 
-    public Page<DanmuModel> findByIsBlocked(boolean isBlocked, Pageable pageable);
-
-    /**
-     * 通过弹幕池编号 与弹幕来源获取弹幕列表
-     * @param danmuPoolId
-     * @param danmuSrc
-     * @param pageable
-     * @return
-     */
-    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrcAndIsBlocked(String danmuPoolId,int danmuSrc,boolean isBlocked,Pageable pageable);
+    public Page<Danmu> findByIsBlocked(boolean isBlocked, Pageable pageable);
 
     /**
      * 通过弹幕池编号 与弹幕来源获取弹幕列表
@@ -38,12 +29,21 @@ public interface DanmuRepository extends MongoRepository<DanmuModel, String> {
      * @param pageable
      * @return
      */
-    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrc(String danmuPoolId,int danmuSrc,Pageable pageable);
+    public Page<Danmu> findByDanmuPoolIdAndDanmuSrcAndIsBlocked(String danmuPoolId, int danmuSrc, boolean isBlocked, Pageable pageable);
+
+    /**
+     * 通过弹幕池编号 与弹幕来源获取弹幕列表
+     * @param danmuPoolId
+     * @param danmuSrc
+     * @param pageable
+     * @return
+     */
+    public Page<Danmu> findByDanmuPoolIdAndDanmuSrc(String danmuPoolId, int danmuSrc, Pageable pageable);
 
 
-    public Page<DanmuModel> findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId,int danmuSrc,boolean isBlocked,boolean viewFlg,Pageable pageable);
+    public Page<Danmu> findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId, int danmuSrc, boolean isBlocked, boolean viewFlg, Pageable pageable);
 
-    public Page<DanmuModel> findByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(List<String> danmuPoolIdList,int danmuSrc,boolean isBlocked,boolean viewFlg,Pageable pageable);
+    public Page<Danmu> findByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(List<String> danmuPoolIdList, int danmuSrc, boolean isBlocked, boolean viewFlg, Pageable pageable);
 
     public long countByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId,int danmuSrc,boolean isBlocked,boolean viewFlg);
 

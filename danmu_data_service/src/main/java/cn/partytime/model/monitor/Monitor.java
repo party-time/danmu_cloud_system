@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "dm_monitor")
 public class Monitor {
 
-    @Field("_id")
+
     private String id;
 
     //监控标题

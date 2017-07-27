@@ -32,7 +32,11 @@ public class MonitorController {
             pageNumber = pageNumber-1;
         }
         Page<Monitor> monitorPage = monitorService.findAll(pageNumber,pageSize);
-        return new PageResultModel(monitorPage);
+        PageResultModel pageResultModel = new PageResultModel();
+        pageResultModel.setTotal(monitorPage.getTotalElements());
+        pageResultModel.setRows(monitorPage.getContent());
+
+        return pageResultModel;
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)

@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "danmu_group")
 public class DanmuGroup extends BasePool {
 
-    @Field("_id")
+
     private String id;
 
     public String getId() {

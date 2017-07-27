@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "ad_timerDanmu_file")
 public class AdTimerDanmuFile extends BaseModel {
 
-    @Field("_id")
+
     private String id;
 
     private String poolId;

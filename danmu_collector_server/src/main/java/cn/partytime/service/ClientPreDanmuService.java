@@ -1,9 +1,9 @@
 package cn.partytime.service;
 
-import cn.partytime.rpcService.dataRpc.PartyService;
-import cn.partytime.model.PartyLogicModel;
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
 import cn.partytime.common.cachekey.PreDanmuCacheKey;
+import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.model.PartyLogicModel;
 import cn.partytime.redis.service.RedisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +26,7 @@ public class ClientPreDanmuService {
     private RedisService redisService;
 
     @Autowired
-    private ClientCacheService clientCacheService;
-
-    @Autowired
-    private PartyService partyService;
+    private RpcPartyService rpcPartyService;
 
 
     /**
@@ -50,7 +47,7 @@ public class ClientPreDanmuService {
      * @return
      */
     public Object findPreDanmu(String addressId, Date nowDate, String partyId) {
-        PartyLogicModel party = partyService.findPartyAddressId(addressId);
+        PartyLogicModel party = rpcPartyService.findPartyAddressId(addressId);
         //logger.info("预制弹幕获取：当前活动信息:{}", JSON.toJSONString(party));
         if (party != null) {
             partyId = party.getPartyId();

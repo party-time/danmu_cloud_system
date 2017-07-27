@@ -2,10 +2,7 @@ package cn.partytime.rpc;
 
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.logicService.CmdLogicService;
-import cn.partytime.model.AdTimerResource;
-import cn.partytime.model.CmdTempAllData;
-import cn.partytime.model.CmdTempComponentData;
-import cn.partytime.model.TimerDanmuFileLogicModel;
+import cn.partytime.model.*;
 import cn.partytime.model.danmu.AdTimerDanmu;
 import cn.partytime.model.manager.AdTimerDanmuFile;
 import cn.partytime.model.manager.Party;
@@ -16,6 +13,7 @@ import cn.partytime.service.ResourceFileService;
 import cn.partytime.service.adDanmu.AdTimerDanmuFileService;
 import cn.partytime.service.adDanmu.AdTimerDanmuService;
 import cn.partytime.service.adDanmu.PartyAddressAdRelationService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,10 +53,8 @@ public class RpcAdTimerService {
     private CmdLogicService cmdLogicService;
 
     @RequestMapping(value = "/findTimerDanmuFileList" ,method = RequestMethod.GET)
-    public AdTimerResource findTimerDanmuFileList(@RequestParam String addressId) {
-
+    public AdTimerResource findTimerDanmuFileList(@RequestParam String addressId,@RequestParam List<String> partyIdList) {
         AdTimerResource adTimerResource = new AdTimerResource();
-
         List<Party> partyList = partyService.findByTypeAndStatus(1, 2);
         List<String> partyIdlList = new ArrayList<String>();
         if (ListUtils.checkListIsNotNull(partyList)) {
@@ -70,9 +66,9 @@ public class RpcAdTimerService {
         if(ListUtils.checkListIsNotNull(partyAddressAdRelationList)){
             List<String> poolIdList = new ArrayList<String>();
             //Map<String,String> partyPoolMap = new HashMap<String,String>();
-            List<TimerDanmuFileLogicModel> timerDanmuFileLogicModelList = new ArrayList<TimerDanmuFileLogicModel>();
+            List<TimerDanmuFileModel> timerDanmuFileLogicModelList = new ArrayList<TimerDanmuFileModel>();
             for(PartyAddressAdRelation partyAddressAdRelation:partyAddressAdRelationList){
-                TimerDanmuFileLogicModel timerDanmuFile = new TimerDanmuFileLogicModel();
+                TimerDanmuFileModel timerDanmuFile = new TimerDanmuFileModel();
                 poolIdList.add(partyAddressAdRelation.getAdDanmuPoolId());
                 timerDanmuFile.setPartyId(partyAddressAdRelation.getPartyId());
                 timerDanmuFile.setPoolId(partyAddressAdRelation.getAdDanmuPoolId());
@@ -115,18 +111,19 @@ public class RpcAdTimerService {
             }
 
             List<ResourceFile> resourceFileList = resourceFileService.findByIds(resourceIdList);
-            List<ResourceFile> resultResourceFileList = new ArrayList<ResourceFile>();
+            List<ResourceFileModel> resultResourceFileList = new ArrayList<ResourceFileModel>();
             if(ListUtils.checkListIsNotNull(resourceFileList)){
                 for(ResourceFile resourceFile:resourceFileList){
+                    ResourceFileModel resourceFileModel = new ResourceFileModel();
                     int type = resourceFile.getFileType();
                     if(type==1|| type==2 || type==3){
-                        resultResourceFileList.add(resourceFile);
+                        BeanUtils.copyProperties(resourceFile,resourceFileModel);
+                        resultResourceFileList.add(resourceFileModel);
                     }
                 }
-                //TODO 需要恢复
-                //adTimerResource.setResourceFileList(resultResourceFileList);
+                adTimerResource.setResourceFileList(resultResourceFileList);
             }
-            for(TimerDanmuFileLogicModel timerDanmuFile :timerDanmuFileLogicModelList){
+            for(TimerDanmuFileModel timerDanmuFile :timerDanmuFileLogicModelList){
                 timerDanmuFile.setPath(map.get(timerDanmuFile.getPoolId()));
             }
             adTimerResource.setTimerDanmuFileLogicModels(timerDanmuFileLogicModelList);

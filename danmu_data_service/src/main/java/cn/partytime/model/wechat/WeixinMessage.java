@@ -17,7 +17,7 @@ import java.util.List;
 @Document(collection = "weixin_message")
 public class WeixinMessage extends BaseModel {
 
-    @Field("_id")
+
     private String id;
 
     @Indexed

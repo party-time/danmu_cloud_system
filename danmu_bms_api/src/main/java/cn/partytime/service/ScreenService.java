@@ -202,7 +202,7 @@ public class ScreenService {
     }
 
 
-    public RestResultModel sendAdStatusToClient(String name,String status,String registCode){
+    public RestResultModel sendAdStatusToClient(String name, String status, String registCode){
 
         logger.info("宣传片播放:{},状态:{},注册码:{}",name,status,registCode);
         DanmuClient danmuClient = danmuClientService.findByRegistCode(registCode);

@@ -1,11 +1,8 @@
 package cn.partytime.service;
 
-import cn.partytime.model.danmu.DanmuModel;
-import cn.partytime.model.danmu.PreDanmuModel;
 import cn.partytime.model.danmu.TimerDanmu;
 import cn.partytime.repository.danmu.TimerDanmuRepository;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by lENOVO on 2016/10/25.

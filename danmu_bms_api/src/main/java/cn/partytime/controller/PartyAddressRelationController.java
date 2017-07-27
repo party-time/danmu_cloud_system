@@ -33,7 +33,7 @@ public class PartyAddressRelationController {
     }
 
     @RequestMapping(value = "/delByPartyIdAndAddressId", method = RequestMethod.GET)
-    public RestResultModel delByPartyIdAndAddressId(String partyId,String addressId ){
+    public RestResultModel delByPartyIdAndAddressId(String partyId, String addressId ){
         RestResultModel restResultModel = new RestResultModel();
         //partyAddressRelationService.delByPartyIdAndAddressId(partyId,addressId);
         partyAddressRelationLogicService.deletePartyAddressRelationByAddressIdAndPartyId(addressId,partyId);

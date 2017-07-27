@@ -3,7 +3,6 @@ package cn.partytime.controller.clientControl;
 import cn.partytime.controller.base.BaseAdminController;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.service.BmsClientWechatSendService;
-import cn.partytime.service.BmsWechatUserService;
 import cn.partytime.service.client.ClientService;
 import cn.partytime.service.movie.MovieService;
 import cn.partytime.util.PartyTimeConfig;
@@ -49,7 +48,7 @@ public class ClientController extends BaseAdminController{
      * @return
      */
     @RequestMapping(value = "/control", method = RequestMethod.GET)
-    public RestResultModel controls(String danmuStart ,String cmd,String addressId){
+    public RestResultModel controls(String danmuStart , String cmd, String addressId){
         RestResultModel restResultModel = new RestResultModel();
         String callback = "";
         if(cmd.equals("screenPic1")){

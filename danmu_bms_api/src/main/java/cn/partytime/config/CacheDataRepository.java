@@ -3,6 +3,7 @@ package cn.partytime.config;
 import cn.partytime.model.BlockKeyQeueueModel;
 import cn.partytime.model.manager.BlockKeyword;
 import cn.partytime.repository.manager.BlockKeywordRepository;
+import cn.partytime.service.BlockKeywordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +17,9 @@ import java.util.*;
 @Component
 public class CacheDataRepository {
 
+
     @Autowired
-    private BlockKeywordRepository blockKeywordRepository;
+    private BlockKeywordService blockKeywordService;
 
     //使用缓存的编号
     private volatile int cacheNo = 0;
@@ -31,7 +33,7 @@ public class CacheDataRepository {
     @PostConstruct
     void initCache() {
         //加载敏感词
-        List<BlockKeyword> blockKeyQeueueModelList = blockKeywordRepository.findAll();
+        List<BlockKeyword> blockKeyQeueueModelList = blockKeywordService.findAll();
         for (BlockKeyword blockKeyword : blockKeyQeueueModelList) {
             blockKeywordAMap.put(blockKeyword.getId(),blockKeyword.getWord());
             blockKeywordBMap.put(blockKeyword.getId(),blockKeyword.getWord());

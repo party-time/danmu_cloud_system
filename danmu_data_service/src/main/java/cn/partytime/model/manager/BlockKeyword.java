@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "block_keyword")
 public class BlockKeyword extends BaseModel{
 
-    @Field("_id")
+
     private String id;
 
     private String word;

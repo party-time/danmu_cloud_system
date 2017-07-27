@@ -1,11 +1,11 @@
 package cn.partytime.service;
 
 import cn.partytime.common.util.PartyTypeEnmu;
-import cn.partytime.model.DanmuClient;
+import cn.partytime.dataRpc.RpcDanmuClientService;
+import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.model.DanmuClientModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.RestResultModel;
-import cn.partytime.rpcService.dataRpc.DanmuClientService;
-import cn.partytime.rpcService.dataRpc.PartyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +25,17 @@ public class PartyLogicService {
     private static final Logger logger = LoggerFactory.getLogger(PartyLogicService.class);
 
     @Autowired
-    private DanmuClientService danmuClientService;
+    private RpcDanmuClientService rpcDanmuClientService;
 
     @Autowired
-    private PartyService partyService;
+    private RpcPartyService rpcPartyService;
 
 
     public RestResultModel partyStatus(@RequestParam String registCode){
         RestResultModel restResultModel = new RestResultModel();
 
         logger.info("execute rpc /rpcDanmuClient/findByRegistCode");
-        DanmuClient danmuClient = danmuClientService.findByRegistCode(registCode);
+        DanmuClientModel danmuClient = rpcDanmuClientService.findByRegistCode(registCode);
 
         if (danmuClient == null) {
             logger.info("注册码:{}错误", registCode);
@@ -45,7 +45,7 @@ public class PartyLogicService {
         }
 
         String addressId = danmuClient.getAddressId();
-        PartyLogicModel partyLogicModel = partyService.findPartyAddressId(addressId);
+        PartyLogicModel partyLogicModel = rpcPartyService.findPartyAddressId(addressId);
         if(partyLogicModel!=null){
             Map<String,Object> map = new HashMap<String,Object>();
             map.put("partyId",partyLogicModel.getPartyId());

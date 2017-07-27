@@ -48,7 +48,11 @@ public class ItemConteoller {
     public PageResultModel itemPage(Integer pageNumber , Integer pageSize ){
         pageNumber = pageNumber-1;
         Page<Item> itemPage = itemService.findAll(pageNumber,pageSize);
-        return new PageResultModel(itemPage);
+
+        PageResultModel  pageResultModel = new PageResultModel();
+        pageResultModel.setRows(itemPage.getContent());
+        pageResultModel.setTotal(itemPage.getTotalElements());
+        return pageResultModel;
     }
 
 

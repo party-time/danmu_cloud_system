@@ -1,25 +1,22 @@
 package cn.partytime.util;
 
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by liuwei on 2016/10/31.
  */
-@ConfigurationProperties(prefix = "partyTime")
+@Component
 public class PartyTimeConfig {
 
+    @Value("${partyTime.url}")
     private String url;
 
+    @Value("${partyTime.appId}")
     private String appId;
 
+    @Value("${partyTime.appSecret}")
     private String appSecret;
-
-    private String shopAppId;
-
-    private String shopAddSecret;
 
     public String getUrl() {
         return url;
@@ -43,21 +40,5 @@ public class PartyTimeConfig {
 
     public void setAppSecret(String appSecret) {
         this.appSecret = appSecret;
-    }
-
-    public String getShopAppId() {
-        return shopAppId;
-    }
-
-    public void setShopAppId(String shopAppId) {
-        this.shopAppId = shopAppId;
-    }
-
-    public String getShopAddSecret() {
-        return shopAddSecret;
-    }
-
-    public void setShopAddSecret(String shopAddSecret) {
-        this.shopAddSecret = shopAddSecret;
     }
 }

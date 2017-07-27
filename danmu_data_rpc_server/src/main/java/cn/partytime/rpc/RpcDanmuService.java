@@ -5,7 +5,7 @@ import cn.partytime.logicService.CmdLogicService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.danmu.DanmuLog;
-import cn.partytime.model.danmu.DanmuModel;
+import cn.partytime.model.danmu.Danmu;
 import cn.partytime.model.danmu.DanmuPool;
 import cn.partytime.repository.danmu.DanmuRepository;
 import cn.partytime.service.DanmuPoolService;
@@ -60,21 +60,21 @@ public class RpcDanmuService {
     }
 
     @RequestMapping(value = "/danmuSave" ,method = RequestMethod.POST)
-    public DanmuModel danmuSave(@RequestBody  DanmuModel danmuModel) {
+    public Danmu danmuSave(@RequestBody Danmu danmuModel) {
         return danmuService.save(danmuModel);
     }
 
 
     @RequestMapping(value = "/findDanmuById" ,method = RequestMethod.GET)
-    public DanmuModel findById(@RequestParam String id) {
+    public Danmu findById(@RequestParam String id) {
         return danmuService.findById(id);
     }
 
     @RequestMapping(value = "/findDanmuByIsBlocked" ,method = RequestMethod.GET)
-    public List<DanmuModel> findDanmuByIsBlocked(@RequestParam int page, @RequestParam int size, @RequestParam boolean isBlocked){
+    public List<Danmu> findDanmuByIsBlocked(@RequestParam int page, @RequestParam int size, @RequestParam boolean isBlocked){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
-        Page<DanmuModel> danmuModelPage = danmuRepository.findByIsBlocked(isBlocked,pageRequest);
+        Page<Danmu> danmuModelPage = danmuRepository.findByIsBlocked(isBlocked,pageRequest);
         return danmuModelPage.getContent();
     }
 
@@ -86,9 +86,9 @@ public class RpcDanmuService {
         if (ListUtils.checkListIsNotNull(danmuPoolList)) {
             List<String> poolIdList = new ArrayList<String>();
             danmuPoolList.forEach(e -> poolIdList.add(e.getId()));
-            List<DanmuModel> danmuModelList = danmuService.findDanmuListByPartyIdAndTimeAndDanmuPool(partyId, time, poolIdList, count);
+            List<Danmu> danmuModelList = danmuService.findDanmuListByPartyIdAndTimeAndDanmuPool(partyId, time, poolIdList, count);
             if (ListUtils.checkListIsNotNull(danmuModelList)) {
-                for (DanmuModel danmuModel : danmuModelList) {
+                for (Danmu danmuModel : danmuModelList) {
 
                     Map<String,Object> timerDanmuMap = new HashMap<String,Object>();
                     String templateId = danmuModel.getTemplateId();

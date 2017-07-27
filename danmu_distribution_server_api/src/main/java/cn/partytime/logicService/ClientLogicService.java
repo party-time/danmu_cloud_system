@@ -1,8 +1,8 @@
 package cn.partytime.logicService;
 
 import cn.partytime.common.cachekey.CollectorServerCacheKey;
-import cn.partytime.model.DanmuClient;
-import cn.partytime.rpcService.DanmuClientService;
+import cn.partytime.dataRpc.RpcDanmuClientService;
+import cn.partytime.model.DanmuClientModel;
 import cn.partytime.model.DanmuCollectorInfo;
 import cn.partytime.model.ResultInfo;
 import cn.partytime.model.ServerInfo;
@@ -28,7 +28,7 @@ public class ClientLogicService {
     private static final Logger logger = LoggerFactory.getLogger(ClientLogicService.class);
 
     @Autowired
-    private DanmuClientService danmuClientService;
+    private RpcDanmuClientService rpcDanmuClientService;
 
     @Autowired
     private RedisService redisService;
@@ -42,7 +42,7 @@ public class ClientLogicService {
         try {
             logger.info("当前请求的注册码是:{}",danmuRegistCode);
             //通过注册码获取客户端信息
-            DanmuClient danmuClient =  danmuClientService.findByRegistCode(danmuRegistCode);
+            DanmuClientModel danmuClient =  rpcDanmuClientService.findByRegistCode(danmuRegistCode);
             if (danmuClient == null) {
                 logger.info("客户端不存在,无效的编号:{}",danmuRegistCode);
                 resultInfo.setCode(404);

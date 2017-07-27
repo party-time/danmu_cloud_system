@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Item {
 
-    @Field("_id")
+
     private String id;
 
     //商品名称

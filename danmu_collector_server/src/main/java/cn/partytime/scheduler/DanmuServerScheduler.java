@@ -1,8 +1,8 @@
 package cn.partytime.scheduler;
 
+import cn.partytime.alarmRpc.RpcClientAlarmService;
 import cn.partytime.config.DanmuChannelRepository;
 import cn.partytime.model.DanmuCollectorInfo;
-import cn.partytime.rpcService.alarmRpc.ClientAalarmRpcService;
 import cn.partytime.common.cachekey.CollectorServerCacheKey;
 import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.constants.ClientConst;
@@ -69,7 +69,7 @@ public class DanmuServerScheduler {
     private ClientChannelService clientChannelService;
 
     @Autowired
-    private ClientAalarmRpcService clientAalarmRpcService;
+    private RpcClientAlarmService rpcClientAlarmService;
 
 
     @Scheduled(cron = "0/10 * * * * *")
@@ -83,7 +83,7 @@ public class DanmuServerScheduler {
                     long offlineTime = clientCacheService.getClientOfflineTime(addressId);
                     long  subMinute = (currentTime - offlineTime)/1000/60;
                     if(subMinute>5){
-                        clientAalarmRpcService.clientNetError(addressId);
+                        rpcClientAlarmService.clientNetError(addressId);
                     }
                 }
             }

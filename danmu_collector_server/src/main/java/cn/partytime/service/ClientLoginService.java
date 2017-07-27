@@ -1,15 +1,15 @@
 package cn.partytime.service;
 
-import cn.partytime.config.DanmuChannelRepository;
-import cn.partytime.model.*;
-import cn.partytime.rpcService.dataRpc.DanmuAddressService;
-import cn.partytime.rpcService.dataRpc.DanmuClientService;
-import cn.partytime.rpcService.dataRpc.PartyService;
-import cn.partytime.rpcService.dataRpc.WechatService;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.DateUtils;
+import cn.partytime.config.DanmuChannelRepository;
+import cn.partytime.dataRpc.RpcDanmuAddressService;
+import cn.partytime.dataRpc.RpcDanmuClientService;
+import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.RpcWechatService;
+import cn.partytime.model.*;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -38,19 +38,19 @@ public class ClientLoginService {
     private DanmuChannelRepository danmuChannelRepository;
 
     @Autowired
-    private DanmuAddressService danmuAddressService;
+    private RpcDanmuAddressService rpcDanmuAddressService;
 
     @Autowired
-    private PartyService partyService;
+    private RpcPartyService partyService;
 
     @Autowired
-    private DanmuClientService danmuClientService;
+    private RpcDanmuClientService rpcDanmuClientService;
 
     @Autowired
     private ClientChannelService clientChannelService;
 
     @Autowired
-    private WechatService wechatService;
+    private RpcWechatService rpcWechatService;
 
     @Autowired
     private ScreenDanmuService screenDanmuService;
@@ -83,7 +83,7 @@ public class ClientLoginService {
 
 
     public void javaClientLogin(String code, Channel channel, String clientType) {
-        DanmuClient danmuClient = findDanmuClientInfo(code);
+        DanmuClientModel danmuClient = findDanmuClientInfo(code);
 
         logger.info("将要连接到服务器客户端的信息:{}", JSON.toJSONString(danmuClient));
         if (danmuClient != null) {
@@ -154,20 +154,20 @@ public class ClientLoginService {
             channel.close();
         }
         //判断微信用户是否合法
-        WechatUser wechatUser = wechatService.findByOpenId(openId);
+        WechatUserDto wechatUser = rpcWechatService.findByOpenId(openId);
         logger.info("当前登录的手机用户信息:{}", JSON.toJSONString(wechatUser));
         if (wechatUser == null) {
             logger.info("通过openId:{}获取的微信用户信息为空,用户为非法用户", openId);
             channel.close();
         }
 
-        WechatUserInfo wechatUserInfo = wechatService.findByWechatId(wechatUser.getId());
+        WechatUserInfoDto wechatUserInfo = rpcWechatService.findByWechatId(wechatUser.getId());
         if (wechatUserInfo == null) {
             logger.info("通过wechatId:{}获取的微信用户地理位置为空,用户为非法用户", wechatUserInfo);
             channel.close();
         }
 
-        DanmuAddressDTO danmuAddress = danmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+        DanmuAddressModel danmuAddress = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
         logger.info("通过经纬度:{},{}获取地址信息",wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude(),JSON.toJSONString(danmuAddress));
         //如果查询不到场地
         if (danmuAddress == null) {
@@ -203,7 +203,7 @@ public class ClientLoginService {
      * @param clientType
      */
     public void screenClientLogin(String code, Channel channel, String clientType) {
-        DanmuClient danmuClient = findDanmuClientInfo(code);
+        DanmuClientModel danmuClient = findDanmuClientInfo(code);
 
         logger.info("将要连接到服务器客户端的信息:{}", JSON.toJSONString(danmuClient));
         if (danmuClient != null) {
@@ -262,8 +262,8 @@ public class ClientLoginService {
     }
 
 
-    public DanmuClient findDanmuClientInfo(String danmuClientCode) {
-        DanmuClient danmuClient = danmuClientService.findByRegistCode(danmuClientCode);
+    public DanmuClientModel findDanmuClientInfo(String danmuClientCode) {
+        DanmuClientModel danmuClient = rpcDanmuClientService.findByRegistCode(danmuClientCode);
         logger.info("通过注册码：{},获取客户端信息:{}", danmuClientCode, JSON.toJSONString(danmuClient));
         if (danmuClient != null) {
             return danmuClient;

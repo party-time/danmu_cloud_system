@@ -1,6 +1,6 @@
 package cn.partytime.rpc;
 
-import cn.partytime.model.danmu.PreDanmuModel;
+import cn.partytime.model.danmu.PreDanmu;
 import cn.partytime.service.PreDanmuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +27,7 @@ public class RpcPreDanmuService {
      * @return
      */
     @RequestMapping(value = "/findByPartyId" ,method = RequestMethod.GET)
-    public List<PreDanmuModel> findByPartyId(@RequestParam String partyId){
+    public List<PreDanmu> findByPartyId(@RequestParam String partyId){
         return  preDanmuService.findByPartyId(partyId);
     }
 

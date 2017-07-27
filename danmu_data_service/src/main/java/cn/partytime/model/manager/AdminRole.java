@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
  */
 public class AdminRole {
 
-    @Field("_id")
+
     private String id;
 
     private String roleName;

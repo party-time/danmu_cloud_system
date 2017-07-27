@@ -1,6 +1,5 @@
 package cn.partytime.rpc;
 
-import cn.partytime.model.PartyResourceResult;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.service.PartyService;
@@ -31,11 +30,28 @@ public class RpcPartyResourceResultService {
 
 
     /**
-     * 查询所有未下线的电影
+     * 查询电影下的资源
      * @return
      */
+    @RequestMapping(value = "/findResourceUnderFilm" ,method = RequestMethod.GET)
+    public Map<String,List<ResourceFile>> findResourceUnderFilm(@RequestParam List<String> partyIdList){
+        Map<String,List<ResourceFile>> resourceFileMap = resourceFileService.findByPartyIds(partyIdList);
+        return resourceFileMap;
+    }
 
-    @RequestMapping(value = "/findLatelyParty" ,method = RequestMethod.POST)
+    /**
+     * 查询活动下的资源
+     * @return
+     */
+    @RequestMapping(value = "/findResourceUnderParty" ,method = RequestMethod.GET)
+    public Map<String,List<ResourceFile>> findResourceUnderParty(@RequestParam String addressId, @RequestParam Integer type,@RequestParam List<String> partyIdList){
+        Map<String,List<ResourceFile>>  resourceFileMap = resourceFileService.findByPartyIds(partyIdList);
+        return resourceFileMap;
+    }
+
+
+
+    /*@RequestMapping(value = "/findLatelyParty" ,method = RequestMethod.POST)
     public List<PartyResourceResult> findLatelyParty(){
         List<PartyResourceResult> partyResourceResultList = new ArrayList<>();
         List<Party> partyList = partyService.findByTypeAndStatus(1,1);
@@ -55,16 +71,9 @@ public class RpcPartyResourceResultService {
             }
         }
         return partyResourceResultList;
-    }
+    }*/
 
-    /**
-     * 查询该场地下所有的未结束的活动
-     * @param addressId
-     * @param type
-     * @return
-     */
-
-    @RequestMapping(value = "/findLatelyPartyByAddressIdAndType" ,method = RequestMethod.POST)
+    /*@RequestMapping(value = "/findLatelyPartyByAddressIdAndType" ,method = RequestMethod.POST)
     public List<PartyResourceResult> findLatelyPartyByAddressIdAndType(@RequestParam String addressId, @RequestParam Integer type){
         List<PartyResourceResult> partyResourceResultList = new ArrayList<>();
         List<Party> partyList = partyService.findByType(addressId,type);
@@ -84,5 +93,5 @@ public class RpcPartyResourceResultService {
             }
         }
         return partyResourceResultList;
-    }
+    }*/
 }

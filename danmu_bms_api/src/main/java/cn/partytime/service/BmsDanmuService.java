@@ -8,8 +8,8 @@ import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.CacheDataRepository;
 import cn.partytime.model.*;
+import cn.partytime.model.danmu.Danmu;
 import cn.partytime.model.danmu.DanmuLog;
-import cn.partytime.model.danmu.DanmuModel;
 import cn.partytime.model.danmu.DanmuPool;
 import cn.partytime.model.manager.danmuCmdJson.CmdTemp;
 import cn.partytime.model.user.UserPrize;
@@ -217,7 +217,7 @@ public class BmsDanmuService {
         }
 
 
-        Page<DanmuModel> danmuListByPage = danmuService.findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(1,false,true,index,size,danmuPoolIdLIST);
+        Page<Danmu> danmuListByPage = danmuService.findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(1,false,true,index,size,danmuPoolIdLIST);
         long count = danmuListByPage.getTotalElements();
         pageResultModel.setTotal(count);
         if(count==0){
@@ -227,8 +227,8 @@ public class BmsDanmuService {
 
         CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(ComponentKeyConst.P_DANMU);
 
-        List<DanmuModel> timerDanmuList = danmuListByPage.getContent();
-        for (DanmuModel danmuModel : timerDanmuList) {
+        List<Danmu> timerDanmuList = danmuListByPage.getContent();
+        for (Danmu danmuModel : timerDanmuList) {
             userIdList.add(danmuModel.getCreateUserId());
             //DanmuLogicModel danmuLogicModel = new DanmuLogicModel();
             //BeanUtils.copyProperties(danmuModel, danmuLogicModel);
@@ -387,7 +387,7 @@ public class BmsDanmuService {
             DanmuPool danmuPool = findDanmuPool(addressId, partyId);
             //弹幕池编号
             String poolId = danmuPool.getId();
-            DanmuModel danmuModel = new DanmuModel();
+            Danmu danmuModel = new Danmu();
             danmuModel.setTemplateId(templateId);
             danmuModel.setContent(map);
             danmuModel.setBlocked(false);
@@ -541,7 +541,7 @@ public class BmsDanmuService {
             DanmuPool danmuPool = findDanmuPool(addressId, partyId);
             //弹幕池编号
             String poolId = danmuPool.getId();
-            DanmuModel danmuModel = new DanmuModel();
+            Danmu danmuModel = new Danmu();
             danmuModel.setTemplateId(templateId);
             //danmuModel.setMsg(msg);
             danmuModel.setContent(map);
@@ -712,7 +712,7 @@ public class BmsDanmuService {
             DanmuPool danmuPool = danmuPoolService.findDanmuPoolbyPartyIdAndAddressId(addressId, partyId);
             //弹幕池编号
             String poolId = danmuPool.getId();
-            DanmuModel danmuModel = new DanmuModel();
+            Danmu danmuModel = new Danmu();
             danmuModel.setTemplateId(templateId);
             //danmuModel.setMsg(msg);
             danmuModel.setContent(map);
@@ -767,7 +767,7 @@ public class BmsDanmuService {
     }
 
 
-    private DanmuLog saveDanmuModel(DanmuModel danmuModel){
+    private DanmuLog saveDanmuModel(Danmu danmuModel){
         DanmuLog danmuLog = new DanmuLog();
         BeanUtils.copyProperties(danmuModel,danmuLog);
         danmuLog.setId(null);

@@ -58,8 +58,9 @@ public class BmsUpdatePlanService {
         return pageResultModel;
     }
 
-    public PageResultModel<Version> findByAddressIdNotIn(String addressId,Integer pageSize,Integer pageNumber){
+    public PageResultModel<Version> findByAddressIdNotIn(String addressId, Integer pageSize, Integer pageNumber){
         List<UpdatePlan> updatePlanList = updatePlanService.findByAddressId(addressId);
+        PageResultModel<Version> versionPageResultModel = new PageResultModel<>();
         if( null != updatePlanList || updatePlanList.size() > 0){
             List<String> versionIdList = new ArrayList<>();
             for(UpdatePlan updatePlan : updatePlanList){
@@ -67,10 +68,14 @@ public class BmsUpdatePlanService {
             }
 
             Page<Version> versionPage = versionService.findByIdNotIn(versionIdList,pageNumber,pageSize);
-            return new PageResultModel<>(versionPage);
+            versionPageResultModel.setRows(versionPage.getContent());
+            versionPageResultModel.setTotal(versionPage.getTotalElements());
+            return versionPageResultModel;
         }else{
             Page<Version> versionPage = versionService.findAll(pageNumber,pageSize);
-            return new PageResultModel<>(versionPage);
+            versionPageResultModel.setRows(versionPage.getContent());
+            versionPageResultModel.setTotal(versionPage.getTotalElements());
+            return versionPageResultModel;
         }
     }
 

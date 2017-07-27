@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "danmu_client_master")
 public class DanmuClientMaster extends BaseModel{
 
-    @Field("_id")
+
     private String id;
 
     /**

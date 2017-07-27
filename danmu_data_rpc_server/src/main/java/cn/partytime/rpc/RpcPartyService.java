@@ -6,6 +6,9 @@ import cn.partytime.common.util.ListUtils;
 import cn.partytime.logicService.DanmuAddressLogicService;
 import cn.partytime.logicService.PartyLogicService;
 import cn.partytime.model.PartyLogicModel;
+import cn.partytime.model.PartyModel;
+import cn.partytime.model.danmu.Danmu;
+import cn.partytime.model.danmu.DanmuPool;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.PartyAddressRelation;
@@ -15,6 +18,7 @@ import cn.partytime.service.*;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +54,13 @@ public class RpcPartyService {
     @Autowired
     private PartyLogicService partyLogicService;
 
+    @Autowired
+    private DanmuPoolService danmuPoolService;
+
+    @Autowired
+    private DanmuService danmuService;
+
+
 
 
     @RequestMapping(value = "/findByMovieAliasOnLine" ,method = RequestMethod.GET)
@@ -70,8 +81,16 @@ public class RpcPartyService {
 
     /**通过地址NO获取当前的活动*/
     @RequestMapping(value = "/getPartyByAddressId" ,method = RequestMethod.GET)
-    public Party getPartyByAddressId(@RequestParam String addressId) {
-        return partyLogicService.getPartyId(addressId);
+    public PartyModel getPartyByAddressId(@RequestParam String addressId) {
+        Party party = partyLogicService.getPartyId(addressId);
+
+        if(party!=null){
+            PartyModel  partyModel = new PartyModel();
+            BeanUtils.copyProperties(party,partyModel);
+            return partyModel;
+        }
+        return null;
+
     }
 
     /**通过活动NO获取当前的活动*/
@@ -94,6 +113,13 @@ public class RpcPartyService {
                 partyAddressRelationService.del(relationId);
                 //TODO 删除弹幕池
                 //danmuPoolLogicService.deleteDanmuPool(relationId);
+                DanmuPool danmuPool = danmuPoolService.findByPartyAddressRelationId(relationId);
+                if(danmuPool!=null){
+                    List<Danmu> danmuModelList =  danmuService.findByDanmuPoolId(danmuPool.getId());
+                    if(danmuModelList!=null){
+                        danmuPoolService.deleteById(danmuPool.getId());
+                    }
+                }
             }
         }
     }
@@ -133,7 +159,7 @@ public class RpcPartyService {
 
 
     @RequestMapping(value = "/getPartyDmDensity" ,method = RequestMethod.GET)
-    public int getPartyDmDensity(String addressId,String partyId){
+    public int getPartyDmDensity(@RequestParam String addressId,@RequestParam String partyId){
         String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId;
         Object object = redisService.get(key);
         int danmuDensity = 0;
@@ -146,6 +172,25 @@ public class RpcPartyService {
             }
         }
         return danmuDensity;
+    }
+
+    @RequestMapping(value = "/findByAddressIdAndStatus" ,method = RequestMethod.GET)
+    public List<Party> findByAddressIdAndStatus(@RequestParam String addressId, @RequestParam Integer status){
+        return partyService.findByAddressIdAndStatus(addressId,status);
+    }
+
+    @RequestMapping(value = "/findByTypeAndStatus" ,method = RequestMethod.GET)
+    public List<PartyModel> findByTypeAndStatus(@RequestParam Integer type, @RequestParam Integer status){
+        List<Party> partyList = partyService.findByTypeAndStatus(type,status);
+        List<PartyModel> partyModelList = new ArrayList<PartyModel>();
+        if(ListUtils.checkListIsNotNull(partyList)){
+            for(Party party:partyList){
+                PartyModel partyModel = new PartyModel();
+                BeanUtils.copyProperties(party,partyModel);
+                partyModelList.add(partyModel);
+            }
+        }
+        return partyModelList;
     }
 
     @RequestMapping(value = "/saveParty" ,method = RequestMethod.POST)

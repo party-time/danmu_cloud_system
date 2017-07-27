@@ -1,15 +1,15 @@
 package cn.partytime.service;
 
 import cn.partytime.config.DanmuChannelRepository;
-import cn.partytime.rpcService.dataRpc.CmdLogicService;
-import cn.partytime.rpcService.dataRpc.DanmuService;
+import cn.partytime.dataRpc.RpcCmdService;
+import cn.partytime.dataRpc.RpcDanmuService;
 import cn.partytime.handlerThread.TestDanmuHandler;
-import cn.partytime.model.CmdTempAllData;
-import cn.partytime.model.CmdTempComponentData;
-import cn.partytime.model.DanmuModel;
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
 import cn.partytime.common.util.BooleanUtils;
 import cn.partytime.common.util.ListUtils;
+import cn.partytime.model.CmdTempAllData;
+import cn.partytime.model.CmdTempComponentData;
+import cn.partytime.model.DanmuModel;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -33,7 +33,7 @@ public class TestDanmuService {
     private static final Logger logger = LoggerFactory.getLogger(TestDanmuService.class);
 
     @Autowired
-    private DanmuService danmuService;
+    private RpcDanmuService rpcDanmuService;
 
     @Autowired
     private RedisService redisService;
@@ -46,11 +46,11 @@ public class TestDanmuService {
 
 
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private RpcCmdService rpcCmdService;
 
 
     public void sendTestDanmu(String addressId, String partyId) {
-        List<DanmuModel> danmuModelPage = danmuService.findDanmuByIsBlocked(0, 200, false);
+        List<DanmuModel> danmuModelPage = rpcDanmuService.findDanmuByIsBlocked(0, 200, false);
         Iterator<DanmuModel> danmuModelIterator = danmuModelPage.iterator();
         int count = 0;
         while (danmuModelIterator.hasNext()) {
@@ -79,7 +79,7 @@ public class TestDanmuService {
                 dataMap.put("type","testDanmu");
                 dataMap.put("createTime",danmuModel.getCreateTime());
 
-                CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(danmuModel.getTemplateId());
+                CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(danmuModel.getTemplateId());
 
                 Map<String,Object> contentMap = danmuModel.getContent();
                 List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();

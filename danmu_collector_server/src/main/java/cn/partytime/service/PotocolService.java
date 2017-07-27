@@ -1,18 +1,18 @@
 package cn.partytime.service;
 
-import cn.partytime.config.DanmuChannelRepository;
-import cn.partytime.rpcService.dataRpc.PartyService;
-import cn.partytime.rpcService.dataRpc.WechatService;
-import cn.partytime.model.DanmuClientModel;
-import cn.partytime.model.PartyLogicModel;
-import cn.partytime.model.WechatUser;
-import cn.partytime.model.WechatUserInfo;
-import cn.partytime.util.PotocolTypeConst;
 import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.util.IntegerUtils;
+import cn.partytime.config.DanmuChannelRepository;
+import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.RpcWechatService;
+import cn.partytime.model.DanmuClientModel;
+import cn.partytime.model.PartyLogicModel;
+import cn.partytime.model.WechatUserDto;
+import cn.partytime.model.WechatUserInfoDto;
 import cn.partytime.redis.service.RedisService;
+import cn.partytime.util.PotocolTypeConst;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -48,11 +48,11 @@ public class PotocolService {
 
 
     @Autowired
-    private WechatService wechatService;
+    private RpcWechatService rpcWechatService;
 
 
     @Autowired
-    private PartyService partyService;
+    private RpcPartyService rpcPartyService;
 
 
     @Autowired
@@ -86,10 +86,10 @@ public class PotocolService {
                 forceLogout(channel);
             }
             //判断微信用户是否合法
-            WechatUser wechatUser = wechatService.findByOpenId(openId);
+            WechatUserDto wechatUser = rpcWechatService.findByOpenId(openId);
             logger.info("当前登录的手机用户信息:{}", JSON.toJSONString(wechatUser));
-            WechatUserInfo wechatuserInfo = wechatService.findByWechatId(wechatUser.getId());
-            PartyLogicModel partyLogicModel = partyService.findPartyByLonLat(wechatuserInfo.getLastLongitude(), wechatuserInfo.getLastLatitude());
+            WechatUserInfoDto wechatuserInfo = rpcWechatService.findByWechatId(wechatUser.getId());
+            PartyLogicModel partyLogicModel = rpcPartyService.findPartyByLonLat(wechatuserInfo.getLastLongitude(), wechatuserInfo.getLastLatitude());
             //如果活动不存在，不做任何处理
             if (partyLogicModel == null) {
                 forceLogout(channel);

@@ -1,5 +1,6 @@
 package cn.partytime.service;
 
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.PartyAddressRelation;
@@ -69,10 +70,14 @@ public class DanmuAddressService {
         return danmuAddressRepository.findById(id);
     }
 
-    public Page<DanmuAddress> findAll(int page, int size) {
+    public PageResultModel<DanmuAddress> findAll(int page, int size) {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
-        return danmuAddressRepository.findAll(pageRequest);
+        Page<DanmuAddress> danmuAddressPage = danmuAddressRepository.findAll(pageRequest);
+        PageResultModel<DanmuAddress>  pageResultModel = new PageResultModel<>();
+        pageResultModel.setTotal(danmuAddressPage.getTotalElements());
+        pageResultModel.setRows(danmuAddressPage.getContent());
+        return pageResultModel;
     }
 
     public Page<DanmuAddress> findPageByType(Integer type,int page, int size) {
@@ -110,10 +115,14 @@ public class DanmuAddressService {
     }
 
 
-    public Page<DanmuAddress> findAddressNotIn(List<String> addressIdList , int page, int size){
+    public PageResultModel<DanmuAddress> findAddressNotIn(List<String> addressIdList , int page, int size){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
-        return danmuAddressRepository.findByIdNotIn(addressIdList, pageRequest);
+        Page<DanmuAddress> danmuAddressPage = danmuAddressRepository.findByIdNotIn(addressIdList, pageRequest);
+        PageResultModel<DanmuAddress> pageResultModel = new PageResultModel<>();
+        pageResultModel.setRows(danmuAddressPage.getContent());
+        pageResultModel.setTotal(danmuAddressPage.getTotalElements());
+        return pageResultModel;
     }
 
     /**
@@ -195,19 +204,25 @@ public class DanmuAddressService {
     }
 
 
-    public Page<DanmuAddress> findDanmuAddressByPartyId(String partyId,Integer pageNum ,Integer pageSize){
+    public PageResultModel<DanmuAddress> findDanmuAddressByPartyId(String partyId,Integer pageNum ,Integer pageSize){
         Party party = partyService.findById(partyId);
+
+        Page<DanmuAddress> page = null;
+        PageResultModel<DanmuAddress> danmuAddressPageResultModel = new PageResultModel<>();
         if( null == party){
             return null;
         }
         if(party.getType() == 0){
             List<String> danmuAddressIdList = this.findAddress(partyId);
-            return this.findAddressByPartyId(danmuAddressIdList,pageNum,pageSize);
+            page = this.findAddressByPartyId(danmuAddressIdList,pageNum,pageSize);
         }else if(party.getType() == 1){
-            return this.findPageByType(0,pageNum,pageSize);
-        }else{
-            return null;
+            page =  this.findPageByType(0,pageNum,pageSize);
         }
+        if(page!=null){
+            danmuAddressPageResultModel.setTotal(page.getTotalElements());
+            danmuAddressPageResultModel.setRows(page.getContent());
+        }
+        return danmuAddressPageResultModel;
 
     }
 

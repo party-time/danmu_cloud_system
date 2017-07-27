@@ -2,8 +2,8 @@ package cn.partytime.controller;
 
 import cn.partytime.controller.base.BaseAdminController;
 import cn.partytime.model.PageResultModel;
-import cn.partytime.model.manager.BlockKeyword;
 import cn.partytime.model.RestResultModel;
+import cn.partytime.model.manager.BlockKeyword;
 import cn.partytime.service.BlockKeywordService;
 import cn.partytime.service.BmsBlockService;
 import org.springframework.beans.factory.annotation.Autowired;

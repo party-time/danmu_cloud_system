@@ -2,7 +2,6 @@ package cn.partytime.model.manager;
 
 import cn.partytime.baseModel.BaseModel;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Map;
 
@@ -13,7 +12,7 @@ import java.util.Map;
 @Document(collection = "danmu_address")
 public class DanmuAddress extends BaseModel {
 
-    @Field("_id")
+
     private String id;
 
     //地址别名
@@ -32,7 +31,7 @@ public class DanmuAddress extends BaseModel {
     private String areaId;
 
     //经纬度
-    private LocationModel location;
+    private Location location;
 
     //场地的长度
     private Integer length;
@@ -159,11 +158,11 @@ public class DanmuAddress extends BaseModel {
         this.peopleNum = peopleNum;
     }
 
-    public LocationModel getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(LocationModel location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 

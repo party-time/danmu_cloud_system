@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "cmd_temp")
 public class CmdTemp extends BaseModel {
 
-    @Field("_id")
+
     private String id;
 
     //中文名称

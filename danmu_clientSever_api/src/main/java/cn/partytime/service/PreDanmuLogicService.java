@@ -2,12 +2,12 @@ package cn.partytime.service;
 
 import cn.partytime.common.cachekey.PreDanmuCacheKey;
 import cn.partytime.common.util.ListUtils;
+import cn.partytime.dataRpc.RpcCmdService;
+import cn.partytime.dataRpc.RpcPreDanmuService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.PreDanmuModel;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.rpcService.dataRpc.CmdService;
-import cn.partytime.rpcService.dataRpc.PreDanmuService;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,10 +26,10 @@ public class PreDanmuLogicService {
 
 
     @Autowired
-    private CmdService cmdService;
+    private RpcCmdService rpcCmdService;
 
     @Autowired
-    private PreDanmuService preDanmuService;
+    private RpcPreDanmuService rpcPreDanmuService;
 
     @Autowired
     private RedisService redisService;
@@ -37,14 +37,14 @@ public class PreDanmuLogicService {
     public void danmuListenHandler(String partyId) {
         String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
 
-        List<PreDanmuModel> preDanmuModelList = preDanmuService.findByPartyId(partyId);
+        List<PreDanmuModel> preDanmuModelList = rpcPreDanmuService.findByPartyId(partyId);
         if (ListUtils.checkListIsNotNull(preDanmuModelList)) {
 
             for(PreDanmuModel preDanmuModel:preDanmuModelList){
                 Map<String,Object> preDanmuMap = new HashMap<String,Object>();
                 String templateId = preDanmuModel.getTemplateId();
                 Map<String,Object> contentMap = preDanmuModel.getContent();
-                CmdTempAllData cmdTempAllData = cmdService.findCmdTempAllDataByIdFromCache(templateId);
+                CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
                 List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();
                 if(ListUtils.checkListIsNotNull(cmdTempComponentDataList)){
                     for(CmdTempComponentData cmdTempComponentData:cmdTempComponentDataList){

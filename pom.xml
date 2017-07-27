@@ -36,8 +36,12 @@
         <module>danmu_message_notice_server</module>
         <module>danmu_message_handler</module>
         <module>danmu_dto_model</module>
+        <module>danmu_logic_model</module>
 
+        <module>danmu_rpc_interface</module>
+        <module>danmu_rpc_alarm_interface</module>
 
+    <module>danmu_data_rpc_server</module>
 
     </modules>
 
@@ -75,18 +79,4 @@
 
 
     </dependencies>
-
-    <!--
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-    -->
-
-
-
 </project>

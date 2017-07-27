@@ -1,19 +1,24 @@
 package cn.partytime.util;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by administrator on 2017/5/22.
  */
-@ConfigurationProperties(prefix = "h5temp")
+@Component
 public class H5TempUtil {
 
+    @Value("${h5temp.ftlWritePath}")
     private String ftlWritePath;
 
+    @Value("${h5temp.ftlReadDir}")
     private String ftlReadDir;
 
+    @Value("${h5temp.htmlWritePath}")
     private String htmlWritePath;
 
+    @Value("${h5temp.htmlReadDir}")
     private String htmlReadDir;
 
     public String getFtlWritePath() {

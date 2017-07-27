@@ -1,7 +1,7 @@
 package cn.partytime.controller;
 
+import cn.partytime.alarmRpc.RpcDanmuAlarmService;
 import cn.partytime.model.RestResultModel;
-import cn.partytime.rpcService.alarmRpc.DanmuAlarmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClientAlarmController {
 
     @Autowired
-    private DanmuAlarmService danmuAlarmService;
+    private RpcDanmuAlarmService rpcDanmuAlarmService;
 
     @RequestMapping(value = "/alarm/{code}/{type}", method = RequestMethod.GET)
-    public RestResultModel danmuNotice(@PathVariable("code") String code,@PathVariable("type") String type){
+    public RestResultModel danmuNotice(@PathVariable("code") String code, @PathVariable("type") String type){
         RestResultModel restResultModel = new RestResultModel();
-        danmuAlarmService.danmuAlarm(type,code);
+        rpcDanmuAlarmService.danmuAlarm(type,code);
         restResultModel.setResult(200);
         return restResultModel;
     }

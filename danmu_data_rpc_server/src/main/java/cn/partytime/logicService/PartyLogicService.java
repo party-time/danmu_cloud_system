@@ -168,7 +168,6 @@ public class PartyLogicService {
                 }else{
                     partyLogicModel.setDmDensity(party.getDmDensity());
                 }
-
             }
         }
         return partyLogicModel;

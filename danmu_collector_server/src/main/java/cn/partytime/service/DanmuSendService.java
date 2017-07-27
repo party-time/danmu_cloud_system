@@ -1,8 +1,9 @@
 package cn.partytime.service;
 
+import cn.partytime.alarmRpc.RpcDanmuAlarmService;
+import cn.partytime.dataRpc.RpcDanmuClientService;
 import cn.partytime.model.ProtocolDanmuModel;
 import cn.partytime.model.ProtocolModel;
-import cn.partytime.rpcService.alarmRpc.DanmuService;
 import cn.partytime.common.cachekey.ScreenClientCacheKey;
 import cn.partytime.common.constants.*;
 import cn.partytime.common.util.*;
@@ -40,9 +41,8 @@ public class DanmuSendService {
     @Autowired
     private ScreenDanmuService screenDanmuService;
 
-
     @Autowired
-    private DanmuService danmuService;
+    private RpcDanmuAlarmService rpcDanmuAlarmService;
 
     /**
      * 发送预制弹幕
@@ -56,7 +56,7 @@ public class DanmuSendService {
         if (preObject == null) {
             Map<String,Object> map = new HashMap<String,Object>();
             //messageHandlerService.messageHandler(preDanmuMessageService, new MessageObject<Map<String,Object>>(LogCodeConst.DanmuLogCode.PREDANMU_ISNULL_CODE,map));
-            danmuService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,"");
+            rpcDanmuAlarmService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,"");
             return;
         }
         String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;

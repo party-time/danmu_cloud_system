@@ -16,6 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = ServerConst.SERVER_NAME_DATASERVER,fallback = DanmuAddressServiceHystrix.class)
 public interface DanmuAddressLogicService {
 
-    @RequestMapping(value = "/findAddressByLonLat" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcDanmuAddress/findAddressByLonLat" ,method = RequestMethod.GET)
     public DanmuAddress findAddressByLonLat(@RequestParam(value = "longitude") Double longitude, @RequestParam(value = "latitude") Double latitude);
 }

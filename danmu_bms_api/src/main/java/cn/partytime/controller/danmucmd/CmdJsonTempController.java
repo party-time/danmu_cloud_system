@@ -41,7 +41,9 @@ public class CmdJsonTempController {
     public PageResultModel paramTemplatePage(Integer pageNumber , Integer pageSize ){
         pageNumber = pageNumber-1;
         Page<CmdTemp> cmdJsonTempPage = cmdTempService.findAll(pageNumber,pageSize);
-        PageResultModel pageResultModel = new PageResultModel(cmdJsonTempPage);
+        PageResultModel pageResultModel = new PageResultModel();
+        pageResultModel.setTotal(cmdJsonTempPage.getTotalElements());
+        pageResultModel.setRows(cmdJsonTempPage.getContent());
         return pageResultModel;
     }
 
@@ -118,7 +120,10 @@ public class CmdJsonTempController {
     public PageResultModel componentPage(Integer pageNumber , Integer pageSize ){
         pageNumber = pageNumber-1;
         Page<CmdComponent> cmdJsonTempPage = cmdJsonComponentService.findAll(pageNumber,pageSize);
-        PageResultModel pageResultModel = new PageResultModel(cmdJsonTempPage);
+        PageResultModel pageResultModel  = new PageResultModel();
+        pageResultModel.setTotal(cmdJsonTempPage.getTotalElements());
+        pageResultModel.setRows(cmdJsonTempPage.getContent());
+
         return pageResultModel;
     }
 

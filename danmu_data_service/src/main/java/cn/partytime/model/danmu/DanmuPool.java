@@ -13,7 +13,7 @@ import java.util.List;
 @Document(collection = "danmu_pool")
 public class DanmuPool extends BaseModel {
 
-    @Field("_id")
+
     private String id;
 
     /**

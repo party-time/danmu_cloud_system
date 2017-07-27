@@ -11,7 +11,7 @@ import java.util.Date;
 @Document(collection = "order")
 public class Order {
 
-    @Field("_id")
+
     private String id;
 
     private String partyId;

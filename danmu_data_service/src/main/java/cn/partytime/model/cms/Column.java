@@ -12,7 +12,7 @@ import java.util.List;
 @Document(collection = "column")
 public class Column {
 
-    @Field("_id")
+
     private String id;
 
     //栏目标题

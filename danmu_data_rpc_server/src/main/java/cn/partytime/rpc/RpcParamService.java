@@ -1,6 +1,6 @@
 package cn.partytime.rpc;
 
-import cn.partytime.model.ParamValueJson;
+import cn.partytime.model.ParamValueJsonModel;
 import cn.partytime.model.client.DanmuClient;
 import cn.partytime.model.manager.Param;
 import cn.partytime.model.manager.ParamValue;
@@ -36,21 +36,21 @@ public class RpcParamService {
     private ParamValueService paramValueService;
 
     @RequestMapping(value = "/findByRegistCode" ,method = RequestMethod.GET)
-    public List<ParamValueJson> findByRegistCode(@RequestParam String code){
+    public List<ParamValueJsonModel> findByRegistCode(@RequestParam String code){
         DanmuClient danmuClient = danmuClientService.findByRegistCode(code);
         if( null == danmuClient){
             return null;
         }
         List<Param> paramList = paramService.findByParamTemplateId(danmuClient.getParamTemplateId());
         List<String> paramIdList = new ArrayList<>();
-        List<ParamValueJson> paramValueJsonList = new ArrayList<>();
+        List<ParamValueJsonModel> paramValueJsonList = new ArrayList<>();
         if( null != paramList && paramList.size() >0) {
             for (Param param : paramList) {
                 paramIdList.add(param.getId());
             }
             List<ParamValue> paramValueList = paramValueService.findByObjIdAndTypeAndParamIdList(danmuClient.getId(), 0, paramIdList);
             for(Param param : paramList){
-                ParamValueJson paramValueJson = new ParamValueJson();
+                ParamValueJsonModel paramValueJson = new ParamValueJsonModel();
                 paramValueJson.setType(param.getValueType());
                 paramValueJson.setName(param.getName());
                 for(ParamValue paramValue : paramValueList){

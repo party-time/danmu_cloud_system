@@ -1,6 +1,8 @@
 package cn.partytime.logicService;
 
 import cn.partytime.common.cachekey.CmdTempCacheKey;
+import cn.partytime.common.util.ListUtils;
+import cn.partytime.model.CmdComponentValueModel;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.manager.danmuCmdJson.CmdComponent;
@@ -13,6 +15,7 @@ import cn.partytime.service.danmuCmdJson.CmdJsonComponentService;
 import cn.partytime.service.danmuCmdJson.CmdJsonParamService;
 import cn.partytime.service.danmuCmdJson.CmdTempService;
 import com.alibaba.fastjson.JSON;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -92,7 +95,15 @@ public class CmdLogicService {
                 }
                 if(!StringUtils.isEmpty(cmdJsonParam.getCmdJsonTempId()) && cmdJsonParam.getCmdJsonTempId().length() > 1){
                     List<CmdComponentValue> cmdComponentValueList =cmdComponentValueService.findByComponentId(cmdJsonParam.getComponentId());
-                    cmdTempComponentData.setCmdComponentValueList(cmdComponentValueList);
+                    if(ListUtils.checkListIsNotNull(cmdComponentValueList)){
+                        List<CmdComponentValueModel> cmdComponentValueModelList = new ArrayList<>();
+                        for(CmdComponentValue cmdComponentValue:cmdComponentValueList){
+                            CmdComponentValueModel cmdComponentValueModel = new CmdComponentValueModel();
+                            BeanUtils.copyProperties(cmdComponentValue,cmdComponentValueModel);
+                            cmdComponentValueModelList.add(cmdComponentValueModel);
+                        }
+                        cmdTempComponentData.setCmdComponentValueList(cmdComponentValueModelList);
+                    }
                 }
 
                 cmdTempComponentDataList.add(cmdTempComponentData);

@@ -1,12 +1,6 @@
 package cn.partytime.service;
 
-import cn.partytime.config.DanmuChannelRepository;
-import cn.partytime.handlerThread.PreDanmuHandler;
-import cn.partytime.handlerThread.TestDanmuHandler;
-import cn.partytime.model.*;
-import cn.partytime.rpcService.alarmRpc.AdminAlarmService;
-import cn.partytime.rpcService.dataRpc.*;
-import cn.partytime.util.CommandTypeConst;
+import cn.partytime.alarmRpc.RpcAdminAlarmService;
 import cn.partytime.common.cachekey.*;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
@@ -14,7 +8,13 @@ import cn.partytime.common.util.BooleanUtils;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.common.util.ListUtils;
+import cn.partytime.config.DanmuChannelRepository;
+import cn.partytime.dataRpc.*;
+import cn.partytime.handlerThread.PreDanmuHandler;
+import cn.partytime.handlerThread.TestDanmuHandler;
+import cn.partytime.model.*;
 import cn.partytime.redis.service.RedisService;
+import cn.partytime.util.CommandTypeConst;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -35,14 +35,12 @@ import java.util.*;
 public class CommandHanderService {
 
     private static final Logger logger = LoggerFactory.getLogger(CommandHanderService.class);
-    @Autowired
-    private DanmuService danmuService;
 
     @Autowired
     private RedisService redisService;
 
     @Autowired
-    private PartyService partyService;
+    private RpcPartyService rpcPartyService;
 
     @Autowired
     private DanmuChannelRepository danmuChannelRepository;
@@ -59,31 +57,29 @@ public class CommandHanderService {
     @Autowired
     private TestDanmuHandler testDanmuHandler;
 
-    @Autowired
-    private PartyLogicService partyLogicService;
 
     @Autowired
     private PreDanmuHandler preDanmuHandler;
 
-    @Autowired
-    private DanmuLibraryPartyService danmuLibraryPartyService;
+    //@Autowired
+    //private RpcDanmuLibraryPartyService rpcDanmuLibraryPartyService;
 
     @Autowired
-    private DanmuLogService danmuLogService;
+    private RpcDanmuService rpcDanmuService;
 
 
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private RpcCmdService rpcCmdService;
 
     @Autowired
-    private AdminUserService adminUserService;
+    private RpcAdminService rpcAdminService;
 
 
     @Autowired
     private CacheDataService cacheDataService;
 
     @Autowired
-    private AdminAlarmService adminAlarmService;
+    private RpcAdminAlarmService rpcAdminAlarmService;
 
     public void commandHandler(Map<String, Object> map, Channel channel) {
         //类型
@@ -383,26 +379,26 @@ public class CommandHanderService {
 
             if(CommandTypeConst.NORMAL_DANMU.equals(type)){
 
-                DanmuLog danmuLog = danmuLogService.findDanmuLogById(id);
-                CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(danmuLog.getTemplateId());
+                DanmuLogModel danmuLog = rpcDanmuService.findDanmuLogById(id);
+                CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(danmuLog.getTemplateId());
 
                 //更新弹幕状态
-                AdminUser adminUser =  adminUserService.getAdminUser(adminTaskModel.getAuthKey());
+                AdminUserDto adminUser =  rpcAdminService.getAdminUser(adminTaskModel.getAuthKey());
 
                 //更新日志信息
                 danmuLog.setCheckUserId(adminUser.getId());
                 danmuLog.setViewFlg(true);
                 danmuLog.setUpdateTime(DateUtils.getCurrentDate());
-                danmuLogService.save(danmuLog);
+                rpcDanmuService.save(danmuLog);
 
                 logger.info("管理员:{},状态更新",adminUser.getId());
                 String danmuId = danmuLog.getDanmuId();
                 if(!StringUtils.isEmpty(danmuId)){
-                    DanmuModel danmuModel = danmuService.findById(danmuId);
+                    DanmuModel danmuModel = rpcDanmuService.findById(danmuId);
                     danmuModel.setCheckUserId(adminUser.getId());
                     danmuModel.setViewFlg(true);
                     danmuModel.setUpdateTime(DateUtils.getCurrentDate());
-                    danmuService.save(danmuModel);
+                    rpcDanmuService.save(danmuModel);
                 }
 
 
@@ -416,8 +412,8 @@ public class CommandHanderService {
                 pubDanmuToUserCachList(partyId, addressId, commandObject);
             }else{
 
-                DanmuModel danmuLog = danmuService.findById(id);
-                CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(danmuLog.getTemplateId());
+                DanmuModel danmuLog = rpcDanmuService.findById(id);
+                CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(danmuLog.getTemplateId());
 
                 Map<String,Object> commandObject = new HashMap<String,Object>();
                 commandObject.put("type",cmdTempAllData.getKey());
@@ -436,7 +432,7 @@ public class CommandHanderService {
         try {
             logger.info("向活动场地广播弹幕");
 
-            List<String> addressIdList = partyLogicService.findAddressIdListByPartyId(partyId);
+            List<String> addressIdList = rpcPartyService.findAddressIdListByPartyId(partyId);
             if(ListUtils.checkListIsNotNull(addressIdList)){
                 for(String address:addressIdList){
                     sendMessageToMq(addressId, commandMap);
@@ -477,22 +473,22 @@ public class CommandHanderService {
             Map<String,Object> map = convertObjectToMap(datObject);
             String id= String.valueOf(map.get("id"));
             AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(partyType,channel);
-            AdminUser adminUser =  adminUserService.getAdminUser(adminTaskModel.getAuthKey());
-            DanmuLog danmuLog =danmuLogService.findDanmuLogById(id);
+            AdminUserDto adminUser =  rpcAdminService.getAdminUser(adminTaskModel.getAuthKey());
+            DanmuLogModel danmuLog =rpcDanmuService.findDanmuLogById(id);
             danmuLog.setCheckUserId(adminUser.getId());
-            danmuLog.setBlocked(true);
+            danmuLog.setIsBlocked(true);
             danmuLog.setViewFlg(true);
             danmuLog.setUpdateTime(DateUtils.getCurrentDate());
-            danmuLogService.save(danmuLog);
+            rpcDanmuService.save(danmuLog);
 
             String danmuId = danmuLog.getDanmuId();
             if(!StringUtils.isEmpty(danmuId)){
-                DanmuModel danmuModel = danmuService.findById(danmuId);
+                DanmuModel danmuModel = rpcDanmuService.findById(danmuId);
                 danmuLog.setCheckUserId(adminUser.getId());
-                danmuLog.setBlocked(true);
+                danmuLog.setIsBlocked(true);
                 danmuLog.setViewFlg(true);
                 danmuLog.setUpdateTime(DateUtils.getCurrentDate());
-                danmuService.save(danmuModel);
+                rpcDanmuService.save(danmuModel);
             }
 
         } catch (Exception e) {
@@ -519,12 +515,14 @@ public class CommandHanderService {
             String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
             if (status) {
 
-                DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyService.findByPartyId(partyId);
+                /*DanmuLibraryParty danmuLibraryParty = rpcDanmuLibraryPartyService.findByPartyId(partyId);
                 if (danmuLibraryParty == null) {
                     result.put("message", "活动没有关联弹幕库");
                     sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms("error", result)));
                     return;
-                }
+                }*/
+
+                //TODO:活动没有关联弹幕库
 
                 logger.info("开启预制弹幕");
                 redisService.set(key, status);
@@ -567,7 +565,7 @@ public class CommandHanderService {
         DanmuResult danmuResult = new DanmuResult();
         danmuResult.setType(type);
         Date now = DateUtils.getCurrentDate();
-        PartyDTO party = partyService.findById(partyId);
+        PartyModel party = rpcPartyService.getPartyByPartyId(partyId);
 
 
         //活动状态
@@ -596,7 +594,7 @@ public class CommandHanderService {
             party.setEndTime(now);
             party.setUpdateTime(now);
             party.setStatus(status);
-            partyService.updateParty(party);
+            rpcPartyService.saveParty(party);
             pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
 
         } else if (status == 2) {
@@ -607,7 +605,7 @@ public class CommandHanderService {
                 return;
             }
             //判断当前场地是否有其他活动正在进行
-            PartyDTO progressParty = partyLogicService.getPartyId(addressId);
+            PartyModel progressParty = rpcPartyService.getPartyId(addressId);
             // 活动存在，并且与partyId 不一致，其他活动正在进行
             if (progressParty != null && !progressParty.getId().equals(partyId)) {
                 //当前本场地有活动正在进行
@@ -630,7 +628,7 @@ public class CommandHanderService {
             party.setUpdateTime(now);
             party.setActivityStartTime(now);
             party.setStatus(status);
-            partyService.updateParty(party);
+            rpcPartyService.saveParty(party);
             pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
 
         } else if (status == 1) {
@@ -644,7 +642,7 @@ public class CommandHanderService {
             }
 
             //判断当前场地是否有其他活动正在进行
-            PartyDTO progressParty = partyLogicService.getPartyId(addressId);
+            PartyModel progressParty = rpcPartyService.getPartyId(addressId);
             // 活动存在，并且与partyId 不一致，其他活动正在进行
             if (progressParty != null && !progressParty.getId().equals(partyId)) {
                 //当前本场地有活动正在进行
@@ -674,14 +672,14 @@ public class CommandHanderService {
                 party.setUpdateTime(now);
                 party.setStatus(status);
                 pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
-                partyService.updateParty(party);
+                rpcPartyService.saveParty(party);
             }
         }
     }
 
 
 
-    public Map<String,Object> getPartyCommandMap(PartyDTO party, int status){
+    public Map<String,Object> getPartyCommandMap(PartyModel party, int status){
         Map<String,Object> dataObject = new HashMap<String,Object>();
         dataObject.put("type", PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS);
         dataObject.put("partyId",party.getId());
@@ -706,7 +704,7 @@ public class CommandHanderService {
         logger.info("初始化连接，活动:{}，地址:{}", partyId, addressId);
         Map<String, Object> result = new HashMap<String, Object>();
 
-        AdminUser adminUser =  adminUserService.getAdminUser(key);
+        AdminUserDto adminUser =  rpcAdminService.getAdminUser(key);
 
         Object object = redisService.get(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+key);
         if(object!=null){
@@ -729,7 +727,7 @@ public class CommandHanderService {
 
         if(partyType==0){
             //获取活动信息
-            PartyDTO party = partyService.findById(partyId);
+            PartyModel party = rpcPartyService.getPartyByPartyId(partyId);
             //判断活动是否结束
             boolean partyIsOver = false;
             if (party.getStatus() > 2) {
@@ -906,7 +904,7 @@ public class CommandHanderService {
             }else{
                 cacheDataService.setAdminOnlineCount(partyType,0);
                 //管理员掉线告警
-                adminAlarmService.admiOffLine();
+                rpcAdminAlarmService    .admiOffLine();
 
             }
 

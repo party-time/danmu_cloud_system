@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "block_keyword")
 public class BlockKeywordModel {
 
-  @Field("_id")
+
   private String id;
 
   private String word;

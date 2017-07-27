@@ -4,7 +4,7 @@ import cn.partytime.common.cachekey.PreDanmuCacheKey;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
-import cn.partytime.model.danmu.PreDanmuModel;
+import cn.partytime.model.danmu.PreDanmu;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.PreDanmuService;
@@ -55,13 +55,13 @@ public class PreDanmuHandler {
 
 
 
-                    List<PreDanmuModel> preDanmuModelList = preDanmuService.findByPartyId(partyId);
-                    if (ListUtils.checkListIsNotNull(preDanmuModelList)) {
+                    List<PreDanmu> preDanmuList = preDanmuService.findByPartyId(partyId);
+                    if (ListUtils.checkListIsNotNull(preDanmuList)) {
 
-                        for(PreDanmuModel preDanmuModel:preDanmuModelList){
+                        for(PreDanmu preDanmu : preDanmuList){
                             Map<String,Object> preDanmuMap = new HashMap<String,Object>();
-                            String templateId = preDanmuModel.getTemplateId();
-                            Map<String,Object> contentMap = preDanmuModel.getContent();
+                            String templateId = preDanmu.getTemplateId();
+                            Map<String,Object> contentMap = preDanmu.getContent();
                             CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
                             List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();
                             if(ListUtils.checkListIsNotNull(cmdTempComponentDataList)){
@@ -83,7 +83,7 @@ public class PreDanmuHandler {
                             }
                             preDanmuMap.put("type",cmdTempAllData.getKey());
                             redisService.setValueToList(preDanmuCacheKey, JSON.toJSONString(preDanmuMap));
-                            //preDanmuModelList.forEach(preDanmuModel -> redisService.setValueToList(preDanmuCacheKey, JSON.toJSONString(preDanmuModel)));
+                            //preDanmuList.forEach(preDanmu -> redisService.setValueToList(preDanmuCacheKey, JSON.toJSONString(preDanmu)));
                         }
                     }
 

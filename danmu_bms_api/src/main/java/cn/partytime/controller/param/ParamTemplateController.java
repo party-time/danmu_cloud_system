@@ -46,7 +46,9 @@ public class ParamTemplateController {
     public PageResultModel paramTemplatePage(Integer pageNumber , Integer pageSize ){
         pageNumber = pageNumber-1;
         Page<ParamTemplate> paramTemplatePage = paramTemplateService.findAll(pageNumber,pageSize);
-        PageResultModel pageResultModel = new PageResultModel(paramTemplatePage);
+        PageResultModel pageResultModel = new PageResultModel();
+        pageResultModel.setRows(paramTemplatePage.getContent());
+        pageResultModel.setTotal(paramTemplatePage.getTotalElements());
         return pageResultModel;
     }
 

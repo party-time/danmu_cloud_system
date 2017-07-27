@@ -1,7 +1,6 @@
 package cn.partytime.model;
 
-import cn.partytime.model.manager.LocationModel;
-import org.springframework.data.mongodb.core.mapping.Field;
+import cn.partytime.model.manager.Location;
 
 /**
  * Created by Administrator on 2017/1/18.
@@ -28,7 +27,7 @@ public class DanmuAddressModel {
     private String areaId;
 
     //经纬度
-    private LocationModel location;
+    private Location location;
 
     //场地的长度
     private Integer length;
@@ -146,11 +145,11 @@ public class DanmuAddressModel {
         this.peopleNum = peopleNum;
     }
 
-    public LocationModel getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(LocationModel location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 

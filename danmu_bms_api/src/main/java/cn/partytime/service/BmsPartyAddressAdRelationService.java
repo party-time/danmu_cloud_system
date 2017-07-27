@@ -36,7 +36,7 @@ public class BmsPartyAddressAdRelationService {
 
 
 
-    public RestResultModel PartyAddressAdAdd(String partyId, String addressId, String adDanmuPoolId,String adminId){
+    public RestResultModel PartyAddressAdAdd(String partyId, String addressId, String adDanmuPoolId, String adminId){
         RestResultModel restResultModel = new RestResultModel();
 
         PartyAddressAdRelation addressAdRelation =partyAddressAdRelationService.findPartyAddressAdRelationByPartyIdAndAddressId(partyId,addressId);

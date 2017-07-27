@@ -1,11 +1,11 @@
 package cn.partytime.logicService;
 
 import cn.partytime.common.cachekey.CollectorServerCacheKey;
-import cn.partytime.model.WechatUser;
-import cn.partytime.rpcService.WechatUserService;
+import cn.partytime.dataRpc.RpcWechatService;
 import cn.partytime.model.DanmuCollectorInfo;
 import cn.partytime.model.ResultInfo;
 import cn.partytime.model.ServerInfo;
+import cn.partytime.model.WechatUserDto;
 import cn.partytime.redis.service.RedisService;
 
 import com.alibaba.fastjson.JSON;
@@ -26,14 +26,14 @@ public class MobileLoginService {
 
 
     @Autowired
-    private WechatUserService wechatUserService;
+    private RpcWechatService rpcWechatService;
 
 
     public ResultInfo findCollectorInfo(String openId) {
 
         ResultInfo resultInfo = new ResultInfo();
         try {
-            WechatUser wechatUser = wechatUserService.findByOpenId(openId);;
+            WechatUserDto wechatUser = rpcWechatService.findByOpenId(openId);;
             if (wechatUser == null) {
                 resultInfo.setCode(404);
                 resultInfo.setMessage("无效的openId");

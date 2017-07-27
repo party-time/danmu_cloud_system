@@ -34,10 +34,13 @@ public class VersionController {
     private UploadFlashUtil uploadFlashUtil;
 
     @RequestMapping(value = "/page", method = RequestMethod.GET)
-    public PageResultModel<Version> findAll(Integer pageSize,Integer pageNumber){
+    public PageResultModel<Version> findAll(Integer pageSize, Integer pageNumber){
         pageNumber = pageNumber-1;
         Page<Version> versionPage = versionService.findAll(pageNumber,pageSize);
-        PageResultModel<Version> pageResultModel = new PageResultModel<>(versionPage);
+        PageResultModel<Version> pageResultModel = new PageResultModel<>();
+        //
+        pageResultModel.setRows(versionPage.getContent());
+        pageResultModel.setTotal(versionPage.getTotalElements());
         return pageResultModel;
     }
 
@@ -48,7 +51,7 @@ public class VersionController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public RestResultModel save(String name,String version,String describe,Integer type){
+    public RestResultModel save(String name, String version, String describe, Integer type){
         RestResultModel restResultModel = new RestResultModel();
         if( type==0){
             Integer count = uploadFlashUtil.countJavaFile();

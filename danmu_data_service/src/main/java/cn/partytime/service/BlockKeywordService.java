@@ -19,7 +19,7 @@ import java.util.List;
  * Created by liuwei on 16/6/15.
  */
 
-@Service("blockKeywordService")
+@Service
 @Slf4j
 public class BlockKeywordService {
 
