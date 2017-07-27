@@ -1,13 +1,13 @@
 package cn.partytime.controller;
 
 import cn.partytime.controller.base.BaseAdminController;
+import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.UpdatePartyModel;
 import cn.partytime.model.manager.MovieAlias;
 import cn.partytime.model.manager.Party;
-import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.service.BmsPartyService;
 import cn.partytime.service.BmsTimerDanmuService;
 import cn.partytime.service.PartyAddressRelationService;
@@ -37,7 +37,7 @@ public class PartyController extends BaseAdminController {
     private PartyService partyService;
 
     @Autowired
-    private PartyLogicService partyLogicService;
+    private RpcPartyService rpcPartyService;
 
     @Autowired
     private BmsPartyService bmsPartyService;
@@ -173,7 +173,7 @@ public class PartyController extends BaseAdminController {
     public RestResultModel delParty(String id) {
         RestResultModel restResultModel = new RestResultModel();
         //partyService.deleteById(id);
-        partyLogicService.deleteParty(id);
+        rpcPartyService.deleteParty(id);
         restResultModel.setResult(200);
         restResultModel.setResult_msg("success");
         return restResultModel;
@@ -270,7 +270,7 @@ public class PartyController extends BaseAdminController {
 
     @RequestMapping(value = "/currentParty", method = RequestMethod.GET)
     public RestResultModel currentParty(String addressId) {
-        PartyLogicModel partyLogicModel = partyLogicService.findPartyAddressId(addressId);
+        PartyLogicModel partyLogicModel = rpcPartyService.findPartyAddressId(addressId);
         RestResultModel restResultModel = new RestResultModel();
         restResultModel.setData(partyLogicModel);
         return restResultModel;

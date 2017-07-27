@@ -7,6 +7,8 @@ import cn.partytime.common.util.ComponentKeyConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.CacheDataRepository;
+import cn.partytime.dataRpc.RpcCmdService;
+import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.*;
 import cn.partytime.model.danmu.Danmu;
 import cn.partytime.model.danmu.DanmuLog;
@@ -15,8 +17,6 @@ import cn.partytime.model.manager.danmuCmdJson.CmdTemp;
 import cn.partytime.model.user.UserPrize;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.rpcService.CmdLogicService;
-import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.service.danmu.DanmuLogService;
 import cn.partytime.service.danmuCmdJson.CmdTempService;
 import cn.partytime.service.wechat.WechatUserService;
@@ -72,7 +72,7 @@ public class BmsDanmuService {
     private UserPrizeService userPrizeService;
 
     @Autowired
-    private PartyLogicService partyLogicService;
+    private RpcPartyService rpcPartyService;
 
     @Autowired
     private BmsColorService bmsColorService;
@@ -92,7 +92,7 @@ public class BmsDanmuService {
     private DanmuCommonService danmuCommonService;
 
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private RpcCmdService rpcCmdService;
 
 
 
@@ -225,7 +225,7 @@ public class BmsDanmuService {
             return pageResultModel;
         }
 
-        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(ComponentKeyConst.P_DANMU);
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(ComponentKeyConst.P_DANMU);
 
         List<Danmu> timerDanmuList = danmuListByPage.getContent();
         for (Danmu danmuModel : timerDanmuList) {
@@ -297,7 +297,7 @@ public class BmsDanmuService {
     public void sendDanmuByWechat(String templateId,Map<String,String> danmuMap,String openId,String partyId,String addressId,int danmuSrc,int danmuType){
 
         logger.info("指令编号:{},消息内容:{},openId:{},活动编号:{},地址编号:{},弹幕来源:{},弹幕类型:{}",templateId,JSON.toJSONString(danmuMap),openId,partyId,addressId,danmuSrc,danmuType);
-        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
         //是否入弹幕库 0入库  1不入库
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
 
@@ -307,7 +307,7 @@ public class BmsDanmuService {
         }
 
         Date date = DateUtils.getCurrentDate();
-        PartyLogicModel party = partyLogicService.findPartyAddressId(addressId);
+        PartyLogicModel party = rpcPartyService.findPartyAddressId(addressId);
         int time = 0;
         if(party!=null){
             logger.info("当前场地没有活动正在进行");
@@ -443,11 +443,11 @@ public class BmsDanmuService {
         String addressId = request.getParameter("addressId");//地址编号
         logger.info("指令编号:{},openId:{},活动编号:{},地址编号:{},弹幕来源:{},弹幕类型:{}",templateId,openId,partyId,addressId,danmuSrc,danmuType);
 
-        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);//组件信息
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);//组件信息
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
         Date date = DateUtils.getCurrentDate();
 
-        PartyLogicModel party = partyLogicService.findPartyAddressId(addressId);
+        PartyLogicModel party = rpcPartyService.findPartyAddressId(addressId);
         if(party==null){
             logger.info("当前场地没有活动正在进行");
             restResultModel.setResult(404);
@@ -622,11 +622,11 @@ public class BmsDanmuService {
         String addressId = request.getParameter("addressId");
         logger.info("指令编号:{},openId:{},活动编号:{},地址编号:{},弹幕来源:{},弹幕类型:{}",templateId,userId,partyId,addressId,danmuSrc,danmuType);
         //组件信息
-        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
         //是否入弹幕库 0入库  1不入库
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
         Date date = DateUtils.getCurrentDate();
-        PartyLogicModel party = partyLogicService.findPartyAddressId(addressId);
+        PartyLogicModel party = rpcPartyService.findPartyAddressId(addressId);
         if(party==null){
             logger.info("当前场地没有活动正在进行");
             restResultModel.setResult(404);

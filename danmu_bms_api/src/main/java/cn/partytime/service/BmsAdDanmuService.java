@@ -4,6 +4,7 @@ import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.CacheDataRepository;
+import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.model.*;
 import cn.partytime.model.danmu.AdDanmuLibrary;
 import cn.partytime.model.danmu.AdTimerDanmu;
@@ -13,7 +14,6 @@ import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.PartyAddressAdRelation;
 import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.adDanmu.AdDanmuLibraryService;
 import cn.partytime.service.adDanmu.AdTimerDanmuFileService;
 import cn.partytime.service.adDanmu.AdTimerDanmuService;
@@ -87,7 +87,7 @@ public class BmsAdDanmuService {
 
 
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private RpcCmdService rpcCmdService;
 
 
 
@@ -186,7 +186,7 @@ public class BmsAdDanmuService {
         int secondsInt = IntegerUtils.objectConvertToInt(seconds);
 
         //通过模板编号。获取模板信息
-        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
 
         Object msg = null;
         List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();
@@ -354,7 +354,7 @@ public class BmsAdDanmuService {
                 }else{
                     /*CmdTempAllData cmdTempAllData = bmsCmdService.findCmdTempAllDataById(templateId);
                     adTimerDanmuModel.setTypeName(cmdTempAllData.getName());*/
-                    CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+                    CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
 
                     adTimerDanmuModel.setTypeName(cmdTempAllData.getName());
 
@@ -444,7 +444,7 @@ public class BmsAdDanmuService {
 
                 if(!"0".equals(templateId)){
                     Map<String,Object> contentMap = adTimerDanmu.getContent();
-                    CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+                    CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
                     List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();
                     if(ListUtils.checkListIsNotNull(cmdTempComponentDataList)){
                         for(CmdTempComponentData cmdTempComponentData:cmdTempComponentDataList){

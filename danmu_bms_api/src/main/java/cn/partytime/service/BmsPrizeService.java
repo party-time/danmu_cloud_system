@@ -1,10 +1,11 @@
 package cn.partytime.service;
 
 import cn.partytime.common.util.DateUtils;
+import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.model.PartyModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.user.UserPrize;
-import cn.partytime.rpcService.PartyLogicService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class BmsPrizeService {
     private static final Logger logger = LoggerFactory.getLogger(BmsPrizeService.class);
 
     @Autowired
-    private PartyLogicService partyLogicService;
+    private RpcPartyService rpcPartyService;
 
     @Autowired
     private UserPrizeService userPrizeService;
@@ -35,7 +36,7 @@ public class BmsPrizeService {
         logger.info("向活动：{},用户:{},发送奖品", partyId, openId);
 
         RestResultModel restResultModel = null;
-        Party party = partyService.findById(partyId);
+        PartyModel party = rpcPartyService.getPartyByPartyId(partyId);
         if (party == null) {
             logger.info("活动:{}不存在", partyId);
             restResultModel = new RestResultModel();
@@ -44,7 +45,7 @@ public class BmsPrizeService {
             return restResultModel;
         }
 
-        boolean isOver = partyLogicService.checkPartyIsOver(party);
+        boolean isOver = rpcPartyService.checkPartyIsOver(party);
         if (isOver) {
             logger.info("活动:{}已经结束", partyId);
             restResultModel = new RestResultModel();

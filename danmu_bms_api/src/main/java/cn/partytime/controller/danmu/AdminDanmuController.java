@@ -1,10 +1,10 @@
 package cn.partytime.controller.danmu;
 
 import cn.partytime.controller.base.BaseAdminController;
+import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.danmuCmdJson.CmdTemp;
-import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.BmsDanmuService;
 import cn.partytime.service.danmuCmdJson.CmdTempService;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class AdminDanmuController  extends BaseAdminController {
 
 
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private RpcCmdService rpcCmdService;
 
 
     @Autowired
@@ -57,7 +57,7 @@ public class AdminDanmuController  extends BaseAdminController {
     public RestResultModel findDanmuTemplateInfo(@PathVariable("id")String id){
 
         RestResultModel restResultModel = new RestResultModel();
-        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(id);
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(id);
         restResultModel.setResult(200);
         restResultModel.setData(cmdTempAllData);
         return restResultModel;

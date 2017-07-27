@@ -2,12 +2,12 @@ package cn.partytime.controller.danmu;
 
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.controller.base.BaseAdminController;
+import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.danmu.*;
-import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.BmsPreDanmuService;
 import cn.partytime.service.DanmuCommonService;
 import cn.partytime.service.DanmuService;
@@ -50,10 +50,6 @@ public class PreDmController  extends BaseAdminController {
     @Autowired
     private BmsPreDanmuService bmsPreDanmuService;
 
-
-    @Autowired
-    private BmsCmdService bmsCmdService;
-
     @Autowired
     private DanmuCommonService danmuCommonService;
 
@@ -61,8 +57,9 @@ public class PreDmController  extends BaseAdminController {
     private String templetPath;
 
 
+
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private RpcCmdService rpcCmdService;
 
     @RequestMapping(value = "/admin/getAllDanmuLibrary", method = RequestMethod.GET)
     public RestResultModel getAllDanmuLibrary() {
@@ -120,7 +117,7 @@ public class PreDmController  extends BaseAdminController {
 
                 String templateId = danmuModel.getTemplateId();
 
-                CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+                CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
 
                 List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();
                 for(CmdTempComponentData cmdTempComponentData:cmdTempComponentDataList){
@@ -214,7 +211,7 @@ public class PreDmController  extends BaseAdminController {
 
                 String templateId = preDanmu.getTemplateId();
 
-                CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+                CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
 
                 List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();
                 for(CmdTempComponentData cmdTempComponentData:cmdTempComponentDataList){

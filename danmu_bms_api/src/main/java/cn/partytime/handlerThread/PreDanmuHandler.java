@@ -2,11 +2,11 @@ package cn.partytime.handlerThread;
 
 import cn.partytime.common.cachekey.PreDanmuCacheKey;
 import cn.partytime.common.util.ListUtils;
+import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.danmu.PreDanmu;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.PreDanmuService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class PreDanmuHandler {
 
 
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private RpcCmdService rpcCmdService;
 
     public void danmuListenHandler(String partyId) {
         logger.info("装载活动:{}预制弹幕",partyId);
@@ -62,7 +62,7 @@ public class PreDanmuHandler {
                             Map<String,Object> preDanmuMap = new HashMap<String,Object>();
                             String templateId = preDanmu.getTemplateId();
                             Map<String,Object> contentMap = preDanmu.getContent();
-                            CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+                            CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
                             List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();
                             if(ListUtils.checkListIsNotNull(cmdTempComponentDataList)){
                                 for(CmdTempComponentData cmdTempComponentData:cmdTempComponentDataList){

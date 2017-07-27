@@ -2,6 +2,7 @@ package cn.partytime.service;
 
 import cn.partytime.common.util.ComponentKeyConst;
 import cn.partytime.common.util.ListUtils;
+import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.DanmuLogicModel;
@@ -10,7 +11,6 @@ import cn.partytime.model.danmu.DanmuPool;
 import cn.partytime.model.user.UserPrize;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.danmuCmd.BmsCmdService;
 import cn.partytime.service.wechat.WechatUserService;
 import org.apache.poi.hssf.usermodel.*;
@@ -64,7 +64,7 @@ public class BmsHistoryDanmuService {
 
 
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private RpcCmdService rpcCmdService;
 
     public  List<Map<String,Object>> findHistoryDanmu(String partyId, int time, int count) {
         List<DanmuPool> danmuPoolList = danmuPoolService.findByPartyId(partyId);
@@ -82,7 +82,7 @@ public class BmsHistoryDanmuService {
 
                     if(!"0".equals(templateId)){
                         Map<String,Object> contentMap = danmuModel.getContent();
-                        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+                        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
                         List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();
                         if(ListUtils.checkListIsNotNull(cmdTempComponentDataList)){
                             for(CmdTempComponentData cmdTempComponentData:cmdTempComponentDataList){
@@ -178,7 +178,7 @@ public class BmsHistoryDanmuService {
         if (count == 0) {
             return null;
         }
-        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(ComponentKeyConst.P_DANMU);
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(ComponentKeyConst.P_DANMU);
 
         List<Danmu> timerDanmuList = danmuListByPage.getContent();
         for (Danmu danmuModel : timerDanmuList) {

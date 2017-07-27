@@ -1,6 +1,7 @@
 package cn.partytime.service.danmuCmd;
 
 import cn.partytime.common.cachekey.CmdTempCacheKey;
+import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.danmucmd.CmdComponentJson;
 import cn.partytime.model.danmucmd.CmdTempJson;
@@ -9,7 +10,6 @@ import cn.partytime.model.manager.danmuCmdJson.CmdComponentValue;
 import cn.partytime.model.manager.danmuCmdJson.CmdJsonParam;
 import cn.partytime.model.manager.danmuCmdJson.CmdTemp;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.danmuCmdJson.CmdComponentValueService;
 import cn.partytime.service.danmuCmdJson.CmdJsonComponentService;
 import cn.partytime.service.danmuCmdJson.CmdJsonParamService;
@@ -32,7 +32,7 @@ public class BmsCmdService {
 
 
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private RpcCmdService rpcCmdService;
 
     @Autowired
     private CmdTempService cmdTempService;
@@ -65,7 +65,7 @@ public class BmsCmdService {
             }
         }
 
-        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataById(cmdTempJson.getCmdTempId());
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataById(cmdTempJson.getCmdTempId());
         String key = CmdTempCacheKey.CMD_TEMP_CACHE_KEY+cmdTempJson.getCmdTempId();
         redisService.set(key, JSON.toJSONString(cmdTempAllData));
         redisService.expire(key,60*60*24*3);

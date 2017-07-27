@@ -1,5 +1,6 @@
 package cn.partytime.service.shop;
 
+import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.OrderItem;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.PartyLogicModel;
@@ -12,7 +13,6 @@ import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.model.wechatMsgTmpl.MsgTmpl;
 import cn.partytime.model.wechatMsgTmpl.ValueTmpl;
-import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.service.AdminUserService;
 import cn.partytime.service.BmsWechatUserService;
 import cn.partytime.service.DanmuAddressService;
@@ -64,7 +64,7 @@ public class BmsOrderService {
     private WechatUserInfoService wechatUserInfoService;
 
     @Autowired
-    private PartyLogicService partyLogicService;
+    private RpcPartyService rpcPartyService;
 
 
     public PageResultModel findAll(Integer pageNum, Integer size){
@@ -206,7 +206,7 @@ public class BmsOrderService {
             if( null != adminUser){
                 WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
                 if( null != wechatUserInfo){
-                    PartyLogicModel partyLogicModel =partyLogicService.findPartyByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+                    PartyLogicModel partyLogicModel =rpcPartyService.findPartyByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
                     if( null != partyLogicModel){
                         danmuAddressService.updateShopStatus(partyLogicModel.getAddressId(), 0);
                         return "开店成功";
@@ -220,7 +220,7 @@ public class BmsOrderService {
             if( null != adminUser){
                 WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
                 if( null != wechatUserInfo){
-                    PartyLogicModel partyLogicModel =partyLogicService.findPartyByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+                    PartyLogicModel partyLogicModel =rpcPartyService.findPartyByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
                     if( null != partyLogicModel){
                         danmuAddressService.updateShopStatus(partyLogicModel.getAddressId(), 1);
                         return "闭店成功";

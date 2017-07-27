@@ -1,5 +1,7 @@
 package cn.partytime.controller.wechat;
 
+import cn.partytime.dataRpc.RpcDanmuAddressService;
+import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.WechatSession;
 import cn.partytime.model.cms.ItemResult;
@@ -8,7 +10,6 @@ import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.H5Template;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
-import cn.partytime.rpcService.DanmuAddressLogicService;
 import cn.partytime.service.BmsColorService;
 import cn.partytime.service.BmsWechatUserService;
 import cn.partytime.service.H5TemplateService;
@@ -73,7 +74,7 @@ public class WechatController {
     private WechatSessionService wechatSessionService;
 
     @Autowired
-    private DanmuAddressLogicService danmuAddressLogicService;
+    private RpcDanmuAddressService rpcDanmuAddressService;
 
     @Autowired
     private WechatUserInfoService wechatUserInfoService;
@@ -248,7 +249,7 @@ public class WechatController {
         if( null == wechatUserInfo){
             return "redirect:/htm/noshop.html";
         }
-        DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+        DanmuAddressModel danmuAddress = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
         if( null == danmuAddress){
             return "redirect:/htm/noshop.html";
         }
@@ -284,7 +285,7 @@ public class WechatController {
         if( null == wechatUserInfo){
             return "redirect:/htm/noshop.html";
         }
-        DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+        DanmuAddressModel danmuAddress = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
         if( null == danmuAddress){
             return "redirect:/htm/noshop.html";
         }

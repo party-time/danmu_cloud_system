@@ -1,5 +1,6 @@
 package cn.partytime.service;
 
+import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.PartyResult;
@@ -12,7 +13,6 @@ import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.repository.user.WechatUserRepository;
-import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.service.wechat.WechatUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class BmsPartyService {
     private static final Logger logger = LoggerFactory.getLogger(BmsPartyService.class);
 
     @Autowired
-    private PartyLogicService partyLogicService;
+    private RpcPartyService rpcPartyService;
 
     @Autowired
     private DanmuAddressService danmuAddressService;
@@ -64,7 +64,7 @@ public class BmsPartyService {
             WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
             String userId = wechatUser.getUserId();
             logger.info("经度:{},纬度:{},用户编号:{}",wechatUserInfo.getLastLongitude(),wechatUserInfo.getLastLatitude(),userId);
-            PartyLogicModel partyLogicModel =partyLogicService.findPartyByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+            PartyLogicModel partyLogicModel =rpcPartyService.findPartyByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
             if (partyLogicModel == null) {
                 logger.info("没有活动");
                 return null;

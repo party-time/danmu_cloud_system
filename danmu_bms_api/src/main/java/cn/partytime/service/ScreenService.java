@@ -3,13 +3,13 @@ package cn.partytime.service;
 import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.PartyTypeEnmu;
+import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.handlerThread.PreDanmuHandler;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.client.DanmuClient;
 import cn.partytime.model.manager.Party;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.service.movie.MovieService;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -18,7 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/12/27.
@@ -45,7 +46,7 @@ public class ScreenService {
     private PreDanmuHandler preDanmuHandler;
 
     @Autowired
-    private PartyLogicService partyLogicService;
+    private RpcPartyService rpcPartyService;
 
     @Autowired
     private RedisService redisService;
@@ -70,7 +71,7 @@ public class ScreenService {
         }
 
         String addressId = danmuClient.getAddressId();
-        PartyLogicModel partyLogicModel = partyLogicService.findPartyAddressId(addressId);
+        PartyLogicModel partyLogicModel = rpcPartyService.findPartyAddressId(addressId);
         if(partyLogicModel!=null){
             Map<String,Object> map = new HashMap<String,Object>();
             map.put("partyId",partyLogicModel.getPartyId());

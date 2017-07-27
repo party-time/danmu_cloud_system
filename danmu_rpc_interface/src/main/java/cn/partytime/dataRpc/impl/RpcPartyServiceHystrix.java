@@ -8,6 +8,7 @@ import java.util.List;
 
 public class RpcPartyServiceHystrix implements RpcPartyService {
 
+
     @Override
     public PartyLogicModel findPartyAddressId(String addressId) {
         return null;
@@ -49,7 +50,7 @@ public class RpcPartyServiceHystrix implements RpcPartyService {
     }
 
     @Override
-    public boolean checkPartyIsOver(PartyLogicModel party) {
+    public boolean checkPartyIsOver(PartyModel party) {
         return false;
     }
 

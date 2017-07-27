@@ -1,12 +1,12 @@
 package cn.partytime.service;
 
 import cn.partytime.common.util.*;
+import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.danmu.Danmu;
 import cn.partytime.model.danmu.PreDanmu;
-import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.danmuCmd.BmsCmdService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -62,7 +62,7 @@ public class BmsPreDanmuService {
     private BmsColorService bmsColorService;
 
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private RpcCmdService rpcCmdService;
 
     /**
      * 讲历史弹幕转换成预置弹幕
@@ -97,7 +97,7 @@ public class BmsPreDanmuService {
         String danmuLibraryId = request.getParameter("danmuLibraryId");
 
         //通过模板编号。获取模板信息
-        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
 
         Object msg = null;
         Integer dataType = null;
@@ -215,7 +215,7 @@ public class BmsPreDanmuService {
         List<PreDanmu> preDanmuList = new ArrayList<>();
 
         String templateId = ComponentKeyConst.P_DANMU;
-        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
 
 
         for(int i=maxUumber; i>0; i--) {

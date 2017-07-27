@@ -5,13 +5,13 @@ import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
+import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.handlerThread.PreDanmuHandler;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.MovieSchedule;
 import cn.partytime.model.manager.Party;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.rpcService.PartyLogicService;
 import cn.partytime.service.MovieScheduleService;
 import cn.partytime.service.PartyService;
 import com.alibaba.fastjson.JSON;
@@ -54,7 +54,7 @@ public class MovieService {
 
 
     @Autowired
-    private PartyLogicService partyLogicService;
+    private RpcPartyService rpcPartyService;
 
 
     /*public RestResultModel movieHandler(String movieStartCommand,String command,String addressId){
@@ -267,7 +267,7 @@ public class MovieService {
         if("1".equals(status)){
 
             //判断是否有活动正在进行
-            PartyLogicModel partyLogicModel = partyLogicService.findTemporaryParty(addressId);
+            PartyLogicModel partyLogicModel = rpcPartyService.findTemporaryParty(addressId);
             if(partyLogicModel!=null){
                 sendCommandRestartClient(addressId);
             }

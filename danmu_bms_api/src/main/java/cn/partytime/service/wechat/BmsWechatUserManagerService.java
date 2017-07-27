@@ -1,13 +1,15 @@
 package cn.partytime.service.wechat;
 
 
+import cn.partytime.dataRpc.RpcDanmuAddressService;
+import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.model.wechat.WechatUserListModel;
-import cn.partytime.rpcService.DanmuAddressLogicService;
 import cn.partytime.service.DanmuAddressService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ public class BmsWechatUserManagerService {
     private WechatUserInfoService wechatUserInfoService;
 
     @Autowired
-    private DanmuAddressLogicService danmuAddressLogicService;
+    private RpcDanmuAddressService rpcDanmuAddressService;
 
     @Autowired
     private DanmuAddressService danmuAddressService;
@@ -49,12 +51,16 @@ public class BmsWechatUserManagerService {
                     if(wechatUser.getId().equals(wechatUserInfo.getWechatId())){
                         wechatUserListModel.setWechatUserInfo(wechatUserInfo);
                         if( null != wechatUserInfo.getRegistLongitude() && null != wechatUserInfo.getRegistLatitude()){
-                            DanmuAddress registAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getRegistLongitude(),wechatUserInfo.getRegistLatitude());
-                            wechatUserListModel.setRegistAddress(registAddress);
+                            DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getRegistLongitude(),wechatUserInfo.getRegistLatitude());
+                            DanmuAddress danmuAddress = new DanmuAddress();
+                            BeanUtils.copyProperties(danmuAddressModel,danmuAddress);
+                            wechatUserListModel.setRegistAddress(danmuAddress);
                         }
                         if( null != wechatUserInfo.getLastLongitude() && null != wechatUserInfo.getLastLatitude() ){
-                            DanmuAddress lastAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(),wechatUserInfo.getLastLatitude());
-                            wechatUserListModel.setLastAddress(lastAddress);
+                            DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(),wechatUserInfo.getLastLatitude());
+                            DanmuAddress danmuAddress = new DanmuAddress();
+                            BeanUtils.copyProperties(danmuAddressModel,danmuAddress);
+                            wechatUserListModel.setLastAddress(danmuAddress);
                         }
                     }
                 }
@@ -86,12 +92,12 @@ public class BmsWechatUserManagerService {
         wechatUserInfoService.delbyWechatId(id);
     }
 
-    public DanmuAddress findUseAddressByWechatId(String wechatId){
+    public DanmuAddressModel findUseAddressByWechatId(String wechatId){
         WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
         if( null == wechatUserInfo){
             return null;
         }
-        return danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(),wechatUserInfo.getLastLongitude());
+        return rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(),wechatUserInfo.getLastLongitude());
     }
 
     public void assignAddress(String addressId,String wechatId){

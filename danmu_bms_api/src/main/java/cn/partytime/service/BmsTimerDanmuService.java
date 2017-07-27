@@ -2,13 +2,13 @@ package cn.partytime.service;
 
 import cn.partytime.baseModel.GropCountModel;
 import cn.partytime.common.util.*;
+import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.model.*;
 import cn.partytime.model.danmu.TimerDanmu;
 import cn.partytime.model.danmu.TimerDanmuModel;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.TimerDanmuFile;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.rpcService.CmdLogicService;
 import cn.partytime.service.danmuCmd.BmsCmdService;
 import com.alibaba.fastjson.JSON;
 import com.mongodb.BasicDBList;
@@ -78,7 +78,7 @@ public class BmsTimerDanmuService {
 
 
     @Autowired
-    private CmdLogicService cmdLogicService;
+    private RpcCmdService rpcCmdService;
 
 
 
@@ -181,7 +181,7 @@ public class BmsTimerDanmuService {
         }
 
         //通过模板编号。获取模板信息
-        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
 
         Object msg = null;
         Integer dataType = null;
@@ -298,7 +298,7 @@ public class BmsTimerDanmuService {
                     timerDanmuModel.setMsg(message);
 
                 }else{
-                    CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+                    CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
 
                     timerDanmuModel.setTypeName(cmdTempAllData.getName());
 
@@ -498,7 +498,7 @@ public class BmsTimerDanmuService {
 
                 if(!"0".equals(templateId)){
                     Map<String,Object> contentMap = timerDanmu.getContent();
-                    CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+                    CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
                     List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();
                     if(ListUtils.checkListIsNotNull(cmdTempComponentDataList)){
                         for(CmdTempComponentData cmdTempComponentData:cmdTempComponentDataList){
@@ -588,7 +588,7 @@ public class BmsTimerDanmuService {
         List<TimerDanmu> timerDanmuList = new ArrayList<>();
 
         String templateId = ComponentKeyConst.P_DANMU;
-        CmdTempAllData cmdTempAllData = cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
 
         for(int i=1; i<maxUumber; i++){
             HSSFRow row = hssfSheet.getRow(i);
