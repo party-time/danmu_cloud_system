@@ -38,6 +38,7 @@ public class RpcProjectorService {
         ProjectorModel projectorModel = new ProjectorModel();
         if(projector!=null){
             BeanUtils.copyProperties(projector,projectorModel);
+            return projectorModel;
         }
         return  null;
     }

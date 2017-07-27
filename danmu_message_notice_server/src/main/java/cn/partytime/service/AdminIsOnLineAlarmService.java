@@ -1,4 +1,4 @@
-package cn.partytime.message.messageHandlerService;
+package cn.partytime.service;
 
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.service.MessageService;

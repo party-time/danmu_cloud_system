@@ -1,4 +1,4 @@
-package cn.partytime.message.model;
+package cn.partytime.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

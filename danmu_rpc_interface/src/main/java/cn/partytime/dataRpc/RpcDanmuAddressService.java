@@ -13,7 +13,7 @@ import java.util.List;
  * Created by dm on 2017/7/10.
  */
 
-@FeignClient(value = "${dataRpcServer}",fallback = RpcDanmuAddressServiceHystrix.class)
+@FeignClient(name = "${dataRpcServer}",fallback = RpcDanmuAddressServiceHystrix.class)
 public interface RpcDanmuAddressService {
 
     @RequestMapping(value = "/rpcDanmuAddress/findAddressByLonLat" ,method = RequestMethod.GET)

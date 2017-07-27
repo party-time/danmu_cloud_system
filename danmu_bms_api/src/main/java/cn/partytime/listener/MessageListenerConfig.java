@@ -10,6 +10,8 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 @Component
 public class MessageListenerConfig {
 
@@ -19,16 +21,27 @@ public class MessageListenerConfig {
     @Autowired
     private RedisMessageListener messageListener;
 
+    @Resource(name = "alarmMessageListener")
+    private AlarmMessageListener alarmMessageListener;
+
     @Bean
-    RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+    RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(listenerAdapter, new PatternTopic("blockKey"));
+        container.addMessageListener(blockKeyListenerAdapter(), new PatternTopic("blockKey"));
+        container.addMessageListener(alarmMessageListenerAdapter(), new PatternTopic("alarm:cache"));
         return container;
     }
 
-    @Bean
-    MessageListenerAdapter listenerAdapter() {
+    @Bean(name = "blockKeyListenerAdapter")
+    MessageListenerAdapter blockKeyListenerAdapter() {
         return new MessageListenerAdapter(messageListener, "receiveMessage");
     }
+
+
+    @Bean(name = "alarmMessageListenerAdapter")
+    MessageListenerAdapter alarmMessageListenerAdapter() {
+        return new MessageListenerAdapter(alarmMessageListener, "receiveMessage");
+    }
+
 }

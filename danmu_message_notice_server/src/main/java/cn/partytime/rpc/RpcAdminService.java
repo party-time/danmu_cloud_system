@@ -1,11 +1,11 @@
-package cn.partytime.message.rpc;
+package cn.partytime.rpc;
 
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.message.bean.MessageObject;
-import cn.partytime.message.messageHandlerService.AdminIsOnLineAlarmService;
+import cn.partytime.service.AdminIsOnLineAlarmService;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.PartyLogicModel;

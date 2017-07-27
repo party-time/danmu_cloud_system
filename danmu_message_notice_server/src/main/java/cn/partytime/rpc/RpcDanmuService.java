@@ -1,10 +1,11 @@
-package cn.partytime.message.rpc;
+package cn.partytime.rpc;
 
 import cn.partytime.common.constants.AlarmConst;
+import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.message.bean.MessageObject;
-import cn.partytime.message.messageHandlerService.DanmuAlarmService;
 import cn.partytime.message.proxy.MessageHandlerService;
+import cn.partytime.service.DanmuAlarmService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,35 +35,42 @@ public class RpcDanmuService {
     @RequestMapping(value = "/danmuAlarm" ,method = RequestMethod.GET)
     public void danmuAlarm(@RequestParam String type, @RequestParam String code) {
 
-        MessageObject<Map<String,Object>> mapMessageObject = null;
-        Map<String,Object> map = new HashMap<>();
+        MessageObject<Map<String,String>> mapMessageObject = null;
+        Map<String,String> map = new HashMap<>();
         switch (type) {
             case AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL:
                 System.out.println("预置弹幕没有了");
-                mapMessageObject = new MessageObject<Map<String, Object>>(LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL, map);
+                map.put("key", AlarmKeyConst.ALARM_KEY_PREDANMU);
+                mapMessageObject = new MessageObject<Map<String, String>>(LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL, map);
+
                 break;
             case AlarmConst.DanmuAlarmType.DANMU_IS_NULL:
                 System.out.println("客户端没有弹幕了");
-                mapMessageObject = new MessageObject<Map<String, Object>>(LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL, map);
+                mapMessageObject = new MessageObject<Map<String, String>>(LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL, map);
                 break;
             case AlarmConst.DanmuAlarmType.HISTORY_DANMU_IS_NULL:
                 System.out.println("客户端历史弹幕没有了");
-                mapMessageObject = new MessageObject<Map<String, Object>>(LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL, map);
+                map.put("key", AlarmKeyConst.ALARM_KEY_HISTORYDANMU);
+                mapMessageObject = new MessageObject<Map<String, String>>(LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL, map);
                 break;
             case AlarmConst.DanmuAlarmType.TIMER_DANMU_IS_NULL:
                 System.out.println("客户端定时弹幕没有了");
-                mapMessageObject = new MessageObject<Map<String, Object>>(LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL, map);
+                map.put("key", AlarmKeyConst.ALARM_KEY_TIMERDANMU);
+                mapMessageObject = new MessageObject<Map<String, String>>(LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL, map);
                 break;
             case AlarmConst.DanmuAlarmType.DANMU_IS_MORE:
                 System.out.println("客户端弹幕过量");
-                mapMessageObject = new MessageObject<Map<String, Object>>(LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL, map);
+                map.put("key", AlarmKeyConst.ALARM_KEY_DANMUEXCESS);
+                mapMessageObject = new MessageObject<Map<String, String>>(LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL, map);
                 break;
         }
 
+        mapMessageObject.setValue(0);
+        mapMessageObject.setThreshold(0);
         sendMessage(mapMessageObject);
     }
 
-    private void sendMessage(MessageObject<Map<String,Object>> map){
+    private void sendMessage(MessageObject<Map<String,String>> map){
         messageHandlerService.messageHandler(danmuAlarmService,map);
     }
 

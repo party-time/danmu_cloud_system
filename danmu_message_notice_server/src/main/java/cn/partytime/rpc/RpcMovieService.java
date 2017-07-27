@@ -1,9 +1,9 @@
-package cn.partytime.message.rpc;
+package cn.partytime.rpc;
 
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.message.bean.MessageObject;
-import cn.partytime.message.messageHandlerService.MovieTimeAlaramService;
+import cn.partytime.service.MovieTimeAlaramService;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.model.PartyModel;
 import org.slf4j.Logger;

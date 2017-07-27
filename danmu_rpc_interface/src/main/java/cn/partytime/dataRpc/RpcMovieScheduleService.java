@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(value = "${dataRpcServer}",fallback = RpcMovieScheduleServiceHystrix.class)
+@FeignClient(name = "${dataRpcServer}",fallback = RpcMovieScheduleServiceHystrix.class)
 public interface RpcMovieScheduleService {
 
     @RequestMapping(value = "/rpcMovieSchedule/findByPartyIdAndAddressId" ,method = RequestMethod.GET)

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@FeignClient(value = "${dataRpcServer}",fallback = RpcDanmuServiceHystrix.class)
+@FeignClient(name = "${dataRpcServer}",fallback = RpcDanmuServiceHystrix.class)
 public interface RpcDanmuService {
 
     @RequestMapping(value = "/rpcDanmu/danmuLogSave" ,method = RequestMethod.POST)

@@ -1,7 +1,7 @@
-package cn.partytime.message.rpc;
+package cn.partytime.rpc;
 
 import cn.partytime.dataRpc.RpcDanmuClientService;
-import cn.partytime.message.messageHandlerService.ProjectorCloseAlarmService;
+import cn.partytime.service.ProjectorCloseAlarmService;
 import cn.partytime.model.DanmuClientModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

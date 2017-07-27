@@ -17,6 +17,7 @@ import freemarker.template.TemplateException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import java.io.IOException;
@@ -28,6 +29,8 @@ import java.util.regex.Pattern;
 /**
  * Created by administrator on 2017/7/24.
  */
+
+@Service
 public class WechatMessageRpcService {
 
     @Autowired
@@ -41,13 +44,6 @@ public class WechatMessageRpcService {
 
     @Autowired
     private BmsWechatUserService bmsWechatUserService;
-
-
-    @Value("${monitor.id}")
-    private String templateId;
-
-    @Autowired
-    private Configuration configuration;
 
 
     public void send(String key,Map<String,String> content){

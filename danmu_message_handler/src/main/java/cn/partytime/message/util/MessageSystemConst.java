@@ -10,6 +10,10 @@ public interface MessageSystemConst {
         public final static String IP_KEY="ip";
 
         public final static String NAME_KEY="name";
+
+    }
+    class CacheKey {
+        public final static String MESSAGE_CACHE_KEY="alarm:cache";
     }
 
 }

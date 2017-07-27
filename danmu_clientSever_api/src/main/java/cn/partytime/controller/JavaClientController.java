@@ -299,8 +299,11 @@ public class JavaClientController {
             projectorAction.setUpdateTime(nowDate);
             projectorAction.setRegisterCode(code);
             rpcProjectorService.saveProjectAction(projectorAction);
+
+            restResultModel.setResult(200);
+            restResultModel.setResult_msg("OK");
+            return restResultModel;
         }
-        return null;
     }
 
     /**

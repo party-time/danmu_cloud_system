@@ -55,7 +55,7 @@ public class DanmuSendService {
         logger.info("获取的预制弹幕信息：{}",JSON.toJSONString(preObject));
         if (preObject == null) {
             Map<String,Object> map = new HashMap<String,Object>();
-            //messageHandlerService.messageHandler(preDanmuMessageService, new MessageObject<Map<String,Object>>(LogCodeConst.DanmuLogCode.PREDANMU_ISNULL_CODE,map));
+            //service.messageHandler(preDanmuMessageService, new MessageObject<Map<String,Object>>(LogCodeConst.DanmuLogCode.PREDANMU_ISNULL_CODE,map));
             rpcDanmuAlarmService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,"");
             return;
         }

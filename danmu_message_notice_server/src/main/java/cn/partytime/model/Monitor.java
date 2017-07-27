@@ -1,4 +1,4 @@
-package cn.partytime.message.model;
+package cn.partytime.model;
 
 /**
  * Created by administrator on 2017/7/24.

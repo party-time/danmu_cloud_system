@@ -7,8 +7,6 @@ import cn.partytime.message.bean.MessageObject;
  */
 public interface MessageService {
 
-
-
     public void before(MessageObject messageObject);
 
     public void after(MessageObject messageObject);

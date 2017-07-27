@@ -1,9 +1,9 @@
-package cn.partytime.message.rpc;
+package cn.partytime.rpc;
 
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.dataRpc.RpcDanmuClientService;
 import cn.partytime.message.bean.MessageObject;
-import cn.partytime.message.messageHandlerService.BulbLifeAlarmService;
+import cn.partytime.service.BulbLifeAlarmService;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.model.DanmuClientModel;
 import org.slf4j.Logger;

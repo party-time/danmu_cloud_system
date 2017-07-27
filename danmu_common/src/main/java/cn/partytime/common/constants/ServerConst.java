@@ -1,4 +1,4 @@
-package cn.partytime.common.util;
+package cn.partytime.common.constants;
 
 /**
  * Created by dm on 2017/7/4.
