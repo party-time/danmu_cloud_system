@@ -185,7 +185,7 @@ public class PartyService {
      * @param delete 删除状态
      * @return
      */
-    public List<Party> findPartyByTime(int delete) {
+    public List<Party> findPartyByDleteFlg(int delete) {
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("status").gt(0),
                 Criteria.where("status").lt(3),

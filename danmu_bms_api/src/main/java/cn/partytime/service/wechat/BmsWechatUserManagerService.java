@@ -53,13 +53,17 @@ public class BmsWechatUserManagerService {
                         if( null != wechatUserInfo.getRegistLongitude() && null != wechatUserInfo.getRegistLatitude()){
                             DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getRegistLongitude(),wechatUserInfo.getRegistLatitude());
                             DanmuAddress danmuAddress = new DanmuAddress();
-                            BeanUtils.copyProperties(danmuAddressModel,danmuAddress);
+                            if(danmuAddressModel!=null){
+                                BeanUtils.copyProperties(danmuAddressModel,danmuAddress);
+                            }
                             wechatUserListModel.setRegistAddress(danmuAddress);
                         }
                         if( null != wechatUserInfo.getLastLongitude() && null != wechatUserInfo.getLastLatitude() ){
                             DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(),wechatUserInfo.getLastLatitude());
                             DanmuAddress danmuAddress = new DanmuAddress();
-                            BeanUtils.copyProperties(danmuAddressModel,danmuAddress);
+                            if(danmuAddressModel!=null){
+                                BeanUtils.copyProperties(danmuAddressModel,danmuAddress);
+                            }
                             wechatUserListModel.setLastAddress(danmuAddress);
                         }
                     }

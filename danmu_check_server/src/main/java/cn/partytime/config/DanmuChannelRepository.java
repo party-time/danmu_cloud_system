@@ -28,6 +28,12 @@ public class DanmuChannelRepository {
 
     private  ConcurrentHashMap<Channel, AdminTaskModel> channelFilmConcurrentHashMap = new ConcurrentHashMap<Channel, AdminTaskModel>();
 
+
+
+    public int findFilmCheckAdminCount(){
+        return channelFilmConcurrentHashMap.size();
+    }
+
     /**
      * 保存通道与管理员的关系
      * @param partyTpe

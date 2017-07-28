@@ -30,7 +30,7 @@ public class ClientPartyService {
         if(object!=null){
             return String.valueOf(object);
         }else{
-            PartyLogicModel partyLogicModel =  rpcPartyService.findPartyAddressId(addressId);
+            PartyLogicModel partyLogicModel =  rpcPartyService.findPartyByAddressId(addressId);
             if(partyLogicModel!=null){
                 String partyId = partyLogicModel.getPartyId();
                 redisService.set(key,partyId);

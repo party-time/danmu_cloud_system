@@ -53,7 +53,7 @@ public class ClientScheduler {
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
             for(DanmuAddressModel danmuAddress:danmuAddressList){
                 String addressId = danmuAddress.getId();
-                PartyLogicModel partyLogicModel  = partyService.findPartyAddressId(addressId);
+                PartyLogicModel partyLogicModel  = partyService.findFilmByAddressId(addressId);
                 if(partyLogicModel!=null){
                     String partyId = partyLogicModel.getPartyId();
                     List<MovieScheduleModel>  movieScheduleList =  rpcMovieScheduleService.findByPartyIdAndAddressId(partyId,addressId);

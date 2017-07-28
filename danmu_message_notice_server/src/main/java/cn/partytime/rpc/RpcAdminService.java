@@ -1,9 +1,11 @@
 package cn.partytime.rpc;
 
+import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
 import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.logicService.MessageLogicService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.service.AdminIsOnLineAlarmService;
 import cn.partytime.message.proxy.MessageHandlerService;
@@ -29,33 +31,21 @@ import java.util.Map;
 public class RpcAdminService {
 
     private static final Logger logger = LoggerFactory.getLogger(RpcAdminService.class);
+
     @Autowired
     private AdminIsOnLineAlarmService adminIsOnLineAlarmService;
 
-    @Autowired
-    private RpcDanmuAddressService danmuAddressService;
 
     @Autowired
     private MessageHandlerService messageHandlerService;
 
-    @Autowired
-    private RpcPartyService partyService;
 
     @RequestMapping(value = "/admiOffLine" ,method = RequestMethod.GET)
     public void admiOffLine() {
-        List<DanmuAddressModel> danmuAddressList = danmuAddressService.findByType(0);
-        if(ListUtils.checkListIsNotNull(danmuAddressList)){
-            for(DanmuAddressModel danmuAddress:danmuAddressList){
-                PartyLogicModel partyLogicModel =partyService.findPartyAddressId(danmuAddress.getId());
-                if(partyLogicModel!=null){
-                    Map<String,Object> map = new HashMap<>();
-                    MessageObject<Map<String,Object>> mapMessageObject = new MessageObject<Map<String,Object>>(LogCodeConst.AdminLogCode.ADMIN_ONLINE_COUNT_ZERO,map);
-                    messageHandlerService.messageHandler(adminIsOnLineAlarmService,mapMessageObject);
-                    break;
-                }
-            }
-
-        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("key",AlarmKeyConst.ALARM_KEY_AUDITOROFFLINE);
+        MessageObject<Map<String,Object>> mapMessageObject = new MessageObject<Map<String,Object>>(LogCodeConst.AdminLogCode.ADMIN_ONLINE_COUNT_ZERO,map);
+        messageHandlerService.messageHandler(adminIsOnLineAlarmService,mapMessageObject);
     }
 
 }

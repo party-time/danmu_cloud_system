@@ -307,7 +307,7 @@ public class BmsDanmuService {
         }
 
         Date date = DateUtils.getCurrentDate();
-        PartyLogicModel party = rpcPartyService.findPartyAddressId(addressId);
+        PartyLogicModel party = rpcPartyService.findPartyByAddressId(addressId);
         int time = 0;
         if(party!=null){
             logger.info("当前场地没有活动正在进行");
@@ -447,7 +447,7 @@ public class BmsDanmuService {
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
         Date date = DateUtils.getCurrentDate();
 
-        PartyLogicModel party = rpcPartyService.findPartyAddressId(addressId);
+        PartyLogicModel party = rpcPartyService.findPartyByAddressId(addressId);
         if(party==null){
             logger.info("当前场地没有活动正在进行");
             restResultModel.setResult(404);
@@ -626,7 +626,7 @@ public class BmsDanmuService {
         //是否入弹幕库 0入库  1不入库
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
         Date date = DateUtils.getCurrentDate();
-        PartyLogicModel party = rpcPartyService.findPartyAddressId(addressId);
+        PartyLogicModel party = rpcPartyService.findPartyByAddressId(addressId);
         if(party==null){
             logger.info("当前场地没有活动正在进行");
             restResultModel.setResult(404);

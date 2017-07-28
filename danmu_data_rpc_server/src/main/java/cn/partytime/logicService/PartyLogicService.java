@@ -9,9 +9,11 @@ import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.MovieSchedule;
 import cn.partytime.model.manager.Party;
+import cn.partytime.model.manager.PartyAddressRelation;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.service.DanmuAddressService;
 import cn.partytime.service.MovieScheduleService;
+import cn.partytime.service.PartyAddressRelationService;
 import cn.partytime.service.PartyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,11 +46,37 @@ public class PartyLogicService {
     @Autowired
     private DanmuAddressService danmuAddressService;
 
+    @Autowired
+    private PartyAddressRelationService partyAddressRelationService;
+
     public Party getPartyId(String addressId) {
         Party partyResult = null;
-        List<Party> partyList = partyService.findPartyByTime(0);
-        if(ListUtils.checkListIsNotNull(partyList)){
-            return partyList.get(0);
+        //通过日期查找活动
+        List<Party> partyList = partyService.findPartyByDleteFlg(0);
+        if (partyList == null || partyList.isEmpty()) {
+            return null;
+        }
+        List<Party> listTemp = new ArrayList<Party>();
+        for (Party party : partyList) {
+            if (party.getStatus() != 3) {
+                listTemp.add(party);
+            }
+        }
+        if (ListUtils.checkListIsNull(listTemp)) {
+            return null;
+        }
+        //通过地点与活动来决定唯一性
+        List<String> partyIdList = new ArrayList<String>();
+        listTemp.stream().forEach(party -> partyIdList.add(party.getId()));
+        PartyAddressRelation partyAddressRelation = partyAddressRelationService.findByAddressIdANDPartyIdWithin(addressId, partyIdList);
+        if (partyAddressRelation == null) {
+            return null;
+        }
+        for (Party party : listTemp) {
+            if (party.getId().equals(partyAddressRelation.getPartyId())) {
+                partyResult = party;
+                break;
+            }
         }
         return partyResult;
     }
@@ -105,7 +134,7 @@ public class PartyLogicService {
     }
 
 
-    private PartyLogicModel findFilmParty(String addressId){
+    public PartyLogicModel findFilmParty(String addressId){
         PartyLogicModel partyLogicModel = null;
         Page<MovieSchedule> movieSchedulePage =  movieScheduleService.findAllByAddressId(addressId,1,0);
         List<MovieSchedule> movieScheduleList = movieSchedulePage.getContent();

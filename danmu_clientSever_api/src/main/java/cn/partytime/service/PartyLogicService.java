@@ -45,7 +45,7 @@ public class PartyLogicService {
         }
 
         String addressId = danmuClient.getAddressId();
-        PartyLogicModel partyLogicModel = rpcPartyService.findPartyAddressId(addressId);
+        PartyLogicModel partyLogicModel = rpcPartyService.findPartyByAddressId(addressId);
         if(partyLogicModel!=null){
             Map<String,Object> map = new HashMap<String,Object>();
             map.put("partyId",partyLogicModel.getPartyId());

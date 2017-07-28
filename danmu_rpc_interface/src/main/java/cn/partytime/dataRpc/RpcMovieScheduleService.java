@@ -23,4 +23,7 @@ public interface RpcMovieScheduleService {
 
     @RequestMapping(value = "/rpcMovieSchedule/updateMovieSchedule" ,method = RequestMethod.POST)
     public MovieScheduleModel updateMovieSchedule(@RequestBody MovieScheduleModel movieScheduleModel);
+
+    @RequestMapping(value = "/rpcMovieSchedule/findCurrentMovie" ,method = RequestMethod.GET)
+    public MovieScheduleModel findCurrentMovie(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId);
 }

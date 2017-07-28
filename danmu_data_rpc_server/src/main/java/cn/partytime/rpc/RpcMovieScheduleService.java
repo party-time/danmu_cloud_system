@@ -1,9 +1,11 @@
 package cn.partytime.rpc;
 
 
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.manager.MovieSchedule;
 import cn.partytime.service.MovieScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,4 +31,14 @@ public class RpcMovieScheduleService {
     public MovieSchedule updateMovieSchedule(@RequestBody MovieSchedule movieSchedule){
        return movieScheduleService.updateMovieSchedule(movieSchedule);
     }
+
+    @RequestMapping(value = "/findCurrentMovie" ,method = RequestMethod.GET)
+    public MovieSchedule findCurrentMovie(String partyId,String addressId){
+        Page<MovieSchedule> movieSchedulePage = movieScheduleService.findPageByPartyIdAndAddressIs(partyId,addressId,1,0);
+        if(movieSchedulePage.getTotalElements()==0){
+            return null;
+        }
+        return movieSchedulePage.getContent().get(0);
+    }
+
 }

@@ -94,7 +94,7 @@ public class WechatMessageRpcService {
         content.put("first",valueTmpl);
 
         ValueTmpl valueTmpl1 = new ValueTmpl();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         valueTmpl1.setValue(sdf.format(new Date()));
         content.put("keyword1",valueTmpl1);
 

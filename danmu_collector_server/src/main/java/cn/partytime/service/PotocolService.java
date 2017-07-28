@@ -177,10 +177,14 @@ public class PotocolService {
             String addressId = danmuClientModel.getAddressId();
             clientCacheService.removeClientFromCache(addressId,danmuClientModel.getRegistCode());
             clientCacheService.setClientOffineLineTime(addressId);
+
+            clientCacheService.removeClientFlashCount(addressId);
         }
 
         //清除用户状态
         danmuChannelRepository.remove(channel);
+
+
 
         //关闭通道
         channel.close();

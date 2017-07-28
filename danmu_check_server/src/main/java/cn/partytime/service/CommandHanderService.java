@@ -605,12 +605,12 @@ public class CommandHanderService {
                 return;
             }
             //判断当前场地是否有其他活动正在进行
-            PartyModel progressParty = rpcPartyService.getPartyId(addressId);
+            PartyLogicModel progressParty = rpcPartyService.findTemporaryParty(addressId);
             // 活动存在，并且与partyId 不一致，其他活动正在进行
-            if (progressParty != null && !progressParty.getId().equals(partyId)) {
+            if (progressParty != null && !progressParty.getPartyId().equals(partyId)) {
                 //当前本场地有活动正在进行
                 map.put("status", 4);
-                map.put("partyName", progressParty.getName());
+                map.put("partyName", progressParty.getPartyName());
                 sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, map)));
                 return;
             }
@@ -642,15 +642,15 @@ public class CommandHanderService {
             }
 
             //判断当前场地是否有其他活动正在进行
-            PartyModel progressParty = rpcPartyService.getPartyId(addressId);
+            PartyLogicModel progressParty = rpcPartyService.findTemporaryParty(addressId);
             // 活动存在，并且与partyId 不一致，其他活动正在进行
-            if (progressParty != null && !progressParty.getId().equals(partyId)) {
+            if (progressParty != null && !progressParty.getPartyId().equals(partyId)) {
                 //当前本场地有活动正在进行
                 map.put("status", 4);
-                map.put("partyName", progressParty.getName());
+                map.put("partyName", progressParty.getPartyName());
                 sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, map)));
                 return;
-            }else if (progressParty != null && progressParty.getId().equals(partyId)) {
+            }else if (progressParty != null && progressParty.getPartyId().equals(partyId)) {
                 //通知bms
                 map.put("status", progressParty.getStatus());
                 pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
@@ -722,6 +722,8 @@ public class CommandHanderService {
         adminTaskModel.setPartyId(partyId);
         adminTaskModel.setPartyType(partyType);
         adminTaskModel.setAddressId(addressId);
+
+        cacheDataService.clearAdminAlarmCache();
 
         danmuChannelRepository.saveChannelAdminRelation(partyType,channel, adminTaskModel);
 
@@ -900,11 +902,12 @@ public class CommandHanderService {
                     sendMessageToBMS(channel, message);
                 }
 
-                cacheDataService.setAdminOnlineCount(partyType,channelList.size());
+                //cacheDataService.setAdminOnlineCount(partyType,channelList.size());
             }else{
-                cacheDataService.setAdminOnlineCount(partyType,0);
+                //cacheDataService.setAdminOnlineCount(partyType,0);
                 //管理员掉线告警
-                rpcAdminAlarmService    .admiOffLine();
+                //rpcAdminAlarmService.admiOffLine();
+                redisService.set(AdminUserCacheKey.AMIN_OFFLINE_TIME,DateUtils.getCurrentDate().getTime());
 
             }
 

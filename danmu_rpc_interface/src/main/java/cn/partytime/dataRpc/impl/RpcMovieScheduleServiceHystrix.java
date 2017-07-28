@@ -21,4 +21,9 @@ public class RpcMovieScheduleServiceHystrix implements RpcMovieScheduleService {
     public MovieScheduleModel updateMovieSchedule(MovieScheduleModel movieScheduleModel) {
         return null;
     }
+
+    @Override
+    public MovieScheduleModel findCurrentMovie(String partyId, String addressId) {
+        return null;
+    }
 }

@@ -105,7 +105,7 @@ public class ClientLoginService {
 
             //获取活动信息
             String commandType = PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS;
-            PartyLogicModel party = partyService.findPartyAddressId(danmuClientModel.getAddressId());
+            PartyLogicModel party = partyService.findPartyByAddressId(danmuClientModel.getAddressId());
             //只有是活动场的情况下，此处才有效果
             if (party != null) {
                 try{
@@ -176,7 +176,7 @@ public class ClientLoginService {
         String addressId = danmuAddress.getId();
         logger.info("手机获取的地址信息：{}",addressId);
 
-        PartyLogicModel party = partyService.findPartyAddressId(addressId);
+        PartyLogicModel party = partyService.findPartyByAddressId(addressId);
 
         logger.info("活动信息：{}",JSON.toJSONString(party));
         //如果活动不存在，不做任何处理
@@ -228,7 +228,7 @@ public class ClientLoginService {
 
             // 获取活动信息
             String commandType = PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS;
-            PartyLogicModel party = partyService.findPartyAddressId(danmuClientModel.getAddressId());
+            PartyLogicModel party = partyService.findPartyByAddressId(danmuClientModel.getAddressId());
             //只有是活动场的情况下，此处才有效果
             if (party != null) {
                 try{
@@ -251,9 +251,16 @@ public class ClientLoginService {
                     logger.info("下发消息给客户端:{}",message);
                     channel.writeAndFlush(new TextWebSocketFrame(message));
                 }catch (Exception e){
-                    logger.info("========================>"+e.getMessage());
+                    logger.info("{}",e);
                 }
             }
+            //计算客户端在线数量
+            String addressId = danmuClientModel.getAddressId();
+            long size =clientCacheService.getClientSize(addressId);
+            if(size==2){
+                clientCacheService.removeAlarmCache(addressId);
+            }
+            clientCacheService.addClientFlashCount(addressId);
         } else {
             logger.info("当前连接的用户未非法用户,强制下线");
             channel.close();

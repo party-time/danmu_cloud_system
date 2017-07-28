@@ -47,7 +47,7 @@ public class ClientPreDanmuService {
      * @return
      */
     public Object findPreDanmu(String addressId, Date nowDate, String partyId) {
-        PartyLogicModel party = rpcPartyService.findPartyAddressId(addressId);
+        PartyLogicModel party = rpcPartyService.findPartyByAddressId(addressId);
         //logger.info("预制弹幕获取：当前活动信息:{}", JSON.toJSONString(party));
         if (party != null) {
             partyId = party.getPartyId();

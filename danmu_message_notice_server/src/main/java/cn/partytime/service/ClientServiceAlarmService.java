@@ -1,5 +1,6 @@
 package cn.partytime.service;
 
+
 import cn.partytime.logicService.MessageLogicService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.service.MessageService;
@@ -8,12 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-/**
- * Created by dm on 2017/7/19.
- */
-
 @Service
-public class AdminIsOnLineAlarmService  implements MessageService {
+public class ClientServiceAlarmService implements MessageService {
+
 
     @Autowired
     private MessageLogicService messageLogicService;

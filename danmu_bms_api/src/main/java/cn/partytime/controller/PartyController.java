@@ -270,7 +270,7 @@ public class PartyController extends BaseAdminController {
 
     @RequestMapping(value = "/currentParty", method = RequestMethod.GET)
     public RestResultModel currentParty(String addressId) {
-        PartyLogicModel partyLogicModel = rpcPartyService.findPartyAddressId(addressId);
+        PartyLogicModel partyLogicModel = rpcPartyService.findPartyByAddressId(addressId);
         RestResultModel restResultModel = new RestResultModel();
         restResultModel.setData(partyLogicModel);
         return restResultModel;

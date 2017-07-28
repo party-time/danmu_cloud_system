@@ -12,4 +12,8 @@ public class AdminUserCacheKey {
 
 
     public static final String ADMIN_ONLINE_COUNT="admin:online:count:";
+
+    public static final String  AMIN_OFFLINE_TIME="admin:offline:time";
+
+    public static final String AMIN_OFFLINE_ALARM_COUNT="admin:offlinealarm:count";
 }

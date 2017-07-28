@@ -1,5 +1,6 @@
 package cn.partytime.service;
 
+import cn.partytime.logicService.MessageLogicService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.service.MessageService;
 import cn.partytime.message.util.MessageSystemConst;
@@ -17,9 +18,8 @@ import java.util.Map;
 @Service
 public class DanmuAlarmService implements MessageService {
 
-
     @Autowired
-    private RedisTemplate redisTemplate;
+    private MessageLogicService messageLogicService;
 
     @Override
     public void before(MessageObject messageObject) {
@@ -28,8 +28,6 @@ public class DanmuAlarmService implements MessageService {
 
     @Override
     public void after(MessageObject messageObject) {
-
-        Map<String,Object> map = (Map<String,Object>)messageObject.getData();
-        redisTemplate.convertAndSend(MessageSystemConst.CacheKey.MESSAGE_CACHE_KEY, JSON.toJSONString(map));
+        messageLogicService.sendMessage(messageObject);
     }
 }

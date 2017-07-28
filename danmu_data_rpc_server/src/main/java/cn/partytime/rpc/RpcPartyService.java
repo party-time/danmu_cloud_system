@@ -61,12 +61,20 @@ public class RpcPartyService {
     private DanmuService danmuService;
 
 
-
-
+    /**
+     * 获取在线的电影
+     * @param command
+     * @return
+     */
     @RequestMapping(value = "/findByMovieAliasOnLine" ,method = RequestMethod.GET)
     public Party findByMovieAliasOnLine(@RequestParam String command){
         return partyService.findByMovieAliasOnLine(command);
     }
+    /**
+     * 通过活动获取活动相关的场地
+     * @param partyId
+     * @return
+     */
     @RequestMapping(value = "/findAddressIdListByPartyId" ,method = RequestMethod.GET)
     public List<String> findAddressIdListByPartyId(@RequestParam String partyId){
         List<PartyAddressRelation> partyAddressRelationList = partyAddressRelationService.findByPartyId(partyId);
@@ -79,22 +87,43 @@ public class RpcPartyService {
         return null;
     }
 
-    /**通过地址NO获取当前的活动*/
-    @RequestMapping(value = "/getPartyByAddressId" ,method = RequestMethod.GET)
-    public PartyModel getPartyByAddressId(@RequestParam String addressId) {
-        Party party = partyLogicService.getPartyId(addressId);
-
-        if(party!=null){
-            PartyModel  partyModel = new PartyModel();
-            BeanUtils.copyProperties(party,partyModel);
-            return partyModel;
-        }
-        return null;
-
+    /**
+     * 通过地址编号获取当前正在进行的
+     * @param addressId
+     * @return
+     */
+    @RequestMapping(value = "/findPartyAddressId" ,method = RequestMethod.GET)
+    public PartyLogicModel findPartyAddressId(@RequestParam String addressId){
+        return partyLogicService.findPartyAddressId(addressId);
     }
 
-    /**通过活动NO获取当前的活动*/
-    @RequestMapping(value = "/getPartyByPartyId" ,method = RequestMethod.GET)
+    /**
+     * 通过地址编号获取当前正在进行的
+     * @param addressId
+     * @return
+     */
+    @RequestMapping(value = "/findFilmByAddressId" ,method = RequestMethod.GET)
+    public PartyLogicModel findFilmByAddressId(@RequestParam String addressId){
+        return partyLogicService.findFilmParty(addressId);
+    }
+
+
+    /**
+     * 通过地址编号获取当前正在进行的
+     * @param addressId
+     * @return
+     */
+    @RequestMapping(value = "/findTempPartyByAddressId" ,method = RequestMethod.GET)
+    public PartyLogicModel findTempPartyByAddressId(@RequestParam String addressId){
+        return partyLogicService.findPartyAddressId(addressId);
+    }
+
+    /**
+     * 通过活动编号获取活动
+     * @param partyId
+     * @return
+     */
+    @RequestMapping(value = "/findPartyByPartyId" ,method = RequestMethod.GET)
     public Party getPartyByPartyId(@RequestParam String partyId) {
         return partyService.findById(partyId);
     }
@@ -111,7 +140,6 @@ public class RpcPartyService {
                 String relationId = partyAddressRelation.getId();
                 //删除关系
                 partyAddressRelationService.del(relationId);
-                //TODO 删除弹幕池
                 //danmuPoolLogicService.deleteDanmuPool(relationId);
                 DanmuPool danmuPool = danmuPoolService.findByPartyAddressRelationId(relationId);
                 if(danmuPool!=null){
@@ -124,7 +152,11 @@ public class RpcPartyService {
         }
     }
 
-    /*验证活动是否结束*/
+    /**
+     * 判断活动是否结束
+     * @param party
+     * @return
+     */
     @RequestMapping(value = "/checkPartyIsOver" ,method = RequestMethod.POST)
     public boolean checkPartyIsOver(@RequestBody Party party) {
         if (party.getStatus() >2) {
@@ -133,6 +165,12 @@ public class RpcPartyService {
         return false;
     }
 
+    /**
+     * g通过经纬度获取活动信息
+     * @param longitude
+     * @param latitude
+     * @return
+     */
     @RequestMapping(value = "/findPartyByLonLat" ,method = RequestMethod.GET)
     public PartyLogicModel findPartyByLonLat(@RequestParam Double longitude, @RequestParam Double latitude){
         PartyLogicModel partyLogicModel = null;
@@ -147,17 +185,23 @@ public class RpcPartyService {
         return findPartyAddressId(addressId);
     }
 
-    @RequestMapping(value = "/findPartyAddressId" ,method = RequestMethod.GET)
-    public PartyLogicModel findPartyAddressId(@RequestParam String addressId){
-        return partyLogicService.findPartyAddressId(addressId);
-    }
 
+    /**
+     * 通过地址获取临时活动
+     * @param addressId
+     * @return
+     */
     @RequestMapping(value = "/findTemporaryParty" ,method = RequestMethod.GET)
     public PartyLogicModel findTemporaryParty(@RequestParam String addressId){
         return partyLogicService.findTemporaryParty(addressId);
     }
 
-
+    /**
+     * 获取活动的弹幕密度
+     * @param addressId
+     * @param partyId
+     * @return
+     */
     @RequestMapping(value = "/getPartyDmDensity" ,method = RequestMethod.GET)
     public int getPartyDmDensity(@RequestParam String addressId,@RequestParam String partyId){
         String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId;
@@ -174,11 +218,23 @@ public class RpcPartyService {
         return danmuDensity;
     }
 
+    /**
+     * 通过地址和活动状态获取活动列表
+     * @param addressId
+     * @param status
+     * @return
+     */
     @RequestMapping(value = "/findByAddressIdAndStatus" ,method = RequestMethod.GET)
     public List<Party> findByAddressIdAndStatus(@RequestParam String addressId, @RequestParam Integer status){
         return partyService.findByAddressIdAndStatus(addressId,status);
     }
 
+    /**
+     * 通过活动类型和活动状态获取活动列表
+     * @param type
+     * @param status
+     * @return
+     */
     @RequestMapping(value = "/findByTypeAndStatus" ,method = RequestMethod.GET)
     public List<PartyModel> findByTypeAndStatus(@RequestParam Integer type, @RequestParam Integer status){
         List<Party> partyList = partyService.findByTypeAndStatus(type,status);
@@ -193,6 +249,11 @@ public class RpcPartyService {
         return partyModelList;
     }
 
+    /**
+     * 保存活动信息
+     * @param party
+     * @return
+     */
     @RequestMapping(value = "/saveParty" ,method = RequestMethod.POST)
     public Party updateParty(@RequestBody Party party) {
         return partyRepository.save(party);

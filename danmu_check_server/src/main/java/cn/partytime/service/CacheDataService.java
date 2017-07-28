@@ -1,5 +1,6 @@
 package cn.partytime.service;
 
+import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.model.DanmuClientModel;
 import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.cachekey.ClientCacheKey;
@@ -24,8 +25,11 @@ public class CacheDataService {
     private RedisService redisService;
 
 
-
-
+    /**
+     * 管理员在线人数
+     * @param partyType
+     * @param count
+     */
     public void setAdminOnlineCount(int partyType,int count){
         String key = AdminUserCacheKey.ADMIN_ONLINE_COUNT+partyType;
         if(count==0){
@@ -33,8 +37,24 @@ public class CacheDataService {
         }else{
             redisService.expire(key,0);
         }
-
     }
+
+    public void clearAdminAlarmCache(){
+        redisService.expire(AdminUserCacheKey.AMIN_OFFLINE_ALARM_COUNT,0);
+        redisService.expire(AdminUserCacheKey.AMIN_OFFLINE_TIME,0);
+    }
+
+    public void adminOfflineAlarmCount(int count){
+        String key = AdminUserCacheKey.AMIN_OFFLINE_ALARM_COUNT;
+        redisService.incrKey(key,count);
+    }
+
+    public int findadminOfflineAlarmCount(){
+        String key = AdminUserCacheKey.AMIN_OFFLINE_ALARM_COUNT;
+        return IntegerUtils.objectConvertToInt(redisService.get(key));
+    }
+
+
 
     /**
      * 获取缓存中存的客户端

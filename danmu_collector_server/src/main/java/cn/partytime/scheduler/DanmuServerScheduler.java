@@ -51,10 +51,6 @@ public class DanmuServerScheduler {
     @Autowired
     private PreDanmuLogicService preDanmuLogicService;
 
-
-    @Autowired
-    private ClientCacheService clientCacheService;
-
     @Autowired
     private ScreenDanmuService screenDanmuService;
 
@@ -71,24 +67,10 @@ public class DanmuServerScheduler {
     @Autowired
     private RpcClientAlarmService rpcClientAlarmService;
 
+    @Autowired
+    private ClientCacheService clientCacheService;
 
-    @Scheduled(cron = "0/10 * * * * *")
-    public void clientOffLineScheduler() {
-        Set<String> clientAddressSet = clientChannelService.findClientAddressSet(2);
-        if(clientAddressSet!=null && clientAddressSet.size()>0){
-            for(String addressId:clientAddressSet){
-                long size =clientCacheService.getClientSize(addressId);
-                if(size<2){
-                    long currentTime = DateUtils.getCurrentDate().getTime();
-                    long offlineTime = clientCacheService.getClientOfflineTime(addressId);
-                    long  subMinute = (currentTime - offlineTime)/1000/60;
-                    if(subMinute>5){
-                        rpcClientAlarmService.clientNetError(addressId);
-                    }
-                }
-            }
-        }
-    }
+
 
     @Scheduled(cron = "0/30 * * * * *")
     public void reportCurrentByCron() {
