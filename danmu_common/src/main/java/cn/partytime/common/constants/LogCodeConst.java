@@ -22,8 +22,8 @@ public interface LogCodeConst {
     }
 
     public class DeviceLogCode{
-        public static final String PROJECTOR_OPEN_FAIL="2000";
-        public static final String PROJECTOR_CLOSE_FAIL="2001";
+        public static final String PROJECTOR_NOT_OPEN="2000";
+        public static final String PROJECTOR_NOT_CLOSE="2001";
         public static final String PROJECTOR_BULB_LIFE_MORE_THAN_PRECENT80="2001";
     }
 

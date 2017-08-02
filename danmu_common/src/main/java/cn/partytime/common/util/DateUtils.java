@@ -59,6 +59,24 @@ public class DateUtils {
     }
 
 
+    /**
+     *
+     * @param date
+     * @return
+     */
+    public static boolean checkDataIsCurrentDate(Date date){
+        if(date==null){
+            return false;
+        }
+        String dateStr = dateToString(date,"yyyy-MM-dd");
+        String currentDateStr = dateToString(getCurrentDate(),"yyyy-MM-dd");
+        if(dateStr.equals(currentDateStr)){
+            return true;
+        }
+        return false;
+    }
+
+
     /*public static void main(String[] args) {
         System.out.println(transferLongToDate("MM/ dd/yyyy HH:mm:ss",Long.parseLong("1496210882091")));
     }*/

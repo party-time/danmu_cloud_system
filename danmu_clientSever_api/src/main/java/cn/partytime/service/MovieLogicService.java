@@ -307,15 +307,20 @@ public class MovieLogicService {
                         List<ProjectorActionModel> projectorActionList =projectorActions.getRows();
                         if(ListUtils.checkListIsNotNull(projectorActionList)){
                             for(ProjectorActionModel projectorAction :projectorActionList){
+                                if(DateUtils.checkDataIsCurrentDate(projectorAction.getCreateTime())){
+                                    rpcProjectorAlarmService.projectorOpen(code);
+                                    break;
+
+                                }
+                                //如果最后一条数据的结束时间不为空
                                 if(projectorAction.getEndTime()!=null){
                                     rpcProjectorAlarmService.projectorOpen(code);
-                                }
-                                if(projectorAction.getCreateTime().before(DateUtils.getCurrentDate())){
-                                    rpcProjectorAlarmService.projectorOpen(code);
+                                    break;
                                 }
                             }
                         }else{
                             rpcProjectorAlarmService.projectorOpen(code);
+                            break;
                         }
                     }
                 }

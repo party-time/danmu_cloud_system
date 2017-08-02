@@ -76,19 +76,21 @@ public class ClientScheduler {
 
     @Scheduled(cron = "0 5 2 * * ?")
     private void projectorCloseCommandListener(){
-
+        logger.info("投影关闭监听逻辑");
         List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
             for(DanmuAddressModel danmuAddress:danmuAddressList){
-                List<DanmuClientModel>  danmuClientList = rpcDanmuClientService.findByAddressId(danmuAddress.getId());
+                String addressId = danmuAddress.getId();
+                logger.info("场地{}:{}投影",addressId,danmuAddress.getName());
+                List<DanmuClientModel>  danmuClientList = rpcDanmuClientService.findByAddressId(addressId);
                 if(ListUtils.checkListIsNotNull(danmuClientList)){
                     for(DanmuClientModel danmuClient:danmuClientList){
                         String regsitrorCode = danmuClient.getRegistCode();
                         PageResultModel<ProjectorActionModel> projectorActions =  rpcProjectorService.findProjectorActionPage(regsitrorCode,0,1);
                         List<ProjectorActionModel> projectorActionList = projectorActions.getRows();
-                        if(projectorActionList!=null){
+                        if(ListUtils.checkListIsNotNull(projectorActionList)){
                             ProjectorActionModel projectorAction = projectorActionList.get(0);
-                            if(projectorAction.getEndTime()==null){
+                            if(projectorAction.getEndTime()==null && DateUtils.checkDataIsCurrentDate(projectorAction.getCreateTime())){
                                 rpcProjectorAlarmService.projectorClose(regsitrorCode);
                             }
                         }

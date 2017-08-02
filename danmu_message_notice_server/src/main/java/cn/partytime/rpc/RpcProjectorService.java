@@ -45,8 +45,10 @@ public class RpcProjectorService {
     public void projectorOpen(@RequestParam String registCode) {
         DanmuClientModel danmuClient = danmuClientService.findByRegistCode(registCode);
         logger.info("projector:{} is not open",danmuClient.getName());
-        Map<String,String> map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_PROJECTOROPEN,registCode);
-        MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.DeviceLogCode.PROJECTOR_OPEN_FAIL,map);
+        Map<String,String> map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_PROJECTORCLOSE,registCode);
+        MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.DeviceLogCode.PROJECTOR_NOT_OPEN,map);
+        mapMessageObject.setValue(0);
+        mapMessageObject.setThreshold(0);
         messageHandlerService.messageHandler(projectorCloseAlarmService,mapMessageObject);
 
     }
@@ -55,8 +57,10 @@ public class RpcProjectorService {
     public void projectorClose(@RequestParam String registCode) {
         DanmuClientModel danmuClient = danmuClientService.findByRegistCode(registCode);
         logger.info("projector:{} is not close",danmuClient.getName());
-        Map<String,String> map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_PROJECTORCLOSE,registCode);
-        MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.DeviceLogCode.PROJECTOR_CLOSE_FAIL,map);
+        Map<String,String> map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_PROJECTOROPEN,registCode);
+        MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.DeviceLogCode.PROJECTOR_NOT_CLOSE,map);
+        mapMessageObject.setValue(0);
+        mapMessageObject.setThreshold(0);
         messageHandlerService.messageHandler(projectorCloseAlarmService,mapMessageObject);
     }
 
