@@ -6,14 +6,11 @@ import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.WechatSession;
 import cn.partytime.model.cms.ItemResult;
 import cn.partytime.model.cms.PageColumn;
-import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.H5Template;
+import cn.partytime.model.manager.LovePay;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
-import cn.partytime.service.BmsColorService;
-import cn.partytime.service.BmsWechatUserService;
-import cn.partytime.service.H5TemplateService;
-import cn.partytime.service.ResourceFileService;
+import cn.partytime.service.*;
 import cn.partytime.service.cms.BmsCmsService;
 import cn.partytime.service.wechat.WechatUserInfoService;
 import cn.partytime.service.wechat.WechatUserService;
@@ -74,7 +71,7 @@ public class WechatController {
     private WechatSessionService wechatSessionService;
 
     @Autowired
-    private RpcDanmuAddressService rpcDanmuAddressService;
+    private RpcDanmuAddressService danmuAddressLogicService;
 
     @Autowired
     private WechatUserInfoService wechatUserInfoService;
@@ -87,6 +84,10 @@ public class WechatController {
 
     @Autowired
     private BmsCmsService bmsCmsService;
+
+
+    @Autowired
+    private LovePayService lovePayService;
 
     @RequestMapping(value = "/sendDM", method = RequestMethod.GET)
     public String redirectUrl(String code,Model model, HttpServletResponse response,HttpServletRequest request){
@@ -133,8 +134,6 @@ public class WechatController {
             wechatSession = new WechatSession();
             wechatSession.setOpenId(openId);
             wechatSession.setPartyLogicModel(party);
-            //DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
-            //wechatSession.setDanmuAddress(danmuAddress);
         }
 
         wechatSessionService.addSession(wechatSession);
@@ -178,9 +177,9 @@ public class WechatController {
     }
 
     @RequestMapping(value = "/h5temp/{h5Url}", method = RequestMethod.GET)
-    public String h5temp(@PathVariable("h5Url") String h5Url, @CookieValue String openId, Model model, HttpServletRequest request){
+    public String h5temp(@PathVariable("h5Url") String h5Url, @CookieValue(required=false) String openId, String code , String state,Model model, HttpServletRequest request){
         if( StringUtils.isEmpty(openId)){
-            return "redirect:https://open.weixin.qq.com/connect/oauth2/authorize?appid="+partyTimeConfig.getAppId()+"&redirect_uri="+partyTimeConfig.getUrl()+"/wechat/sendDM&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+            openId = WeixinUtil.getUserOpenId(code);
         }
         H5Template h5Template = h5TemplateService.findByH5Url(h5Url);
         if( null != h5Template){
@@ -228,6 +227,35 @@ public class WechatController {
         return "wechat/wechatpay";
     }
 
+    @RequestMapping(value = "/lovePayIndex", method = RequestMethod.GET)
+    public String lovePayIndex(String code,String state, Model model,String lovePayId, HttpServletRequest request){
+
+        String openId = WeixinUtil.getUserOpenId(code);
+        StringBuffer url = request.getRequestURL();
+        String trueUrl = url.toString()+"?lovePayId="+lovePayId + "code="+code+"&state="+state;
+        WxJsConfig wxJsConfig = wechatPayService.createWxjsConfig(trueUrl);
+        model.addAttribute("opendId",openId);
+        model.addAttribute("wxJsConfig",wxJsConfig);
+        LovePay lovePay = lovePayService.findById(lovePayId);
+        if(lovePay.getPrice() == 521){
+            model.addAttribute("loveType",1);
+        }else if( lovePay.getPrice() == 990){
+            model.addAttribute("loveType",2);
+        }else if( lovePay.getPrice() == 2100){
+            model.addAttribute("loveType",3);
+        }else if( lovePay.getPrice() == 5210){
+            model.addAttribute("loveType",4);
+        }else if(lovePay.getPrice() == 9900 ){
+            model.addAttribute("loveType",5);
+        }
+        model.addAttribute("lovePayId",lovePayId);
+        H5Template h5Template = h5TemplateService.findByH5Url("biaobaipay");
+        if( null != h5Template){
+            return  h5TempUtil.getFtlReadDir()+"/"+h5Template.getH5Url();
+        }
+        return "wechat/wechatpay";
+    }
+
 
     @RequestMapping(value = "/buy", method = RequestMethod.GET)
     public String buy(String code,String state, Model model, HttpServletResponse response,@CookieValue(required=false) String openId){
@@ -249,7 +277,7 @@ public class WechatController {
         if( null == wechatUserInfo){
             return "redirect:/htm/noshop.html";
         }
-        DanmuAddressModel danmuAddress = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+        DanmuAddressModel danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
         if( null == danmuAddress){
             return "redirect:/htm/noshop.html";
         }
@@ -285,7 +313,7 @@ public class WechatController {
         if( null == wechatUserInfo){
             return "redirect:/htm/noshop.html";
         }
-        DanmuAddressModel danmuAddress = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+        DanmuAddressModel danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
         if( null == danmuAddress){
             return "redirect:/htm/noshop.html";
         }
@@ -309,13 +337,5 @@ public class WechatController {
 
         return "wechat/shop/detail";
     }
-
-    @RequestMapping(value = "/biaobaiPay", method = RequestMethod.GET)
-    public String biaobaiPay(String name,String toName, String msg){
-        
-
-        return "";
-    }
-
 
 }

@@ -1,12 +1,16 @@
 package cn.partytime.controller.wechat;
 
+
+import cn.partytime.common.util.CmdConst;
+import cn.partytime.dataRpc.RpcDanmuAddressService;
+import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.PartyLogicModel;
-import cn.partytime.model.manager.AdminUser;
-import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.H5Template;
+import cn.partytime.model.manager.LovePay;
 import cn.partytime.model.shop.Item;
 import cn.partytime.model.shop.Order;
 import cn.partytime.model.wechat.WechatUser;
+import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.model.wechat.WeixinMessage;
 import cn.partytime.service.*;
 import cn.partytime.service.shop.BmsOrderService;
@@ -14,7 +18,6 @@ import cn.partytime.service.shop.ItemService;
 import cn.partytime.service.shop.OrderService;
 import cn.partytime.service.wechat.WechatUserInfoService;
 import cn.partytime.service.wechat.WechatUserService;
-import cn.partytime.common.util.ComponentKeyConst;
 import cn.partytime.util.MessageUtil;
 import cn.partytime.util.WechatSignUtil;
 import cn.partytime.util.WeixinUtil;
@@ -33,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,6 +98,14 @@ public class WechatRestController {
     @Autowired
     private BmsOrderService bmsOrderService;
 
+    @Autowired
+    private LovePayService lovePayService;
+
+    @Autowired
+    private RpcDanmuAddressService danmuAddressLogicService;
+
+    @Value("${env}")
+    private Integer env;
     /**
      * 微信公众平台验证用
      *
@@ -270,7 +282,7 @@ public class WechatRestController {
                     Map<String,String> map = new HashMap<String,String>();
                     map.put("message",recognition);
                     map.put("color",bmsColorService.getRandomColor());
-                    bmsDanmuService.sendDanmuByWechat(ComponentKeyConst.P_DANMU,map,openId,partyId,addressId,1,1);
+                    bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_PDANMU,map,openId,partyId,addressId,1,1);
                     //bmsDanmuService.saveDanmu(recognition,null,openId,1,1);
                 }
             }
@@ -306,33 +318,33 @@ public class WechatRestController {
         String detail="";
         Integer total_fee = 100;
         Map<String,String> map = new HashMap<>();
-        PartyLogicModel partyLogicModel = bmsPartyService.findCurrentParty(openId);
-        if( null != partyLogicModel){
-            DanmuAddress danmuAddress = danmuAddressService.findById(partyLogicModel.getAddressId());
-            if( null != danmuAddress){
-                if( null != danmuAddress.getControlerStatus().get("pay")){
-                    if(!StringUtils.isEmpty(h5TempId)){
-                        H5Template h5Template = h5TemplateService.findById(h5TempId);
-                        if( null != h5Template){
-                            if(!StringUtils.isEmpty(h5Template.getPayTitle())){
-                                body = h5Template.getPayTitle();
-                            }
-                            if( null != h5Template.getPayMoney()){
-                                total_fee = h5Template.getPayMoney();
-                            }
+        WechatUser wechatUser = wechatUserService.findByOpenId(openId);
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
+        DanmuAddressModel danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+        if( null != danmuAddress){
+            log.info("danmuAddress:controler"+danmuAddress.getControlerStatus().get("pay"));
+            if( null == danmuAddress.getControlerStatus() || null == danmuAddress.getControlerStatus().get("pay")){
+                if(!StringUtils.isEmpty(h5TempId)){
+                    H5Template h5Template = h5TemplateService.findById(h5TempId);
+                    if( null != h5Template){
+                        if(!StringUtils.isEmpty(h5Template.getPayTitle())){
+                            body = h5Template.getPayTitle();
+                        }
+                        if( null != h5Template.getPayMoney()){
+                            total_fee = h5Template.getPayMoney();
                         }
                     }
-                    String clientIp = request.getHeader("x-forwarded-for");
-                    if(StringUtils.isEmpty(clientIp)){
-                        clientIp = request.getRemoteAddr();
-                    }
-                    if(!StringUtils.isEmpty(clientIp) && clientIp.indexOf(",")!=-1){
-                        clientIp = clientIp.substring(0,clientIp.indexOf(","));
-                    }
-                    map = wechatPayService.createUnifiedorder(nonceStr,timestamp,openId,body,detail,attach,total_fee,clientIp);
-                    map.put("result","200");
-                    return map;
                 }
+                String clientIp = request.getHeader("x-forwarded-for");
+                if(StringUtils.isEmpty(clientIp)){
+                    clientIp = request.getRemoteAddr();
+                }
+                if(!StringUtils.isEmpty(clientIp) && clientIp.indexOf(",")!=-1){
+                    clientIp = clientIp.substring(0,clientIp.indexOf(","));
+                }
+                map = wechatPayService.createUnifiedorder(nonceStr,timestamp,openId,body,detail,attach,total_fee,clientIp);
+                map.put("result","200");
+                return map;
             }
         }
         map.put("result","404");
@@ -340,27 +352,16 @@ public class WechatRestController {
     }
 
     @RequestMapping(value = "/lovepay", method = RequestMethod.GET)
-    public Map lovepay(String nonceStr,String timestamp ,String openId,String attach, HttpServletRequest request,Integer loveType){
+    public Map lovepay(String nonceStr,String timestamp ,String openId,String attach, HttpServletRequest request,String lovePayId){
         String body="弹幕电影-表白";
         String detail="";
-        Integer total_fee = 100;
         Map<String,String> map = new HashMap<>();
-        PartyLogicModel partyLogicModel = bmsPartyService.findCurrentParty(openId);
-        if( null != partyLogicModel){
-            DanmuAddress danmuAddress = danmuAddressService.findById(partyLogicModel.getAddressId());
+        WechatUser wechatUser = wechatUserService.findByOpenId(openId);
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
+        DanmuAddressModel danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
             if( null != danmuAddress){
-                if( null != danmuAddress.getControlerStatus().get("love")){
-                    if(loveType == 1){
-                        total_fee = 521;
-                    }else if( loveType ==2 ){
-                        total_fee = 990;
-                    }else if( loveType ==3 ){
-                        total_fee = 210;
-                    }else if( loveType ==4 ){
-                        total_fee = 521;
-                    }else if( loveType ==5){
-                        total_fee = 990;
-                    }
+                if( null == danmuAddress.getControlerStatus() || null == danmuAddress.getControlerStatus().get("love")){
+
                     String clientIp = request.getHeader("x-forwarded-for");
                     if(StringUtils.isEmpty(clientIp)){
                         clientIp = request.getRemoteAddr();
@@ -368,10 +369,45 @@ public class WechatRestController {
                     if(!StringUtils.isEmpty(clientIp) && clientIp.indexOf(",")!=-1){
                         clientIp = clientIp.substring(0,clientIp.indexOf(","));
                     }
-                    map = wechatPayService.createUnifiedorder(nonceStr,timestamp,openId,body,detail,attach,total_fee,clientIp);
+
+                    LovePay lovePay = lovePayService.findById(lovePayId);
+                    if(StringUtils.isEmpty(attach)){
+                        attach = "lovePayId:"+lovePay.getId();
+                    }
+                    log.info(attach);
+                    map = wechatPayService.createUnifiedorder(nonceStr,timestamp,openId,body,detail,attach,lovePay.getPrice(),clientIp);
+
+                    /**
+                     * 以下逻辑是需要放到支付成功之后
+                     */
+                    if( env != 0){
+                        if( null != lovePay){
+                            PartyLogicModel partyLogicModel = bmsPartyService.findCurrentParty(openId);
+                            lovePay.setAddressId(partyLogicModel.getAddressId());
+                            lovePay.setPartyId(partyLogicModel.getPartyId());
+                            lovePay.setStatus(0);
+                            lovePayService.update(lovePay);
+                            Map<String,String> danmuMap = new HashMap<>();
+                            if(lovePay.getPrice() == 521){
+                                danmuMap.put("idd","1");
+                            }else if( lovePay.getPrice() == 990){
+                                danmuMap.put("idd","2");
+                            }else if( lovePay.getPrice() == 2100){
+                                danmuMap.put("idd","3");
+                            }else if( lovePay.getPrice() == 5210){
+                                danmuMap.put("idd","4");
+                            }else if(lovePay.getPrice() == 9900 ){
+                                danmuMap.put("idd","5");
+                            }
+                            danmuMap.put("nameA",lovePay.getName());
+                            danmuMap.put("nameB",lovePay.getToName());
+                            danmuMap.put("content",lovePay.getMesssage());
+                            bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_BIAOBAI, danmuMap, openId, partyLogicModel.getPartyId(), partyLogicModel.getAddressId(), 1, 0);
+                        }
+                    }
                     map.put("result","200");
                     return map;
-                }
+
             }
         }
         map.put("result","404");
@@ -408,8 +444,8 @@ public class WechatRestController {
                 log.info(attach);
                 Integer price = item.getShowPrice()*num;
                 Map<String,String> map = wechatPayService.createUnifiedorder(nonceStr,timestamp,openId,item.getName(),"",attach,price,clientIp);
-                bmsOrderService.sendBuySuccess(openId,order.getId());
-                bmsOrderService.sendAdminOrder("buyItem",order.getId());
+                //bmsOrderService.sendBuySuccess(openId,order.getId());
+                //bmsOrderService.sendAdminOrder("buyItem",order.getId());
                 return map;
             }
         }else{
@@ -430,11 +466,13 @@ public class WechatRestController {
         String partyId = null;
         String dmCmdId = "";
         String orderId = null;
+        String lovePayId = null;
         Map<String, String> map = new HashMap<String, String>();
         WechatUser wechatUser = bmsWechatUserService.findByOpenId(entity.getOpenid());
         if (null != wechatUser) {
             String attach = entity.getAttach();
             if (!StringUtils.isEmpty(attach)) {
+                log.info(attach);
                 if (attach.indexOf(",") != -1) {
                     String[] attachs = attach.split(",");
                     for (int i = 0; i < attachs.length; i++) {
@@ -445,6 +483,8 @@ public class WechatRestController {
                             log.info("h5Id:" + h5Id);
                         } else if(attachs[i].indexOf("orderId") != -1 ){
                             orderId = attachs[i].split(":")[1];
+                        } else if(attachs[i].indexOf("lovePayId") != -1){
+                            lovePayId = attachs[i].split(":")[1];
                         } else {
                             String[] dms = attachs[i].split(":");
                             if (dms[1].equals("noname")) {
@@ -457,16 +497,54 @@ public class WechatRestController {
                         }
                     }
                 } else {
-                    dmCmdId = attach;
+                    if (attach.indexOf("dmId") != -1) {
+                        dmCmdId = attach.split(":")[1];
+                    } else if (attach.indexOf("h5Id") != -1) {
+                        h5Id = attach.split(":")[1];
+                        log.info("h5Id:" + h5Id);
+                    } else if(attach.indexOf("orderId") != -1 ){
+                        orderId = attach.split(":")[1];
+                    } else if(attach.indexOf("lovePayId") != -1){
+                        lovePayId = attach.split(":")[1];
+                    } else{
+                        dmCmdId = attach;
+                    }
                 }
             }
         }
         //购买商品
         if( !StringUtils.isEmpty(orderId)){
             //修改订单支付状态
-            orderService.updateStatus(orderId,1);
+            orderService.updateStatus(orderId,0);
             bmsOrderService.sendBuySuccess(entity.getOpenid(),orderId);
             bmsOrderService.sendAdminOrder("buyItem",orderId);
+        }else if(!StringUtils.isEmpty(lovePayId) ) {
+            LovePay lovePay = lovePayService.findById(lovePayId);
+            if( null != lovePay){
+                PartyLogicModel partyLogicModel = bmsPartyService.findCurrentParty(entity.getOpenid());
+                if( null != partyLogicModel){
+                    lovePay.setAddressId(partyLogicModel.getAddressId());
+                    lovePay.setPartyId(partyLogicModel.getPartyId());
+                }
+                lovePay.setStatus(0);
+                lovePayService.update(lovePay);
+                Map<String,String> danmuMap = new HashMap<>();
+                if(lovePay.getPrice() == 521){
+                    danmuMap.put("idd","1");
+                }else if( lovePay.getPrice() == 990){
+                    danmuMap.put("idd","2");
+                }else if( lovePay.getPrice() == 2100){
+                    danmuMap.put("idd","3");
+                }else if( lovePay.getPrice() == 5210){
+                    danmuMap.put("idd","4");
+                }else if(lovePay.getPrice() == 9900 ){
+                    danmuMap.put("idd","5");
+                }
+                danmuMap.put("nameA",lovePay.getName());
+                danmuMap.put("nameB",lovePay.getToName());
+                danmuMap.put("content",lovePay.getMesssage());
+                bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_BIAOBAI, danmuMap, entity.getOpenid(), partyLogicModel.getPartyId(), partyLogicModel.getAddressId(), 1, 0);
+            }
         }else {
             PartyLogicModel partyLogicModel = bmsPartyService.findCurrentParty(entity.getOpenid());
             if (null != partyLogicModel) {
@@ -480,9 +558,10 @@ public class WechatRestController {
                 wechatRewardService.save(partyId, addressId, entity.getOpenid(), entity.getTime_end(), h5Template.getPayMoney(), h5Id);
             }
         }
-
         return "success";
     }
+
+
 
     @RequestMapping(value = "/sanae", method = RequestMethod.GET)
     public List<List<String>> sanae(){
@@ -496,6 +575,33 @@ public class WechatRestController {
         listStr.add(l3);
 
         return listStr;
+    }
+
+    @RequestMapping(value = "/lovePayMsg", method = RequestMethod.POST)
+    public Map lovepayMsg(String name,String toName ,String msg,Integer loveType,String openId){
+        Map<String,String> map = new HashMap<>();
+        LovePay lovePay = new LovePay();
+        lovePay.setName(name);
+        lovePay.setToName(toName);
+        lovePay.setMesssage(msg);
+        Integer price = 0;
+        if(loveType == 1){
+            price = 521;
+        }else if( loveType ==2 ){
+            price = 990;
+        }else if( loveType ==3 ){
+            price = 2100;
+        }else if( loveType ==4 ){
+            price = 5210;
+        }else if( loveType ==5){
+            price = 9900;
+        }
+        lovePay.setPrice(price);
+        lovePay.setOpenId(openId);
+        lovePayService.save(lovePay);
+        map.put("lovePayId",lovePay.getId());
+        map.put("result","200");
+        return map;
     }
 
     /**

@@ -1,9 +1,9 @@
 package cn.partytime.service.shop;
 
-import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.RpcDanmuAddressService;
+import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.OrderItem;
 import cn.partytime.model.PageResultModel;
-import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.manager.AdminUser;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.monitor.Monitor;
@@ -64,7 +64,9 @@ public class BmsOrderService {
     private WechatUserInfoService wechatUserInfoService;
 
     @Autowired
-    private RpcPartyService rpcPartyService;
+    private RpcDanmuAddressService danmuAddressLogicService;
+
+
 
 
     public PageResultModel findAll(Integer pageNum, Integer size){
@@ -129,7 +131,8 @@ public class BmsOrderService {
         content.put("keyword4",valueTmpl4);
 
         ValueTmpl valueTmpl5 = new ValueTmpl();
-        valueTmpl5.setValue("请在有效期之前，在星美生活领取您的商品,向工作人员出示您的兑换码，如有任何问题，请联系13888888888");
+        valueTmpl5.setValue("请在有效期之前，在星美生活领取您的商品,向工作人员出示您的兑换码，如有任何问题，请联系17501061266");
+        valueTmpl5.setColor("#ff0000");
         content.put("remark",valueTmpl5);
         msgTmpl.setData(content);
         bmsWechatUserService.sendMsg(msgTmpl);
@@ -206,9 +209,9 @@ public class BmsOrderService {
             if( null != adminUser){
                 WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
                 if( null != wechatUserInfo){
-                    PartyLogicModel partyLogicModel =rpcPartyService.findPartyByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
-                    if( null != partyLogicModel){
-                        danmuAddressService.updateShopStatus(partyLogicModel.getAddressId(), 0);
+                    DanmuAddressModel danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+                    if( null != danmuAddress){
+                        danmuAddressService.updateShopStatus(danmuAddress.getId(), 0);
                         return "开店成功";
                     }else{
                         return "开店失败，不存在该电影院";
@@ -220,9 +223,9 @@ public class BmsOrderService {
             if( null != adminUser){
                 WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
                 if( null != wechatUserInfo){
-                    PartyLogicModel partyLogicModel =rpcPartyService.findPartyByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
-                    if( null != partyLogicModel){
-                        danmuAddressService.updateShopStatus(partyLogicModel.getAddressId(), 1);
+                    DanmuAddressModel danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+                    if( null != danmuAddress){
+                        danmuAddressService.updateShopStatus(danmuAddress.getId(), 1);
                         return "闭店成功";
                     }else{
                         return "闭店失败，不存在该电影院";

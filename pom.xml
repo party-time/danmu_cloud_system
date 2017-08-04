@@ -41,7 +41,7 @@
         <module>danmu_rpc_interface</module>
         <module>danmu_rpc_alarm_interface</module>
 
-    <module>danmu_data_rpc_server</module>
+        <module>danmu_data_rpc_server</module>
 
     </modules>
 
