@@ -65,9 +65,6 @@ public class DanmuServerScheduler {
     private ClientChannelService clientChannelService;
 
     @Autowired
-    private RpcClientAlarmService rpcClientAlarmService;
-
-    @Autowired
     private ClientCacheService clientCacheService;
 
 
@@ -89,7 +86,6 @@ public class DanmuServerScheduler {
         logger.info("将连接的客户端数量入缓存------------>end");
     }
 
-
     @Scheduled(cron="0/5 * * * * ?")
     public void repeatSendCommand() {
         logger.info("重新向客户端发送新的命令");
@@ -98,19 +94,20 @@ public class DanmuServerScheduler {
         List<String> addressIdList =  clientChannelService.findScreenAddresIdList(clientType);
         if(ListUtils.checkListIsNotNull(addressIdList)){
             for(String addressId:addressIdList){
-
-                String key = CommandCacheKey.PUB_COMMAND_PARTYSTATUS_PRE_QUEUE_CACHE+addressId;
-                Set<String> stringSet = redisService.getSortSetByRnage(key,0,1,true);
-                if(stringSet!=null && stringSet.size()>0){
-                    Iterator<String> it  = stringSet.iterator();
-                    while (it.hasNext()){
-                        Map<String, Object> commandMap = (Map<String, Object>) JSON.parse(String.valueOf(it.next()));
-                        String message = JSON.toJSONString(commandMap);
-                        logger.info("向客户重新发送的命令是:{}",message);
-                        danmuSendService.pubDanmuToAllScreenClient(addressId,message);
-
-                    }
+                Map<String,Object>  stringObjectMap = clientCacheService.getFirstCommandFromCache(addressId);
+                String message = JSON.toJSONString(stringObjectMap);
+                //{"type":"command","data":{"clientType":"0","partyTime":1501830393838,"type":"partyStatus","partyId":"59841cedf0b0a1a490ea343c","status":2,"movieTime":1501833182944}}
+                //Map<String, Object> dataObject = (Map<String, Object>) JSON.parse(String.valueOf(stringObjectMap.get("data")));
+                int count = clientCacheService.findTempCommandCount(addressId);
+                logger.info("场地:{},重复发送指令次数:{}",addressId,count);
+                if(count<=5){
+                    clientCacheService.addTempCommandCount(addressId);
+                }else{
+                    clientCacheService.removeTempCommandCount(addressId);
+                    clientCacheService.removeFirstCommandFromCache(addressId);
                 }
+                logger.info("向客户重新发送的命令是:{}",message);
+                danmuSendService.pubDanmuToAllScreenClient(addressId,message);
             }
         }
     }

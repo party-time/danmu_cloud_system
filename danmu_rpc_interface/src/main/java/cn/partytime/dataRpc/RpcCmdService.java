@@ -19,6 +19,10 @@ public interface RpcCmdService {
     public CmdTempAllData findCmdTempAllDataByIdFromCache(@RequestParam(value = "templateId") String templateId);
 
 
+    @RequestMapping(value = "/rpcCmd/findCmdTempAllDataByKeyFromCache" ,method = RequestMethod.GET)
+    public CmdTempAllData findCmdTempAllDataByKeyFromCache(@RequestParam(value = "key") String key);
+
+
     @RequestMapping(value = "/rpcCmd/findCmdTempAllDataById" ,method = RequestMethod.GET)
     public CmdTempAllData findCmdTempAllDataById(@RequestParam(value = "id") String id);
 }

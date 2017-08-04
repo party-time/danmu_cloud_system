@@ -193,7 +193,7 @@ public class BmsHistoryDanmuService {
                 String value = danmuModel.getContent().get(cmdTempComponentData.getKey())+"";
                 if(cmdTempComponentData.getType()==3){
                     //显示的内容
-                    objectMsg = danmuCommonService.setShowArrayContent(cmdTempComponentData.getComponentType(),value,cmdTempComponentData.getComponentId());
+                    objectMsg = danmuCommonService.setShowArrayContent(cmdTempComponentData.getComponentType(),value,cmdTempComponentData.getComponentId(),cmdTempComponentData.getDefaultValue());
                 }else{
                     objectMsg = danmuCommonService.setShowNotArrayContent(value,cmdTempComponentData.getComponentId(),cmdTempComponentData.getType());
                 }

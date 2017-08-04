@@ -58,13 +58,6 @@ public class CmdTempService {
         return cmdJsonTempRepository.findAll(pageRequest);
     }
 
-    public void del(String id){
-
-        String key = CmdTempCacheKey.CMD_TEMP_CACHE_KEY+id;
-        redisService.expire(key,0);
-        cmdJsonTempRepository.delete(id);
-    }
-
     public CmdTemp findById(String id){
         return cmdJsonTempRepository.findOne(id);
     }

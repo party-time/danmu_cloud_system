@@ -132,7 +132,7 @@ public class PreDmController  extends BaseAdminController {
                         String value = danmuModel.getContent().get(key)+"";
                         if(cmdTempComponentData.getType()==3){
                             //显示的内容
-                            objectMsg = danmuCommonService.setShowArrayContent(cmdTempComponentData.getComponentType(),value,componentId);
+                            objectMsg = danmuCommonService.setShowArrayContent(cmdTempComponentData.getComponentType(),value,componentId,cmdTempComponentData.getDefaultValue());
                         }else{
                             objectMsg = danmuCommonService.setShowNotArrayContent(value,componentId,cmdTempComponentData.getType());
                         }
@@ -226,7 +226,7 @@ public class PreDmController  extends BaseAdminController {
                         String value = preDanmuViewModel.getContent().get(key)+"";
                         if(cmdTempComponentData.getType()==3){
                             //显示的内容
-                            objectMsg = danmuCommonService.setShowArrayContent(cmdTempComponentData.getComponentType(),value,componentId);
+                            objectMsg = danmuCommonService.setShowArrayContent(cmdTempComponentData.getComponentType(),value,componentId,cmdTempComponentData.getDefaultValue());
                         }else{
                             objectMsg = danmuCommonService.setShowNotArrayContent(value,componentId,cmdTempComponentData.getType());
                         }

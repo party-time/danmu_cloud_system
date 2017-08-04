@@ -25,6 +25,11 @@ public class RpcCmdService {
         return cmdLogicService.findCmdTempAllDataByIdFromCache(templateId);
     }
 
+    @RequestMapping(value = "/findCmdTempAllDataByKeyFromCache" ,method = RequestMethod.GET)
+    public CmdTempAllData findCmdTempAllDataByKeyFromCache(@RequestParam String key){
+        return cmdLogicService.findCmdTempAllDataByKeyFromCache(key);
+    }
+
 
     @RequestMapping(value = "/findCmdTempAllDataById" ,method = RequestMethod.GET)
     public CmdTempAllData findCmdTempAllDataById(@RequestParam String id){

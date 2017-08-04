@@ -118,20 +118,20 @@ public class PotocolService {
         if(PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS.equals(type)){
             logger.info("收到客户端返回的状态信息:{}",JSON.toJSONString(map));
             int status = Integer.parseInt(String.valueOf(map.get("status")));
+            String partyId = String.valueOf(map.get("partyId"));
             DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
-            String key = CommandCacheKey.PUB_COMMAND_PARTYSTATUS_PRE_QUEUE_CACHE+clientInfoModel.getAddressId();
-            Set<String> stringSet = redisService.getSortSetByRnage(key,0,100,true);
-            if(stringSet!=null && stringSet.size()>0){
-                Iterator<String> it  = stringSet.iterator();
-                while (it.hasNext()){
-                    Map<String, Object> commandMap = (Map<String, Object>) JSON.parse(String.valueOf(it.next()));
-                    Map<String, Object> dataObject = (Map<String, Object>) JSON.parse(String.valueOf(commandMap.get("data")));
-                    int statusTemp = Integer.parseInt(String.valueOf(dataObject.get("status")));
-                    if(status==statusTemp){
-                        logger.info("移除命令:{}",JSON.toJSONString(commandMap));
-                        it.remove();
-                        redisService.deleteSortData(key,JSON.toJSONString(commandMap));
-                    }
+            String addressId = clientInfoModel.getAddressId();
+
+
+            Map<String,Object> commandMap = clientCacheService.getFirstCommandFromCache(addressId);
+            if(commandMap!=null){
+                Map<String, Object> dataMap = (Map<String, Object>) JSON.parse(String.valueOf(commandMap.get("data")));
+                logger.info("data:{}",JSON.toJSONString(dataMap));
+                int cacheStatus = Integer.parseInt(String.valueOf(dataMap.get("status")));
+                String cachePartyId = String.valueOf(dataMap.get("partyId"));
+                if(status == cacheStatus && partyId.equals(cachePartyId)){
+                    clientCacheService.removeFirstCommandFromCache(addressId);
+                    clientCacheService.removeTempCommandCount(addressId);
                 }
             }
 
@@ -179,6 +179,8 @@ public class PotocolService {
             clientCacheService.setClientOffineLineTime(addressId);
 
             clientCacheService.removeClientFlashCount(addressId);
+
+            clientCacheService.removeCommandCache(danmuClientModel.getAddressId());
         }
 
         //清除用户状态

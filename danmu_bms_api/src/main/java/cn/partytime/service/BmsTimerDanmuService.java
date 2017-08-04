@@ -221,8 +221,8 @@ public class BmsTimerDanmuService {
                 }else{
                     if(type==3){
                         //显示的内容
-                        content = danmuCommonService.setProtocolArrayContent(componentType,request.getParameter(key));
-                        msgContent = danmuCommonService.setShowArrayContent(componentType,request.getParameter(key),componentId);
+                        content = danmuCommonService.setProtocolArrayContent(componentType,request.getParameter(key),cmdTempComponentData.getDefaultValue());
+                        msgContent = danmuCommonService.setShowArrayContent(componentType,request.getParameter(key),componentId,cmdTempComponentData.getDefaultValue());
                     }else{
                         msgContent = danmuCommonService.setShowNotArrayContent(request.getParameter(key),componentId,type);
                         content = danmuCommonService.setShowNotArrayContent(request.getParameter(key),type);
@@ -315,7 +315,7 @@ public class BmsTimerDanmuService {
                             String value = timerDanmu.getContent().get(key)+"";
                             if(cmdTempComponentData.getType()==3){
                                 //显示的内容
-                                objectMsg = danmuCommonService.setShowArrayContent(cmdTempComponentData.getComponentType(),value,componentId);
+                                objectMsg = danmuCommonService.setShowArrayContent(cmdTempComponentData.getComponentType(),value,componentId,cmdTempComponentData.getDefaultValue());
                             }else{
                                 objectMsg = danmuCommonService.setShowNotArrayContent(value,componentId,type);
                             }

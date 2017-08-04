@@ -5,5 +5,7 @@ package cn.partytime.common.cachekey;
  */
 public class CmdTempCacheKey {
 
-    public  static  final String CMD_TEMP_CACHE_KEY="cmd:templateId:";
+    public  static  final String CMD_TEMP_CACHE_ID_KEY="cmd:templateId:";
+
+    public  static  final String CMD_TEMP_CACHE_KEY_KEY="cmd:templateKey:";
 }

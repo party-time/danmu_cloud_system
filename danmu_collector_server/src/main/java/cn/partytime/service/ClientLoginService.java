@@ -248,6 +248,10 @@ public class ClientLoginService {
                     }
                     commandObject.put("data",dataMap);
                     String message = JSON.toJSONString(commandObject);
+
+                    clientCacheService.setFirstCommandFromCache(danmuClientModel.getAddressId(),commandObject);
+
+
                     logger.info("下发消息给客户端:{}",message);
                     channel.writeAndFlush(new TextWebSocketFrame(message));
                 }catch (Exception e){
