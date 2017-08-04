@@ -15,7 +15,9 @@ public interface CmdJsonTempRepository extends MongoRepository<CmdTemp,String> {
 
     public List<CmdTemp> findByIdIn(List<String> idList);
 
-    public List<CmdTemp> findByKey(String key);
+    public CmdTemp findByKey(String key);
+
+    public Integer countByKey(String key);
 
 
 }

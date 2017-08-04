@@ -116,6 +116,54 @@ public class CmdLogicService {
         return cmdTempAllData;
     }
 
+    public CmdTempAllData findCmdTempAllDataByKey(String key){
+        CmdTempAllData cmdTempAllData = new CmdTempAllData();
+        CmdTemp cmdTemp = cmdTempService.findByKey(key);
+        if( null != cmdTemp){
+            cmdTempAllData.setId(cmdTemp.getId());
+            cmdTempAllData.setKey(cmdTemp.getKey());
+            cmdTempAllData.setName(cmdTemp.getName());
+            cmdTempAllData.setIsSendH5(cmdTemp.getIsSendH5());
+            cmdTempAllData.setIsInDanmuLib(cmdTemp.getIsInDanmuLib());
+        }
+        List<CmdJsonParam> cmdJsonParamList = cmdJsonParamService.findByCmdJsonTempId(cmdTemp.getId());
+        if( null != cmdJsonParamList){
+            List<CmdTempComponentData> cmdTempComponentDataList = new ArrayList<>();
+            for(CmdJsonParam cmdJsonParam : cmdJsonParamList){
+                CmdComponent cmdComponent = cmdJsonComponentService.findById(cmdJsonParam.getComponentId());
+                CmdTempComponentData cmdTempComponentData = new CmdTempComponentData();
+                cmdTempComponentData.setType(cmdJsonParam.getType());
+                cmdTempComponentData.setComponentId(cmdJsonParam.getComponentId());
+                cmdTempComponentData.setCheckRule(cmdJsonParam.getCheckRule());
+                cmdTempComponentData.setDefaultValue(cmdJsonParam.getDefaultValue());
+                cmdTempComponentData.setIsCheck(cmdJsonParam.getIsCheck());
+                cmdTempComponentData.setKey(cmdJsonParam.getKey());
+                cmdTempComponentData.setSort(cmdJsonParam.getSort());
+                cmdTempComponentData.setId(cmdJsonParam.getId());
+                if( null != cmdComponent){
+                    cmdTempComponentData.setComponentType(cmdComponent.getType());
+                }
+                if(!StringUtils.isEmpty(cmdJsonParam.getCmdJsonTempId()) && cmdJsonParam.getCmdJsonTempId().length() > 1){
+                    List<CmdComponentValue> cmdComponentValueList =cmdComponentValueService.findByComponentId(cmdJsonParam.getComponentId());
+                    List<CmdComponentValueModel> cmdComponentValueModelList = new ArrayList<>();
+                    for(CmdComponentValue cmdComponentValue:cmdComponentValueList){
+                        CmdComponentValueModel cmdComponentValueModel = new CmdComponentValueModel();
+                        BeanUtils.copyProperties(cmdComponentValue,cmdComponentValueModel);
+                        cmdComponentValueModelList.add(cmdComponentValueModel);
+                    }
+                    cmdTempComponentData.setCmdComponentValueList(cmdComponentValueModelList);
+                }
+
+                cmdTempComponentDataList.add(cmdTempComponentData);
+
+            }
+
+            cmdTempAllData.setCmdTempComponentDataList(cmdTempComponentDataList);
+
+        }
+        return cmdTempAllData;
+    }
+
 }
 
 

@@ -34,7 +34,7 @@ public class BmsPartyService {
     private static final Logger logger = LoggerFactory.getLogger(BmsPartyService.class);
 
     @Autowired
-    private RpcPartyService rpcPartyService;
+    private RpcPartyService partyLogicService;
 
     @Autowired
     private DanmuAddressService danmuAddressService;
@@ -64,14 +64,14 @@ public class BmsPartyService {
             WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
             String userId = wechatUser.getUserId();
             logger.info("经度:{},纬度:{},用户编号:{}",wechatUserInfo.getLastLongitude(),wechatUserInfo.getLastLatitude(),userId);
-            PartyLogicModel partyLogicModel =rpcPartyService.findPartyByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+            PartyLogicModel partyLogicModel =partyLogicService.findPartyByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
             if (partyLogicModel == null) {
                 logger.info("没有活动");
                 return null;
             }
             return partyLogicModel;
         } catch (Exception e) {
-            logger.error("查询当前活动:" + e.getMessage());
+            logger.error("查询当前活动:{}" , e);
             return null;
         }
     }
@@ -83,7 +83,7 @@ public class BmsPartyService {
      * type 1：活动  2：电影
      *
      */
-    public PageResultModel findAllByPage(Integer pageNo, Integer pageSize , Integer type, Integer status){
+    public PageResultModel findAllByPage(Integer pageNo, Integer pageSize ,Integer type,Integer status){
         Page<Party> partyPage = null;
         if( type == -1){
             partyPage = partyService.findAllPageByStatus(pageNo,pageSize,status);

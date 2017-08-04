@@ -37,10 +37,10 @@
                             <img src="${imgUrl}${object.coverImg.fileUrl}" />
                             <div class="outer-con ">
                                 <div class="title ">
-                                    ${object.item.name}
+                                   ${object.item.title}
                                 </div>
                                 <div class="sub-title ">
-                                    ${object.item.title}
+                                   ${object.item.name}
                                 </div>
                             </div>
                         </a>

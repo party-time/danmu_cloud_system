@@ -178,11 +178,13 @@ public class AddressController {
     }
 
     @RequestMapping(value = "/setAddressControle", method = RequestMethod.GET)
-    public RestResultModel setAddressControle(String addressId, String keys){
+    public RestResultModel setAddressControle(String addressId,String keys){
         RestResultModel restResultModel = new RestResultModel();
         Map<String,Integer> map = new HashMap<>();
-        for(String key:keys.split(",")){
-            map.put(key,1);
+        if(!StringUtils.isEmpty(keys)){
+            for(String key:keys.split(",")){
+                map.put(key,1);
+            }
         }
         danmuAddressService.updateControlerStatus(addressId,map);
         restResultModel.setResult(200);

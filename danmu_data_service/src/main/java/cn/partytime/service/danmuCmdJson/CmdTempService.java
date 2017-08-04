@@ -77,7 +77,12 @@ public class CmdTempService {
         return cmdJsonTempRepository.findAll();
     }
 
-    public List<CmdTemp> findByKey(String key){
+    public CmdTemp findByKey(String key){
         return cmdJsonTempRepository.findByKey(key);
     }
+
+    public Integer countByKey(String key){
+        return cmdJsonTempRepository.countByKey(key);
+    }
+
 }

@@ -16,11 +16,11 @@
     <image id="bg" src="/images/wechat/love/biaobai/biaobai1.jpg" style="position:absolute;height:100%;width:100%;overflow:hidden;"/>
     <div style="position:absolute;top:73%;width:100%;background:url('/images/wechat/love/biaobai/input.png') no-repeat;background-position:center;background-size:95% 100%;">
         <div style="margin-top:5px;text-align:center;">
-            <input type="text" style="width:35%;border:0px;background:none;font-size:21px;color:#44BBEE" value="昵称" onfocus="javascript:if(this.value=='昵称'){this.value=''};" onblur="javascript:if(this.value==''){this.value='昵称'};" maxlength="4"/>
-            <input type="text" style="margin-left:10px;width:35%;border:0px;background:none;font-size:21px;color:#44BBEE" value="昵称" onfocus="javascript:if(this.value=='昵称'){this.value=''};" onblur="javascript:if(this.value==''){this.value='昵称'};" maxlength="4"/>
+            <input id="name" type="text" style="width:35%;border:0px;background:none;font-size:21px;color:#44BBEE" value="昵称" onfocus="javascript:if(this.value=='昵称'){this.value=''};" onblur="javascript:if(this.value==''){this.value='昵称'};" maxlength="4"/>
+            <input id="toName" type="text" style="margin-left:10px;width:35%;border:0px;background:none;font-size:21px;color:#44BBEE" value="昵称" onfocus="javascript:if(this.value=='昵称'){this.value=''};" onblur="javascript:if(this.value==''){this.value='昵称'};" maxlength="4"/>
         </div>
         <div>
-            <input type="text" style="width:68%;height:1.5em;font-size:16px;color:#44BBEE;border:0px;background:none;margin-left:40px;" value="请输入你的情话" onfocus="javascript:if(this.value=='请输入你的情话'){this.value=''};" onblur="javascript:if(this.value==''){this.value='请输入你的情话'};" maxlength="16"／>
+            <input id="msg" type="text" style="width:68%;height:1.5em;font-size:16px;color:#44BBEE;border:0px;background:none;margin-left:40px;" value="请输入你的情话" onfocus="javascript:if(this.value=='请输入你的情话'){this.value=''};" onblur="javascript:if(this.value==''){this.value='请输入你的情话'};" maxlength="16"／>
         </div>
 
         <div style="text-align:right;margin-bottom:8px;">
@@ -35,7 +35,7 @@
         var url = location.href;
         var bb = '';
         if(url.indexOf('bb=')!=-1){
-           bb = url.substr(url.indexOf('=')+1);
+           bb = url.substring(url.indexOf('bb=')+3,url.indexOf('bb=')+4);
            if( bb == 1){
             $('#bg').attr('src','/images/wechat/love/biaobai/biaobai1.jpg');
            }else if( bb ==2 ){
@@ -48,12 +48,43 @@
             $('#bg').attr('src','/images/wechat/love/biaobai/biaobai5.jpg');
            }
            _bb = bb;
+           console.log("bb="+_bb);
         }
     }
 
     var openNext = function(){
-        window.location.href='/upload/h5html/biaobaipay.html?bb='+_bb;
+        if( $('#name').val() == '昵称' || $('#name').val().trim() == ''){
+            alert('请填写昵称');
+            return;
+        }
+        if( $('#toName').val() == '昵称'|| $('#toName').val().trim() == '' ){
+            alert('请填写昵称');
+            return;
+        }
+        if( $('#msg').val() == '请输入你的情话' || $('#msg').val().trim() == ''){
+            alert('请填写情话');
+            return;
+        }
+        var object = {
+            name:$('#name').val(),
+            toName:$('#toName').val(),
+            msg:$('#msg').val(),
+            loveType:_bb,
+            openId:'${openId}'
+        }
+        $.ajax({
+          url: "/wechat/lovePayMsg",
+          type: "post",
+          data: object
+        }).done(function (data) {
+             if(data.result == 200){
+                  window.location.href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0dddd556a76e7248&redirect_uri=http://test.party-time.cn/wechat/lovePayIndex?lovePayId='+data.lovePayId+'&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
+             }else{
+                  alert('表白失败');
+             }
+        });
     }
+
     selectBiaobai();
 </script>
 </body>

@@ -9,4 +9,6 @@ public class ComponentKeyConst {
 
     //发送礼物的弹幕指令id
     public final static String SEND_GIFT="594ac8590cf20939daa50c13";
+
+    public final static String LOVE="59780ec40cf2af0f9ecfa45c";
 }

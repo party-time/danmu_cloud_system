@@ -1,5 +1,6 @@
 package cn.partytime.service.cms;
 
+import cn.partytime.model.RestResultModel;
 import cn.partytime.model.cms.*;
 import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.model.shop.Item;
@@ -8,6 +9,8 @@ import cn.partytime.service.shop.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,12 +104,15 @@ public class BmsCmsService {
             if( null == objectIdList){
                 objectIdList = new ArrayList<>();
             }else{
+                List<Item> itemList = new ArrayList<>();
                 for(String objectId:objectIdList){
                     if( objectId.equals(itemId)){
                         return "不能添加相同的商品";
                     }
+                    Item item = itemService.findById(objectId);
+                    itemList.add(item);
                 }
-                if(objectIdList.size() > 4){
+                if(itemList.size() > 4){
                     return "最多只能添加5个商品";
                 }
             }

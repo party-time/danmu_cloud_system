@@ -36,13 +36,14 @@
             <div class="row">
                 <div class="col-md-7">
                     <div id="gallery" class="ad-gallery" data-x="400" data-y="400">
-                        <div class="ad-image-wrapper" style="height:300px;">
+                        <div class="ad-image-wrapper" style="height:340px;">
                             <div class="ad-image" style="width: 400px;top:0px;left:126.5px;position:relative;z-index:1">
                                 <img id="showImg" src="${imgUrl}${firstImg.fileUrl}" width="400px" style="position:absolute;">
                             </div>
-                            <div style="position:absolute;z-index:2;top:260px;">
-                                <span>${itemResult.item.name}</span>
+                            <div style="position:absolute;z-index:2;top:290px;">
+                                <span>${itemResult.item.title!}</span>
                                 <span style="color:red;font-size:20px">${(itemResult.item.showPrice/100)?string.number}元</span>
+                                <p style="font-size:10px;text-align:left;color:#888888">${itemResult.item.name}</p>
                             </div>
                         </div>
                         <div class="ad-nav">
@@ -109,7 +110,7 @@
                         signType: data.signType, // 注意：新版支付接口使用 MD5 加密
                         paySign: data.paySign,
                         success: function (res) {
-                            window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxJsConfig.appId}&redirect_uri=http://test.party-time.cn/wechat/buy&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+                            window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxJsConfig.appId}&redirect_uri=http://www.party-time.cn/wechat/buy&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
                             alert('支付成功');
                         }
                   });

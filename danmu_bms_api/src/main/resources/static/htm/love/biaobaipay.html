@@ -13,29 +13,66 @@
 </head>
 <body>
 <div style="position:absolute;left:0;right:0;top:0;bottom:0;overflow:hidden;z-index:3;">
-    <image src="/images/wechat/love/biaobai/pay.jpg" style="position:absolute;height:100%;width:100%;overflow:hidden;"/>
+    <image id="bg" src="/images/wechat/love/biaobai/pay.jpg" style="position:absolute;height:100%;width:100%;overflow:hidden;"/>
     <div style="position:absolute;text-align:center;width:100%;top:10%;" id="money">
 
     </div>
+    <div style="position:absolute;bottom:23%;width:100%;text-align:center;">
+        <image src="/images/wechat/love/biaobai/pay_btn.png" style="width:60%" onclick="wechatPay()"/>
+    </div>
+
 </div>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
 <script>
+    wx.config({
+          debug: false,
+          appId: '${wxJsConfig.appId}',
+          timestamp: ${wxJsConfig.timestamp},
+          nonceStr: '${wxJsConfig.nonceStr}',
+          signature: '${wxJsConfig.signature}',
+          jsApiList: [
+            'checkJsApi',
+            'chooseWXPay'
+          ]
+    });
+    var wechatPay = function(attach){
+          // 注意：此 Demo 使用 2.7 版本支付接口实现，建议使用此接口时参考微信支付相关最新文档。
+          var timestamp=new Date().getTime()
+          $.ajax({
+              url: "/wechat/lovepay?timestamp="+timestamp+"&nonceStr=${wxJsConfig.nonceStr}&openId=${opendId}&timestamp=${wxJsConfig.timestamp}&lovePayId=${lovePayId}&attach="+attach,
+              type: "get"
+          }).done(function (data) {
+                 if(data.result == 200){
+                      wx.chooseWXPay({
+                            timestamp: data.timeStamp,
+                            nonceStr: data.nonceStr,
+                            package: data.packageStr,
+                            signType: data.signType, // 注意：新版支付接口使用 MD5 加密
+                            paySign: data.paySign,
+                            success: function(res){
+                                window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=${wxJsConfig.appId}&redirect_uri=http://www.party-time.cn/wechat/payIndex&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+                                alert('支付成功');
+                            }
+                      });
+                 }else{
+                      alert('本功能仅在部分地区可以使用');
+                 }
+            });
+    }
+
     var payMoney = function(){
-        var url = location.href;
-        var bb = '';
-        if(url.indexOf('bb=')!=-1){
-           bb = url.substr(url.indexOf('=')+1);
-           if( bb == 1){
-            $('#money').html('<span style="font-size:150px">5.21</span><span style="font-size:40px">元</span>');
-           }else if( bb ==2 ){
-            $('#money').html('<span style="font-size:190px">9.9</span><span style="font-size:40px">元</span>');
-           }else if( bb ==3 ){
-            $('#money').html('<span style="font-size:190px">21</span><span style="font-size:40px">元</span>');
-           }else if( bb ==4 ){
-            $('#money').html('<span style="font-size:150px">52.1</span><span style="font-size:40px">元</span>');
-           }else if( bb ==5 ){
-            $('#money').html('<span style="font-size:190px">99</span><span style="font-size:40px">元</span>');
-           }
-        }
+       var bb = ${loveType};
+       if( bb == 1){
+        $('#bg').attr('src','/images/wechat/love/biaobai/1.png');
+       }else if( bb ==2 ){
+        $('#bg').attr('src','/images/wechat/love/biaobai/2.png');
+       }else if( bb ==3 ){
+        $('#bg').attr('src','/images/wechat/love/biaobai/3.png');
+       }else if( bb ==4 ){
+        $('#bg').attr('src','/images/wechat/love/biaobai/4.png');
+       }else if( bb ==5 ){
+        $('#bg').attr('src','/images/wechat/love/biaobai/5.png');
+       }
     }
     payMoney();
 </script>

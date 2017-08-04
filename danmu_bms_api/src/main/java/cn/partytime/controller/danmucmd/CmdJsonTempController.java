@@ -55,14 +55,14 @@ public class CmdJsonTempController {
             return restResultModel;
         }
         if(StringUtils.isEmpty(cmdTempJson.getCmdTempId())){
-            List<CmdTemp> cmdTempList = cmdTempService.findByKey(cmdTempJson.getKey());
-            if( null != cmdTempList && cmdTempList.size() > 0){
+            Integer count = cmdTempService.countByKey(cmdTempJson.getKey());
+            if( count > 0){
                 restResultModel.setResult(501);
                 return restResultModel;
             }
         }else{
-            List<CmdTemp> cmdTempList = cmdTempService.findByKey(cmdTempJson.getKey());
-            if( null != cmdTempList && cmdTempList.size() > 1){
+            Integer count = cmdTempService.countByKey(cmdTempJson.getKey());
+            if( count > 1){
                 restResultModel.setResult(501);
                 return restResultModel;
             }
@@ -86,8 +86,8 @@ public class CmdJsonTempController {
     @RequestMapping(value = "/checkKey", method = RequestMethod.GET)
     public RestResultModel checkKey(String key){
         RestResultModel restResultModel = new RestResultModel();
-        List<CmdTemp> cmdTempList = cmdTempService.findByKey(key);
-        if( null != cmdTempList && cmdTempList.size() > 0){
+        Integer count = cmdTempService.countByKey(key);
+        if( count > 0){
             restResultModel.setResult(501);
             return restResultModel;
         }else {

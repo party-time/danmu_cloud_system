@@ -55,7 +55,7 @@
     }
     var openView = function(obj){
         var imgSrcs = $(obj).attr('src').split('.');
-        window.location.href="/upload/h5html/biaobai.html?bb="+imgSrcs[0].substr(imgSrcs[0].length-1,imgSrcs[0].length);
+        window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0dddd556a76e7248&redirect_uri=http://test.party-time.cn/wechat/h5temp/biaobai?bb="+imgSrcs[0].substr(imgSrcs[0].length-1,imgSrcs[0].length)+"&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
     }
 </script>
 </body>
