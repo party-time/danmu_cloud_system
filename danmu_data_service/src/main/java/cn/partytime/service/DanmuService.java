@@ -90,6 +90,10 @@ public class DanmuService {
     }
 
 
+    public List<Danmu> findByBlockedAndViewFlgAndDanmuPoolIdInOrderByTimeDesc(List<String> poolIdList){
+        return danmuRepository.findByIsBlockedAndViewFlgAndDanmuSrcAndDanmuPoolIdInOrderByTimeDesc(false,true,1,poolIdList);
+    }
+
 
 
     public List<Danmu> findDanmuListByPartyIdAndTimeAndDanmuPool(String partyId, int time, List<String>danmuPoolIdList, int limit){

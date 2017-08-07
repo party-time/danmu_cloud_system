@@ -31,6 +31,6 @@ public interface RpcDanmuService {
     public List<DanmuModel> findDanmuByIsBlocked(@RequestParam(value = "page") int page, @RequestParam(value = "size") int size, @RequestParam(value = "isBlocked") boolean isBlocked);
 
     @RequestMapping(value = "/rpcDanmu/findHistoryDanmu" ,method = RequestMethod.GET)
-    public List<Map<String,Object>> findHistoryDanmu(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "time") int time, @RequestParam(value = "count") int count);
+    public List<Map<String,Object>> findHistoryDanmu(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "count") int count, @RequestParam(value = "id") String  id);
 
 }

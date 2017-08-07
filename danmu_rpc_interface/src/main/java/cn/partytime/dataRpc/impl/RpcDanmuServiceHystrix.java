@@ -35,7 +35,9 @@ public class RpcDanmuServiceHystrix implements RpcDanmuService {
     }
 
     @Override
-    public List<Map<String, Object>> findHistoryDanmu(String partyId, int time, int count) {
+    public List<Map<String, Object>> findHistoryDanmu(String partyId, int count, String id) {
         return null;
     }
+
+
 }

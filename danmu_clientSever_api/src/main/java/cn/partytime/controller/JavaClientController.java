@@ -149,11 +149,11 @@ public class JavaClientController {
 
 
     @RequestMapping(value = "/findHistoryDanmu", method = RequestMethod.GET)
-    public RestResultModel BmsHistoryDanmuService(String partyId, Integer time, Integer count, Integer clientType, String code){
+    public RestResultModel BmsHistoryDanmuService(String partyId,Integer count,Integer clientType,String code,String id){
         //http://localhost:8780/v1/api/javaClient/findHistoryDanmu?partyId=59098703f0b071b95ac9bb7f&time=0&count=200&clientType=0&code=123456
         RestResultModel restResultModel = new RestResultModel();
         restResultModel.setResult(200);
-        restResultModel.setData(rpcDanmuService.findHistoryDanmu(partyId,time,count));
+        restResultModel.setData(rpcDanmuService.findHistoryDanmu(partyId,count,id));
         return restResultModel;
     }
 
