@@ -1,5 +1,6 @@
 package cn.partytime.listener;
 
+import cn.partytime.service.ClientCacheService;
 import cn.partytime.service.ClientChannelService;
 import cn.partytime.service.PreDanmuLogicService;
 import cn.partytime.common.cachekey.CommandCacheKey;
@@ -35,6 +36,9 @@ public class PartyCommandListener implements MessageListener {
     @Autowired
     private PreDanmuLogicService preDanmuLogicService;
 
+    @Autowired
+    private ClientCacheService clientCacheService;
+
     @Override
     public void onMessage(Message message, byte[] bytes) {
         if (message != null) {
@@ -59,15 +63,8 @@ public class PartyCommandListener implements MessageListener {
                     if ("partyStatus".equals(dataObject.get("type"))) {
 
                         int status = Integer.parseInt(String.valueOf(dataObject.get("status")));
-
                         if (status < 3) {
-
-                            String repeatCommandCacheKey = CommandCacheKey.PUB_COMMAND_PARTYSTATUS_PRE_QUEUE_CACHE+addressId;
-                            //设置到预发送队列
-                            redisService.setSortSet(repeatCommandCacheKey, status, JSON.toJSONString(map));
-                            redisService.expire(repeatCommandCacheKey,60*60*2);
-
-
+                            clientCacheService.setCommandToList(addressId,map);
                         }
                         pubDanmuToAllScreenClient(addressId, map);
                         //触发预制弹幕逻辑
