@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by dm on 2017/7/11.
  */
-@FeignClient(name = "${dataRpcServer}",fallback = RpcPartyResourceResultServiceHystrix.class)
+@FeignClient(value = "${dataRpcServer}",fallback = RpcPartyResourceResultServiceHystrix.class)
 public interface RpcPartyResourceResultService {
 
 

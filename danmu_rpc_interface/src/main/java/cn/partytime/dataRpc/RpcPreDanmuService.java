@@ -13,7 +13,7 @@ import java.util.List;
  * Created by dm on 2017/7/10.
  */
 
-@FeignClient(name = "${dataRpcServer}",fallback = RpcPreDanmuServiceHystrix.class)
+@FeignClient(value = "${dataRpcServer}",fallback = RpcPreDanmuServiceHystrix.class)
 public interface RpcPreDanmuService {
 
 

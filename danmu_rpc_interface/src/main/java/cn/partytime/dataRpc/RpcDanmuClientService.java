@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 
-@FeignClient(name = "${dataRpcServer}",fallback = RpcDanmuClientServiceHystrix.class)
+@FeignClient(value = "${dataRpcServer}",fallback = RpcDanmuClientServiceHystrix.class)
 public interface RpcDanmuClientService {
 
 
