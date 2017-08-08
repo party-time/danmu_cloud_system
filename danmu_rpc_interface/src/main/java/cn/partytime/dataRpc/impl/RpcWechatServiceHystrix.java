@@ -3,7 +3,9 @@ package cn.partytime.dataRpc.impl;
 import cn.partytime.dataRpc.RpcWechatService;
 import cn.partytime.model.WechatUserDto;
 import cn.partytime.model.WechatUserInfoDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RpcWechatServiceHystrix implements RpcWechatService {
 
     @Override

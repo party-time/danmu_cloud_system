@@ -3,10 +3,12 @@ package cn.partytime.dataRpc.impl;
 import cn.partytime.dataRpc.RpcDanmuService;
 import cn.partytime.model.DanmuLogModel;
 import cn.partytime.model.DanmuModel;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class RpcDanmuServiceHystrix implements RpcDanmuService {
 
     @Override

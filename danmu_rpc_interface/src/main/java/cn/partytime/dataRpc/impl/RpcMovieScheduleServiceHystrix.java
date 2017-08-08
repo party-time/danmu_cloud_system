@@ -2,9 +2,11 @@ package cn.partytime.dataRpc.impl;
 
 import cn.partytime.dataRpc.RpcMovieScheduleService;
 import cn.partytime.model.MovieScheduleModel;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class RpcMovieScheduleServiceHystrix implements RpcMovieScheduleService {
 
     @Override

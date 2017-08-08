@@ -2,7 +2,9 @@ package cn.partytime.dataRpc.impl;
 
 import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.model.CmdTempAllData;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RpcCmdServiceHystrix implements RpcCmdService {
     @Override
     public CmdTempAllData findCmdTempAllDataByIdFromCache(String templateId) {
