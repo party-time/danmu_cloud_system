@@ -111,6 +111,7 @@ public class DanmuServerHandler extends SimpleChannelInboundHandler<TextWebSocke
 
         if("command".equals(String.valueOf(map.get("type")))){
             Map<String, Object> dataMap = (Map<String, Object>) JSON.parse(String.valueOf(map.get("data")));
+            logger.info("data:{}",JSON.toJSONString(dataMap));
             potocolService.potocolHandler(dataMap, channel);
         }else{
             //协议处理

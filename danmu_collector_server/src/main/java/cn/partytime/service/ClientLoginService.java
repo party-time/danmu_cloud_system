@@ -237,6 +237,7 @@ public class ClientLoginService {
                     Map<String,Object> commandObject = new HashMap<String,Object>();
                     commandObject.put("type", ProtocolConst.PROTOCOL_COMMAND);
                     Map<String,Object> dataMap = new HashMap<String,Object>();
+                    dataMap.put("clientType",ClientConst.CLIENT_TYPE_SCREEN);
                     dataMap.put("type",commandType);
                     dataMap.put("status",status);
                     dataMap.put("partyId",party.getPartyId());
