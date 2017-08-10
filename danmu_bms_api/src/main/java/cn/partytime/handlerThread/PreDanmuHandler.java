@@ -94,7 +94,7 @@ public class PreDanmuHandler {
                 }
             });
         } catch (Exception e) {
-            logger.error("预制弹幕装载线程启动异常:{}", e.getMessage());
+            logger.error("预制弹幕装载线程启动异常:{}", e);
         }
     }
 }
