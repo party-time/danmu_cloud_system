@@ -13,6 +13,8 @@ public class CommonConst {
 
     public static final String COUNT="count";
 
+    public static final String TIME="time";
+
     public static final String COOKIE_AUTH_KEY = "auth_key";
 
     public static final String COOKIE_NICK = "nick";

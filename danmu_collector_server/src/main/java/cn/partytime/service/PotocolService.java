@@ -39,21 +39,14 @@ public class PotocolService {
     @Autowired
     private DanmuChannelRepository danmuChannelRepository;
 
-
     @Autowired
     private ScreenDanmuService screenDanmuService;
 
     @Autowired
-    private RedisService redisService;
-
-
-    @Autowired
     private RpcWechatService rpcWechatService;
-
 
     @Autowired
     private RpcPartyService rpcPartyService;
-
 
     @Autowired
     private ClientCacheService clientCacheService;
@@ -141,6 +134,9 @@ public class PotocolService {
             String addressId = clientInfoModel.getAddressId();
             String dataStr = JSON.toJSONString(map.get("data"));
             Integer danmuCount = IntegerUtils.objectConvertToInt(dataStr);
+            if(danmuCount>0){
+
+            }
             logger.info("==========================================接收客户端返回的弹幕数量:{}",danmuCount);
             String partyId = String.valueOf(map.get("partyId"));
             if(partyId!=null){

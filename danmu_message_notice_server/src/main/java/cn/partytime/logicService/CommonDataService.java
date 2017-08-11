@@ -46,6 +46,7 @@ public class CommonDataService {
         String movieName = partyLogicModel.getPartyName();
         map = new HashMap<String, String>();
         map.put("key", key);
+        map.put("partyId",partyLogicModel.getPartyId());
         map.put("addressName", addressName);
         map.put("addressId",addressId);
         map.put("movieName", movieName);
@@ -69,9 +70,10 @@ public class CommonDataService {
                 logger.info("通过地址编号:{}，查询不到前正在进行的活动", addressId);
                 return null;
             }
-            String movieName = partyLogicModel.getPartyName();
+
             map = new HashMap<String, String>();
             map.put("key", key);
+            map.put("partyId",partyLogicModel.getPartyId());
             map.put("screen", danmuClientModel.getName());
             map.put("addressId",danmuClientModel.getAddressId());
             map.put("addressName", addressName);
