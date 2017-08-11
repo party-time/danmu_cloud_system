@@ -56,7 +56,7 @@ public class DanmuSendService {
         if (preObject == null) {
             Map<String,Object> map = new HashMap<String,Object>();
             //service.messageHandler(preDanmuMessageService, new MessageObject<Map<String,Object>>(LogCodeConst.DanmuLogCode.PREDANMU_ISNULL_CODE,map));
-            rpcDanmuAlarmService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,"");
+            rpcDanmuAlarmService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,addressId);
             return;
         }
         String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;
