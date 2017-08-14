@@ -128,7 +128,8 @@ public class WeixinUtil {
             } catch (JSONException e) {
                 userInfo = null;
                 // 获取token失败
-                log.error("获取userInfo失败 errcode:{"+ jsonObject.get("errcode")+"} errmsg:{"+ jsonObject.getString("errmsg")+"}");
+                log.error("getUserInfo errer:",e);
+                log.error("获取userInfo失败 errcode:{"+ jsonObject.get("errcode")+"}");
             }
         }
         return userInfo;
