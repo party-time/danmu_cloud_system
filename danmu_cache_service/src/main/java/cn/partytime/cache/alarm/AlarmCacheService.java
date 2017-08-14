@@ -3,6 +3,7 @@ package cn.partytime.cache.alarm;
 import cn.partytime.common.cachekey.alarm.AlarmCacheKey;
 import cn.partytime.common.constants.CommonConst;
 import cn.partytime.common.util.IntegerUtils;
+import cn.partytime.common.util.LongUtils;
 import cn.partytime.redis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,10 +65,26 @@ public class AlarmCacheService {
     }
 
 
+    /**
+     * 告警时间
+     * @param time
+     * @param expireTime
+     * @param args
+     */
     public void addAlarmTime(long time,long expireTime,String... args){
         String key = getTimeKey(args);
         redisService.set(key,time);
         redisService.expire(key,expireTime==0?60*60*24:expireTime);
+    }
+
+    /**
+     * 获取报警时间
+     * @param args
+     * @return
+     */
+    public long findAlarmTime(String... args){
+        String key = getTimeKey(args);
+        return LongUtils.objectConvertToLong(redisService.get(key));
     }
 
     public void removeAlarmTime(String... args){

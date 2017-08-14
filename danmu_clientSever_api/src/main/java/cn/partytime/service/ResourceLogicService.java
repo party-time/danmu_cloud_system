@@ -7,6 +7,7 @@ import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.PartyModel;
 import cn.partytime.model.PartyResourceResult;
 import cn.partytime.model.ResourceFileModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class ResourceLogicService {
 
     @Autowired
@@ -53,6 +55,7 @@ public class ResourceLogicService {
         if (ListUtils.checkListIsNotNull(partyList)) {
             partyList.stream().forEach(party -> partyIdlList.add(party.getId()));
         }
+        log.info("partylist:{}",partyIdlList);
         Map<String,List<ResourceFileModel>> resourceFileMap =  rpcPartyResourceResultService.findResourceUnderFilm(partyIdlList);
         for(PartyModel party : partyList){
             PartyResourceResult partyResourceResult = new PartyResourceResult();

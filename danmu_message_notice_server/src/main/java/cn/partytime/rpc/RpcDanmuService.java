@@ -95,24 +95,6 @@ public class RpcDanmuService {
 
     }
 
-
-
-    private long cacheTime(String partyId,String addressId){
-        MovieScheduleModel movieScheduleModel = rpcMovieScheduleService.findCurrentMovie(partyId,addressId);
-        Date startDate = movieScheduleModel.getStartTime();
-        Date endDate = movieScheduleModel.getEndTime()==null?DateUtils.addMinuteToDate(startDate,180):movieScheduleModel.getEndTime();
-        long movieTime = endDate.getTime() - startDate.getTime();
-
-        PartyLogicModel partyLogicModel = rpcPartyService.findFilmByAddressId(addressId);
-        Date partyStartDate = partyLogicModel.getStartTime();
-        Date currentDate = DateUtils.getCurrentDate();
-        long subTime = currentDate.getTime() - partyStartDate.getTime();
-
-        return  movieTime - subTime;
-
-
-    }
-
     private void sendMessageByRule(Map<String,String> map,String type,int count){
         if(map!=null){
             String addressId = map.get("addressId");
@@ -122,8 +104,15 @@ public class RpcDanmuService {
                 log.info("type:{}告警发出的次数超过上限",type);
                 return;
             }
-            long time = cacheTime(partyId,addressId);
-            alarmCacheService.addAlarmTime(DateUtils.getCurrentDate().getTime(),time,addressId,type);
+
+            long alarmOktTime = alarmCacheService.findAlarmTime(addressId,type);
+            if(alarmOktTime!=0){
+                long subTime = DateUtils.getCurrentDate().getTime()-alarmOktTime;
+                if(subTime/1000/60<2){
+                    return;
+                }
+            }
+            long time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
             //告警计数
             alarmCacheService.addAlarmCount(time,addressId,type);
             //执行告警发送
@@ -144,7 +133,7 @@ public class RpcDanmuService {
                 return;
             }
             //告警计数
-            long time = cacheTime(partyId,addressId);
+            long  time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
             alarmCacheService.addAlarmCount(time,addressId,type);
             //执行告警发送
             MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(type,map);

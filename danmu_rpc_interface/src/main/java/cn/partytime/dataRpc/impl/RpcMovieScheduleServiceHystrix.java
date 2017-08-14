@@ -10,6 +10,11 @@ import java.util.List;
 public class RpcMovieScheduleServiceHystrix implements RpcMovieScheduleService {
 
     @Override
+    public long findByCurrentMovieTime(String partyId, String addressId) {
+        return 0;
+    }
+
+    @Override
     public List<MovieScheduleModel> findByPartyIdAndAddressId(String partyId, String addressId) {
         return null;
     }

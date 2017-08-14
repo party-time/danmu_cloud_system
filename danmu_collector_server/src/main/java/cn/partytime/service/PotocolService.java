@@ -5,6 +5,7 @@ import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
+import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.config.DanmuChannelRepository;
 import cn.partytime.dataRpc.RpcPartyService;
@@ -142,11 +143,11 @@ public class PotocolService {
                 if(danmuCount<=15){
                     //清除弹幕过量的缓存 和 和时间
                     alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE);
-                    alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE);
+                    alarmCacheService.addAlarmTime(DateUtils.getCurrentDate().getTime(),0,addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE);
                 }
                 //清除没有弹幕的计数 和 时间
                 alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL);
-                alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL);
+                alarmCacheService.addAlarmTime(DateUtils.getCurrentDate().getTime(),0,addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL);
             }
 
 
