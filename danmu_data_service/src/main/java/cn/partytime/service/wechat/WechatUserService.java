@@ -140,6 +140,7 @@ public class WechatUserService {
     }
 
     public void unsubscribe(String openId) {
+        log.info("unsubscribe,openId:{}",openId);
         WechatUser wechatUser = this.findByOpenId(openId);
         wechatUser.setSubscribeState(1);
         wechatUserRepository.save(wechatUser);
