@@ -15,7 +15,7 @@ import java.util.List;
 public interface RpcMovieScheduleService {
 
     @RequestMapping(value = "/rpcMovieSchedule/findByCurrentMovieLastTime" ,method = RequestMethod.GET)
-    public long findByCurrentMovieLastTime(@RequestParam String partyId, @RequestParam String addressId);
+    public long findByCurrentMovieLastTime(@RequestParam (value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId);
 
     @RequestMapping(value = "/rpcMovieSchedule/findByPartyIdAndAddressId" ,method = RequestMethod.GET)
     public List<MovieScheduleModel> findByPartyIdAndAddressId(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId);
