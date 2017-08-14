@@ -51,16 +51,16 @@ public class UserInfo {
             wechatUser.setNick(this.getNickname());
         }
         wechatUser.setSex(this.getSex());
-        if(StringUtils.isEmpty(this.getProvince())){
+        if(!StringUtils.isEmpty(this.getProvince())){
             wechatUser.setProvince(this.getProvince());
         }
-        if(StringUtils.isEmpty(this.getOpenid())){
+        if(!StringUtils.isEmpty(this.getOpenid())){
             wechatUser.setOpenId(this.getOpenid());
         }
-        if(StringUtils.isEmpty(this.getSubscribe_time())){
+        if(!StringUtils.isEmpty(this.getSubscribe_time())){
             wechatUser.setSubscribeTime(this.getSubscribe_time());
         }
-        if(StringUtils.isEmpty(this.getUnionid())){
+        if(!StringUtils.isEmpty(this.getUnionid())){
             wechatUser.setUnionId(this.getUnionid());
         }
 
