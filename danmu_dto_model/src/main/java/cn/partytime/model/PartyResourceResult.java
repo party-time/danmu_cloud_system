@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 public class PartyResourceResult {
 
-    private PartyModel partyModel;
+    private PartyModel party;
 
     private List<ResourceFileModel> resourceFileList;
 }

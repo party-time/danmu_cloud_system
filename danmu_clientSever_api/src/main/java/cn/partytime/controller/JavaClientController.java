@@ -93,14 +93,9 @@ public class JavaClientController {
     public RestResultModel latelyParty(String addressId){
         RestResultModel restResultModel = new RestResultModel();
         DanmuAddressModel danmuAddress = rpcDanmuAddressService.findById(addressId);
-
         if( null == danmuAddress){
             return restResultModel;
         }
-
-
-
-
         List<PartyResourceResult> partyResourceResultList1 = null;
         List<PartyResourceResult> partyResourceResultList2 = null;
         //如果是固定场地,下载电影和活动
@@ -115,8 +110,6 @@ public class JavaClientController {
             partyResourceResultList1 = new ArrayList<>();
             partyResourceResultList2 = resourceLogicService.findPartyResource(addressId);
         }
-
-
         List<PartyResourceResult> partyResourceResultList = new ArrayList<>();
 
         partyResourceResultList.addAll(partyResourceResultList1);

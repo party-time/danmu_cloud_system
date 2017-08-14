@@ -40,7 +40,7 @@ public class ResourceLogicService {
         Map<String,List<ResourceFileModel>> resourceFileMap =  rpcPartyResourceResultService.findResourceUnderFilm(partyIdlList);
         for(PartyModel party : partyList){
             PartyResourceResult partyResourceResult = new PartyResourceResult();
-            partyResourceResult.setPartyModel(party);
+            partyResourceResult.setParty(party);
             if( null != resourceFileMap) {
                 partyResourceResult.setResourceFileList(resourceFileMap.get(party.getId()));
             }
@@ -64,7 +64,7 @@ public class ResourceLogicService {
         Map<String,List<ResourceFileModel>> resourceFileMap =  rpcPartyResourceResultService.findResourceUnderFilm(partyIdlList);
         for(PartyModel party : partyList){
             PartyResourceResult partyResourceResult = new PartyResourceResult();
-            partyResourceResult.setPartyModel(party);
+            partyResourceResult.setParty(party);
             if( null != resourceFileMap) {
                 partyResourceResult.setResourceFileList(resourceFileMap.get(party.getId()));
             }
