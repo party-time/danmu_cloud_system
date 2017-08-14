@@ -95,6 +95,24 @@ public class RpcDanmuService {
 
     }
 
+
+
+    private long cacheTime(String partyId,String addressId){
+        MovieScheduleModel movieScheduleModel = rpcMovieScheduleService.findCurrentMovie(partyId,addressId);
+        Date startDate = movieScheduleModel.getStartTime();
+        Date endDate = movieScheduleModel.getEndTime()==null?DateUtils.addMinuteToDate(startDate,180):movieScheduleModel.getEndTime();
+        long movieTime = endDate.getTime() - startDate.getTime();
+
+        PartyLogicModel partyLogicModel = rpcPartyService.findFilmByAddressId(addressId);
+        Date partyStartDate = partyLogicModel.getStartTime();
+        Date currentDate = DateUtils.getCurrentDate();
+        long subTime = currentDate.getTime() - partyStartDate.getTime();
+
+        return  movieTime - subTime;
+
+
+    }
+
     private void sendMessageByRule(Map<String,String> map,String type,int count){
         if(map!=null){
             String addressId = map.get("addressId");
@@ -114,22 +132,6 @@ public class RpcDanmuService {
             mapMessageObject.setThreshold(0);
             messageHandlerService.messageHandler(danmuAlarmService,mapMessageObject);
         }
-    }
-
-    private long cacheTime(String partyId,String addressId){
-        MovieScheduleModel movieScheduleModel = rpcMovieScheduleService.findCurrentMovie(partyId,addressId);
-        Date startDate = movieScheduleModel.getStartTime();
-        Date endDate = movieScheduleModel.getEndTime()==null?DateUtils.addMinuteToDate(startDate,180):movieScheduleModel.getEndTime();
-        long movieTime = endDate.getTime() - startDate.getTime();
-
-        PartyLogicModel partyLogicModel = rpcPartyService.findFilmByAddressId(addressId);
-        Date partyStartDate = partyLogicModel.getStartTime();
-        Date currentDate = DateUtils.getCurrentDate();
-        long subTime = currentDate.getTime() - partyStartDate.getTime();
-
-        return  movieTime - subTime;
-
-
     }
 
     private void sendMessage(Map<String,String> map,String type,int count){

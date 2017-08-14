@@ -1,7 +1,9 @@
 package cn.partytime.service;
 
+import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.constants.ClientConst;
+import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.config.DanmuChannelRepository;
@@ -51,6 +53,9 @@ public class PotocolService {
     @Autowired
     private ClientCacheService clientCacheService;
 
+
+    @Autowired
+    private AlarmCacheService alarmCacheService;
     /**
      * 协议处理
      *
@@ -106,16 +111,12 @@ public class PotocolService {
     }
     private void screenClientHandler(Map<String,Object> map, Channel channel) {
         String type = String.valueOf(map.get("type"));
-
-        //{"type":"danmucount","clientType":"0","code":"m6o844","partyId":"5951ffe2f0b04a04fc030200","data":1}
         if(PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS.equals(type)){
             logger.info("收到客户端返回的状态信息:{}",JSON.toJSONString(map));
             int status = Integer.parseInt(String.valueOf(map.get("status")));
             String partyId = String.valueOf(map.get("partyId"));
             DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
             String addressId = clientInfoModel.getAddressId();
-
-
             Map<String,Object> commandMap = clientCacheService.getFirstCommandFromCache(addressId);
             if(commandMap!=null){
                 Map<String, Object> dataMap = (Map<String, Object>) JSON.parse(String.valueOf(commandMap.get("data")));
@@ -134,9 +135,21 @@ public class PotocolService {
             String addressId = clientInfoModel.getAddressId();
             String dataStr = JSON.toJSONString(map.get("data"));
             Integer danmuCount = IntegerUtils.objectConvertToInt(dataStr);
-            if(danmuCount>0){
 
+
+            //当返回的弹幕数量大于0的处理
+            if(danmuCount>0){
+                if(danmuCount<=15){
+                    //清除弹幕过量的缓存 和 和时间
+                    alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE);
+                    alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE);
+                }
+                //清除没有弹幕的计数 和 时间
+                alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL);
+                alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL);
             }
+
+
             logger.info("==========================================接收客户端返回的弹幕数量:{}",danmuCount);
             String partyId = String.valueOf(map.get("partyId"));
             if(partyId!=null){
@@ -144,6 +157,8 @@ public class PotocolService {
             }
             danmuChannelRepository.set(channel,clientInfoModel);
             screenDanmuService.setScreenDanmuCount(addressId,danmuCount);
+
+
 
         }else if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
             DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
