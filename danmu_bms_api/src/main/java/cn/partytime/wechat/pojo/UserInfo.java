@@ -1,6 +1,7 @@
 package cn.partytime.wechat.pojo;
 
 import cn.partytime.model.wechat.WechatUser;
+import org.springframework.util.StringUtils;
 
 /**
  * 接口访问凭证
@@ -34,16 +35,37 @@ public class UserInfo {
 
     public WechatUser toWechatUser(){
         WechatUser wechatUser = new WechatUser();
-        wechatUser.setCity(this.getCity());
-        wechatUser.setCountry(this.getCountry());
-        wechatUser.setImgUrl(this.getHeadimgurl());
-        wechatUser.setLanguage(this.getLanguage());
-        wechatUser.setNick(this.getNickname());
-        wechatUser.setSex(this.getSex());
-        wechatUser.setProvince(this.getProvince());
-        wechatUser.setOpenId(this.getOpenid());
-        wechatUser.setSubscribeTime(this.getSubscribe_time());
-        wechatUser.setUnionId(this.getUnionid());
+        if(!StringUtils.isEmpty(this.getCity())){
+            wechatUser.setCity(this.getCity());
+        }
+        if(!StringUtils.isEmpty(this.getCountry())){
+            wechatUser.setCountry(this.getCountry());
+        }
+        if(!StringUtils.isEmpty(this.getHeadimgurl())){
+            wechatUser.setImgUrl(this.getHeadimgurl());
+        }
+        if(!StringUtils.isEmpty(this.getLanguage())){
+            wechatUser.setLanguage(this.getLanguage());
+        }
+        if(!StringUtils.isEmpty(this.getNickname())){
+            wechatUser.setNick(this.getNickname());
+        }
+        if(StringUtils.isEmpty(this.getSex())){
+            wechatUser.setSex(this.getSex());
+        }
+        if(StringUtils.isEmpty(this.getProvince())){
+            wechatUser.setProvince(this.getProvince());
+        }
+        if(StringUtils.isEmpty(this.getOpenid())){
+            wechatUser.setOpenId(this.getOpenid());
+        }
+        if(StringUtils.isEmpty(this.getSubscribe_time())){
+            wechatUser.setSubscribeTime(this.getSubscribe_time());
+        }
+        if(StringUtils.isEmpty(this.getUnionid())){
+            wechatUser.setUnionId(this.getUnionid());
+        }
+
         return wechatUser;
     }
 
