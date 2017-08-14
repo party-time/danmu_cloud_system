@@ -65,11 +65,10 @@ public class BmsCmdService {
             }
         }
 
-        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataById(cmdTempJson.getCmdTempId());
-        String key = CmdTempCacheKey.CMD_TEMP_CACHE_KEY+cmdTempJson.getCmdTempId();
-        redisService.set(key, JSON.toJSONString(cmdTempAllData));
-        redisService.expire(key,60*60*24*3);
-        //redisService.set(CmdTempCacheKey);
+        String key = CmdTempCacheKey.CMD_TEMP_CACHE_ID_KEY+cmdTempJson.getCmdTempId();
+        redisService.expire(key,0);
+        key = CmdTempCacheKey.CMD_TEMP_CACHE_KEY_KEY+cmdTempJson.getKey();
+        redisService.expire(key,0);
     }
 
     public void saveComponent(CmdComponentJson cmdComponentJson){

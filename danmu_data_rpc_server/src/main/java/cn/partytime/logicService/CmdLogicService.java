@@ -48,8 +48,8 @@ public class CmdLogicService {
     @Autowired
     private RedisService redisService;
 
-    public CmdTempAllData findCmdTempAllDataByIdFromCache(@RequestParam String templateId){
-        String key = CmdTempCacheKey.CMD_TEMP_CACHE_KEY+templateId;
+    public CmdTempAllData findCmdTempAllDataByIdFromCache(String templateId){
+        String key = CmdTempCacheKey.CMD_TEMP_CACHE_ID_KEY+templateId;
         Object object = redisService.get(key);
         CmdTempAllData cmdTempAllData = null;
         if(object!=null){
@@ -58,11 +58,25 @@ public class CmdLogicService {
         }else {
             cmdTempAllData = findCmdTempAllDataById(templateId);
             redisService.set(key, JSON.toJSONString(cmdTempAllData));
+            redisService.expire(key,24*60*60);
+        }
+        return cmdTempAllData;
+        //return findCmdTempAllDataById(templateId);
+    }
+
+    public CmdTempAllData findCmdTempAllDataByKeyFromCache(String cmdKey){
+        String key = CmdTempCacheKey.CMD_TEMP_CACHE_KEY_KEY+cmdKey;
+        Object object = redisService.get(key);
+        CmdTempAllData cmdTempAllData = null;
+        if(object!=null){
+            cmdTempAllData = JSON.parseObject(String.valueOf(object),CmdTempAllData.class);
+            return cmdTempAllData;
+        }else {
+            cmdTempAllData = findCmdTempAllDataByKey(cmdKey);
+            redisService.set(key, JSON.toJSONString(cmdTempAllData));
             redisService.expire(key,24*60*60*3);
         }
         return cmdTempAllData;
-
-        //return findCmdTempAllDataById(templateId);
     }
 
 

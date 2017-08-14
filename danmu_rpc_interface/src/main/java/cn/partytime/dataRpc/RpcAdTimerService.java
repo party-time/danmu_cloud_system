@@ -13,7 +13,7 @@ import java.util.List;
  * Created by dm on 2017/7/11.
  */
 
-@FeignClient(name = "${dataRpcServer}",fallback = RpcAdTimerServiceHystrix.class)
+@FeignClient(value = "${dataRpcServer}",fallback = RpcAdTimerServiceHystrix.class)
 public interface RpcAdTimerService {
 
 

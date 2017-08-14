@@ -237,6 +237,7 @@ public class ClientLoginService {
                     Map<String,Object> commandObject = new HashMap<String,Object>();
                     commandObject.put("type", ProtocolConst.PROTOCOL_COMMAND);
                     Map<String,Object> dataMap = new HashMap<String,Object>();
+                    dataMap.put("clientType",ClientConst.CLIENT_TYPE_SCREEN);
                     dataMap.put("type",commandType);
                     dataMap.put("status",status);
                     dataMap.put("partyId",party.getPartyId());
@@ -248,6 +249,10 @@ public class ClientLoginService {
                     }
                     commandObject.put("data",dataMap);
                     String message = JSON.toJSONString(commandObject);
+
+                    clientCacheService.setFirstCommandFromCache(danmuClientModel.getAddressId(),commandObject);
+
+
                     logger.info("下发消息给客户端:{}",message);
                     channel.writeAndFlush(new TextWebSocketFrame(message));
                 }catch (Exception e){

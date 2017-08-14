@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * Created by dm on 2017/7/10.
  */
 
-@FeignClient(name = "${dataRpcServer}",fallback = RpcAdminServiceHystrix.class)
+@FeignClient(value = "${dataRpcServer}",fallback = RpcAdminServiceHystrix.class)
 public interface RpcAdminService {
 
     /**

@@ -3,9 +3,11 @@ package cn.partytime.dataRpc.impl;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.PartyModel;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class RpcPartyServiceHystrix implements RpcPartyService {
 
     @Override

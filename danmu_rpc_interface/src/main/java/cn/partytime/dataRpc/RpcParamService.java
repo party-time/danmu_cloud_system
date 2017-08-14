@@ -13,7 +13,7 @@ import java.util.List;
  * Created by dm on 2017/7/11.
  */
 
-@FeignClient(name = "${dataRpcServer}",fallback = RpcParamServiceHystrix.class)
+@FeignClient(value = "${dataRpcServer}",fallback = RpcParamServiceHystrix.class)
 public interface RpcParamService {
 
     @RequestMapping(value = "/rpcParam/findByRegistCode" ,method = RequestMethod.POST)

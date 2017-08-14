@@ -3,10 +3,12 @@ package cn.partytime.dataRpc.impl;
 import cn.partytime.dataRpc.RpcPartyResourceResultService;
 import cn.partytime.model.PartyResourceResult;
 import cn.partytime.model.ResourceFileModel;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class RpcPartyResourceResultServiceHystrix implements RpcPartyResourceResultService {
 
     @Override

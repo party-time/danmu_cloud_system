@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by dm on 2017/7/12.
  */
-@FeignClient(name = "${dataRpcServer}",fallback = RpcDeviceIpInfoServiceHystrix.class)
+@FeignClient(value = "${dataRpcServer}",fallback = RpcDeviceIpInfoServiceHystrix.class)
 public interface RpcDeviceIpInfoService {
 
     @RequestMapping(value = "/rpcDeviceIpInfo/findByAddressId" ,method = RequestMethod.GET)

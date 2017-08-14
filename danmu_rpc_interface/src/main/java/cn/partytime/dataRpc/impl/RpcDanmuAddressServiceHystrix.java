@@ -2,9 +2,11 @@ package cn.partytime.dataRpc.impl;
 
 import cn.partytime.dataRpc.RpcDanmuAddressService;
 import cn.partytime.model.DanmuAddressModel;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class RpcDanmuAddressServiceHystrix implements RpcDanmuAddressService {
 
     @Override

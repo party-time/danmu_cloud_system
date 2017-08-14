@@ -11,10 +11,14 @@ import cn.partytime.repository.danmu.DanmuRepository;
 import cn.partytime.service.DanmuPoolService;
 import cn.partytime.service.DanmuService;
 import cn.partytime.service.danmu.DanmuLogService;
+import com.alibaba.fastjson.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -30,6 +34,7 @@ import java.util.Map;
 @RequestMapping("/rpcDanmu")
 public class RpcDanmuService {
 
+    private static final Logger logger = LoggerFactory.getLogger(RpcDanmuService.class);
 
 
     @Autowired
@@ -79,14 +84,15 @@ public class RpcDanmuService {
     }
 
     @RequestMapping(value = "/findHistoryDanmu" ,method = RequestMethod.GET)
-    public  List<Map<String,Object>> findHistoryDanmu(@RequestParam String partyId, @RequestParam int time, @RequestParam int count){
+    public  List<Map<String,Object>> findHistoryDanmu(@RequestParam String partyId, @RequestParam int count, @RequestParam String id){
         List<DanmuPool> danmuPoolList = danmuPoolService.findByPartyId(partyId);
 
         List<Map<String,Object>> danmuList = new ArrayList<Map<String,Object>>();
         if (ListUtils.checkListIsNotNull(danmuPoolList)) {
             List<String> poolIdList = new ArrayList<String>();
             danmuPoolList.forEach(e -> poolIdList.add(e.getId()));
-            List<Danmu> danmuModelList = danmuService.findDanmuListByPartyIdAndTimeAndDanmuPool(partyId, time, poolIdList, count);
+            List<Danmu> danmuModelList = danmuService.findByBlockedAndViewFlgAndDanmuPoolIdInOrderByTimeDesc(poolIdList);
+            danmuModelList = resultList(danmuModelList,id,count);
             if (ListUtils.checkListIsNotNull(danmuModelList)) {
                 for (Danmu danmuModel : danmuModelList) {
 
@@ -119,12 +125,45 @@ public class RpcDanmuService {
                         timerDanmuMap.put("data",danmuModel.getContent());
                         timerDanmuMap.put("type","vedio");
                     }
+                    timerDanmuMap.put("id",danmuModel.getId());
                     timerDanmuMap.put("beginTime",danmuModel.getTime());
                     danmuList.add(timerDanmuMap);
                 }
             }
         }
         return danmuList;
+    }
+
+    public static List<Danmu> resultList(List<Danmu> list,String id,int page){
+        if(list==null || list.size()==0){
+            logger.info("没有历史弹幕");
+            return null;
+        }
+        int max = 0;
+        if(StringUtils.isEmpty(id) || "null".equals(id)){
+            logger.info("没有弹幕id");
+            int length = list.size();
+            if(length>page){
+                max=page;
+            }else{
+                max = length;
+            }
+            return list.subList(0,max);
+        }else{
+            logger.info("list:{}", JSON.toJSONString(list));
+            int index = 0;
+            for(int i=0;i<=list.size(); i++){
+                if(id.equals(list.get(i).getId())){
+                    index = i;
+                    break;
+                }
+            }
+            if(list.size()-index>page){
+                return list.subList(index+1,index+1+page);
+            }else{
+                return list.subList(index+1,list.size());
+            }
+        }
     }
 
 }

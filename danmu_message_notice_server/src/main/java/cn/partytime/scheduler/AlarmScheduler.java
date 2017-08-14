@@ -43,7 +43,6 @@ public class AlarmScheduler {
     @Autowired
     private RpcDanmuAddressService rpcDanmuAddressService;
 
-
     @Autowired
     private RpcPartyService rpcPartyService;
 
@@ -62,10 +61,9 @@ public class AlarmScheduler {
     @Autowired
     private MessageLogicService messageLogicService;
 
-    @Scheduled(cron = "0/10 * * * * *")
+    @Scheduled(cron = "0/30 * * * * *")
     public void clientOffLineScheduler() {
-        logger.info("客户端再现数量监听");
-
+        logger.info("客户端在线数量监听");
         List<DanmuAddressModel> danmuAddressModels = rpcDanmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressModels)) {
             for (DanmuAddressModel danmuAddressModel : danmuAddressModels) {

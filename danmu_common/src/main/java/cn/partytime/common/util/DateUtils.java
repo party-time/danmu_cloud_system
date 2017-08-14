@@ -33,6 +33,13 @@ public class DateUtils {
         return ca.getTime();
     }
 
+    public static Date addMinuteToDate(Date date ,int minute){
+        Calendar ca=Calendar.getInstance();
+        ca.setTime(date);
+        ca.add(Calendar.MINUTE,minute);
+        return ca.getTime();
+    }
+
 
     public static long subMinute(Date minDate,Date maxDate){
         long between=(maxDate.getTime()-minDate.getTime())/1000;

@@ -3,6 +3,7 @@ package cn.partytime.service;
 import cn.partytime.common.util.BooleanUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.model.manager.ResourceFile;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +110,7 @@ public class DanmuCommonService {
     }
 
     public Object setShowNotArrayContent(String message,int type){
-       if(type==1){
+        if(type==1){
             return BooleanUtils.objectConvertToBoolean(message);
         }
         return message;
@@ -117,8 +118,19 @@ public class DanmuCommonService {
 
 
 
-    public List<String> setShowArrayContent(int componentType,String message,String componentId){
+    public List<String> setShowArrayContent(int componentType,String message,String componentId,String defaultValue){
+        logger.info("componentType:{},message:{},defaultValue:{}",componentType,message,defaultValue);
         List<String> contentList = new ArrayList<String>();
+        if(message==null){
+            if(!StringUtils.isEmpty(defaultValue)){
+                String array[] = defaultValue.split(",");
+                for(String str:array){
+                    contentList.add(str);
+                }
+                return contentList;
+            }
+            return contentList;
+        }
         //组件的类型 0text 1textarea 2select  3radiobutton 4checkbox
         if(componentType==1){
             //如果是textArea机型字符串截取
@@ -139,8 +151,16 @@ public class DanmuCommonService {
         return contentList;
     }
 
-    public List<String> setProtocolArrayContent(int componentType,String message){
+    public List<String> setProtocolArrayContent(int componentType,String message,String defaultValue){
+        logger.info("componentType:{},message:{},defaultValue:{}",componentType,message,defaultValue);
         List<String> contentList = new ArrayList<String>();
+        if(message==null){
+            String array[] = defaultValue.split(",");
+            for(String str:array){
+                contentList.add(str);
+            }
+            return contentList;
+        }
         //组件的类型 0text 1textarea 2select  3radiobutton 4checkbox
         if(componentType==1){
             //如果是textArea机型字符串截取
