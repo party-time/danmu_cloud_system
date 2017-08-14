@@ -113,18 +113,41 @@ public class WeixinUtil {
         if (null != jsonObject) {
             try {
                 userInfo = new UserInfo();
-                userInfo.setSubscribe(jsonObject.getInt("subscribe"));
-                userInfo.setOpenid(jsonObject.getString("openid"));
-                userInfo.setNickname(EmojiFilter.filterEmoji(jsonObject.getString("nickname")));
-                userInfo.setSex(jsonObject.getInt("sex"));
-                userInfo.setLanguage(jsonObject.getString("language"));
-                userInfo.setCity(jsonObject.getString("city"));
-                userInfo.setProvince(jsonObject.getString("province"));
-                userInfo.setCountry(jsonObject.getString("country"));
-                userInfo.setHeadimgurl(jsonObject.getString("headimgurl"));
-                userInfo.setSubscribe_time(jsonObject.getLong("subscribe_time"));
+                if(jsonObject.has("subscribe")){
+                    userInfo.setSubscribe(jsonObject.getInt("subscribe"));
+                }
+                if(jsonObject.has("openid")) {
+                    userInfo.setOpenid(jsonObject.getString("openid"));
+                }
+                if(jsonObject.has("nickname")){
+                    userInfo.setNickname(EmojiFilter.filterEmoji(jsonObject.getString("nickname")));
+                }
+                if(jsonObject.has("sex")){
+                    userInfo.setSex(jsonObject.getInt("sex"));
+                }
+                if(jsonObject.has("language")){
+                    userInfo.setLanguage(jsonObject.getString("language"));
+                }
+                if(jsonObject.has("city")){
+                    userInfo.setCity(jsonObject.getString("city"));
+                }
+                if(jsonObject.has("province")){
+                    userInfo.setProvince(jsonObject.getString("province"));
+                }
+                if(jsonObject.has("country")){
+                    userInfo.setCountry(jsonObject.getString("country"));
+                }
+                if(jsonObject.has("headimgurl")){
+                    userInfo.setHeadimgurl(jsonObject.getString("headimgurl"));
+                }
+                if(jsonObject.has("subscribe_time")){
+                    userInfo.setSubscribe_time(jsonObject.getLong("subscribe_time"));
+                }
+
                 //unionId有问题
-                userInfo.setUnionid(jsonObject.getString("openid"));
+                if(jsonObject.has("openid")) {
+                    userInfo.setUnionid(jsonObject.getString("openid"));
+                }
             } catch (JSONException e) {
                 userInfo = null;
                 // 获取token失败

@@ -157,7 +157,10 @@ public class WechatRestController {
         String wechatId = xmlEntity.getToUserName();
         String openId = xmlEntity.getFromUserName();
         UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
-        WechatUser wechatUser = wechatUserService.updateUserInfo(userInfo.toWechatUser());
+        WechatUser wechatUser = null;
+        if( null != userInfo){
+            wechatUser = wechatUserService.updateUserInfo(userInfo.toWechatUser());
+        }
 
         String result = "";
         //消息类型为event
