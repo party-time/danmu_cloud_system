@@ -25,7 +25,7 @@ public class DanmuAlarmCacheService {
         };
         for(int i=0; i<typeArray.length; i++) {
             alarmCacheService.removeAlarmCount(addressId, typeArray[i]);
-            alarmCacheService.removeAlarmCount(addressId, LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE);
+            alarmCacheService.removeAlarmCount(addressId, typeArray[i]);
         }
     }
 
