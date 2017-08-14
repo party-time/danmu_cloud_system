@@ -16,6 +16,6 @@ import java.util.List;
 @FeignClient(value = "${dataRpcServer}",fallback = RpcParamServiceHystrix.class)
 public interface RpcParamService {
 
-    @RequestMapping(value = "/rpcParam/findByRegistCode" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/rpcParam/findByRegistCode" ,method = RequestMethod.GET)
     public List<ParamValueJsonModel> findByRegistCode(@RequestParam(value = "code") String code);
 }
