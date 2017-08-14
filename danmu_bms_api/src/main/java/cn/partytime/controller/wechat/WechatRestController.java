@@ -158,7 +158,7 @@ public class WechatRestController {
         String openId = xmlEntity.getFromUserName();
         UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
         WechatUser wechatUser = null;
-        if( null != userInfo && !MessageUtil.EVENT_TYPE_UNSUBSCRIBE.equals(xmlEntity.getMsgType())){
+        if( null != userInfo && !MessageUtil.EVENT_TYPE_UNSUBSCRIBE.equals(xmlEntity.getEvent())){
             wechatUser = wechatUserService.updateUserInfo(userInfo.toWechatUser());
         }
 

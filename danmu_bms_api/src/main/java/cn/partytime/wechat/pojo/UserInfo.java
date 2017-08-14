@@ -50,9 +50,7 @@ public class UserInfo {
         if(!StringUtils.isEmpty(this.getNickname())){
             wechatUser.setNick(this.getNickname());
         }
-        if(StringUtils.isEmpty(this.getSex())){
-            wechatUser.setSex(this.getSex());
-        }
+        wechatUser.setSex(this.getSex());
         if(StringUtils.isEmpty(this.getProvince())){
             wechatUser.setProvince(this.getProvince());
         }
