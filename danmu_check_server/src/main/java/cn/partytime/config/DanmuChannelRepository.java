@@ -55,9 +55,15 @@ public class DanmuChannelRepository {
     }
 
 
-
-
-
+    public List<Channel> findAdminTaskModelFilmChannelList(){
+        List<Channel> channelList = new ArrayList<>();
+        Iterator<Map.Entry<Channel, AdminTaskModel>> entries = channelFilmConcurrentHashMap.entrySet().iterator();
+        while (entries.hasNext()) {
+            Map.Entry<Channel, AdminTaskModel> entry = entries.next();
+            channelList.add(entry.getKey());
+        }
+        return channelList;
+    }
 
     public List<Channel> findAdminTaskModelChnnelListByPartyId(int partyType,String partyId) {
         ConcurrentHashMap<Channel, AdminTaskModel> adminTaskModelConcurrentHashMap = new ConcurrentHashMap<Channel, AdminTaskModel>();
