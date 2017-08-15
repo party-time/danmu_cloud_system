@@ -155,7 +155,7 @@ public class BmsHistoryDanmuService {
             long count = danmuService.countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(danmuPoolIdList, 1, false, true);
             int page = 0;
             int size = 300;
-
+            logger.info("弹幕总数:{}",count);
             if (count > 0) {
                 danmuLogicModelList = new ArrayList<DanmuLogicModel>();
                 while (page * size < count) {

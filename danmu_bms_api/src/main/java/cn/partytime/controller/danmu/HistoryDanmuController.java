@@ -13,6 +13,7 @@ import cn.partytime.model.wechatMsgTmpl.MsgTmpl;
 import cn.partytime.model.wechatMsgTmpl.ValueTmpl;
 import cn.partytime.service.*;
 import cn.partytime.service.wechat.WechatUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/v1/api")
+@Slf4j
 public class HistoryDanmuController extends BaseAdminController {
 
     @Autowired
@@ -101,6 +103,7 @@ public class HistoryDanmuController extends BaseAdminController {
         response.setHeader("Content-Disposition", "attachment;fileName="
                 + partyId+".xls");
         String path=bmsHistoryDanmuService.historyDanmuExport(partyId,addressArea);
+        log.info("生成的文件地址:{}",path);
         if(StringUtils.isEmpty(path)){
             return null;
         }
