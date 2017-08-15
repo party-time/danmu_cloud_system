@@ -28,8 +28,8 @@ public class RpcTimerDanmuService {
 
 
     @RequestMapping(value = "/findTimerDanmuFileList" ,method = RequestMethod.GET)
-    public List<TimerDanmuFile> findTimerDanmuFileList(@RequestParam List<String> partyIdlList) {
-        List<TimerDanmuFile> timerDanmuFileList = timerDanmuFileService.findByPartyId(partyIdlList);
+    public List<TimerDanmuFile> findTimerDanmuFileList(@RequestParam List<String> partyIdList) {
+        List<TimerDanmuFile> timerDanmuFileList = timerDanmuFileService.findByPartyId(partyIdList);
         return timerDanmuFileList;
     }
 
