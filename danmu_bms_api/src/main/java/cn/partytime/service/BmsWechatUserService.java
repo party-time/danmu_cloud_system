@@ -95,8 +95,8 @@ public class BmsWechatUserService {
 
     public WechatUser subscribe(UserInfo userInfo){
         if( null != userInfo) {
-            userInfo.setSubscribe(0);
             WechatUser wechatUserModel = userInfo.toWechatUser();
+            wechatUserModel.setSubscribeState(0);
             WechatUser wechatUser = wechatUserService.save(wechatUserModel);
             wechatUserInfoService.saveOrUpdate(wechatUser.getId(),null,null);
             wechatUserLogService.save(wechatUserModel.getOpenId(),"subscribe");
