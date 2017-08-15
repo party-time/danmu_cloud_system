@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 
-@Component("realTimeDanmuMessageListener")
-public class RealTimeDanmuMessageListener implements MessageListener {
+@Component("partyDanmuListener")
+public class PartyDanmuListener implements MessageListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(RealTimeDanmuMessageListener.class);
+    private static final Logger logger = LoggerFactory.getLogger(PartyDanmuListener.class);
 
     @Autowired
     private RealTimeDanmuHandler realTimeDanmuHandler;

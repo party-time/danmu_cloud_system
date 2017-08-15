@@ -756,6 +756,9 @@ public class CommandHanderService {
             result.put("partyName", party.getName());
             //初始化内容发送个管理界面
             sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
+        }else{
+
+            sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
         }
 
 

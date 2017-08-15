@@ -17,20 +17,31 @@ public class MessageListenerConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageListenerConfig.class);
 
 
-    @Resource(name = "realTimeDanmuMessageListener")
-    private RealTimeDanmuMessageListener realTimeDanmuMessageListener;
+    @Resource(name = "partyDanmuListener")
+    private PartyDanmuListener partyDanmuListener;
+
+    @Resource(name = "filmDanmuListener")
+    private FilmDanmuListener filmDanmuListener;
+
+
 
     @Bean
     RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(realTimeDanmuMessageListenerAdapter(), new PatternTopic("partyId:danmu"));
+        container.addMessageListener(partyDanmuListenerAdapter(), new PatternTopic("partyId:danmu"));
+        container.addMessageListener(filmDanmuListenerAdapter(), new PatternTopic("filmId:danmu"));
         return container;
     }
 
-    @Bean(name = "realTimeDanmuMessageListenerAdapter")
-    MessageListenerAdapter realTimeDanmuMessageListenerAdapter() {
-        return new MessageListenerAdapter(realTimeDanmuMessageListener, "receiveMessage");
+    @Bean(name = "partyDanmuListenerAdapter")
+    MessageListenerAdapter partyDanmuListenerAdapter() {
+        return new MessageListenerAdapter(partyDanmuListener, "receiveMessage");
+    }
+
+    @Bean(name = "filmDanmuListenerAdapter")
+    MessageListenerAdapter filmDanmuListenerAdapter() {
+        return new MessageListenerAdapter(filmDanmuListener, "receiveMessage");
     }
 
 }

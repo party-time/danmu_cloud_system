@@ -22,7 +22,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/rpcParamService")
+@RequestMapping("/rpcParam")
 public class RpcParamService {
 
 

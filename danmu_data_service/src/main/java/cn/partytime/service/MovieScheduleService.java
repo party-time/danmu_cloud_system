@@ -60,6 +60,12 @@ public class MovieScheduleService {
         return movieScheduleRepository.findByPartyId(partyId,pageRequest);
     }
 
+    public Page<MovieSchedule> findPageByPartyIdAndAddressIsAndCreateTimeAsc(String partyId,String addressId,int pageSize,int pageNo){
+        Sort sort = new Sort(Sort.Direction.ASC, "createTime");
+        PageRequest pageRequest = new PageRequest(pageNo, pageSize, sort);
+        return movieScheduleRepository.findByPartyIdAndAddressId(partyId,addressId,pageRequest);
+    }
+
     public Page<MovieSchedule> findPageByPartyIdAndAddressIs(String partyId,String addressId,int pageSize,int pageNo){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(pageNo, pageSize, sort);

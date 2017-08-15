@@ -28,7 +28,7 @@ public class DanmuAlarmService implements MessageService {
 
     @Override
     public void after(MessageObject messageObject) {
-        //messageLogicService.sendMessage(messageObject);
-        System.out.println("================>"+JSON.toJSONString(messageObject));
+        messageLogicService.sendMessage(messageObject);
+        //System.out.println("================>"+JSON.toJSONString(messageObject));
     }
 }
