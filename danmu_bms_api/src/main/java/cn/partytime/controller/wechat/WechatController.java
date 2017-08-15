@@ -91,6 +91,8 @@ public class WechatController {
 
     @RequestMapping(value = "/sendDM", method = RequestMethod.GET)
     public String redirectUrl(String code,Model model, HttpServletResponse response,HttpServletRequest request){
+
+        log.info("/sendDM:code:{}",code);
         String openId = WeixinUtil.getUserOpenId(code);
         if(StringUtils.isEmpty(openId)){
             return "redirect:/htm/noparty.html";
