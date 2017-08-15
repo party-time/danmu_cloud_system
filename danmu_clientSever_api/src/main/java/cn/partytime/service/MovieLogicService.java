@@ -468,7 +468,7 @@ public class MovieLogicService {
 
     private void stopMovie(MovieScheduleModel movieSchedule,PartyModel party){
         movieSchedule = rpcMovieScheduleService.updateMovieSchedule(movieSchedule);
-        long time = movieSchedule.getEndTime().getTime()-movieSchedule.getMoviceStartTime().getTime();
+        long time = movieSchedule.getEndTime().getTime()-movieSchedule.getStartTime().getTime();
         if(party!=null && party.getMovieTime()==0){
             party.setMovieTime(time);
             party = partyService.saveParty(party);
