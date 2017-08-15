@@ -423,10 +423,10 @@ public class MovieLogicService {
             danmuAlarmCacheService.removeDanmuAlarmAllCache(addressId);
 
             //判断是否有活动正在进行
-            PartyLogicModel partyLogicModel = partyService.findTemporaryParty(addressId);
-            if(partyLogicModel!=null){
+            //PartyLogicModel partyLogicModel = partyService.findTemporaryParty(addressId);
+            //if(partyLogicModel!=null){
                 sendCommandRestartClient(addressId);
-            }
+            //}
             dataObject.put("partyTime",clientTime);
         }else if("2".equals(status)){
             dataObject.put("movieTime",clientTime);
