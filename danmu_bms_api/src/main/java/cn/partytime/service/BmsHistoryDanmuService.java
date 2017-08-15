@@ -143,6 +143,8 @@ public class BmsHistoryDanmuService {
         List<DanmuLogicModel> danmuLogicModelList = null;
         UUID uuid = UUID.randomUUID();
         String fileName = tempPath + File.separator + uuid + ".xls";
+
+        logger.info("filePath:{}",fileName);
         if (ListUtils.checkListIsNotNull(danmuPoolList)) {
             //String poolId = danmuPool.getId();
             List<String> danmuPoolIdList = new ArrayList<>();
