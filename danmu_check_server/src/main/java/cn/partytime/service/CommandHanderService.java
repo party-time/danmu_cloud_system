@@ -433,6 +433,7 @@ public class CommandHanderService {
             logger.info("向活动场地广播弹幕");
 
             List<String> addressIdList = rpcPartyService.findAddressIdListByPartyId(partyId);
+            logger.info("场地信息:{}",JSON.toJSONString(addressIdList));
             if(ListUtils.checkListIsNotNull(addressIdList)){
                 for(String address:addressIdList){
                     sendMessageToMq(addressId, commandMap);
