@@ -76,7 +76,7 @@ public class CmdJsonTempController {
     @RequestMapping(value = "/del", method = RequestMethod.GET)
     public RestResultModel del(String id){
         RestResultModel restResultModel = new RestResultModel();
-
+        cmdTempService.del(id);
         restResultModel.setResult(200);
         return restResultModel;
     }
