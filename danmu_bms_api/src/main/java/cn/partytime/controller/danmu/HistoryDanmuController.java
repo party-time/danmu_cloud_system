@@ -1,5 +1,6 @@
 package cn.partytime.controller.danmu;
 
+import cn.partytime.common.util.CmdConst;
 import cn.partytime.common.util.ComponentKeyConst;
 import cn.partytime.common.util.FileUtils;
 import cn.partytime.controller.base.BaseAdminController;
@@ -157,7 +158,7 @@ public class HistoryDanmuController extends BaseAdminController {
                 Map<String,String> map = new HashMap<>();
                 map.put("userName",wechatUser.getNick());
                 map.put("gift",msg);
-                bmsDanmuService.sendDanmuByWechat(ComponentKeyConst.SEND_GIFT, map, wechatUser.getOpenId(), partyAddressRelation.getPartyId(), partyAddressRelation.getAddressId(), 0, 0);
+                bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_MONEY, map, wechatUser.getOpenId(), partyAddressRelation.getPartyId(), partyAddressRelation.getAddressId(), 0, 0);
                 MsgTmpl msgTmpl = new MsgTmpl();
                 msgTmpl.setTouser(wechatUser.getOpenId());
                 msgTmpl.setTemplate_id(sendGiftId);
