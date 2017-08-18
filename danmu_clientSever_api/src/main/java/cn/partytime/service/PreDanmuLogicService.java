@@ -37,6 +37,7 @@ public class PreDanmuLogicService {
     private RedisService redisService;
 
     public void danmuListenHandler(String partyId) {
+        log.info("加载活动{}的预置弹幕",partyId);
         String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
 
         List<PreDanmuModel> preDanmuModelList = rpcPreDanmuService.findByPartyId(partyId);
