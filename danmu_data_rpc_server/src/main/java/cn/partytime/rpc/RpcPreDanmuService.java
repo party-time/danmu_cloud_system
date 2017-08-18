@@ -30,7 +30,7 @@ public class RpcPreDanmuService {
      */
     @RequestMapping(value = "/findByPartyId" ,method = RequestMethod.GET)
     public List<PreDanmu> findByPartyId(@RequestParam String partyId){
-        log.info("获取活动:{}下预置弹幕");
+        log.info("获取活动:{}下预置弹幕",partyId);
         return  preDanmuService.findByPartyId(partyId);
     }
 
