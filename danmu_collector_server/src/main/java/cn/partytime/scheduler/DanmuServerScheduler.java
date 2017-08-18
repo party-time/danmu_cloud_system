@@ -1,6 +1,5 @@
 package cn.partytime.scheduler;
 
-import cn.partytime.alarmRpc.RpcClientAlarmService;
 import cn.partytime.config.DanmuChannelRepository;
 import cn.partytime.model.DanmuCollectorInfo;
 import cn.partytime.common.cachekey.CollectorServerCacheKey;
