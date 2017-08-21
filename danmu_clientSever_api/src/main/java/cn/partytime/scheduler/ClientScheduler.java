@@ -1,8 +1,7 @@
 package cn.partytime.scheduler;
 
 
-import cn.partytime.alarmRpc.RpcMovieAlarmService;
-import cn.partytime.alarmRpc.RpcProjectorAlarmService;
+
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.*;
@@ -25,8 +24,9 @@ public class ClientScheduler {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientScheduler.class);
 
-    @Autowired
-    private RpcProjectorAlarmService rpcProjectorAlarmService;
+    //TODO:
+    //@Autowired
+    //private RpcProjectorAlarmService rpcProjectorAlarmService;
 
     @Autowired
     private RpcProjectorService rpcProjectorService;
@@ -43,10 +43,10 @@ public class ClientScheduler {
     @Autowired
     private RpcMovieScheduleService rpcMovieScheduleService;
 
-    @Autowired
-    private RpcMovieAlarmService rpcMovieAlarmService;
+    //@Autowired
+    //private RpcMovieAlarmService rpcMovieAlarmService;
 
-    @Scheduled(cron = "0 0/5 * * * ?")
+    //@Scheduled(cron = "0 0/5 * * * ?")
     private void moviePlayTimeListener(){
         logger.info("movie time is too long listener");
         List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
@@ -65,7 +65,8 @@ public class ClientScheduler {
                             Date movieStartTime = movieSchedule.getMoviceStartTime();
                             if(movieStartTime!=null){
                                 long time = currentDate.getTime() - movieStartTime.getTime();
-                                rpcMovieAlarmService.movieTime(partyId,addressId,time);
+                                //TODO:
+                                //rpcMovieAlarmService.movieTime(partyId,addressId,time);
                             }
                         }
                     }
@@ -91,7 +92,8 @@ public class ClientScheduler {
                         if(ListUtils.checkListIsNotNull(projectorActionList)){
                             ProjectorActionModel projectorAction = projectorActionList.get(0);
                             if(projectorAction.getEndTime()==null && DateUtils.checkDataIsCurrentDate(projectorAction.getCreateTime())){
-                                rpcProjectorAlarmService.projectorClose(regsitrorCode);
+                                //TODO:
+                                //rpcProjectorAlarmService.projectorClose(regsitrorCode);
                             }
                         }
                     }

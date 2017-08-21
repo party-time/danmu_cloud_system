@@ -214,10 +214,9 @@ public class BmsPreDanmuService {
         int maxUumber = hssfSheet.getLastRowNum();
         List<PreDanmu> preDanmuList = new ArrayList<>();
 
-        String templateId = ComponentKeyConst.P_DANMU;
-        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByKeyFromCache(CmdConst.CMD_NAME_PDANMU);
 
-
+        String templateId = cmdTempAllData.getId();
         for(int i=maxUumber; i>0; i--) {
             HSSFRow row = hssfSheet.getRow(i);
             int maxColumn = 1;

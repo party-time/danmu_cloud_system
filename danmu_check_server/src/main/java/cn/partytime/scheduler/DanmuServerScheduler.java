@@ -1,6 +1,5 @@
 package cn.partytime.scheduler;
 
-import cn.partytime.alarmRpc.RpcAdminAlarmService;
 import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
@@ -46,15 +45,12 @@ public class DanmuServerScheduler {
     private RpcPartyService rpcPartyService;
 
     @Autowired
-    private RpcAdminAlarmService rpcAdminAlarmService;
-
-    @Autowired
     private RpcMovieScheduleService rpcMovieScheduleService;
 
     @Autowired
     private CacheDataService cacheDataService;
 
-    @Scheduled(cron = "0/10 * * * * *")
+    //@Scheduled(cron = "0/10 * * * * *")
     public void checkAdminOffLineScheduler() {
 
         logger.info("管理员离线告警监听");
@@ -102,7 +98,7 @@ public class DanmuServerScheduler {
         long minute = subTime/1000/60;
         if(minute>5){
             //告警
-            rpcAdminAlarmService.admiOffLine();
+            //rpcAdminAlarmService.admiOffLine();
             cacheDataService.adminOfflineAlarmCount(1);
         }
     }

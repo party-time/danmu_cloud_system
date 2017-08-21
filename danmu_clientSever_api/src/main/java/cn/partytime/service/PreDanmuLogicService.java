@@ -9,6 +9,7 @@ import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.PreDanmuModel;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.Map;
  */
 
 @Service
+@Slf4j
 public class PreDanmuLogicService {
 
 
@@ -35,11 +37,13 @@ public class PreDanmuLogicService {
     private RedisService redisService;
 
     public void danmuListenHandler(String partyId) {
+        log.info("加载活动{}的预置弹幕",partyId);
         String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
 
         List<PreDanmuModel> preDanmuModelList = rpcPreDanmuService.findByPartyId(partyId);
-        if (ListUtils.checkListIsNotNull(preDanmuModelList)) {
 
+        if (ListUtils.checkListIsNotNull(preDanmuModelList)) {
+            log.info("获取预置弹幕的数量:{}",preDanmuModelList.size());
             for(PreDanmuModel preDanmuModel:preDanmuModelList){
                 Map<String,Object> preDanmuMap = new HashMap<String,Object>();
                 String templateId = preDanmuModel.getTemplateId();
@@ -67,9 +71,9 @@ public class PreDanmuLogicService {
                 redisService.setValueToList(preDanmuCacheKey, JSON.toJSONString(preDanmuMap));
                 //preDanmuModelList.forEach(preDanmuModel -> redisService.setValueToList(preDanmuCacheKey, JSON.toJSONString(preDanmuModel)));
             }
-        }
-        //预制弹幕缓存时间
+        }else{
+            log.info("获取预置弹幕的数量:{}",0);
+        }        //预制弹幕缓存时间
         redisService.expire(preDanmuCacheKey, 60 * 60 * 24);
-
     }
 }

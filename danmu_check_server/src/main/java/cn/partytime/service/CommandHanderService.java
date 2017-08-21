@@ -1,6 +1,5 @@
 package cn.partytime.service;
 
-import cn.partytime.alarmRpc.RpcAdminAlarmService;
 import cn.partytime.common.cachekey.*;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
@@ -78,8 +77,6 @@ public class CommandHanderService {
     @Autowired
     private CacheDataService cacheDataService;
 
-    @Autowired
-    private RpcAdminAlarmService rpcAdminAlarmService;
 
     public void commandHandler(Map<String, Object> map, Channel channel) {
         //类型

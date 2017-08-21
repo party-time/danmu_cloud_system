@@ -1,7 +1,6 @@
 package cn.partytime.controller;
 
 
-import cn.partytime.alarmRpc.RpcBulbAlarmService;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.*;
 import cn.partytime.model.*;
@@ -72,8 +71,8 @@ public class JavaClientController {
     @Autowired
     private MovieLogicService movieLogicService;
 
-    @Autowired
-    private RpcBulbAlarmService rpcBulbAlarmService;
+    /*@Autowired
+    private RpcBulbAlarmService rpcBulbAlarmService;*/
 
     @Autowired
     private TimerDanmuLogicService timerDanmuLogicService;
@@ -340,7 +339,8 @@ public class JavaClientController {
                 long usedHour = usedTime/1000/60/60;
                 if(usedHour> 2000*0.8){
                     //rpc告警
-                    rpcBulbAlarmService.partyStart(code);
+                    //TODO:
+                    //rpcBulbAlarmService.partyStart(code);
                 }
 
                 restResultModel.setResult(200);

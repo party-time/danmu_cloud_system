@@ -19,6 +19,6 @@ public interface RpcPreDanmuService {
 
 
     @RequestMapping(value = "/rpcRepDanmu/findByPartyId" ,method = RequestMethod.GET)
-    public List<PreDanmuModel> findByPartyId(@RequestParam(value = "partyId") String partyId);
+    public List<PreDanmuModel> findByPartyId(@RequestParam(name = "partyId") String partyId);
 
 }

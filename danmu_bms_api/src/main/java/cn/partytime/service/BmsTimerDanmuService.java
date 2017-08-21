@@ -587,9 +587,10 @@ public class BmsTimerDanmuService {
         int maxUumber = hssfSheet.getLastRowNum();
         List<TimerDanmu> timerDanmuList = new ArrayList<>();
 
-        String templateId = ComponentKeyConst.P_DANMU;
-        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
-
+        //String templateId = ComponentKeyConst.P_DANMU;
+        //CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByKeyFromCache(CmdConst.CMD_NAME_PDANMU);
+        String templateId = cmdTempAllData.getId();
         for(int i=1; i<maxUumber; i++){
             HSSFRow row = hssfSheet.getRow(i);
 

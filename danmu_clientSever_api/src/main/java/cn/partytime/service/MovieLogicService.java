@@ -1,7 +1,5 @@
 package cn.partytime.service;
 
-import cn.partytime.alarmRpc.RpcMovieAlarmService;
-import cn.partytime.alarmRpc.RpcProjectorAlarmService;
 import cn.partytime.cache.danmu.DanmuAlarmCacheService;
 import cn.partytime.common.cachekey.*;
 import cn.partytime.common.constants.PotocolComTypeConst;
@@ -42,8 +40,8 @@ public class MovieLogicService {
     @Autowired
     private RpcDanmuClientService rpcDanmuClientService;
 
-    @Autowired
-    private RpcProjectorAlarmService rpcProjectorAlarmService;
+    //@Autowired
+    //private RpcProjectorAlarmService rpcProjectorAlarmService;
 
     @Autowired
     private RpcMovieScheduleService rpcMovieScheduleService;
@@ -63,8 +61,8 @@ public class MovieLogicService {
     @Autowired
     private DanmuAlarmCacheService danmuAlarmCacheService;
 
-    @Autowired
-    private RpcMovieAlarmService rpcMovieAlarmService;
+    //@Autowired
+    //private RpcMovieAlarmService rpcMovieAlarmService;
 
 
     public RestResultModel partyStart(String registCode,String command,long clientTime) {
@@ -313,18 +311,18 @@ public class MovieLogicService {
                         if(ListUtils.checkListIsNotNull(projectorActionList)){
                             for(ProjectorActionModel projectorAction :projectorActionList){
                                 if(DateUtils.checkDataIsCurrentDate(projectorAction.getCreateTime())){
-                                    rpcProjectorAlarmService.projectorOpen(code);
+                                    //rpcProjectorAlarmService.projectorOpen(code);
                                     break;
 
                                 }
                                 //如果最后一条数据的结束时间不为空
                                 if(projectorAction.getEndTime()!=null){
-                                    rpcProjectorAlarmService.projectorOpen(code);
+                                    //rpcProjectorAlarmService.projectorOpen(code);
                                     break;
                                 }
                             }
                         }else{
-                            rpcProjectorAlarmService.projectorOpen(code);
+                            //rpcProjectorAlarmService.projectorOpen(code);
                             break;
                         }
                     }
@@ -473,7 +471,8 @@ public class MovieLogicService {
             party.setMovieTime(time);
             party = partyService.saveParty(party);
         }
-        rpcMovieAlarmService.movieTime(party.getId(),movieSchedule.getAddressId(),time);
+        //TODO:
+        //rpcMovieAlarmService.movieTime(party.getId(),movieSchedule.getAddressId(),time);
 
     }
 
