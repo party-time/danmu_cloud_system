@@ -553,7 +553,7 @@ public class WechatRestController {
             if (null != partyLogicModel) {
                 addressId = partyLogicModel.getAddressId();
                 partyId = partyLogicModel.getPartyId();
-                bmsDanmuService.sendDanmuByWechat(dmCmdId, map, entity.getOpenid(), partyId, addressId, 1, 0);
+                bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_MONEY, map, entity.getOpenid(), partyId, addressId, 1, 0);
                 //bmsDanmuService.sendMessageToScreenClient(addressId, MessageConst.MESSAGE_FROM_ClIENT, null, DanmuTypeEnmu.getEnName(DanmuConst.MONEY_DANMU), null, null, null, name);
             }
             if (!StringUtils.isEmpty(h5Id)) {
