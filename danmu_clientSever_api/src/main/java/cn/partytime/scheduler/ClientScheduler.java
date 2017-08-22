@@ -56,17 +56,22 @@ public class ClientScheduler {
                 PartyLogicModel partyLogicModel  = partyService.findFilmByAddressId(addressId);
                 if(partyLogicModel!=null){
                     String partyId = partyLogicModel.getPartyId();
+                    long movieTime = partyLogicModel.getMovieTime();
                     List<MovieScheduleModel>  movieScheduleList =  rpcMovieScheduleService.findByPartyIdAndAddressId(partyId,addressId);
                     if(ListUtils.checkListIsNotNull(movieScheduleList)){
                         MovieScheduleModel movieSchedule = movieScheduleList.get(0);
                         if(movieSchedule.getEndTime()==null){
                             Date currentDate = DateUtils.getCurrentDate();
                             Date danmuStartTime = movieSchedule.getStartTime();
-                            Date movieStartTime = movieSchedule.getMoviceStartTime();
+                            long subTime = currentDate.getTime() - danmuStartTime.getTime();
+                            if(subTime>movieTime){
+                                rpcMovieAlarmService.movieTime(partyId,addressId,subTime);
+                            }
+                            /*Date movieStartTime = movieSchedule.getMoviceStartTime();
                             if(movieStartTime!=null){
                                 long time = currentDate.getTime() - movieStartTime.getTime();
                                 rpcMovieAlarmService.movieTime(partyId,addressId,time);
-                            }
+                            }*/
                         }
                     }
                 }

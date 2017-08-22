@@ -65,12 +65,12 @@ public class RpcMovieService {
         }else{
             long minute = time/1000/60;
             log.info("minute:{}",minute);
-            if(minute<60){
+            if(minute<90){
                 //触发事件过短
                 map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT,addressId,partyId);
                 mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
 
-            }else if(minute >150) {
+            }else if(minute >180) {
                 //触发时间过
                 map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME,addressId,partyId);
                 mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);

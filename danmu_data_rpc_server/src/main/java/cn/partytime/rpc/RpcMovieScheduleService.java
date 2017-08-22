@@ -42,7 +42,7 @@ public class RpcMovieScheduleService {
         Date currentDate = DateUtils.getCurrentDate();
         long subTime = currentDate.getTime() - partyStartDate.getTime();
 
-        return movieTime - subTime;
+        return Math.abs(movieTime - subTime);
     }
 
     @RequestMapping(value = "/findByPartyIdAndAddressId" ,method = RequestMethod.GET)
