@@ -56,16 +56,23 @@ public class RpcDanmuService {
 
     @RequestMapping(value = "/danmuAlarm" ,method = RequestMethod.GET)
     public void danmuAlarm(@RequestParam String type, @RequestParam String code) {
-        logger.info("告警类型:{},客户端编号:{}",type,code);
+
         MessageObject<Map<String,String>> mapMessageObject = null;
         Map<String,String> map = new HashMap<>();
         if(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL.equals(type)){
+            logger.info("告警类型:{},场地编号:{}",type,code);
             log.info("预置弹幕没有了");
+            int cacheCount = alarmCacheService.findAlarmCount(code,LogCodeConst.DanmuLogCode.PREDANMU_ISNULL);
+            if(cacheCount>= 1){
+                log.info("type:{}告警发出的次数超过上限",type);
+                return;
+            }
             map = commonDataService.setCommonMapByAddressId(AlarmKeyConst.ALARM_KEY_PREDANMU,code);
             sendMessage(map,LogCodeConst.DanmuLogCode.PREDANMU_ISNULL,1);
 
         }else if(AlarmConst.DanmuAlarmType.DANMU_IS_NULL.equals(type)){
 
+            logger.info("告警类型:{},客户端编号:{}",type,code);
             log.info("客户端没有弹幕了");
             map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_SYSTEMERROR,code);
             sendMessageByRule(map,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL,1);
@@ -73,18 +80,21 @@ public class RpcDanmuService {
 
         }else if(AlarmConst.DanmuAlarmType.HISTORY_DANMU_IS_NULL.equals(type)){
 
+            logger.info("告警类型:{},客户端编号:{}",type,code);
             log.info("客户端历史弹幕没有了");
             map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_HISTORYDANMU,code);
             sendMessage(map,LogCodeConst.DanmuLogCode.CLIENT_HISTORYDANMU_ISNULL,1);
 
         }else if(AlarmConst.DanmuAlarmType.TIMER_DANMU_IS_NULL.equals(type)){
 
+            logger.info("告警类型:{},客户端编号:{}",type,code);
             log.info("客户端定时弹幕没有了");
             map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_TIMERDANMU,code);
             sendMessage(map,LogCodeConst.DanmuLogCode.CLIENT_TIMERDANMU_ISNULL,1);
 
         }else if(AlarmConst.DanmuAlarmType.DANMU_IS_MORE.equals(type)){
 
+            logger.info("告警类型:{},客户端编号:{}",type,code);
             log.info("客户端弹幕过量");
             map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_DANMUEXCESS,code);
             sendMessageByRule(map,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE,1);

@@ -50,30 +50,31 @@ public class RpcMovieService {
         MessageObject<Map<String,String>> mapMessageObject = null;
         Map<String,String> map = new HashMap<String,String>();
         if(party!=null && party.getMovieTime()!=0){
+            long movieTime = party.getMovieTime();
+            if(time<movieTime){
+                //触发事件过短
+                map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT,addressId,partyId);
+                mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
+            }else if(time >movieTime) {
+                //触发时间过
+                map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME,addressId,partyId);
+                mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
+            }
+        }else{
             long minute = time/1000/60;
             if(minute<60){
                 //触发事件过短
 
-                map = commonDataService.setCommonMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT,addressId);
+                map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT,addressId,partyId);
                 mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
 
             }else if(minute >150) {
                 //触发时间过
-                map = commonDataService.setCommonMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME,addressId);
+                map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME,addressId,partyId);
                 mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
 
             }
-        }else{
-            long movieTime = party.getMovieTime();
-            if(time<movieTime){
-                //触发事件过短
-                map = commonDataService.setCommonMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT,addressId);
-                mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
-            }else if(time >movieTime) {
-                //触发时间过
-                map = commonDataService.setCommonMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME,addressId);
-                mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
-            }
+
         }
         mapMessageObject.setValue(0);
         mapMessageObject.setThreshold(0);

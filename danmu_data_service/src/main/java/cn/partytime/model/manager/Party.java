@@ -78,6 +78,11 @@ public class Party extends BaseModel {
      */
     private Integer dmDensity;
 
+    /**
+     * 电影总时长
+     */
+    private long movieTime;
+
 
 
     public String getJsonStartTime(){
@@ -220,6 +225,14 @@ public class Party extends BaseModel {
 
     public void setDmDensity(Integer dmDensity) {
         this.dmDensity = dmDensity;
+    }
+
+    public long getMovieTime() {
+        return movieTime;
+    }
+
+    public void setMovieTime(long movieTime) {
+        this.movieTime = movieTime;
     }
 }
 
