@@ -46,7 +46,7 @@ public class ClientScheduler {
     @Autowired
     private RpcMovieAlarmService rpcMovieAlarmService;
 
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0/30 * * * * ?")
     private void moviePlayTimeListener(){
         logger.info("movie time is too long listener");
         List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);

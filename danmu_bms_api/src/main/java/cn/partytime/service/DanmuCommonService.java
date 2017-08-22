@@ -39,7 +39,7 @@ public class DanmuCommonService {
      */
     public String getResourceContent(String id,int type){
 
-        logger.info("查找资源:资源编号:{},资源类型:{}",id,type);
+        //logger.info("查找资源:资源编号:{},资源类型:{}",id,type);
 
         if(type==1){
             //表情

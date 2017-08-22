@@ -6,6 +6,7 @@ import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.DanmuClientModel;
 import cn.partytime.model.PartyLogicModel;
+import cn.partytime.model.PartyModel;
 import cn.partytime.rpc.RpcMovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,21 @@ public class CommonDataService {
 
     @Autowired
     private RpcPartyService rpcPartyService;
+
+    public Map<String,String> setMapByAddressId(String key,String addressId,String partyId){
+        Map<String, String> map = null;
+        DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findById(addressId);
+
+        PartyModel partyModel = rpcPartyService.getPartyByPartyId(partyId);
+
+        map = new HashMap<String, String>();
+        map.put("key", key);
+        map.put("partyId",partyModel.getId());
+        map.put("addressName", danmuAddressModel.getAddress());
+        map.put("addressId",addressId);
+        map.put("movieName", partyModel.getName());
+        return map;
+    }
 
     public Map<String,String> setCommonMapByAddressId(String key, String addressId) {
         Map<String, String> map = null;

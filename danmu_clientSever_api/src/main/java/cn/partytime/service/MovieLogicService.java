@@ -247,9 +247,8 @@ public class MovieLogicService {
                     logger.info("当前时间距离最一条数据的电影开始时间是150分钟以内可以触发结束");
                     movieSchedule.setEndTime(DateUtils.getCurrentDate());
                     movieSchedule.setUpdateTime(DateUtils.getCurrentDate());
-
                     movieSchedule.setClientEndTime(clientTime);
-
+                    //stop movie
                     stopMovie(movieSchedule,party);
 
                     redisService.expire(FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId,0);

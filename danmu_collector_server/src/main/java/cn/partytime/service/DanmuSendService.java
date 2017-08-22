@@ -2,6 +2,9 @@ package cn.partytime.service;
 
 import cn.partytime.alarmRpc.RpcDanmuAlarmService;
 import cn.partytime.dataRpc.RpcDanmuClientService;
+import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.model.PartyLogicModel;
+import cn.partytime.model.PartyModel;
 import cn.partytime.model.ProtocolDanmuModel;
 import cn.partytime.model.ProtocolModel;
 import cn.partytime.common.cachekey.ScreenClientCacheKey;
@@ -44,6 +47,9 @@ public class DanmuSendService {
     @Autowired
     private RpcDanmuAlarmService rpcDanmuAlarmService;
 
+    @Autowired
+    private RpcPartyService rpcPartyService;
+
     /**
      * 发送预制弹幕
      *
@@ -52,11 +58,18 @@ public class DanmuSendService {
     public void sendPreDanmu(String addressId,String partyId) {
         Date nowDate = DateUtils.getCurrentDate();
         Object preObject = clientPreDanmuService.getPreDanmu(addressId,nowDate,partyId);
+
+
+
         logger.info("获取的预制弹幕信息：{}",JSON.toJSONString(preObject));
         if (preObject == null) {
-            Map<String,Object> map = new HashMap<String,Object>();
-            //service.messageHandler(preDanmuMessageService, new MessageObject<Map<String,Object>>(LogCodeConst.DanmuLogCode.PREDANMU_ISNULL_CODE,map));
-            rpcDanmuAlarmService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,addressId);
+            //获取活动信息
+            PartyModel partyModel =rpcPartyService.getPartyByPartyId(partyId);
+            if(partyModel.getType()==1){
+                Map<String,Object> map = new HashMap<String,Object>();
+                //service.messageHandler(preDanmuMessageService, new MessageObject<Map<String,Object>>(LogCodeConst.DanmuLogCode.PREDANMU_ISNULL_CODE,map));
+                rpcDanmuAlarmService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,addressId);
+            }
             return;
         }
         String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;
