@@ -8,6 +8,7 @@ import cn.partytime.message.bean.MessageObject;
 import cn.partytime.service.MovieTimeAlaramService;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.model.PartyModel;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,8 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rpcMovie")
+@Slf4j
 public class RpcMovieService {
-
-    private static final Logger logger = LoggerFactory.getLogger(RpcMovieService.class);
-
     @Autowired
     private MovieTimeAlaramService movieTimeAlaramService;
 
@@ -51,6 +50,7 @@ public class RpcMovieService {
         Map<String,String> map = new HashMap<String,String>();
         if(party!=null && party.getMovieTime()!=0){
             long movieTime = party.getMovieTime();
+            log.info("time:{},moviTime:{}",time,party.getMovieTime());
             if(time<movieTime){
                 //触发事件过短
                 map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT,addressId,partyId);
@@ -59,12 +59,14 @@ public class RpcMovieService {
                 //触发时间过
                 map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME,addressId,partyId);
                 mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
+            }else{
+                return;
             }
         }else{
             long minute = time/1000/60;
+            log.info("minute:{}",minute);
             if(minute<60){
                 //触发事件过短
-
                 map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT,addressId,partyId);
                 mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
 

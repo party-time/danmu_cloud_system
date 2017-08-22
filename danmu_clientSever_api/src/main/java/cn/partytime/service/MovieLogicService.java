@@ -1,5 +1,7 @@
 package cn.partytime.service;
 
+import cn.partytime.alarmRpc.RpcMovieAlarmService;
+import cn.partytime.alarmRpc.RpcProjectorAlarmService;
 import cn.partytime.cache.danmu.DanmuAlarmCacheService;
 import cn.partytime.common.cachekey.*;
 import cn.partytime.common.constants.PotocolComTypeConst;
@@ -13,6 +15,7 @@ import cn.partytime.dataRpc.RpcProjectorService;
 import cn.partytime.model.*;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,7 @@ import java.util.Map;
  */
 
 @Service
+@Slf4j
 public class MovieLogicService {
 
 
@@ -40,8 +44,8 @@ public class MovieLogicService {
     @Autowired
     private RpcDanmuClientService rpcDanmuClientService;
 
-    //@Autowired
-    //private RpcProjectorAlarmService rpcProjectorAlarmService;
+    @Autowired
+    private RpcProjectorAlarmService rpcProjectorAlarmService;
 
     @Autowired
     private RpcMovieScheduleService rpcMovieScheduleService;
@@ -61,8 +65,8 @@ public class MovieLogicService {
     @Autowired
     private DanmuAlarmCacheService danmuAlarmCacheService;
 
-    //@Autowired
-    //private RpcMovieAlarmService rpcMovieAlarmService;
+    @Autowired
+    private RpcMovieAlarmService rpcMovieAlarmService;
 
 
     public RestResultModel partyStart(String registCode,String command,long clientTime) {
@@ -471,7 +475,7 @@ public class MovieLogicService {
             party = partyService.saveParty(party);
         }
         //TODO:
-        //rpcMovieAlarmService.movieTime(party.getId(),movieSchedule.getAddressId(),time);
+        rpcMovieAlarmService.movieTime(party.getId(),movieSchedule.getAddressId(),time);
 
     }
 
