@@ -7,13 +7,11 @@ import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.DanmuClientModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.PartyModel;
-import cn.partytime.rpc.RpcMovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.plaf.PanelUI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,12 +37,31 @@ public class CommonDataService {
 
         map = new HashMap<String, String>();
         map.put("key", key);
-        map.put("partyId",partyModel.getId());
+
         map.put("addressName", danmuAddressModel.getAddress());
         map.put("addressId",addressId);
-        map.put("movieName", partyModel.getName());
+        if(partyModel!=null){
+            map.put("partyId",partyModel.getId());
+            map.put("movieName", partyModel.getName());
+        }
         return map;
     }
+
+    public Map<String,String> setMapByRegistorCode(String key,String registorCode){
+        DanmuClientModel danmuClientModel = rpcDanmuClientService.findByRegistCode(registorCode);
+        Map<String, String> map = null;
+        if (danmuClientModel != null) {
+            DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findById(danmuClientModel.getAddressId());
+            map = new HashMap<String, String>();
+            map.put("key", key);
+            map.put("addressName", danmuAddressModel.getAddress());
+            map.put("addressId",danmuAddressModel.getId());
+            return map;
+        }
+        return null;
+    }
+
+
 
     public Map<String,String> setCommonMapByAddressId(String key, String addressId) {
         Map<String, String> map = null;

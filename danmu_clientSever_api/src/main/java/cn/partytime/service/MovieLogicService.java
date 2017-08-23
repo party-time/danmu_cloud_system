@@ -317,20 +317,16 @@ public class MovieLogicService {
                         List<ProjectorActionModel> projectorActionList =projectorActions.getRows();
                         if(ListUtils.checkListIsNotNull(projectorActionList)){
                             for(ProjectorActionModel projectorAction :projectorActionList){
-                                if(DateUtils.checkDataIsCurrentDate(projectorAction.getCreateTime())){
+                                if(!DateUtils.checkDataIsCurrentDate(projectorAction.getCreateTime())){
                                     rpcProjectorAlarmService.projectorOpen(code);
-                                    break;
-
                                 }
                                 //如果最后一条数据的结束时间不为空
                                 if(projectorAction.getEndTime()!=null){
                                     rpcProjectorAlarmService.projectorOpen(code);
-                                    break;
                                 }
                             }
                         }else{
                             rpcProjectorAlarmService.projectorOpen(code);
-                            break;
                         }
                     }
                 }
@@ -426,7 +422,7 @@ public class MovieLogicService {
         if("1".equals(status)){
             //清除告警缓存
             danmuAlarmCacheService.removeDanmuAlarmAllCache(addressId);
-            partyAlarmCacheService.removeDanmuAlarmAllCache(addressId);
+            partyAlarmCacheService.removeAlarmAllCache(addressId);
 
             //判断是否有活动正在进行
             //PartyLogicModel partyLogicModel = partyService.findTemporaryParty(addressId);
@@ -439,7 +435,7 @@ public class MovieLogicService {
         }else if("3".equals(status)){
             //清除告警缓存
             danmuAlarmCacheService.removeDanmuAlarmAllCache(addressId);
-            partyAlarmCacheService.removeDanmuAlarmAllCache(addressId);
+            partyAlarmCacheService.removeAlarmAllCache(addressId);
         }
 
         commandObject.put("data",dataObject);

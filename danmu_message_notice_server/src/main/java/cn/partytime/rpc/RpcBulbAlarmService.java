@@ -24,9 +24,9 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/rpcBulb")
-public class RpcBulbService {
+public class RpcBulbAlarmService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RpcBulbService.class);
+    private static final Logger logger = LoggerFactory.getLogger(RpcBulbAlarmService.class);
     @Autowired
     private BulbLifeAlarmService bulbLifeAlarmService;
 

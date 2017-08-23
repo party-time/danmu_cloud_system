@@ -5,8 +5,8 @@ public class AlarmKeyConst {
     public final static String ALARM_KEY_SYSTEMERROR="systemError";//系统异常报警
     public final static String ALARM_KEY_MOVIEOVERTIME="movieOvertime";//电影播放超时报警
     public final static String ALARM_KEY_MOVIESHORT="movieShort";//电影播放时间过短报警
-    public final static String ALARM_KEY_PROJECTORCLOSE="projectorClose";//投影未开启报警
-    public final static String ALARM_KEY_PROJECTOROPEN="projectorOpen";//投影未关闭
+    public final static String ALARM_KEY_PROJECTORNOTOPEN="projectorNotOpen";//投影未开启报警
+    public final static String ALARM_KEY_PROJECTORNOTCLOSE="projectorNotClose";//投影未关闭
     public final static String ALARM_KEY_LIGHTLIFE="lightLife";//灯泡使用寿命报警
     public final static String ALARM_KEY_PREDANMU="preDanmu";//预置弹幕报警
     public final static String ALARM_KEY_SMSIGNIN="smSignIn";//超级管理员登录通知

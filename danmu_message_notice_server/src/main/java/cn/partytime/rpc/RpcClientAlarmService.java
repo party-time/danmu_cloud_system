@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/rpcClient")
-public class RpcClientService {
+public class RpcClientAlarmService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RpcClientService.class);
+    private static final Logger logger = LoggerFactory.getLogger(RpcClientAlarmService.class);
 
     @RequestMapping(value = "/clientNetError" ,method = RequestMethod.GET)
     public void clientNetError(@RequestParam String addressId) {

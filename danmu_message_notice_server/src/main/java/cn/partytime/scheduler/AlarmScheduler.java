@@ -1,26 +1,18 @@
 package cn.partytime.scheduler;
 
-import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.cachekey.ClientCacheKey;
 import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.dataRpc.RpcDanmuAddressService;
-import cn.partytime.dataRpc.RpcDanmuClientService;
-import cn.partytime.dataRpc.RpcMovieScheduleService;
-import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.*;
 import cn.partytime.logicService.CommonDataService;
 import cn.partytime.logicService.FlashClientLogicService;
 import cn.partytime.logicService.MessageLogicService;
 import cn.partytime.message.bean.MessageObject;
-import cn.partytime.model.DanmuAddressModel;
-import cn.partytime.model.DanmuClientModel;
-import cn.partytime.model.MovieScheduleModel;
-import cn.partytime.model.PartyLogicModel;
+import cn.partytime.model.*;
 import cn.partytime.redis.service.RedisService;
-import cn.partytime.rpc.RpcAdminService;
-import cn.partytime.service.ClientServiceAlarmService;
+import cn.partytime.rpc.RpcProjectorAlarmService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +53,43 @@ public class AlarmScheduler {
     @Autowired
     private MessageLogicService messageLogicService;
 
-    @Scheduled(cron = "0/30 * * * * *")
+    @Autowired
+    private RpcDanmuClientService rpcDanmuClientService;
+
+    @Autowired
+    private RpcProjectorService rpcProjectorService;
+
+    @Autowired
+    private RpcProjectorAlarmService rpcProjectorAlarmService;
+
+    @Scheduled(cron = "0 5 2 * * ?")
+    private void projectorCloseCommandListener(){
+        logger.info("投影关闭监听逻辑");
+        List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
+        if(ListUtils.checkListIsNotNull(danmuAddressList)){
+            for(DanmuAddressModel danmuAddress:danmuAddressList){
+                String addressId = danmuAddress.getId();
+                logger.info("场地{}:{}投影",addressId,danmuAddress.getName());
+                List<DanmuClientModel>  danmuClientList = rpcDanmuClientService.findByAddressId(addressId);
+                if(ListUtils.checkListIsNotNull(danmuClientList)){
+                    for(DanmuClientModel danmuClient:danmuClientList){
+                        String regsitrorCode = danmuClient.getRegistCode();
+                        PageResultModel<ProjectorActionModel> projectorActions =  rpcProjectorService.findProjectorActionPage(regsitrorCode,0,1);
+                        List<ProjectorActionModel> projectorActionList = projectorActions.getRows();
+                        if(ListUtils.checkListIsNotNull(projectorActionList)){
+                            ProjectorActionModel projectorAction = projectorActionList.get(0);
+                            if(projectorAction.getEndTime()==null && DateUtils.checkDataIsCurrentDate(projectorAction.getCreateTime())){
+                                rpcProjectorAlarmService.projectorClose(regsitrorCode);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    @Scheduled(cron = "0 0/10 * * * *")
     public void clientOffLineScheduler() {
         logger.info("客户端在线数量监听");
         List<DanmuAddressModel> danmuAddressModels = rpcDanmuAddressService.findByType(0);

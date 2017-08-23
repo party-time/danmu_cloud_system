@@ -10,8 +10,6 @@ import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.logicService.CommonDataService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.proxy.MessageHandlerService;
-import cn.partytime.model.MovieScheduleModel;
-import cn.partytime.model.PartyLogicModel;
 import cn.partytime.service.DanmuAlarmService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,9 +29,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/rpcDanmu")
 @Slf4j
-public class RpcDanmuService {
+public class RpcDanmuAlarmService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RpcDanmuService.class);
+    private static final Logger logger = LoggerFactory.getLogger(RpcDanmuAlarmService.class);
 
     @Autowired
     private DanmuAlarmService danmuAlarmService;

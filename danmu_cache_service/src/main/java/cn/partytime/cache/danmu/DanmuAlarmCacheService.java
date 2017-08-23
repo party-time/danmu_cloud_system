@@ -25,7 +25,6 @@ public class DanmuAlarmCacheService {
         };
         for(int i=0; i<typeArray.length; i++) {
             alarmCacheService.removeAlarmCount(addressId, typeArray[i]);
-            alarmCacheService.removeAlarmCount(addressId, typeArray[i]);
         }
     }
 
@@ -33,10 +32,8 @@ public class DanmuAlarmCacheService {
         if(danmuCount<=15){
             //清除弹幕过量的缓存 和 和时间
             alarmCacheService.removeAlarmCount(addressId, LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE);
-            alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE);
         }
         //清除没有弹幕的计数 和 时间
-        alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL);
         alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL);
     }
 }

@@ -1,6 +1,7 @@
 package cn.partytime.controller;
 
 
+import cn.partytime.cache.projector.ProjectorAlarmCacheService;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.*;
 import cn.partytime.model.*;
@@ -82,6 +83,10 @@ public class JavaClientController {
 
     @Autowired
     private ResourceLogicService resourceLogicService;
+
+    @Autowired
+    private ProjectorAlarmCacheService projectorAlarmCacheService;
+
 
     /**
      * 查找最近的所有的活动
@@ -264,6 +269,10 @@ public class JavaClientController {
         }
         Date nowDate = new Date();
         PageResultModel<ProjectorActionModel> projectorActions =  rpcProjectorService.findProjectorActionPage(code,0,1);
+
+
+
+
         List<ProjectorActionModel> projectorActionList = projectorActions.getRows();
 
         if(ListUtils.checkListIsNotNull(projectorActionList)){
@@ -275,6 +284,10 @@ public class JavaClientController {
                 projectorAction.setUpdateTime(nowDate);
                 projectorAction.setRegisterCode(code);
                 rpcProjectorService.saveProjectAction(projectorAction);
+
+                //清除清除投影缓存
+                DanmuClientModel danmuClientModel =  rpcDanmuClientService.findByRegistCode(code);
+                projectorAlarmCacheService.removeAlarmAllCache(danmuClientModel.getAddressId(),code);
 
                 restResultModel.setResult(200);
                 restResultModel.setResult_msg("OK");
@@ -342,6 +355,10 @@ public class JavaClientController {
                     //TODO:
                     //rpcBulbAlarmService.partyStart(code);
                 }
+
+                //清除清除投影缓存
+                DanmuClientModel danmuClientModel =  rpcDanmuClientService.findByRegistCode(code);
+                projectorAlarmCacheService.removeAlarmAllCache(danmuClientModel.getAddressId(),code);
 
                 restResultModel.setResult(200);
                 restResultModel.setResult_msg("OK");

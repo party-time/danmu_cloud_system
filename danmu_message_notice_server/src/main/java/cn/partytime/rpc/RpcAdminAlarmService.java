@@ -2,15 +2,9 @@ package cn.partytime.rpc;
 
 import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
-import cn.partytime.common.util.ListUtils;
-import cn.partytime.dataRpc.RpcDanmuAddressService;
-import cn.partytime.dataRpc.RpcPartyService;
-import cn.partytime.logicService.MessageLogicService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.service.AdminIsOnLineAlarmService;
 import cn.partytime.message.proxy.MessageHandlerService;
-import cn.partytime.model.DanmuAddressModel;
-import cn.partytime.model.PartyLogicModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,9 +21,9 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/rpcAdmin")
-public class RpcAdminService {
+public class RpcAdminAlarmService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RpcAdminService.class);
+    private static final Logger logger = LoggerFactory.getLogger(RpcAdminAlarmService.class);
 
     @Autowired
     private AdminIsOnLineAlarmService adminIsOnLineAlarmService;

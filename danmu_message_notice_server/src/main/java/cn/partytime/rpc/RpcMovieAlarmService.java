@@ -28,7 +28,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/rpcMovie")
 @Slf4j
-public class RpcMovieService {
+public class RpcMovieAlarmService {
     @Autowired
     private MovieTimeAlaramService movieTimeAlaramService;
 
@@ -100,6 +100,5 @@ public class RpcMovieService {
             mapMessageObject.setThreshold(0);
             messageHandlerService.messageHandler(movieTimeAlaramService,mapMessageObject);
         }
-
     }
 }

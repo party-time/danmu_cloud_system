@@ -21,13 +21,12 @@ public class PartyAlarmCacheService {
      * 电影开始或者结束
      * @param addressId
      */
-    public void removeDanmuAlarmAllCache(String addressId){
+    public void removeAlarmAllCache(String addressId){
         String typeArray[]={
                 LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_LONG,
                 LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT
         };
         for(int i=0; i<typeArray.length; i++) {
-            alarmCacheService.removeAlarmCount(addressId, typeArray[i]);
             alarmCacheService.removeAlarmCount(addressId, typeArray[i]);
         }
     }
