@@ -61,8 +61,7 @@ public class FilmDanmuListener  implements MessageListener {
             String channelId = channel.id().asLongText();
             adminTaskModel.setAdminId(channelId);
             adminTaskModel.setChannel(channel);
-            int count = managerCachService.appointTaskCount(channelId, partyId);
-            adminTaskModel.setPartyId(partyId);
+            int count = managerCachService.appointTaskCount(channelId);
             adminTaskModel.setCount(count);
             adminTaskModelList.add(adminTaskModel);
             logger.info("管理员信息:{}", JSON.toJSONString(adminTaskModel));
@@ -86,7 +85,7 @@ public class FilmDanmuListener  implements MessageListener {
 
             Channel channel = adminTaskModel.getChannel();
             channel.writeAndFlush(new TextWebSocketFrame(message));
-            managerCachService.addAppointCount(adminTaskModel.getAdminId(), adminTaskModel.getPartyId());
+            managerCachService.addAppointCount(adminTaskModel.getAdminId());
         }
 
     }

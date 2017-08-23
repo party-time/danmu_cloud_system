@@ -1,5 +1,7 @@
 package cn.partytime.scheduler;
 
+import cn.partytime.cache.admin.CheckAdminCacheService;
+import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.cachekey.ClientCacheKey;
 import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
@@ -12,6 +14,7 @@ import cn.partytime.logicService.MessageLogicService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.model.*;
 import cn.partytime.redis.service.RedisService;
+import cn.partytime.rpc.RpcAdminAlarmService;
 import cn.partytime.rpc.RpcProjectorAlarmService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +65,12 @@ public class AlarmScheduler {
     @Autowired
     private RpcProjectorAlarmService rpcProjectorAlarmService;
 
+    @Autowired
+    private CheckAdminCacheService checkAdminCacheService;
+
+    @Autowired
+    private RpcAdminAlarmService rpcAdminAlarmService;
+
     @Scheduled(cron = "0 5 2 * * ?")
     private void projectorCloseCommandListener(){
         logger.info("投影关闭监听逻辑");
@@ -89,7 +98,56 @@ public class AlarmScheduler {
 
     }
 
-    @Scheduled(cron = "0 0/10 * * * *")
+    @Scheduled(cron = "0/30 * * * * ?")
+    public void checkAdminOffLineScheduler() {
+
+        logger.info("管理员离线告警监听");
+        //获取管理员掉县时间
+        List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
+        if(ListUtils.checkListIsNotNull(danmuAddressList)){
+            int type = 1;
+            for(DanmuAddressModel danmuAddressModel:danmuAddressList){
+                //rpcPartyService.findPartyAddressId(danmuAddressModel.getId());
+                PartyLogicModel partyLogicModel = rpcPartyService.findFilmByAddressId(danmuAddressModel.getId());
+                if(partyLogicModel!=null){
+                    String partyId = partyLogicModel.getPartyId();
+                    String addressId = partyLogicModel.getAddressId();
+                    int count = checkAdminCacheService.getCheckAdminCount(type);
+                    long offlineTime = checkAdminCacheService.findAdminOfflineTime(type);
+                    if(count==0){
+                        if(offlineTime==0){
+                            MovieScheduleModel movieScheduleModel = rpcMovieScheduleService.findCurrentMovie(partyId,addressId);
+                            Date movieStartTime = movieScheduleModel.getMoviceStartTime();
+                            rpcAdminAlarmService.admiOffLineAlarm(movieStartTime.getTime());
+                        }else{
+                            rpcAdminAlarmService.admiOffLineAlarm(offlineTime);
+                        }
+
+                    }
+                    /*if(count==0){
+                            //判断管理员离线时间
+
+                        if(offlineTime==0){
+
+                        }
+                            Object object = redisService.get(AdminUserCacheKey.CHECK_AMIN_OFFLINE_TIME+type);
+                            if(object!=null){
+                                long time = Long.parseLong(String.valueOf(object));
+                                sendAlaram(time);
+                            }else{
+                                //管理员从来未登陆过
+                                MovieScheduleModel movieScheduleModel = rpcMovieScheduleService.findCurrentMovie(partyId,addressId);
+                                Date movieStartTime = movieScheduleModel.getMoviceStartTime();
+                                sendAlaram(movieStartTime.getTime());
+                            }
+                    }*/
+                    break;
+                }
+            }
+        }
+    }
+
+   /* @Scheduled(cron = "0 0/10 * * * *")
     public void clientOffLineScheduler() {
         logger.info("客户端在线数量监听");
         List<DanmuAddressModel> danmuAddressModels = rpcDanmuAddressService.findByType(0);
@@ -133,7 +191,7 @@ public class AlarmScheduler {
             messageLogicService.sendMessage(mapMessageObject);
             flashClientLogicService.addClientAlarmCount(1,addressId);
         }
-    }
+    }*/
 
 
 }

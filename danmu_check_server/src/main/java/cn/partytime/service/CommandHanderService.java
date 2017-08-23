@@ -1,5 +1,7 @@
 package cn.partytime.service;
 
+import cn.partytime.cache.admin.CheckAdminAlarmCacheService;
+import cn.partytime.cache.admin.CheckAdminCacheService;
 import cn.partytime.common.cachekey.*;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
@@ -17,6 +19,7 @@ import cn.partytime.util.CommandTypeConst;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,7 @@ import java.util.*;
  */
 
 @Service
+@Slf4j
 public class CommandHanderService {
 
     private static final Logger logger = LoggerFactory.getLogger(CommandHanderService.class);
@@ -62,6 +66,13 @@ public class CommandHanderService {
 
     //@Autowired
     //private RpcDanmuLibraryPartyService rpcDanmuLibraryPartyService;
+
+
+    @Autowired
+    private CheckAdminCacheService checkAdminCacheService;
+
+    @Autowired
+    private CheckAdminAlarmCacheService checkAdminAlarmCacheService;
 
     @Autowired
     private RpcDanmuService rpcDanmuService;
@@ -721,7 +732,6 @@ public class CommandHanderService {
         adminTaskModel.setPartyType(partyType);
         adminTaskModel.setAddressId(addressId);
 
-        cacheDataService.clearAdminAlarmCache();
 
         danmuChannelRepository.saveChannelAdminRelation(partyType,channel, adminTaskModel);
 
@@ -754,10 +764,17 @@ public class CommandHanderService {
             result.put("partyName", party.getName());
             //初始化内容发送个管理界面
             sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
-        }else{
+            checkAdminCacheService.addCheckAdminCount(partyType,1);
 
+            checkAdminAlarmCacheService.removeAlarmAllCache(partyType);
+        }else{
             sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
+            checkAdminCacheService.addCheckAdminCount(partyType,1);
+            checkAdminAlarmCacheService.removeAlarmAllCache(partyType);
         }
+
+
+
 
 
 
@@ -837,15 +854,24 @@ public class CommandHanderService {
      */
     private void clearClientCacheData(AdminTaskModel adminTaskModel, Channel channel) {
         if (adminTaskModel != null) {
+
+            int type = adminTaskModel.getPartyType();
+            checkAdminCacheService.addCheckAdminCount(type,-1);
             String partyId = adminTaskModel.getPartyId();
+
+            //设置管理员掉线时间
+            checkAdminCacheService.setAdminOfflineTime(type);
+
+            //清除分配的弹幕数量
             managerCachService.subOnlineAdminCount(channel, partyId);
+
             //清除屏幕与地址关系
             danmuChannelRepository.remove(channel);
 
             redisService.expire(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+adminTaskModel.getAuthKey(),0);
-
+            //移除通道信息
             danmuChannelRepository.remove(channel);
-
+            //通知其他管理员在线数量
              pushCommandToPartyAdmin(adminTaskModel.getPartyType(),partyId, CommandTypeConst.ONLINE_AMDIN_COUNT, null);
 
         }
@@ -904,12 +930,6 @@ public class CommandHanderService {
                 }
 
                 //cacheDataService.setAdminOnlineCount(partyType,channelList.size());
-            }else{
-                //cacheDataService.setAdminOnlineCount(partyType,0);
-                //管理员掉线告警
-                //rpcAdminAlarmService.admiOffLine();
-                redisService.set(AdminUserCacheKey.AMIN_OFFLINE_TIME,DateUtils.getCurrentDate().getTime());
-
             }
 
         } catch (Exception e) {

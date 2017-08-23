@@ -30,7 +30,10 @@ public class DanmuChannelRepository {
 
 
 
-    public int findFilmCheckAdminCount(){
+    public int getAdminCount(int type){
+        if(type==0){
+            return channelPartyConcurrentHashMap.size();
+        }
         return channelFilmConcurrentHashMap.size();
     }
 

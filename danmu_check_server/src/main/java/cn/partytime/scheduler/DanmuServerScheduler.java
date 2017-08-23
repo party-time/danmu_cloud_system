@@ -1,5 +1,6 @@
 package cn.partytime.scheduler;
 
+import cn.partytime.cache.admin.CheckAdminCacheService;
 import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
@@ -13,6 +14,7 @@ import cn.partytime.model.PartyLogicModel;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.service.CacheDataService;
 import cn.partytime.service.CommandHanderService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,30 +30,26 @@ import java.util.Set;
 @Component
 @EnableScheduling
 @RefreshScope
+@Slf4j
 public class DanmuServerScheduler {
-
-    private static final Logger logger = LoggerFactory.getLogger(CommandHanderService.class);
-
-    @Autowired
-    private RedisService redisService;
 
     @Autowired
     private DanmuChannelRepository danmuChannelRepository;
 
     @Autowired
-    private RpcDanmuAddressService danmuAddressService;
+    private CheckAdminCacheService checkAdminCacheService;
 
-    @Autowired
-    private RpcPartyService rpcPartyService;
+    @Scheduled(cron = "0/60 * * * * *")
+    public void resetOnlineCheckAdminCount(){
+        log.info("重置在线审核管理员的个数");
+        int type=1;
+        int count = danmuChannelRepository.getAdminCount(type);
+        checkAdminCacheService.setCheckAdminCount(type,count);
+    }
 
-    @Autowired
-    private RpcMovieScheduleService rpcMovieScheduleService;
-
-    @Autowired
-    private CacheDataService cacheDataService;
 
     //@Scheduled(cron = "0/10 * * * * *")
-    public void checkAdminOffLineScheduler() {
+    /*public void checkAdminOffLineScheduler() {
 
         logger.info("管理员离线告警监听");
         //获取管理员掉县时间
@@ -101,5 +99,5 @@ public class DanmuServerScheduler {
             //rpcAdminAlarmService.admiOffLine();
             cacheDataService.adminOfflineAlarmCount(1);
         }
-    }
+    }*/
 }

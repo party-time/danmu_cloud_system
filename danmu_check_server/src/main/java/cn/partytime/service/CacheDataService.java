@@ -30,29 +30,16 @@ public class CacheDataService {
      * @param partyType
      * @param count
      */
-    public void setAdminOnlineCount(int partyType,int count){
+   /* public void setAdminOnlineCount(int partyType,int count){
         String key = AdminUserCacheKey.ADMIN_ONLINE_COUNT+partyType;
         if(count==0){
             redisService.set(key,count);
         }else{
             redisService.expire(key,0);
         }
-    }
+    }*/
 
-    public void clearAdminAlarmCache(){
-        redisService.expire(AdminUserCacheKey.AMIN_OFFLINE_ALARM_COUNT,0);
-        redisService.expire(AdminUserCacheKey.AMIN_OFFLINE_TIME,0);
-    }
 
-    public void adminOfflineAlarmCount(int count){
-        String key = AdminUserCacheKey.AMIN_OFFLINE_ALARM_COUNT;
-        redisService.incrKey(key,count);
-    }
-
-    public int findadminOfflineAlarmCount(){
-        String key = AdminUserCacheKey.AMIN_OFFLINE_ALARM_COUNT;
-        return IntegerUtils.objectConvertToInt(redisService.get(key));
-    }
 
 
 
