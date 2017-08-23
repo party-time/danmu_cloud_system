@@ -3,6 +3,7 @@ package cn.partytime.service;
 import cn.partytime.alarmRpc.RpcMovieAlarmService;
 import cn.partytime.alarmRpc.RpcProjectorAlarmService;
 import cn.partytime.cache.danmu.DanmuAlarmCacheService;
+import cn.partytime.cache.party.PartyAlarmCacheService;
 import cn.partytime.common.cachekey.*;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
@@ -67,6 +68,9 @@ public class MovieLogicService {
 
     @Autowired
     private RpcMovieAlarmService rpcMovieAlarmService;
+
+    @Autowired
+    private PartyAlarmCacheService partyAlarmCacheService;
 
 
     public RestResultModel partyStart(String registCode,String command,long clientTime) {
@@ -422,6 +426,7 @@ public class MovieLogicService {
         if("1".equals(status)){
             //清除告警缓存
             danmuAlarmCacheService.removeDanmuAlarmAllCache(addressId);
+            partyAlarmCacheService.removeDanmuAlarmAllCache(addressId);
 
             //判断是否有活动正在进行
             //PartyLogicModel partyLogicModel = partyService.findTemporaryParty(addressId);
@@ -434,6 +439,7 @@ public class MovieLogicService {
         }else if("3".equals(status)){
             //清除告警缓存
             danmuAlarmCacheService.removeDanmuAlarmAllCache(addressId);
+            partyAlarmCacheService.removeDanmuAlarmAllCache(addressId);
         }
 
         commandObject.put("data",dataObject);
