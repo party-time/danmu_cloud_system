@@ -8,6 +8,7 @@ import cn.partytime.model.danmu.PreDanmu;
 import cn.partytime.repository.danmu.DanmuLibraryPartyRepository;
 import cn.partytime.repository.danmu.DanmuLibraryRepository;
 import cn.partytime.repository.manager.PreDanmuRepository;
+import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -136,6 +137,10 @@ public class PreDanmuService {
         Sort sort = new Sort(Sort.Direction.DESC,"createTime");
         PageRequest pageRequest = new PageRequest(page,size,sort);
         return preDanmuRepository.findByDanmuLibraryId(danmuLibraryParty.getDanmuLibraryId(),pageRequest);
+    }
+
+    public long countByDanmuLibraryId(String dlId){
+        return preDanmuRepository.countByDanmuLibraryId(dlId);
     }
 
     public Page<PreDanmu> findPageByDLId(int page, int size, String dlId){
