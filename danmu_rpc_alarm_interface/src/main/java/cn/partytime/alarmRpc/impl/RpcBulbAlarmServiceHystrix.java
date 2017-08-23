@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RpcBulbAlarmServiceHystrix implements RpcBulbAlarmService {
     @Override
-    public void partyStart(String registerCode) {
+    public void blubLife(String registerCode) {
 
     }
 }

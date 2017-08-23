@@ -1,11 +1,14 @@
 package cn.partytime.rpc;
 
+import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.dataRpc.RpcDanmuClientService;
+import cn.partytime.logicService.CommonDataService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.service.BulbLifeAlarmService;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.model.DanmuClientModel;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/rpcBulb")
+@Slf4j
 public class RpcBulbAlarmService {
 
     private static final Logger logger = LoggerFactory.getLogger(RpcBulbAlarmService.class);
@@ -36,14 +40,22 @@ public class RpcBulbAlarmService {
     @Autowired
     private MessageHandlerService messageHandlerService;
 
+    @Autowired
+    private CommonDataService commonDataService;
+
 
 
     @RequestMapping(value = "/blubLife" ,method = RequestMethod.GET)
-    public void partyStart(@RequestParam String registerCode) {
+    public void blubLife(@RequestParam String registerCode) {
+        log.info("灯泡使用寿命报警:{}",registerCode);
         DanmuClientModel danmuClient = danmuClientService.findByRegistCode(registerCode);
+        Map<String,String> map = commonDataService.setMapByRegistorCode(AlarmKeyConst.ALARM_KEY_LIGHTLIFE,registerCode);
+        if(map!=null){
+            MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.CLientLogCode.BULB_LIFE_TIME,map);
+            mapMessageObject.setValue(0);
+            mapMessageObject.setValue(0);
+            messageHandlerService.messageHandler(bulbLifeAlarmService,mapMessageObject);
+        }
 
-        Map<String,Object> map = new HashMap<>();
-        MessageObject<Map<String,Object>> mapMessageObject = new MessageObject<Map<String,Object>>(LogCodeConst.CLientLogCode.BULB_LIFE_TIME,map);
-        messageHandlerService.messageHandler(bulbLifeAlarmService,mapMessageObject);
     }
 }

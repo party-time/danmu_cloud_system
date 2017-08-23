@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface RpcBulbAlarmService {
 
     @RequestMapping(value = "/rpcBulb/blubLife" ,method = RequestMethod.GET)
-    public void partyStart(@RequestParam(value = "registerCode") String registerCode);
+    public void blubLife(@RequestParam(value = "registerCode") String registerCode);
 }

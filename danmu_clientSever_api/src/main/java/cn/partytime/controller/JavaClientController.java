@@ -1,6 +1,7 @@
 package cn.partytime.controller;
 
 
+import cn.partytime.alarmRpc.RpcBulbAlarmService;
 import cn.partytime.cache.projector.ProjectorAlarmCacheService;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.*;
@@ -72,8 +73,8 @@ public class JavaClientController {
     @Autowired
     private MovieLogicService movieLogicService;
 
-    /*@Autowired
-    private RpcBulbAlarmService rpcBulbAlarmService;*/
+    @Autowired
+    private RpcBulbAlarmService rpcBulbAlarmService;
 
     @Autowired
     private TimerDanmuLogicService timerDanmuLogicService;
@@ -351,11 +352,9 @@ public class JavaClientController {
 
                 long usedHour = usedTime/1000/60/60;
                 if(usedHour> 2000*0.8){
-                    //rpc告警
-                    //TODO:
-                    //rpcBulbAlarmService.partyStart(code);
+                    rpcBulbAlarmService.blubLife(code);
                 }
-
+                //rpcBulbAlarmService.blubLife(code);
                 //清除清除投影缓存
                 DanmuClientModel danmuClientModel =  rpcDanmuClientService.findByRegistCode(code);
                 projectorAlarmCacheService.removeAlarmAllCache(danmuClientModel.getAddressId(),code);
