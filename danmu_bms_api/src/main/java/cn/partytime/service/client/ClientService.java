@@ -4,6 +4,7 @@ import cn.partytime.common.cachekey.ClientCommandCacheKey;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.Map;
  */
 
 @Service
+@Slf4j
 public class ClientService {
 
     @Autowired
@@ -39,8 +41,10 @@ public class ClientService {
         dataMap.put("name",command);
         commandMap.put("data",dataMap);
 
+        String message = JSON.toJSONString(commandMap);
+        log.info("发送给客户端的指令{}",message);
+        redisService.set(key, message);
 
-        redisService.set(key, JSON.toJSONString(commandMap));
         redisService.expire(key, 60);
         redisTemplate.convertAndSend("client:command", addressId);
     }

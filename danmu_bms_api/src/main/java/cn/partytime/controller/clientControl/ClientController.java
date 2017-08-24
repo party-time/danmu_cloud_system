@@ -49,6 +49,7 @@ public class ClientController extends BaseAdminController{
      */
     @RequestMapping(value = "/control", method = RequestMethod.GET)
     public RestResultModel controls(String danmuStart , String cmd, String addressId){
+        log.info("控制台请求指令");
         RestResultModel restResultModel = new RestResultModel();
         String callback = "";
         if(cmd.equals("screenPic1")){
@@ -56,7 +57,7 @@ public class ClientController extends BaseAdminController{
         }else if( cmd.equals("screenPic2")){
             callback = partyTimeConfig.getUrl()+"/v1/api/printScreen/sendScreenPic?adminId="+getAdminUser().getId()+"&addressId="+addressId+"&num=2";
         }
-
+        log.info("控制台请求指令{}",cmd);
         if(cmd.startsWith("danmu-")){
             clientService.sendCommand(danmuStart,addressId,callback);
         }else{
