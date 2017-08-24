@@ -52,7 +52,7 @@ public class RpcPreDanmuService {
      * @param partyId
      * @return
      */
-    @RequestMapping(value = "/findDanmuLibraryIdByParty" ,method = RequestMethod.GET)
+   /*@RequestMapping(value = "/findDanmuLibraryIdByParty" ,method = RequestMethod.GET)
     public String findDanmuLibraryIdByParty(@RequestParam String partyId) {
         DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyRepository.findByPartyId(partyId);
         if(danmuLibraryParty!=null){
@@ -65,7 +65,7 @@ public class RpcPreDanmuService {
     public List<PreDanmu> findPreDanmuByLibraryId(@RequestParam String libraryId,@RequestParam int page,@RequestParam int size) {
         Page<PreDanmu> preDanmuPage = preDanmuService.findPageByDLId(page,size,libraryId);
         return preDanmuPage.getContent();
-    }
+    }*/
 
 
 
