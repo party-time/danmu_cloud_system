@@ -15,4 +15,19 @@ public class RpcPreDanmuServiceHystrix implements RpcPreDanmuService {
         log.info("获取预置弹幕为空");
         return null;
     }
+
+    @Override
+    public String findDanmuLibraryIdByParty(String partyId) {
+        return null;
+    }
+
+    @Override
+    public List<PreDanmuModel> findPreDanmuByLibraryId(String libraryId, int page, int size) {
+        return null;
+    }
+
+    @Override
+    public long findPreDanmuCountByLibraryId(String libraryId) {
+        return 0;
+    }
 }

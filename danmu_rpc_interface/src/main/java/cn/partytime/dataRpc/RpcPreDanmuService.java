@@ -21,4 +21,16 @@ public interface RpcPreDanmuService {
     @RequestMapping(value = "/rpcRepDanmu/findByPartyId" ,method = RequestMethod.GET)
     public List<PreDanmuModel> findByPartyId(@RequestParam(name = "partyId") String partyId);
 
+
+    @RequestMapping(value = "/rpcRepDanmu/findDanmuLibraryIdByParty" ,method = RequestMethod.GET)
+    public String findDanmuLibraryIdByParty(@RequestParam(name = "partyId") String partyId);
+
+
+    @RequestMapping(value = "/rpcRepDanmu/findPreDanmuByLibraryId" ,method = RequestMethod.GET)
+    public List<PreDanmuModel> findPreDanmuByLibraryId(@RequestParam(name = "libraryId") String libraryId,@RequestParam(name = "page") int page,@RequestParam(name = "size") int size) ;
+
+    @RequestMapping(value = "/rpcRepDanmu/findPreDanmuCountByLibraryId" ,method = RequestMethod.GET)
+    public long findPreDanmuCountByLibraryId(@RequestParam(name = "libraryId") String libraryId);
+
+
 }

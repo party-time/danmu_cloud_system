@@ -151,7 +151,7 @@ public class PotocolService {
 
             //当返回的弹幕数量大于0的处理
             if(danmuCount>0){
-                if(danmuCount<=15){
+                if(danmuCount<15){
                     //清除弹幕过量的缓存 和 和时间
                     alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE);
                     alarmCacheService.addAlarmTime(DateUtils.getCurrentDate().getTime(),0,addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE);

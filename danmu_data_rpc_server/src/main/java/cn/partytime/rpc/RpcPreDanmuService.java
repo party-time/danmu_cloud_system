@@ -47,6 +47,27 @@ public class RpcPreDanmuService {
         return  preDanmuService.findByPartyId(partyId);
     }
 
+    @RequestMapping(value = "/findDanmuLibraryIdByParty" ,method = RequestMethod.GET)
+    public String findDanmuLibraryIdByParty(@RequestParam String partyId) {
+        DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyRepository.findByPartyId(partyId);
+        if(danmuLibraryParty!=null){
+            return danmuLibraryParty.getDanmuLibraryId();
+        }
+        return "";
+    }
+
+
+    @RequestMapping(value = "/findPreDanmuByLibraryId" ,method = RequestMethod.GET)
+    public List<PreDanmu> findPreDanmuByLibraryId(@RequestParam String libraryId,@RequestParam int page,@RequestParam int size) {
+        Page<PreDanmu> preDanmuPage = preDanmuService.findPageByDLId(page,size,libraryId);
+        return preDanmuPage.getContent();
+    }
+
+    @RequestMapping(value = "/findPreDanmuCountByLibraryId" ,method = RequestMethod.GET)
+    public long findPreDanmuCountByLibraryId(@RequestParam String libraryId) {
+        return  preDanmuService.countByDanmuLibraryId(libraryId);
+    }
+
     /**
      * 查找活动下的预制弹幕
      * @param partyId

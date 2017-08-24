@@ -65,14 +65,14 @@ public class RpcDanmuAlarmService {
                 return;
             }
             map = commonDataService.setCommonMapByAddressId(AlarmKeyConst.ALARM_KEY_PREDANMU,code);
-            sendMessage(map,LogCodeConst.DanmuLogCode.PREDANMU_ISNULL,1);
+            sendMessage(map,LogCodeConst.DanmuLogCode.PREDANMU_ISNULL,1,AlarmKeyConst.ALARM_KEY_PREDANMU);
 
         }else if(AlarmConst.DanmuAlarmType.DANMU_IS_NULL.equals(type)){
 
             logger.info("告警类型:{},客户端编号:{}",type,code);
             log.info("客户端没有弹幕了");
             map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_SYSTEMERROR,code);
-            sendMessageByRule(map,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL,1);
+            sendMessageByRule(map,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL,1,AlarmKeyConst.ALARM_KEY_SYSTEMERROR);
 
 
         }else if(AlarmConst.DanmuAlarmType.HISTORY_DANMU_IS_NULL.equals(type)){
@@ -80,21 +80,21 @@ public class RpcDanmuAlarmService {
             logger.info("告警类型:{},客户端编号:{}",type,code);
             log.info("客户端历史弹幕没有了");
             map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_HISTORYDANMU,code);
-            sendMessage(map,LogCodeConst.DanmuLogCode.CLIENT_HISTORYDANMU_ISNULL,1);
+            sendMessage(map,LogCodeConst.DanmuLogCode.CLIENT_HISTORYDANMU_ISNULL,1,AlarmKeyConst.ALARM_KEY_HISTORYDANMU);
 
         }else if(AlarmConst.DanmuAlarmType.TIMER_DANMU_IS_NULL.equals(type)){
 
             logger.info("告警类型:{},客户端编号:{}",type,code);
             log.info("客户端定时弹幕没有了");
             map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_TIMERDANMU,code);
-            sendMessage(map,LogCodeConst.DanmuLogCode.CLIENT_TIMERDANMU_ISNULL,1);
+            sendMessage(map,LogCodeConst.DanmuLogCode.CLIENT_TIMERDANMU_ISNULL,1,AlarmKeyConst.ALARM_KEY_TIMERDANMU);
 
         }else if(AlarmConst.DanmuAlarmType.DANMU_IS_MORE.equals(type)){
 
             logger.info("告警类型:{},客户端编号:{}",type,code);
             log.info("客户端弹幕过量");
             map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_DANMUEXCESS,code);
-            sendMessageByRule(map,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE,1);
+            sendMessageByRule(map,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE,1,AlarmKeyConst.ALARM_KEY_DANMUEXCESS);
 
         }else{
             logger.info("=============》告警类型:{},客户端编号:{}",type,code);
@@ -102,20 +102,22 @@ public class RpcDanmuAlarmService {
 
     }
 
-    private void sendMessageByRule(Map<String,String> map,String type,int count){
+    private void sendMessageByRule(Map<String,String> map,String type,int count,String typeName){
         if(map!=null){
             String addressId = map.get("addressId");
             String partyId = map.get("partyId");
             int cacheCount = alarmCacheService.findAlarmCount(addressId,type);
             if(cacheCount>= count){
-                log.info("type:{}告警发出的次数超过上限",type);
+                log.info("{}告警发出的次数超过上限",typeName);
                 return;
             }
 
             long alarmOktTime = alarmCacheService.findAlarmTime(addressId,type);
             if(alarmOktTime!=0){
                 long subTime = DateUtils.getCurrentDate().getTime()-alarmOktTime;
-                if(subTime/1000/60<2){
+                long minute = subTime/1000/60;
+                log.info("time:{}",minute);
+                if(minute<2){
                     return;
                 }
             }
@@ -130,13 +132,13 @@ public class RpcDanmuAlarmService {
         }
     }
 
-    private void sendMessage(Map<String,String> map,String type,int count){
+    private void sendMessage(Map<String,String> map,String type,int count,String typeName){
         if(map!=null){
             String addressId = map.get("addressId");
             String partyId = map.get("partyId");
             int cacheCount = alarmCacheService.findAlarmCount(addressId,type);
             if(cacheCount>= count){
-                log.info("type:{}告警发出的次数超过上限",type);
+                log.info("{}:告警发出的次数超过上限",typeName);
                 return;
             }
             //告警计数
