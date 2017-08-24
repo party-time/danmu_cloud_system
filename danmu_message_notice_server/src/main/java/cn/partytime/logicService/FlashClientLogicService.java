@@ -14,7 +14,7 @@ public class FlashClientLogicService {
     @Autowired
     private RedisService redisService;
 
-    public void addClientAlarmCount(int count,String addressId){
+    /*public void addClientAlarmCount(int count,String addressId){
         String key = ClientCacheKey.CLIENT_OFFLINE_ALARM_COUNT+addressId;
         redisService.incrKey(key,count);
     }
@@ -38,5 +38,5 @@ public class FlashClientLogicService {
     public int  findClientFlashCount(String addressId){
         String key = AddressCacheKey.ADDRESS_FLASH_CLIENT_COUNT+addressId;
         return IntegerUtils.objectConvertToInt(redisService.get(key));
-    }
+    }*/
 }

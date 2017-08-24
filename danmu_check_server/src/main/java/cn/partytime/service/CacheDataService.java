@@ -48,7 +48,7 @@ public class CacheDataService {
      * @param addressId
      * @return
      */
-    public List<DanmuClientModel> findDanmuClientList(String addressId) {
+    /*public List<DanmuClientModel> findDanmuClientList(String addressId) {
         String clientSortSetKey = ClientCacheKey.CLIENT_CACHE_ID_SORTSET + addressId;
         Set<String> clientSet = redisService.getSortSetByRnage(clientSortSetKey, 0, -1, true);
         List<DanmuClientModel> clientNameList = null;
@@ -60,5 +60,5 @@ public class CacheDataService {
             }
         }
         return clientNameList;
-    }
+    }*/
 }

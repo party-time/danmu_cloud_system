@@ -44,7 +44,7 @@ public class ClientCacheService {
     }
 
 
-    public void setClientIdIntoCache(String addressId,String registerCode){
+    /*public void setClientIdIntoCache(String addressId,String registerCode){
         String key = ClientCacheKey.CLIENT_CACHE_ID_SORTSET + addressId;
         redisService.setSortSet(key,0,registerCode);
         redisService.expire(key,60*60*24*30);
@@ -81,7 +81,7 @@ public class ClientCacheService {
     public void removeClientFlashCount(String addressId){
         String key = AddressCacheKey.ADDRESS_FLASH_CLIENT_COUNT+addressId;
         redisService.decrKey(key,-1);
-    }
+    }*/
 
     /**
      * 将命令压入队列

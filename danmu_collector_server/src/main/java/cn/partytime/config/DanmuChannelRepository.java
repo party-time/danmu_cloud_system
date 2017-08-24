@@ -1,7 +1,10 @@
 package cn.partytime.config;
 
+import cn.partytime.common.constants.ClientConst;
 import cn.partytime.model.DanmuClientModel;
+import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -42,6 +45,18 @@ public class DanmuChannelRepository {
     public int size() {
         logger.info("获取客户端数量");
         return channelConcurrentHashMap.size();
+    }
+
+    public int findDanmuClientCount(int type,String addressId){
+
+        int count =0;
+        for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : channelConcurrentHashMap.entrySet()) {
+            DanmuClientModel danmuClientModel = entry.getValue();
+            if (addressId.equals(danmuClientModel.getAddressId()) && danmuClientModel.getClientType()==Integer.parseInt(ClientConst.CLIENT_TYPE_JAVACLIENT)) {
+                count = count+1;
+            }
+        }
+        return count;
     }
 
 

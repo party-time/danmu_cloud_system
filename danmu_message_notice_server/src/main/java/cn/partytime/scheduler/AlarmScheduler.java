@@ -1,6 +1,7 @@
 package cn.partytime.scheduler;
 
 import cn.partytime.cache.admin.CheckAdminCacheService;
+import cn.partytime.cache.collector.CollectorCacheService;
 import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.cachekey.ClientCacheKey;
 import cn.partytime.common.constants.AlarmKeyConst;
@@ -15,6 +16,7 @@ import cn.partytime.message.bean.MessageObject;
 import cn.partytime.model.*;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.rpc.RpcAdminAlarmService;
+import cn.partytime.rpc.RpcClientAlarmService;
 import cn.partytime.rpc.RpcProjectorAlarmService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +44,7 @@ public class AlarmScheduler {
     private RpcPartyService rpcPartyService;
 
     @Autowired
-    private FlashClientLogicService flashClientLogicService;
+    private CollectorCacheService collectorCacheService;
 
     @Autowired
     private RpcMovieScheduleService rpcMovieScheduleService;
@@ -70,6 +72,9 @@ public class AlarmScheduler {
 
     @Autowired
     private RpcAdminAlarmService rpcAdminAlarmService;
+
+    @Autowired
+    private RpcClientAlarmService rpcClientAlarmService;
 
     @Scheduled(cron = "0 5 2 * * ?")
     private void projectorCloseCommandListener(){
@@ -117,37 +122,20 @@ public class AlarmScheduler {
                     if(count==0){
                         if(offlineTime==0){
                             MovieScheduleModel movieScheduleModel = rpcMovieScheduleService.findCurrentMovie(partyId,addressId);
-                            Date movieStartTime = movieScheduleModel.getMoviceStartTime();
+                            Date movieStartTime = movieScheduleModel.getStartTime();
                             rpcAdminAlarmService.admiOffLineAlarm(movieStartTime.getTime());
                         }else{
                             rpcAdminAlarmService.admiOffLineAlarm(offlineTime);
                         }
 
                     }
-                    /*if(count==0){
-                            //判断管理员离线时间
-
-                        if(offlineTime==0){
-
-                        }
-                            Object object = redisService.get(AdminUserCacheKey.CHECK_AMIN_OFFLINE_TIME+type);
-                            if(object!=null){
-                                long time = Long.parseLong(String.valueOf(object));
-                                sendAlaram(time);
-                            }else{
-                                //管理员从来未登陆过
-                                MovieScheduleModel movieScheduleModel = rpcMovieScheduleService.findCurrentMovie(partyId,addressId);
-                                Date movieStartTime = movieScheduleModel.getMoviceStartTime();
-                                sendAlaram(movieStartTime.getTime());
-                            }
-                    }*/
                     break;
                 }
             }
         }
     }
 
-   /* @Scheduled(cron = "0 0/10 * * * *")
+   @Scheduled(cron = "0/30 * * * * *")
     public void clientOffLineScheduler() {
         logger.info("客户端在线数量监听");
         List<DanmuAddressModel> danmuAddressModels = rpcDanmuAddressService.findByType(0);
@@ -157,9 +145,19 @@ public class AlarmScheduler {
                 if(partyLogicModel!=null){
                     String partyId = partyLogicModel.getPartyId();
                     String addressId = partyLogicModel.getAddressId();
-                    int count  = flashClientLogicService.findClientFlashCount(addressId);
+                    int count  = collectorCacheService.getClientCount(0,addressId);
                     if(count<2){
-                        Object object = redisService.get(ClientCacheKey.ClIENT_OFFLINE_TIME+addressId);
+                        long time = collectorCacheService.findFlashOfflineTime(addressId);
+                        Date date =  DateUtils.getCurrentDate();
+                        long subTime = date.getTime() - time;
+                        long minute = subTime/1000/60;
+                        if(time==0){
+                            //从来未启动过
+                            rpcClientAlarmService.clientNetError(addressId);
+                        }else if(minute>5){
+                            rpcClientAlarmService.clientNetError(addressId);
+                        }
+                        /*Object object = redisService.get(ClientCacheKey.ClIENT_OFFLINE_TIME+addressId);
                         if(object!=null){
                             long time = Long.parseLong(String.valueOf(object));
                             sendAlaram(time,addressId);
@@ -170,13 +168,13 @@ public class AlarmScheduler {
                                 Date movieStartTime = movieScheduleModel.getStartTime();
                                 sendAlaram(movieStartTime.getTime(),addressId);
                             }
-                        }
+                        }*/
                     }
                 }
             }
         }
     }
-    public void sendAlaram(long  time,String addressId){
+    /*public void sendAlaram(long  time,String addressId){
         Date date =  DateUtils.getCurrentDate();
         int alarmCount = flashClientLogicService.findClientAlarmCount(addressId);
         if(alarmCount>0){

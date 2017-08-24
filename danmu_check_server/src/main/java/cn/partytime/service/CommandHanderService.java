@@ -128,7 +128,7 @@ public class CommandHanderService {
             testModelHander(partyId, addressId, object, channel,partyType);
         } else if (CommandTypeConst.FIND_CLIENTLIST.equals(type)) {
             //查找客户端数量
-            findClientList(type, addressId, channel,partyType);
+            ///findClientList(type, addressId, channel,partyType);
         } else if (CommandTypeConst.DANMU_DENSITY.equals(type)) {
             //设置弹幕密度
             setDanmuDensity(type, addressId, partyId, object, channel,partyType);
@@ -169,7 +169,7 @@ public class CommandHanderService {
      *
      * @param channel
      */
-    public void findClientList(String type, String addressId, Channel channel,int partyType) {
+    /*public void findClientList(String type, String addressId, Channel channel,int partyType) {
         logger.info("获取在线客户端");
         try {
             logger.info("获取地址{}客户端信息", addressId);
@@ -183,7 +183,7 @@ public class CommandHanderService {
         } catch (Exception e) {
             logger.error("获取在线客户端异常,{}", e.getMessage());
         }
-    }
+    }*/
 
     /**
      * 测试模式的开启

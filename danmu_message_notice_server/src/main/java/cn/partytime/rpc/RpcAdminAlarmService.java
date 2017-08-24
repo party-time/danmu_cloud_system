@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -42,11 +43,11 @@ public class RpcAdminAlarmService {
 
 
     @RequestMapping(value = "/admiOffLine" ,method = RequestMethod.GET)
-    public void admiOffLineAlarm(long time) {
+    public void admiOffLineAlarm(@RequestParam long time) {
         Date date  = DateUtils.getCurrentDate();
         long subTime = date.getTime() - time;
         long minute = subTime/1000/60;
-        if(minute<2){
+        if(minute<5){
             log.info("当前时间与离线时间小于5分钟");
             return;
         }
@@ -59,6 +60,7 @@ public class RpcAdminAlarmService {
         //MessageObject<Map<String,Object>> mapMessageObject = new MessageObject<Map<String,Object>>(LogCodeConst.AdminLogCode.ADMIN_ONLINE_COUNT_ZERO,map);
         //messageHandlerService.messageHandler(adminIsOnLineAlarmService,mapMessageObject);
     }
+
 
     private void sendMessage(String type,Map<String,String> map){
         if(map!=null){

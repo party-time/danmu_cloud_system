@@ -1,5 +1,7 @@
 package cn.partytime.service;
 
+import cn.partytime.cache.collector.CollectorAlarmCacheService;
+import cn.partytime.cache.collector.CollectorCacheService;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
@@ -17,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -58,7 +61,18 @@ public class ClientLoginService {
     @Autowired
     private ClientCacheService clientCacheService;
 
+    @Autowired
+    private CollectorCacheService collectorCacheService;
 
+    @Autowired
+    private CollectorAlarmCacheService collectorAlarmCacheService;
+
+
+    @Value("${netty.host}")
+    private String host;
+
+    @Value("${netty.port}")
+    private int port;
     /**
      * 客户端登录
      *
@@ -224,7 +238,7 @@ public class ClientLoginService {
             danmuChannelRepository.set(channel, danmuClientModel);
 
             //将当前客户端的信息存入缓
-            clientCacheService.setClientIdIntoCache(danmuClient.getAddressId(),danmuClient.getRegistCode());
+            //clientCacheService.setClientIdIntoCache(danmuClient.getAddressId(),danmuClient.getRegistCode());
 
             // 获取活动信息
             String commandType = PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS;
@@ -260,12 +274,18 @@ public class ClientLoginService {
                 }
             }
             //计算客户端在线数量
+
             String addressId = danmuClientModel.getAddressId();
-            long size =clientCacheService.getClientSize(addressId);
-            if(size==2){
-                clientCacheService.removeAlarmCache(addressId);
+            //获取已经在线的flashclient数量
+            int count =danmuChannelRepository.findDanmuClientCount(0,addressId);
+            if(count>=2){
+                //collectorCacheService.removeFlashOfflineTime(addressId);
+                collectorAlarmCacheService.removeAlarmAllCache(addressId);
             }
-            clientCacheService.addClientFlashCount(addressId);
+
+            collectorCacheService.setCollectorIpRelation(addressId,host);
+            collectorCacheService.setClientCount(0,addressId,host,count+1);
+
         } else {
             logger.info("当前连接的用户未非法用户,强制下线");
             channel.close();

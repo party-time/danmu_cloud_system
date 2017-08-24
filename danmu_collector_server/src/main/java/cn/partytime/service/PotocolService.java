@@ -1,6 +1,7 @@
 package cn.partytime.service;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
+import cn.partytime.cache.collector.CollectorCacheService;
 import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.LogCodeConst;
@@ -22,6 +23,7 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -57,6 +59,15 @@ public class PotocolService {
 
     @Autowired
     private AlarmCacheService alarmCacheService;
+
+    @Autowired
+    private CollectorCacheService collectorCacheService;
+
+    @Value("${netty.host}")
+    private String host;
+
+    @Value("${netty.port}")
+    private int port;
     /**
      * 协议处理
      *
@@ -187,18 +198,15 @@ public class PotocolService {
 
         if(danmuClientModel!=null && danmuClientModel.getClientType()==0){
             String addressId = danmuClientModel.getAddressId();
-            clientCacheService.removeClientFromCache(addressId,danmuClientModel.getRegistCode());
-            clientCacheService.setClientOffineLineTime(addressId);
-
-            clientCacheService.removeClientFlashCount(addressId);
-
             clientCacheService.removeCommandCache(danmuClientModel.getAddressId());
+
+            int count =danmuChannelRepository.findDanmuClientCount(0,addressId);
+            collectorCacheService.setFlashOfflineTime(addressId);
+            collectorCacheService.setClientCount(0,addressId,host,count+1);
         }
 
         //清除用户状态
         danmuChannelRepository.remove(channel);
-
-
 
         //关闭通道
         channel.close();

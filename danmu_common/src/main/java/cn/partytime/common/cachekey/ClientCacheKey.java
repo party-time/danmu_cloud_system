@@ -9,15 +9,7 @@ import org.omg.CORBA.PUBLIC_MEMBER;
 public class ClientCacheKey {
 
 
-    /**
-     * 客户端id编号 client:id:sortset:address
-     */
-    public static final String CLIENT_CACHE_ID_SORTSET = "client:id:sortset:";
 
-
-    public static final String ClIENT_OFFLINE_TIME="client:offline:time";
-
-    public static final String CLIENT_OFFLINE_ALARM_COUNT="client:offlinealarm:count";
 
 
     /**
