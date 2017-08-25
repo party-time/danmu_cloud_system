@@ -1,12 +1,15 @@
 package cn.partytime.rpc;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
+import cn.partytime.cache.danmu.DanmuAlarmCacheService;
+import cn.partytime.common.cachekey.DanmuCacheKey;
 import cn.partytime.common.constants.AlarmConst;
 import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.dataRpc.RpcMovieScheduleService;
 import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.RpcTimerDanmuService;
 import cn.partytime.logicService.CommonDataService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.proxy.MessageHandlerService;
@@ -51,8 +54,15 @@ public class RpcDanmuAlarmService {
     @Autowired
     private RpcMovieScheduleService rpcMovieScheduleService;
 
+
+    @Autowired
+    private DanmuAlarmCacheService danmuAlarmCacheService;
+
+    @Autowired
+    private RpcTimerDanmuService rpcTimerDanmuService;
+
     @RequestMapping(value = "/danmuAlarm" ,method = RequestMethod.GET)
-    public void danmuAlarm(@RequestParam String type, @RequestParam String code) {
+    public void danmuAlarm(@RequestParam String type, @RequestParam String code,@RequestParam String idd) {
 
         MessageObject<Map<String,String>> mapMessageObject = null;
         Map<String,String> map = new HashMap<>();
@@ -84,10 +94,18 @@ public class RpcDanmuAlarmService {
 
         }else if(AlarmConst.DanmuAlarmType.TIMER_DANMU_IS_NULL.equals(type)){
 
-            logger.info("告警类型:{},客户端编号:{}",type,code);
-            log.info("客户端定时弹幕没有了");
-            map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_TIMERDANMU,code);
-            sendMessage(map,LogCodeConst.DanmuLogCode.CLIENT_TIMERDANMU_ISNULL,1,AlarmKeyConst.ALARM_KEY_TIMERDANMU);
+            if("null".equals(idd)){
+                logger.info("告警类型:{},客户端编号:{}",type,code);
+                log.info("客户端定时弹幕没有了");
+                map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.ALARM_KEY_TIMERDANMU,code);
+                sendMessage(map,LogCodeConst.DanmuLogCode.CLIENT_TIMERDANMU_ISNULL,1,AlarmKeyConst.ALARM_KEY_TIMERDANMU);
+            }else{
+                logger.info("告警类型:{},客户端编号:{},资源编号:{}",type,code,idd);
+                log.info("客户端定时弹幕没有了");
+                map = commonDataService.setCommonMapByRegistor(AlarmKeyConst.RESOURCENOTPLAY,code);
+                sendMessageByRule(map,LogCodeConst.DanmuLogCode.CLIENT_TIMERDANMU_NOT_PLAY,idd,1,AlarmKeyConst.RESOURCENOTPLAY);
+            }
+
 
         }else if(AlarmConst.DanmuAlarmType.DANMU_IS_MORE.equals(type)){
 
@@ -102,6 +120,48 @@ public class RpcDanmuAlarmService {
 
     }
 
+
+    private void sendMessageByRule(Map<String,String> map,String type,String idd, int count,String typeName){
+        if(map!=null){
+            String addressId = map.get("addressId");
+            String partyId = map.get("partyId");
+            long time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
+            boolean isExist = danmuAlarmCacheService.timerDanmuNotPlayResourceisExist(addressId,idd);
+            if(isExist){
+                log.info("场地:{},编号:{}资源告警已经发送过",addressId,idd);
+                return;
+            }
+            danmuAlarmCacheService.addTimerDanmuNotPlayResource(addressId,idd,time);
+
+            /*int cacheCount = alarmCacheService.findAlarmCount(addressId,type);
+            if(cacheCount>= count){
+                log.info("{}告警发出的次数超过上限",typeName);
+                return;
+            }*/
+
+//            long alarmOktTime = alarmCacheService.findAlarmTime(addressId,type);
+//            if(alarmOktTime!=0){
+//                long subTime = DateUtils.getCurrentDate().getTime()-alarmOktTime;
+//                long minute = subTime/1000/60;
+//                log.info("time:{}",minute);
+//                if(minute<2){
+//                    return;
+//                }
+//            }
+
+            //告警计数
+            //alarmCacheService.addAlarmCount(time,addressId,type);
+
+
+
+            //执行告警发送
+            MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(type,map);
+            mapMessageObject.setValue(0);
+            mapMessageObject.setThreshold(0);
+            messageHandlerService.messageHandler(danmuAlarmService,mapMessageObject);
+        }
+
+    }
     private void sendMessageByRule(Map<String,String> map,String type,int count,String typeName){
         if(map!=null){
             String addressId = map.get("addressId");
@@ -141,8 +201,18 @@ public class RpcDanmuAlarmService {
                 log.info("{}:告警发出的次数超过上限",typeName);
                 return;
             }
-            //告警计数
             long  time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
+            if(time==0){
+                //电影结束了
+                return;
+            }
+            if(AlarmKeyConst.ALARM_KEY_TIMERDANMU.equals(typeName)){
+                boolean isExist =  rpcTimerDanmuService.findTimerDanmuIsExistAfterCurrentTime(time);
+                if(!isExist){
+                    log.info("没有定时弹幕了");
+                    return;
+                }
+            }
             alarmCacheService.addAlarmCount(time,addressId,type);
             //执行告警发送
             MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(type,map);

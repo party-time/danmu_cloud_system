@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface RpcDanmuAlarmService {
 
     @RequestMapping(value = "/rpcDanmu/danmuAlarm" ,method = RequestMethod.GET)
-    public void danmuAlarm(@RequestParam(value = "type") String type, @RequestParam(value = "code") String code);
+    public void danmuAlarm(@RequestParam(value = "type") String type, @RequestParam(value = "code") String code, @RequestParam(value = "idd") String idd);
 }

@@ -1,15 +1,48 @@
 package cn.partytime.cache.danmu;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
+import cn.partytime.common.cachekey.DanmuCacheKey;
 import cn.partytime.common.constants.LogCodeConst;
+import cn.partytime.redis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 public class DanmuAlarmCacheService {
 
     @Autowired
     private AlarmCacheService alarmCacheService;
+
+    @Autowired
+    private RedisService redisService;
+
+    public void addTimerDanmuNotPlayResource(String addressId,String idd,long time){
+        String key = DanmuCacheKey.TIMERDANMU_NOT_PLARY_RESOUR_LIST+addressId;
+        redisService.setSortSet(key,0,idd);
+        redisService.expire(key,time);
+    }
+
+    public boolean timerDanmuNotPlayResourceisExist(String addressId,String idd){
+        String key = DanmuCacheKey.TIMERDANMU_NOT_PLARY_RESOUR_LIST+addressId;
+        Set<String> stringSet = redisService.getSortSetByRnage(key,0,-1,true);
+         if(stringSet!=null && stringSet.size()>0){
+             for(String str:stringSet){
+                 if(idd.equals(str)){
+                     return true;
+                 }
+             }
+         }
+         return false;
+    }
+
+    public void removeDanmuNotPlayResource(String addressId){
+        String key = DanmuCacheKey.TIMERDANMU_NOT_PLARY_RESOUR_LIST+addressId;
+        redisService.expire(key,0);
+    }
+
+
 
     /**
      * 电影开始或者结束
@@ -26,6 +59,8 @@ public class DanmuAlarmCacheService {
         for(int i=0; i<typeArray.length; i++) {
             alarmCacheService.removeAlarmCount(addressId, typeArray[i]);
         }
+        removeDanmuNotPlayResource(addressId);
+
     }
 
     public void removeDanmuAlarmCacheIfDanmuIsMore(int danmuCount,String addressId){

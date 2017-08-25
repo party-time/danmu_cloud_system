@@ -20,4 +20,7 @@ public class DanmuCacheKey {
      */
     public static final String PUB_DANMU_CACHE_LIST="pub:danmu:cache:list:";
 
+
+    public static final String TIMERDANMU_NOT_PLARY_RESOUR_LIST = "timerdanm:notplay:resoure:list:";
+
 }

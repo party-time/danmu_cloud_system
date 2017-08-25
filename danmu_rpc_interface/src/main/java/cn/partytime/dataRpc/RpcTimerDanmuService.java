@@ -20,4 +20,9 @@ public interface RpcTimerDanmuService {
     @RequestMapping(value = "/rpcTimerDanmu/findTimerDanmuFileList" ,method = RequestMethod.GET)
     public List<TimerDanmuFileModel> findTimerDanmuFileList(@RequestParam(value = "partyIdList") List<String> partyIdList);
 
+
+    @RequestMapping(value = "/rpcTimerDanmu/findTimerDanmuIsExistAfterCurrentTime" ,method = RequestMethod.GET)
+    public boolean findTimerDanmuIsExistAfterCurrentTime(@RequestParam(value = "currentTime") long currentTime);
+
+
 }

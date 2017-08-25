@@ -13,6 +13,8 @@ public interface LogCodeConst {
         public static final String PREDANMU_ISNULL = "0103";
         public static final String CLIENT_HISTORYDANMU_ISNULL = "0104";
         public static final String CLIENT_TIMERDANMU_ISNULL = "0105";
+
+        public static final String CLIENT_TIMERDANMU_NOT_PLAY="0106";
     }
 
     public class PartyLogCode{

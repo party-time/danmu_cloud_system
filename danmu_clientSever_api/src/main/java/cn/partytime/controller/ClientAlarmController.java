@@ -19,12 +19,11 @@ public class ClientAlarmController {
     @Autowired
     private RpcDanmuAlarmService rpcDanmuAlarmService;
 
-    @RequestMapping(value = "/alarm/{code}/{type}", method = RequestMethod.GET)
-    public RestResultModel danmuNotice(@PathVariable("code") String code, @PathVariable("type") String type){
+    @RequestMapping(value = "/alarm/{code}/{type}/{idd}", method = RequestMethod.GET)
+    public RestResultModel danmuNotice(@PathVariable("code") String code, @PathVariable("type") String type, @PathVariable("idd") String idd){
         RestResultModel restResultModel = new RestResultModel();
-        rpcDanmuAlarmService.danmuAlarm(type,code);
+        rpcDanmuAlarmService.danmuAlarm(type,code,idd);
         restResultModel.setResult(200);
         return restResultModel;
     }
-
 }

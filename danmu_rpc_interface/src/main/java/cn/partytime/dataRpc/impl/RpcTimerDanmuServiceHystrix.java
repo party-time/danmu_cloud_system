@@ -12,4 +12,9 @@ public class RpcTimerDanmuServiceHystrix implements RpcTimerDanmuService {
     public List<TimerDanmuFileModel> findTimerDanmuFileList(List<String> partyIdList) {
         return null;
     }
+
+    @Override
+    public boolean findTimerDanmuIsExistAfterCurrentTime(long currentTime) {
+        return true;
+    }
 }

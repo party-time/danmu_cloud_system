@@ -83,4 +83,8 @@ public class TimerDanmuService {
         DBObject dbObject = danmuMongoTemplate.getCollection("timer_danmu").group(new BasicDBObject("beginTime", 1), query.getQueryObject(), new BasicDBObject("count", 0), reduce);
         return dbObject;
     }
+
+    public long countByPartyIdLessThanBAndBeginTime(long time){
+        return timerDanmuRepository.countByPartyIdLessThanBAndBeginTime(time);
+    }
 }
