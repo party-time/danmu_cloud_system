@@ -42,7 +42,7 @@ public class ClientService {
         commandMap.put("data",dataMap);
 
         String message = JSON.toJSONString(commandMap);
-        log.info("发送给客户端的指令{}",message);
+        log.info("发送给地址:{}客户端的指令{}",addressId,message);
         redisService.set(key, message);
 
         redisService.expire(key, 60);

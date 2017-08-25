@@ -52,7 +52,7 @@ public class DanmuChannelRepository {
         int count =0;
         for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : channelConcurrentHashMap.entrySet()) {
             DanmuClientModel danmuClientModel = entry.getValue();
-            if (addressId.equals(danmuClientModel.getAddressId()) && danmuClientModel.getClientType()==Integer.parseInt(ClientConst.CLIENT_TYPE_JAVACLIENT)) {
+            if (addressId.equals(danmuClientModel.getAddressId()) && danmuClientModel.getClientType()==type) {
                 count = count+1;
             }
         }

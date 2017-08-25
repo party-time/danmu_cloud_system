@@ -18,6 +18,7 @@ import cn.partytime.redis.service.RedisService;
 import cn.partytime.rpc.RpcAdminAlarmService;
 import cn.partytime.rpc.RpcClientAlarmService;
 import cn.partytime.rpc.RpcProjectorAlarmService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,8 @@ import java.util.*;
 @Component
 @EnableScheduling
 @RefreshScope
+@Slf4j
 public class AlarmScheduler {
-
-    private static final Logger logger = LoggerFactory.getLogger(AlarmScheduler.class);
-
 
     @Autowired
     private RpcDanmuAddressService rpcDanmuAddressService;
@@ -78,12 +77,12 @@ public class AlarmScheduler {
 
     @Scheduled(cron = "0 5 2 * * ?")
     private void projectorCloseCommandListener(){
-        logger.info("投影关闭监听逻辑");
+        log.info("投影关闭监听逻辑");
         List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
             for(DanmuAddressModel danmuAddress:danmuAddressList){
                 String addressId = danmuAddress.getId();
-                logger.info("场地{}:{}投影",addressId,danmuAddress.getName());
+                log.info("场地{}:{}投影",addressId,danmuAddress.getName());
                 List<DanmuClientModel>  danmuClientList = rpcDanmuClientService.findByAddressId(addressId);
                 if(ListUtils.checkListIsNotNull(danmuClientList)){
                     for(DanmuClientModel danmuClient:danmuClientList){
@@ -106,7 +105,7 @@ public class AlarmScheduler {
     @Scheduled(cron = "0/30 * * * * ?")
     public void checkAdminOffLineScheduler() {
 
-        logger.info("管理员离线告警监听");
+        log.info("管理员离线告警监听");
         //获取管理员掉县时间
         List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
@@ -137,7 +136,7 @@ public class AlarmScheduler {
 
    @Scheduled(cron = "0/30 * * * * *")
     public void clientOffLineScheduler() {
-        logger.info("客户端在线数量监听");
+        log.info("客户端在线数量监听");
         List<DanmuAddressModel> danmuAddressModels = rpcDanmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressModels)) {
             for (DanmuAddressModel danmuAddressModel : danmuAddressModels) {
@@ -151,10 +150,11 @@ public class AlarmScheduler {
                         Date date =  DateUtils.getCurrentDate();
                         long subTime = date.getTime() - time;
                         long minute = subTime/1000/60;
+                        log.info("flash 离线时间:{}",minute);
                         if(time==0){
                             //从来未启动过
                             rpcClientAlarmService.clientNetError(addressId);
-                        }else if(minute>5){
+                        }else if(minute>=2){
                             rpcClientAlarmService.clientNetError(addressId);
                         }
                         /*Object object = redisService.get(ClientCacheKey.ClIENT_OFFLINE_TIME+addressId);

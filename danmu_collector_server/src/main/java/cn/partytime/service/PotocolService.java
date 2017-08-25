@@ -201,8 +201,9 @@ public class PotocolService {
             clientCacheService.removeCommandCache(danmuClientModel.getAddressId());
 
             int count =danmuChannelRepository.findDanmuClientCount(0,addressId);
+            logger.info("当前场地下载线的flash client数量是:{}",count);
             collectorCacheService.setFlashOfflineTime(addressId);
-            collectorCacheService.setClientCount(0,addressId,host,count+1);
+            collectorCacheService.setClientCount(0,addressId,host,count-1);
         }
 
         //清除用户状态
@@ -211,4 +212,5 @@ public class PotocolService {
         //关闭通道
         channel.close();
     }
+
 }

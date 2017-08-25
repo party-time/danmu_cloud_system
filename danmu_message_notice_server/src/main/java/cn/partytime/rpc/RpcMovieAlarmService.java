@@ -55,17 +55,17 @@ public class RpcMovieAlarmService {
         Map<String,String> map = new HashMap<String,String>();
         if(party!=null && party.getMovieTime()!=0){
             long movieTime = party.getMovieTime();
-            log.info("time:{},moviTime:{}",time,party.getMovieTime());
+            log.info("time:{},moviTime:{}",time/1000/60,party.getMovieTime()/1000/60);
             if(time<movieTime){
                 //触发事件过短
                 map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT,addressId,partyId);
                 //mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
-                sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
+                sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map,AlarmKeyConst.ALARM_KEY_MOVIESHORT);
             }else if(time >movieTime) {
                 //触发时间过
                 map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME,addressId,partyId);
                 //mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
-                sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_LONG,map);
+                sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_LONG,map,AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME);
             }else{
                 return;
             }
@@ -75,23 +75,23 @@ public class RpcMovieAlarmService {
             if (minute < 90) {
                 //触发事件过短
                 map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT, addressId, partyId);
-                sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
+                sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map,AlarmKeyConst.ALARM_KEY_MOVIESHORT);
             } else if (minute > 180) {
                 //触发时间过
                 map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME, addressId, partyId);
-                sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_LONG,map);
+                sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_LONG,map,AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME);
 
             }
         }
     }
 
-    private void sendMessage(String type,Map<String,String> map){
+    private void sendMessage(String type,Map<String,String> map,String typeName){
         if(map!=null){
             String addressId = map.get("addressId");
             String partyId = map.get("partyId");
             int cacheCount = alarmCacheService.findAlarmCount(addressId,type);
             if(cacheCount>0){
-                log.info("电影{}告警发出的次数超过上限",type);
+                log.info("{}:告警发出的次数超过上限",typeName);
                 return;
             }
             alarmCacheService.addAlarmCount(0,addressId,type);
