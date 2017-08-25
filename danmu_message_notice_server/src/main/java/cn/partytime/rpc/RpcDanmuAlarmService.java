@@ -202,6 +202,7 @@ public class RpcDanmuAlarmService {
                 return;
             }
             long  time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
+            log.info("time:{}",time);
             if(time==0){
                 //电影结束了
                 return;
