@@ -284,7 +284,7 @@ public class ClientLoginService {
             }
 
             collectorCacheService.setCollectorIpRelation(addressId,host);
-            collectorCacheService.setClientCount(0,addressId,host,count+1);
+            collectorCacheService.setClientCount(0,addressId,host,count);
 
         } else {
             logger.info("当前连接的用户未非法用户,强制下线");
