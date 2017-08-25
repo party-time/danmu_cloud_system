@@ -110,7 +110,7 @@ public class CommonDataService {
             map.put("screen", danmuClientModel.getName());
             map.put("addressId",danmuClientModel.getAddressId());
             map.put("addressName", addressName);
-            //map.put("movieName", movieName);
+            map.put("movieName", partyLogicModel.getPartyName());
             return map;
 
         }
