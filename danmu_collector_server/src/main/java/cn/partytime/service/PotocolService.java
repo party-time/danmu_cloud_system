@@ -3,6 +3,7 @@ package cn.partytime.service;
 import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
 import cn.partytime.common.cachekey.CommandCacheKey;
+import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
@@ -153,12 +154,12 @@ public class PotocolService {
             if(danmuCount>0){
                 if(danmuCount<15){
                     //清除弹幕过量的缓存 和 和时间
-                    alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE);
-                    alarmCacheService.addAlarmTime(DateUtils.getCurrentDate().getTime(),0,addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE);
+                    alarmCacheService.removeAlarmCount(addressId, AlarmKeyConst.ALARM_KEY_DANMUEXCESS);
+                    alarmCacheService.addAlarmTime(DateUtils.getCurrentDate().getTime(),0,addressId,AlarmKeyConst.ALARM_KEY_DANMUEXCESS);
                 }
                 //清除没有弹幕的计数 和 时间
-                alarmCacheService.removeAlarmCount(addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL);
-                alarmCacheService.addAlarmTime(DateUtils.getCurrentDate().getTime(),0,addressId,LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL);
+                alarmCacheService.removeAlarmCount(addressId,AlarmKeyConst.ALARM_KEY_SYSTEMERROR);
+                alarmCacheService.addAlarmTime(DateUtils.getCurrentDate().getTime(),0,addressId,AlarmKeyConst.ALARM_KEY_SYSTEMERROR);
             }
 
 

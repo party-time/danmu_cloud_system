@@ -73,6 +73,11 @@ public class ClientLoginService {
 
     @Value("${netty.port}")
     private int port;
+
+    @Value("${client.online.count}")
+    private int clientOnlineCount;
+
+
     /**
      * 客户端登录
      *
@@ -278,7 +283,7 @@ public class ClientLoginService {
             String addressId = danmuClientModel.getAddressId();
             //获取已经在线的flashclient数量
             int count =danmuChannelRepository.findDanmuClientCount(0,addressId);
-            if(count>=2){
+            if(count>=clientOnlineCount){
                 //collectorCacheService.removeFlashOfflineTime(addressId);
                 collectorAlarmCacheService.removeAlarmAllCache(addressId);
             }

@@ -4,6 +4,7 @@ import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.cache.common.CommonCacheService;
 import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.cachekey.collector.CollectorCacheKey;
+import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class CollectorAlarmCacheService {
      */
     public void removeAlarmAllCache(String addressId){
         String typeArray[]={
-                LogCodeConst.CLientLogCode.FLASH_NETWORK_EXCEPTION
+                AlarmKeyConst.ALARM_KEY_NETWORKERROR
         };
         //清除告警次数
         for(int i=0; i<typeArray.length; i++) {

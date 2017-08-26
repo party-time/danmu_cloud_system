@@ -5,7 +5,7 @@ public class CollectorCacheKey {
 
     public static final String BASE_KEY="collector";
 
-    public static final String BASE_ALARM_KEY="collector:alarm";
+    public static final String BASE_ALARM_KEY="collector";
 
     public static final String COLLECTOR_ADDRESS_IP_CACHEC_LIST="collector:iplist:";
 

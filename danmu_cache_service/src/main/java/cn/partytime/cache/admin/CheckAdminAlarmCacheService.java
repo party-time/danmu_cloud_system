@@ -4,6 +4,7 @@ package cn.partytime.cache.admin;
 import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.cache.common.CommonCacheService;
 import cn.partytime.common.cachekey.AdminUserCacheKey;
+import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.redis.service.RedisService;
@@ -28,7 +29,7 @@ public class CheckAdminAlarmCacheService {
      */
     public void removeAlarmAllCache(int type){
         String typeArray[]={
-                LogCodeConst.AdminLogCode.ADMIN_ONLINE_COUNT_ZERO
+                AlarmKeyConst.ALARM_KEY_AUDITOROFFLINE
         };
         //清除告警次数
         for(int i=0; i<typeArray.length; i++) {

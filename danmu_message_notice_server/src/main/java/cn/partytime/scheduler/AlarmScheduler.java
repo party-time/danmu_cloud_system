@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -74,6 +75,16 @@ public class AlarmScheduler {
 
     @Autowired
     private RpcClientAlarmService rpcClientAlarmService;
+
+
+
+    @Value("${alarm.admin.offlineTime}")
+    private int clientOfflineTime;
+
+    @Value("${client.online.count}")
+    private int clientOnlineCount;
+
+
 
     @Scheduled(cron = "0 5 2 * * ?")
     private void projectorCloseCommandListener(){
@@ -145,7 +156,7 @@ public class AlarmScheduler {
                     String partyId = partyLogicModel.getPartyId();
                     String addressId = partyLogicModel.getAddressId();
                     int count  = collectorCacheService.getClientCount(0,addressId);
-                    if(count<2){
+                    if(count<clientOnlineCount){
                         long time = collectorCacheService.findFlashOfflineTime(addressId);
                         Date date =  DateUtils.getCurrentDate();
                         long subTime = date.getTime() - time;
@@ -154,7 +165,7 @@ public class AlarmScheduler {
                         if(time==0){
                             //从来未启动过
                             rpcClientAlarmService.clientNetError(addressId);
-                        }else if(minute>=2){
+                        }else if(minute>=clientOfflineTime){
                             rpcClientAlarmService.clientNetError(addressId);
                         }
                         /*Object object = redisService.get(ClientCacheKey.ClIENT_OFFLINE_TIME+addressId);

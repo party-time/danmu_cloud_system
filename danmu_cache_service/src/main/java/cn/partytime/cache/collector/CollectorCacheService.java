@@ -31,7 +31,7 @@ public class CollectorCacheService {
     }
 
     public void setClientCount(int type,String addressId,String ip,int count){
-        String key = CollectorCacheKey.BASE_KEY+CommonConst.COLON+addressId+CommonConst.COLON+CommonConst.COLON+ip+CommonConst.COLON+type;
+        String key = CollectorCacheKey.BASE_KEY+CommonConst.COLON+addressId+CommonConst.COLON+ip+CommonConst.COLON+type;
         redisService.set(key,count);
     }
 
@@ -41,7 +41,7 @@ public class CollectorCacheService {
         int count = 0;
         if(stringSet!=null && stringSet.size()>0){
             for(String ip:stringSet){
-                key = CollectorCacheKey.BASE_KEY+CommonConst.COLON+addressId+CommonConst.COLON+CommonConst.COLON+ip+CommonConst.COLON+type;
+                key = CollectorCacheKey.BASE_KEY+CommonConst.COLON+addressId+CommonConst.COLON+ip+CommonConst.COLON+type;
                 count+=  IntegerUtils.objectConvertToInt(redisService.get(key));
             }
         }

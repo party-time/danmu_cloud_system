@@ -50,12 +50,12 @@ public class RpcClientAlarmService {
     @RequestMapping(value = "/clientNetError" ,method = RequestMethod.GET)
     public void clientNetError(@RequestParam String addressId) {
 
-        int cacheCount = alarmCacheService.findAlarmCount(CollectorCacheKey.BASE_ALARM_KEY,LogCodeConst.CLientLogCode.FLASH_NETWORK_EXCEPTION,addressId);
+        int cacheCount = alarmCacheService.findAlarmCount(CollectorCacheKey.BASE_ALARM_KEY,AlarmKeyConst.ALARM_KEY_NETWORKERROR,addressId);
         if(cacheCount>0){
             log.info("客户端不在线的告警超过上限");
             return;
         }
-        alarmCacheService.addAlarmCount(0,CollectorCacheKey.BASE_ALARM_KEY,LogCodeConst.CLientLogCode.FLASH_NETWORK_EXCEPTION,addressId);
+        alarmCacheService.addAlarmCount(0,CollectorCacheKey.BASE_ALARM_KEY,AlarmKeyConst.ALARM_KEY_NETWORKERROR,addressId);
 
         DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findById(addressId);
         Map<String,String> map = new HashMap<String,String>();

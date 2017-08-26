@@ -1,6 +1,7 @@
 package cn.partytime.service;
 
 import cn.partytime.alarmRpc.RpcDanmuAlarmService;
+import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.dataRpc.RpcDanmuClientService;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.PartyLogicModel;
@@ -50,6 +51,9 @@ public class DanmuSendService {
     @Autowired
     private RpcPartyService rpcPartyService;
 
+    @Autowired
+    private AlarmCacheService alarmCacheService;
+
     /**
      * 发送预制弹幕
      *
@@ -65,7 +69,8 @@ public class DanmuSendService {
         if (preObject == null) {
             //获取活动信息
             PartyModel partyModel =rpcPartyService.getPartyByPartyId(partyId);
-            if(partyModel.getType()==1){
+            int cacheCount = alarmCacheService.findAlarmCount(addressId,AlarmKeyConst.ALARM_KEY_PREDANMU);
+            if(partyModel.getType()==1 && cacheCount==0){
                 Map<String,Object> map = new HashMap<String,Object>();
                 //service.messageHandler(preDanmuMessageService, new MessageObject<Map<String,Object>>(LogCodeConst.DanmuLogCode.PREDANMU_ISNULL_CODE,map));
                 rpcDanmuAlarmService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,addressId,"null");

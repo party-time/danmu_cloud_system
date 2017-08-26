@@ -53,7 +53,6 @@ public class AlarmCacheService {
     public void addAlarmCount(long expireTime,String ... args){
         String key = getCountKey(args);
         redisService.incrKey(key,1);
-
         redisService.expire(key,expireTime==0?60*60*24:expireTime);
     }
     /**

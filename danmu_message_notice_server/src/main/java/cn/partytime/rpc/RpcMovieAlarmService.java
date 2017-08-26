@@ -89,12 +89,12 @@ public class RpcMovieAlarmService {
         if(map!=null){
             String addressId = map.get("addressId");
             String partyId = map.get("partyId");
-            int cacheCount = alarmCacheService.findAlarmCount(addressId,type);
+            int cacheCount = alarmCacheService.findAlarmCount(addressId,typeName);
             if(cacheCount>0){
                 log.info("{}:告警发出的次数超过上限",typeName);
                 return;
             }
-            alarmCacheService.addAlarmCount(0,addressId,type);
+            alarmCacheService.addAlarmCount(0,addressId,typeName);
             MessageObject<Map<String,String>>  mapMessageObject = new MessageObject<Map<String,String>>(type,map);
             mapMessageObject.setValue(0);
             mapMessageObject.setThreshold(0);

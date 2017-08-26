@@ -69,7 +69,7 @@ public class RpcDanmuAlarmService {
         if(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL.equals(type)){
             logger.info("告警类型:{},场地编号:{}",type,code);
             log.info("预置弹幕没有了");
-            int cacheCount = alarmCacheService.findAlarmCount(code,LogCodeConst.DanmuLogCode.PREDANMU_ISNULL);
+            int cacheCount = alarmCacheService.findAlarmCount(code,AlarmKeyConst.ALARM_KEY_PREDANMU);
             if(cacheCount>= 1){
                 log.info("type:{}告警发出的次数超过上限",type);
                 return;
@@ -132,28 +132,6 @@ public class RpcDanmuAlarmService {
                 return;
             }
             danmuAlarmCacheService.addTimerDanmuNotPlayResource(addressId,idd,time);
-
-            /*int cacheCount = alarmCacheService.findAlarmCount(addressId,type);
-            if(cacheCount>= count){
-                log.info("{}告警发出的次数超过上限",typeName);
-                return;
-            }*/
-
-//            long alarmOktTime = alarmCacheService.findAlarmTime(addressId,type);
-//            if(alarmOktTime!=0){
-//                long subTime = DateUtils.getCurrentDate().getTime()-alarmOktTime;
-//                long minute = subTime/1000/60;
-//                log.info("time:{}",minute);
-//                if(minute<2){
-//                    return;
-//                }
-//            }
-
-            //告警计数
-            //alarmCacheService.addAlarmCount(time,addressId,type);
-
-
-
             //执行告警发送
             MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(type,map);
             mapMessageObject.setValue(0);
@@ -166,13 +144,13 @@ public class RpcDanmuAlarmService {
         if(map!=null){
             String addressId = map.get("addressId");
             String partyId = map.get("partyId");
-            int cacheCount = alarmCacheService.findAlarmCount(addressId,type);
+            int cacheCount = alarmCacheService.findAlarmCount(addressId,typeName);
             if(cacheCount>= count){
                 log.info("{}告警发出的次数超过上限",typeName);
                 return;
             }
 
-            long alarmOktTime = alarmCacheService.findAlarmTime(addressId,type);
+            long alarmOktTime = alarmCacheService.findAlarmTime(addressId,typeName);
             if(alarmOktTime!=0){
                 long subTime = DateUtils.getCurrentDate().getTime()-alarmOktTime;
                 long minute = subTime/1000/60;
@@ -183,7 +161,7 @@ public class RpcDanmuAlarmService {
             }
             long time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
             //告警计数
-            alarmCacheService.addAlarmCount(time,addressId,type);
+            alarmCacheService.addAlarmCount(time,addressId,typeName);
             //执行告警发送
             MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(type,map);
             mapMessageObject.setValue(0);
@@ -196,25 +174,29 @@ public class RpcDanmuAlarmService {
         if(map!=null){
             String addressId = map.get("addressId");
             String partyId = map.get("partyId");
-            int cacheCount = alarmCacheService.findAlarmCount(addressId,type);
+            int cacheCount = alarmCacheService.findAlarmCount(addressId,typeName);
             if(cacheCount>= count){
                 log.info("{}:告警发出的次数超过上限",typeName);
                 return;
             }
-            long  time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
-            log.info("time:{}",time);
-            if(time==0){
-                //电影结束了
-                return;
-            }
+
             if(AlarmKeyConst.ALARM_KEY_TIMERDANMU.equals(typeName)){
+                long  time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
+                log.info("time:{}",time);
+                if(time==0){
+                    //电影结束了
+                    return;
+                }
                 boolean isExist =  rpcTimerDanmuService.findTimerDanmuIsExistAfterCurrentTime(time);
                 if(!isExist){
                     log.info("没有定时弹幕了");
                     return;
                 }
+                alarmCacheService.addAlarmCount(time,addressId,typeName);
+            }else{
+                alarmCacheService.addAlarmCount(0,addressId,typeName);
             }
-            alarmCacheService.addAlarmCount(time,addressId,type);
+
             //执行告警发送
             MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(type,map);
             mapMessageObject.setValue(0);

@@ -2,6 +2,7 @@ package cn.partytime.cache.danmu;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.common.cachekey.DanmuCacheKey;
+import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.redis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,16 +51,24 @@ public class DanmuAlarmCacheService {
      */
     public void removeDanmuAlarmAllCache(String addressId){
         String typeArray[]={
-                LogCodeConst.DanmuLogCode.PREDANMU_ISNULL,
-                LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISNULL,
-                LogCodeConst.DanmuLogCode.CLIENT_HISTORYDANMU_ISNULL,
-                LogCodeConst.DanmuLogCode.CLIENT_TIMERDANMU_ISNULL,
-                LogCodeConst.DanmuLogCode.CLIENT_DANMU_ISMORE
+                AlarmKeyConst.ALARM_KEY_PREDANMU,
+                AlarmKeyConst.ALARM_KEY_SYSTEMERROR,
+                AlarmKeyConst.ALARM_KEY_HISTORYDANMU,
+                AlarmKeyConst.ALARM_KEY_TIMERDANMU,
+                AlarmKeyConst.ALARM_KEY_DANMUEXCESS
         };
         for(int i=0; i<typeArray.length; i++) {
             alarmCacheService.removeAlarmCount(addressId, typeArray[i]);
         }
+        String timerTypeArray[] = {
+                AlarmKeyConst.ALARM_KEY_DANMUEXCESS,
+                AlarmKeyConst.ALARM_KEY_SYSTEMERROR
+        };
+        for(int i=0; i<timerTypeArray.length; i++) {
+            alarmCacheService.removeAlarmTime(addressId, timerTypeArray[i]);
+        }
         removeDanmuNotPlayResource(addressId);
+
 
     }
 

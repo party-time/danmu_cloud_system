@@ -421,8 +421,8 @@ public class MovieLogicService {
         dataObject.put("status",status);
         if("1".equals(status)){
             //清除告警缓存
-            danmuAlarmCacheService.removeDanmuAlarmAllCache(addressId);
-            partyAlarmCacheService.removeAlarmAllCache(addressId);
+
+            partyAlarmCacheService.removeAlarmAllCache(addressId,1);
 
             //判断是否有活动正在进行
             //PartyLogicModel partyLogicModel = partyService.findTemporaryParty(addressId);
@@ -434,8 +434,7 @@ public class MovieLogicService {
             dataObject.put("movieTime",clientTime);
         }else if("3".equals(status)){
             //清除告警缓存
-            danmuAlarmCacheService.removeDanmuAlarmAllCache(addressId);
-            partyAlarmCacheService.removeAlarmAllCache(addressId);
+            partyAlarmCacheService.removeAlarmAllCache(addressId,1);
         }
 
         commandObject.put("data",dataObject);
