@@ -60,8 +60,8 @@ public class MovieScheduleService {
         return movieScheduleRepository.findByPartyId(partyId,pageRequest);
     }
 
-    public Page<MovieSchedule> findPageByPartyIdAndAddressIsAndCreateTimeAsc(String partyId,String addressId,int pageSize,int pageNo){
-        Sort sort = new Sort(Sort.Direction.ASC, "createTime");
+    public Page<MovieSchedule> findPageByPartyIdAndAddressIsAndCreateTimeDesc(String partyId,String addressId,int pageSize,int pageNo){
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(pageNo, pageSize, sort);
         return movieScheduleRepository.findByPartyIdAndAddressId(partyId,addressId,pageRequest);
     }

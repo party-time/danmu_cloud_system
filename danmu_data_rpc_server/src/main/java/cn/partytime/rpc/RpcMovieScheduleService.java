@@ -28,7 +28,7 @@ public class RpcMovieScheduleService {
 
     @RequestMapping(value = "/findByCurrentMovieLastTime" ,method = RequestMethod.GET)
     public long findByCurrentMovieLastTime(@RequestParam String partyId, @RequestParam String addressId){
-        Page<MovieSchedule> movieSchedulePage = movieScheduleService.findPageByPartyIdAndAddressIsAndCreateTimeAsc(partyId,addressId,1,0);
+        Page<MovieSchedule> movieSchedulePage = movieScheduleService.findPageByPartyIdAndAddressIsAndCreateTimeDesc(partyId,addressId,1,0);
 
         PartyLogicModel partyLogicModel = partyLogicService.findFilmParty(addressId);
         long movieTime = partyLogicModel.getMovieTime();
