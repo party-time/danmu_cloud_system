@@ -349,7 +349,7 @@ public class WechatController {
     }
 
     @RequestMapping(value = "/historyDM", method = RequestMethod.GET)
-    public String historyDM(String code,Model model,Integer pageNumber, Integer pageSize, String arrayArea, String partyId){
+    public String historyDM(String code,Model model,Integer pageNumber, Integer pageSize){
         /**
         PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(0,20,"","59917cd2c556f03edcf5259e",1);
         Party party = partyService.findById("59917cd2c556f03edcf5259e");
@@ -372,7 +372,7 @@ public class WechatController {
                 pageSize = 20;
             }
             if( !StringUtils.isEmpty(party.getAddressId()) && StringUtils.isEmpty(party.getPartyId())){
-                PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(0,20,"","59917cd2c556f03edcf5259e",1);
+                PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(0,20,party.getAddressId(),party.getPartyId(),1);
                 model.addAttribute("dataList",pageResultModel.getRows());
                 model.addAttribute("total",pageResultModel.getTotal());
                 model.addAttribute("pageNumber",pageNumber);
