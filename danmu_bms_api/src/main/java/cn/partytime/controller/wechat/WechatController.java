@@ -367,13 +367,16 @@ public class WechatController {
         if( null != party){
             if( null == pageNumber){
                 pageNumber = 0;
+            }else if(pageNumber>0){
+                pageNumber=pageNumber-1;
             }
+
             if( null == pageSize){
                 pageSize = 20;
             }
             model.addAttribute("partyName",party.getPartyName());
             if(!StringUtils.isEmpty(party.getPartyId())){
-                PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(pageNumber-1,pageSize,party.getAddressId(),party.getPartyId(),1);
+                PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(pageNumber,pageSize,party.getAddressId(),party.getPartyId(),1);
                 model.addAttribute("dataList",pageResultModel.getRows());
                 model.addAttribute("total",pageResultModel.getTotal());
                 model.addAttribute("pageNumber",pageNumber);
