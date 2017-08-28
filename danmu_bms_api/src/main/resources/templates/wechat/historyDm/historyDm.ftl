@@ -17,15 +17,15 @@
     </div>
     <#if dataList??>
     <#list dataList as obj>
-    <div style="background-color:#fff;border:1px solid #eee;min-height:55px">
-        <div style="width:19%;float:left;margin-top:2px;margin-left: 2px;">
+    <div style="background-color:#fff;border:1px solid #eee;min-height:50px;margin-top:2px;">
+        <div style="width:45px;position:absolute;margin-top:2px;margin-left: 2px;">
             <img style="width:45px;height:45px" src="${obj.url!"123123123"}" />
         </div>
-        <div style="width:80%;float:left;">
-            <div style="background-color:#f5f8fd;font-size:13px;color:#aaa">
+        <div style="margin-left:50px;">
+            <div style="background-color:#f5f8fd;font-size:13px;color:#aaa;margin-top:2px;">
                 <span>发送于:${obj.createTime?string("yyyy-MM-dd HH:mm:ss")}</span>
             </div>
-            <div style="word-wrap:break-word">
+            <div style="word-wrap:break-word;margin-top:2px;">
                 <span>${obj.msg}</span>
             </div>
         </div>

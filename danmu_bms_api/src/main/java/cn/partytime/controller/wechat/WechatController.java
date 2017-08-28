@@ -361,7 +361,7 @@ public class WechatController {
          **/
         String openId = WeixinUtil.getUserOpenId(code);
         if(StringUtils.isEmpty(openId)){
-            return "redirect:https://open.weixin.qq.com/connect/oauth2/authorize?appid="+partyTimeConfig.getAppId()+"&redirect_uri=http://"+partyTimeConfig.getUrl()+"/wechat/historyDM&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+            return "redirect:https://open.weixin.qq.com/connect/oauth2/authorize?appid="+partyTimeConfig.getAppId()+"&redirect_uri="+partyTimeConfig.getUrl()+"/wechat/historyDM&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
         }
         PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
         if( null != party){
