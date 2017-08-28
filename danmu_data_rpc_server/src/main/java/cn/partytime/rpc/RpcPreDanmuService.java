@@ -49,6 +49,7 @@ public class RpcPreDanmuService {
 
     @RequestMapping(value = "/findDanmuLibraryIdByParty" ,method = RequestMethod.GET)
     public String findDanmuLibraryIdByParty(@RequestParam String partyId) {
+        log.info("获取活动的预置弹幕库编号");
         DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyRepository.findByPartyId(partyId);
         if(danmuLibraryParty!=null){
             return danmuLibraryParty.getDanmuLibraryId();
