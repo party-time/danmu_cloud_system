@@ -22,7 +22,7 @@ public interface RpcTimerDanmuService {
 
 
     @RequestMapping(value = "/rpcTimerDanmu/findTimerDanmuIsExistAfterCurrentTime" ,method = RequestMethod.GET)
-    public boolean findTimerDanmuIsExistAfterCurrentTime(@RequestParam(value = "currentTime") long currentTime);
+    public boolean findTimerDanmuIsExistAfterCurrentTime(@RequestParam(value = "time") long time);
 
 
 }

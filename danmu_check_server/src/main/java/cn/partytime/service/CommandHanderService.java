@@ -444,7 +444,7 @@ public class CommandHanderService {
             logger.info("场地信息:{}",JSON.toJSONString(addressIdList));
             if(ListUtils.checkListIsNotNull(addressIdList)){
                 for(String address:addressIdList){
-                    sendMessageToMq(addressId, commandMap);
+                    sendMessageToMq(address, commandMap);
                 }
             }
             /*List<PartyAddressRelation> partyAddressRelationList = partyAddressRelationService.findByPartyId(partyId);
