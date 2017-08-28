@@ -4,7 +4,7 @@
             {
                 "type":"view",
                 "name":"H5弹幕",
-                "url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=http://test.party-time.cn/wechat/sendDM&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+                "url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=${url}/wechat/sendDM&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
             },
             {
                 "type":"click",
@@ -12,23 +12,28 @@
                 "key":"VOICE_DAN_MU"
             },
             {
+                "name": "历史弹幕",
+                "type":"view",
+                "url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=${url}/wechat/historyDM&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+            },
+            {
                 "name": "来打赏",
                 "type":"view",
-                "url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=http://test.party-time.cn/wechat/payIndex&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+                "url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=${url}/wechat/payIndex&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
             },
             {
                 "type":"view",
-                "url":"http://www.party-time.cn/htm/contact.html",
+                "url":"${url}/htm/contact.html",
                 "name":"商务合作"
             }
      ]
     },
     {"name": "表白",
      "type":"view",
-     "url":"http://test.party-time.cn/upload/h5html/love.html"
+     "url":"${url}/upload/h5html/love.html"
     },
     {"name": "买买买",
      "type":"view",
-     "url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=http://test.party-time.cn/wechat/buy&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+     "url":"https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appId}&redirect_uri=${url}/wechat/buy&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
     }
 ]}

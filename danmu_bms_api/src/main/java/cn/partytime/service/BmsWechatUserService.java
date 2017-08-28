@@ -164,6 +164,7 @@ public class BmsWechatUserService {
         Template template = null; // freeMarker template
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("appId",partyTimeConfig.getAppId());
+        model.put("url",partyTimeConfig.getUrl());
         String content = null;
         try {
             template = configuration.getTemplate("wechat/menu.ftl");
