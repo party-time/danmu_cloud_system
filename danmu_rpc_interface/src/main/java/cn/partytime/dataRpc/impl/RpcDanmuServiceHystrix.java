@@ -41,5 +41,15 @@ public class RpcDanmuServiceHystrix implements RpcDanmuService {
         return null;
     }
 
+    @Override
+    public List<String> findDanmuPoolIdListByPartyIdAndAddressId(String partyId, String addressId) {
+        return null;
+    }
+
+    @Override
+    public long countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan(List<String> danmuPoolIdList, int danmuSrc, boolean isBlocked, long time) {
+        return 0;
+    }
+
 
 }

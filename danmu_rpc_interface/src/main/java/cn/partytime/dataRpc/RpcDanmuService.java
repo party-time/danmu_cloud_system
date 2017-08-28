@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,5 +33,12 @@ public interface RpcDanmuService {
 
     @RequestMapping(value = "/rpcDanmu/findHistoryDanmu" ,method = RequestMethod.GET)
     public List<Map<String,Object>> findHistoryDanmu(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "count") int count, @RequestParam(value = "id") String  id);
+
+
+    @RequestMapping(value = "/rpcDanmu/findDanmuPoolIdListByPartyIdAndAddressId" ,method = RequestMethod.GET)
+    public List<String> findDanmuPoolIdListByPartyIdAndAddressId(@RequestParam(value = "partyId") String partyId,@RequestParam(value = "addressId") String addressId);
+
+    @RequestMapping(value = "/rpcDanmu/countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan" ,method = RequestMethod.GET)
+    public long countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan(@RequestParam(value = "danmuPoolIdList") List<String> danmuPoolIdList,@RequestParam(value = "danmuSrc") int danmuSrc,@RequestParam(value = "isBlocked") boolean isBlocked,@RequestParam(value = "time") long time);
 
 }
