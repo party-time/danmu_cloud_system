@@ -285,7 +285,7 @@ public class WechatRestController {
                     Map<String,String> map = new HashMap<String,String>();
                     map.put("message",recognition);
                     map.put("color",bmsColorService.getRandomColor());
-                    bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_PDANMU,map,openId,partyId,addressId,1,1);
+                    bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_PDANMU,map,openId,partyId,addressId,1);
                     //bmsDanmuService.saveDanmu(recognition,null,openId,1,1);
                 }
             }
@@ -405,7 +405,7 @@ public class WechatRestController {
                             danmuMap.put("nameA",lovePay.getName());
                             danmuMap.put("nameB",lovePay.getToName());
                             danmuMap.put("content",lovePay.getMesssage());
-                            bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_BIAOBAI, danmuMap, openId, partyLogicModel.getPartyId(), partyLogicModel.getAddressId(), 1, 0);
+                            bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_BIAOBAI, danmuMap, openId, partyLogicModel.getPartyId(), partyLogicModel.getAddressId(), 0);
                         }
                     }
                     map.put("result","200");
@@ -546,14 +546,14 @@ public class WechatRestController {
                 danmuMap.put("nameA",lovePay.getName());
                 danmuMap.put("nameB",lovePay.getToName());
                 danmuMap.put("content",lovePay.getMesssage());
-                bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_BIAOBAI, danmuMap, entity.getOpenid(), partyLogicModel.getPartyId(), partyLogicModel.getAddressId(), 1, 0);
+                bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_BIAOBAI, danmuMap, entity.getOpenid(), partyLogicModel.getPartyId(), partyLogicModel.getAddressId(), 0);
             }
         }else {
             PartyLogicModel partyLogicModel = bmsPartyService.findCurrentParty(entity.getOpenid());
             if (null != partyLogicModel) {
                 addressId = partyLogicModel.getAddressId();
                 partyId = partyLogicModel.getPartyId();
-                bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_MONEY, map, entity.getOpenid(), partyId, addressId, 1, 0);
+                bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_MONEY, map, entity.getOpenid(), partyId, addressId, 0);
                 //bmsDanmuService.sendMessageToScreenClient(addressId, MessageConst.MESSAGE_FROM_ClIENT, null, DanmuTypeEnmu.getEnName(DanmuConst.MONEY_DANMU), null, null, null, name);
             }
             if (!StringUtils.isEmpty(h5Id)) {

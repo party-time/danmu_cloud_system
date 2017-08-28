@@ -46,7 +46,7 @@ public class DanmuController{
             logger.info("用户{}，相同弹幕发送太多",openId);
             return restResultModel;
         }else {
-            return bmsDanmuService.sendDanmu(request,openId,1,0);
+            return bmsDanmuService.sendDanmu(request,openId,0);
         }
         /*if( StringUtils.isEmpty(color)){
             color = bmsDanmuService.getRandomColor();
@@ -90,7 +90,7 @@ public class DanmuController{
             logger.info("用户{}，发送弹幕,太频繁",openId);
             return restResultModel;
         }else {
-            return  bmsDanmuService.sendDanmu(request,openId,1,0);
+            return  bmsDanmuService.sendDanmu(request,openId,0);
         }
 
     }

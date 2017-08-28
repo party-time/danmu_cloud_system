@@ -89,6 +89,9 @@ public class WechatController {
     @Autowired
     private LovePayService lovePayService;
 
+    @Autowired
+    private BmsDanmuService bmsDanmuService;
+
     @RequestMapping(value = "/sendDM", method = RequestMethod.GET)
     public String redirectUrl(String code,Model model, HttpServletResponse response,HttpServletRequest request){
 
@@ -338,6 +341,28 @@ public class WechatController {
         model.addAttribute("wxJsConfig",wxJsConfig);
 
         return "wechat/shop/detail";
+    }
+
+    @RequestMapping(value = "/historyDM", method = RequestMethod.GET)
+    public String item(String code,Model model,Integer pageNumber, Integer pageSize, String arrayArea, String partyId){
+        String openId = WeixinUtil.getUserOpenId(code);
+        if(StringUtils.isEmpty(openId)){
+            return "redirect:";
+        }
+        PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
+        if( null != party){
+            if( null == pageNumber){
+                pageNumber = 0;
+            }
+            if( null == pageSize){
+                pageSize = 20;
+            }
+            if( !StringUtils.isEmpty(party.getAddressId()) && StringUtils.isEmpty(party.getPartyId())){
+                bmsDanmuService.findPageResultModel(pageNumber,pageSize,party.getAddressId(),party.getPartyId(),1);
+            }
+
+        }
+        return "";
     }
 
 }
