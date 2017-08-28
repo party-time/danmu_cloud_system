@@ -180,15 +180,18 @@ public class RpcDanmuAlarmService {
                 return;
             }
 
-            if(AlarmKeyConst.ALARM_KEY_TIMERDANMU.equals(typeName)){
+            if(AlarmKeyConst.ALARM_KEY_HISTORYDANMU.equals(typeName)){
+
+            }else if(AlarmKeyConst.ALARM_KEY_TIMERDANMU.equals(typeName)){
                 long  time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
                 log.info("time:{}",time);
                 if(time==0){
                     //电影结束了
                     return;
                 }
-                boolean isExist =  rpcTimerDanmuService.findTimerDanmuIsExistAfterCurrentTime(time);
-                if(!isExist){
+                boolean isExist =  rpcTimerDanmuService.findTimerDanmuIsExistAfterCurrentTime(DateUtils.getCurrentDate().getTime());
+                log.info("没有定时弹幕:{}",isExist);
+                if(isExist){
                     log.info("没有定时弹幕了");
                     return;
                 }
