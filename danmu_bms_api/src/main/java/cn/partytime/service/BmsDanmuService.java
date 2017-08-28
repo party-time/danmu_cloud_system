@@ -304,10 +304,11 @@ public class BmsDanmuService {
      * @param openId
      * @param partyId
      * @param addressId
+     * @param danmuSrc   弹幕来源 管理员:0,微信用户:1
      * @param danmuType 0:非语音 1：语音弹幕
      */
-    public void sendDanmuByWechat(String cmdKey,Map<String,String> danmuMap,String openId,String partyId,String addressId,int danmuType){
-        int danmuSrc = 1;
+    public void sendDanmuByWechat(String cmdKey,Map<String,String> danmuMap,String openId,String partyId,String addressId,int danmuSrc,int danmuType){
+
         logger.info("指令key:{},消息内容:{},openId:{},活动编号:{},地址编号:{},弹幕来源:{},弹幕类型:{}",cmdKey,JSON.toJSONString(danmuMap),openId,partyId,addressId,danmuSrc,danmuType);
         CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByKeyFromCache(cmdKey);
         String cmdName = cmdTempAllData.getName();

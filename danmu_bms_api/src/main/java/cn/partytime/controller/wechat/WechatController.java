@@ -2,6 +2,7 @@ package cn.partytime.controller.wechat;
 
 import cn.partytime.dataRpc.RpcDanmuAddressService;
 import cn.partytime.model.DanmuAddressModel;
+import cn.partytime.model.PageResultModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.WechatSession;
 import cn.partytime.model.cms.ItemResult;
@@ -344,7 +345,13 @@ public class WechatController {
     }
 
     @RequestMapping(value = "/historyDM", method = RequestMethod.GET)
-    public String item(String code,Model model,Integer pageNumber, Integer pageSize, String arrayArea, String partyId){
+    public String historyDM(String code,Model model,Integer pageNumber, Integer pageSize, String arrayArea, String partyId){
+        PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(0,20,"","59917cd2c556f03edcf5259e",1);
+        model.addAttribute("dataList",pageResultModel.getRows());
+        model.addAttribute("total",pageResultModel.getTotal());
+        model.addAttribute("pageNumber",pageNumber);
+        model.addAttribute("pageSize",pageSize);
+        /**
         String openId = WeixinUtil.getUserOpenId(code);
         if(StringUtils.isEmpty(openId)){
             return "redirect:";
@@ -358,11 +365,13 @@ public class WechatController {
                 pageSize = 20;
             }
             if( !StringUtils.isEmpty(party.getAddressId()) && StringUtils.isEmpty(party.getPartyId())){
-                bmsDanmuService.findPageResultModel(pageNumber,pageSize,party.getAddressId(),party.getPartyId(),1);
-            }
 
+            }
+        }else{
+            return "wechat/historyDm/historyDm";
         }
-        return "";
+         **/
+        return "wechat/historyDm/historyDm";
     }
 
 }
