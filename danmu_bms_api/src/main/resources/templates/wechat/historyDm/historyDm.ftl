@@ -12,24 +12,27 @@
   <meta name="x5-orientation" content="portrait">
 </head>
 <body>
+    <div style="text-align:center">
+        <h1>${partyName}的历史弹幕</h1>
+    </div>
     <#if dataList??>
     <#list dataList as obj>
-    <div>
-        <div>
-            <img src="${obj.url}" />
+    <div style="background-color:#fff;border:1px solid #eee;min-height:55px">
+        <div style="width:19%;float:left;margin-top:2px;margin-left: 2px;">
+            <img style="width:45px;height:45px" src="${obj.url!"123123123"}" />
         </div>
-        <div>
-            <div>
-                <span>${obj.createTime?string("yyyy-MM-dd HH:mm:ss")}</span>
+        <div style="width:80%;float:left;">
+            <div style="background-color:#f5f8fd;font-size:13px;color:#aaa">
+                <span>发送于:${obj.createTime?string("yyyy-MM-dd HH:mm:ss")}</span>
             </div>
-            <div>
+            <div style="word-wrap:break-word">
                 <span>${obj.msg}</span>
             </div>
         </div>
     </div>
     </#list>
     <#else>
-        <div>目前没有弹幕</div>
+        <div style="text-align:center">目前没有弹幕</div>
     </#if>
 </body>
 </html>
