@@ -13,7 +13,7 @@
 </head>
 <body>
     <div style="text-align:center">
-        <h1>${partyName}的历史弹幕</h1>
+        <h1>${partyName!"null"}的历史弹幕</h1>
     </div>
     <#if dataList??>
     <#list dataList as obj>

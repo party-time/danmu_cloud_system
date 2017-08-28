@@ -371,14 +371,15 @@ public class WechatController {
             if( null == pageSize){
                 pageSize = 20;
             }
-            log.info("###########partyName:{}",party.getPartyName());
-            if( !StringUtils.isEmpty(party.getAddressId()) && StringUtils.isEmpty(party.getPartyId())){
+            model.addAttribute("partyName",party.getPartyName());
+            if(!StringUtils.isEmpty(party.getPartyId())){
                 PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(pageNumber-1,pageSize,party.getAddressId(),party.getPartyId(),1);
                 model.addAttribute("dataList",pageResultModel.getRows());
                 model.addAttribute("total",pageResultModel.getTotal());
                 model.addAttribute("pageNumber",pageNumber);
                 model.addAttribute("pageSize",pageSize);
-                model.addAttribute("partyName",party.getPartyName());
+            }else{
+                return "redirect:/htm/nodanmu.html";
             }
         }else{
             return "redirect:/htm/nodanmu.html";
