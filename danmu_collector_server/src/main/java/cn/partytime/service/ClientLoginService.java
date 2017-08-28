@@ -288,6 +288,7 @@ public class ClientLoginService {
                 collectorAlarmCacheService.removeAlarmAllCache(addressId);
             }
 
+            collectorCacheService.removeFlahOfflineCLient(addressId,danmuClientModel.getRegistCode());
             collectorCacheService.setCollectorIpRelation(addressId,host);
             collectorCacheService.setClientCount(0,addressId,host,count);
 
