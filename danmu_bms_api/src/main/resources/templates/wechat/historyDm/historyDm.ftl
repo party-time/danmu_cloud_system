@@ -31,6 +31,12 @@
         </div>
     </div>
     </#list>
+    <#if total gt 20>
+    <div>
+        <span style="<#if pageNum==0>color:#aaa</#if>"><前</span>
+        <span style="<#if pageNum==lastPage>color:#aaa</#if>">后></span>
+    </div>
+    </#if>
     <#else>
         <div style="text-align:center">目前没有弹幕</div>
     </#if>

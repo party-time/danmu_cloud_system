@@ -349,7 +349,7 @@ public class WechatController {
     }
 
     @RequestMapping(value = "/historyDM", method = RequestMethod.GET)
-    public String historyDM(String code,Model model,Integer pageNumber, Integer pageSize){
+    public String historyDM(String code,Model model,Integer pageNumber){
         /**
         PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(0,20,"","59917cd2c556f03edcf5259e",1);
         Party party = partyService.findById("59917cd2c556f03edcf5259e");
@@ -370,17 +370,19 @@ public class WechatController {
             }else if(pageNumber>0){
                 pageNumber=pageNumber-1;
             }
-
-            if( null == pageSize){
-                pageSize = 20;
-            }
             model.addAttribute("partyName",party.getPartyName());
             if(!StringUtils.isEmpty(party.getPartyId())){
-                PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(pageNumber,pageSize,party.getAddressId(),party.getPartyId(),1);
+                PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(pageNumber,20,party.getAddressId(),party.getPartyId(),1);
                 model.addAttribute("dataList",pageResultModel.getRows());
                 model.addAttribute("total",pageResultModel.getTotal());
                 model.addAttribute("pageNumber",pageNumber);
-                model.addAttribute("pageSize",pageSize);
+                long index = 0;
+                if (pageResultModel.getTotal() % 20 > 0) {
+                    index = pageResultModel.getTotal() / 20 + 1;
+                } else {
+                    index = pageResultModel.getTotal() / 20;
+                }
+                model.addAttribute("lastPage",index);
             }else{
                 return "redirect:/htm/nodanmu.html";
             }
