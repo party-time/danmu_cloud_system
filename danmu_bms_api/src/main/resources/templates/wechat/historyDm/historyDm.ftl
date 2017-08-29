@@ -52,6 +52,7 @@
               url: "/wechat/report?openId=${openId}&danmuId="+danmuId,
               type: "get"
             }).done(function (data) {
+
                   alert('举报成功，我们会尽快处理!');
             });
 
