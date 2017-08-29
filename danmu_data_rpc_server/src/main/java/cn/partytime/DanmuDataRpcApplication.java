@@ -16,5 +16,4 @@ public class DanmuDataRpcApplication {
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(DanmuDataRpcApplication.class, args);
 	}
-
 }
