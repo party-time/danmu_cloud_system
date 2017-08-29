@@ -56,19 +56,19 @@ public class ClientChannelService {
     }
 
 
-    public List<String> findScreenAddresIdList(int clientType){
-        List<String> addressList = new ArrayList<String>();
+    public Set<String> findScreenAddresIdList(int clientType){
+        Set<String> addressSet = new HashSet<String>();
         ConcurrentHashMap<Channel,DanmuClientModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
         if (channelConcurrentHashMap != null && channelConcurrentHashMap.size() > 0) {
             for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : channelConcurrentHashMap.entrySet()) {
                 DanmuClientModel danmuClientModel = entry.getValue();
                 Channel channel = entry.getKey();
                 if(clientType==danmuClientModel.getClientType()){
-                    addressList.add(danmuClientModel.getAddressId());
+                    addressSet.add(danmuClientModel.getAddressId());
                 }
             }
         }
-        return addressList;
+        return addressSet;
     }
 
     public List<Channel> findDanmuClientChannelAddressByClientType(String addressId,int clientType){
