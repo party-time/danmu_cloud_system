@@ -41,5 +41,11 @@ public class ReportService {
         }
     }
 
+    public Report findByWechatIdAndDanmuId(String wechatId,String danmuId){
+        return reportRepository.findByWechatIdAndDanmuId(wechatId,danmuId);
+    }
+
+
+
 
 }

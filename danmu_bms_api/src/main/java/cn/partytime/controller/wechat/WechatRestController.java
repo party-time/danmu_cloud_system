@@ -5,8 +5,10 @@ import cn.partytime.common.util.CmdConst;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
 import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.PartyLogicModel;
+import cn.partytime.model.RestResultModel;
 import cn.partytime.model.manager.H5Template;
 import cn.partytime.model.manager.LovePay;
+import cn.partytime.model.manager.Report;
 import cn.partytime.model.shop.Item;
 import cn.partytime.model.shop.Order;
 import cn.partytime.model.wechat.WechatUser;
@@ -103,6 +105,9 @@ public class WechatRestController {
 
     @Autowired
     private RpcDanmuAddressService danmuAddressLogicService;
+
+    @Autowired
+    private ReportService reportService;
 
     @Value("${env}")
     private Integer env;
@@ -606,6 +611,17 @@ public class WechatRestController {
         map.put("result","200");
         return map;
     }
+
+    @RequestMapping(value = "/report", method = RequestMethod.GET)
+    public RestResultModel report(String openId,String danmuId){
+        RestResultModel restResultModel = new RestResultModel();
+        Report report = new Report();
+
+        reportService.save(report);
+        return restResultModel;
+
+    }
+
 
     /**
     public static void main(String[] args){

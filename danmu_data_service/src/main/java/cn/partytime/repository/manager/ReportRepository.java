@@ -10,5 +10,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(mongoTemplateRef = "managerMongoTemplate")
 public interface ReportRepository  extends MongoRepository<Report,String> {
 
+    Report findByWechatIdAndDanmuId(String wechatId,String danmuId);
 
 }

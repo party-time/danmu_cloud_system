@@ -16,7 +16,7 @@
         <#list dataList as obj>
         <div style="background-color:#fff;border:1px solid #eee;min-height:50px;margin-top:2px;">
             <div style="width:45px;position:absolute;margin-top:2px;margin-left: 2px;">
-                <img style="width:45px;height:45px" src="${obj.url!"123123123"}" />
+                <img style="width:45px;height:45px" src="${obj.url!""}" />
             </div>
             <div style="margin-left:50px;">
                 <div style="background-color:#f5f8fd;font-size:13px;color:#aaa;margin-top:2px;">

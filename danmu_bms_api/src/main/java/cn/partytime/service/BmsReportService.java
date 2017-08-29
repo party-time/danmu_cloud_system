@@ -9,6 +9,7 @@ import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.service.wechat.WechatUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 /**
  * Created by administrator on 2017/8/29.
  */
+@Service
 public class BmsReportService {
 
     @Autowired
@@ -26,6 +28,9 @@ public class BmsReportService {
 
     @Autowired
     private BmsDanmuService bmsDanmuService;
+
+    @Autowired
+    private DanmuService danmuService;
 
     public PageResultModel findAll(Integer pageNum,Integer pageSize){
         PageResultModel pageResultModel = new PageResultModel();
@@ -59,6 +64,15 @@ public class BmsReportService {
             pageResultModel.setRows(reportListModelList);
         }
         return pageResultModel;
+    }
+
+    public void reportDanmu(String openId,String danmuId){
+        WechatUser wechatUser = wechatUserService.findByOpenId(openId);
+        Danmu danmu = danmuService.findById(danmuId);
+        if( null != wechatUser && null != danmu){
+            reportService.findByWechatIdAndDanmuId(wechatUser.getId(),danmuId);
+        }
+
     }
 
 
