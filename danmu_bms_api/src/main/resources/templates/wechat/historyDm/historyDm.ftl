@@ -35,7 +35,7 @@
     </div>
     </#if>
     <#else>
-        <div style="text-align:center">目前没有弹幕</div>
+        <div style="text-align:center"><h1>目前没有弹幕</h1></div>
     </#if>
 <script>
   function next(){
