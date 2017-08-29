@@ -205,6 +205,7 @@ public class PotocolService {
             logger.info("当前场地下载线的flash client数量是:{}",count);
             collectorCacheService.setFlashOfflineTime(addressId);
             collectorCacheService.setClientCount(0,addressId,host,count-1);
+            collectorCacheService.setFlahOfflineCLient(addressId,danmuClientModel.getRegistCode());
         }
 
         //清除用户状态

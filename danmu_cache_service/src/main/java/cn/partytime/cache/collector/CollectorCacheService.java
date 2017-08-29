@@ -13,10 +13,7 @@ import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CollectorCacheService {
@@ -48,28 +45,27 @@ public class CollectorCacheService {
         return count;
     }
 
-
-    /*public void setClientCount(int type,String addressId,String ip,int count){
-        String key = CollectorCacheKey.COLLECTOR_CLIENT_CACHE_SORTSET + addressId+ CommonConst.COUNT+type;
-        Map<String,Object> map = new HashMap<>();
-        map.put("ip",ip);
-        map.put("count",count);
-        redisService.setSortSet(key,count, JSON.toJSONString(map));
-        redisService.expire(key,60*60*5);
+    public void setFlahOfflineCLient(String addressId,String registerCode){
+        String key = CollectorCacheKey.COLLECTOR_FLASH_CLIENT_OFFLINE_LIST+addressId;
+        redisService.setSortSet(key,0,registerCode);
+        redisService.expire(key,60*60*24);
     }
 
-    public int getClientCount(String addressId,int type){
-        String key = CollectorCacheKey.COLLECTOR_CLIENT_CACHE_SORTSET + addressId+ CommonConst.COUNT+type;
-        Set<String> stringSet = redisService.getSortSetByRnage(key,0,1,true);
-        int count =0;
-        if(stringSet!=null && stringSet.size()>0) {
-            for (String str : stringSet) {
-                Map<String, Object> map = (Map<String, Object>) JSON.parseObject(JSON.toJSONString(str));
-                count += IntegerUtils.objectConvertToInt(map.get("count"));
-            }
+    public void removeFlahOfflineCLient(String addressId,String registerCode){
+        String key = CollectorCacheKey.COLLECTOR_FLASH_CLIENT_OFFLINE_LIST+addressId;
+        redisService.deleteSortData(key,registerCode);
+    }
+
+    public List<String> findFlahOfflineCLientList(String addressId){
+        String key = CollectorCacheKey.COLLECTOR_FLASH_CLIENT_OFFLINE_LIST+addressId;
+        List<String> registerCodeList = new ArrayList<String>();
+        Set<String> registerSet = redisService.getSortSetByRnage(key,0,-1,true);
+        if(registerSet!=null && registerSet.size()>0){
+            registerSet.forEach(set->registerCodeList.add(set));
         }
-        return count;
-    }*/
+        return registerCodeList;
+    }
+
 
     public void setFlashOfflineTime(String addressId){
         String key = CollectorCacheKey.COLLECTOR_FLASH_CLIENT_OFFLINE_TIME+addressId;

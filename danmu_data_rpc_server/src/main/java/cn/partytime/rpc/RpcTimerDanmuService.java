@@ -4,6 +4,7 @@ import cn.partytime.model.manager.TimerDanmuFile;
 import cn.partytime.service.PartyService;
 import cn.partytime.service.TimerDanmuFileService;
 import cn.partytime.service.TimerDanmuService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rpcTimerDanmu")
+@Slf4j
 public class RpcTimerDanmuService {
 
     @Autowired
@@ -34,8 +36,9 @@ public class RpcTimerDanmuService {
     }
 
     @RequestMapping(value = "/findTimerDanmuIsExistAfterCurrentTime" ,method = RequestMethod.GET)
-    public boolean findTimerDanmuIsExistAfterCurrentTime(@RequestParam long time){
-        long count =  timerDanmuService.countByPartyIdLessThanBAndBeginTime(time);
+    public boolean findTimerDanmuIsExistAfterCurrentTime(@RequestParam String partyId,@RequestParam long time){
+        long count =  timerDanmuService.countByPartyIdLessThanBAndBeginTime(partyId,time);
+        log.info("count:{}",count);
         if(count>0){
             return true;
         }

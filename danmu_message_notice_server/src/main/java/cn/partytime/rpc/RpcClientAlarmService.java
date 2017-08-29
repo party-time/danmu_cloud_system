@@ -1,11 +1,13 @@
 package cn.partytime.rpc;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
+import cn.partytime.cache.collector.CollectorCacheService;
 import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.cachekey.collector.CollectorCacheKey;
 import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.util.DateUtils;
+import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.proxy.MessageHandlerService;
@@ -20,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.naming.ldap.PagedResultsControl;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,6 +51,9 @@ public class RpcClientAlarmService {
     @Autowired
     private MessageHandlerService messageHandlerService;
 
+    @Autowired
+    private CollectorCacheService collectorCacheService;
+
     @RequestMapping(value = "/clientNetError" ,method = RequestMethod.GET)
     public void clientNetError(@RequestParam String addressId) {
 
@@ -62,7 +69,14 @@ public class RpcClientAlarmService {
         map.put("key", AlarmKeyConst.ALARM_KEY_NETWORKERROR);
         map.put("addressId", addressId);
         map.put("addressName", danmuAddressModel.getAddress());
-        sendMessage(LogCodeConst.CLientLogCode.FLASH_NETWORK_EXCEPTION,map);
+        List<String> registerCodeList =  collectorCacheService.findFlahOfflineCLientList(addressId);
+        if(ListUtils.checkListIsNotNull(registerCodeList)){
+            for(int i=0; i<registerCodeList.size(); i++){
+                map.put("screen", registerCodeList.get(i));
+                sendMessage(LogCodeConst.CLientLogCode.FLASH_NETWORK_EXCEPTION,map);
+            }
+        }
+
     }
 
     private void sendMessage(String type,Map<String,String> map){

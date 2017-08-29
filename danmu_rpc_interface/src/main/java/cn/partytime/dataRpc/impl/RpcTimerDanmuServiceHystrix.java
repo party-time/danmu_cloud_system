@@ -14,7 +14,8 @@ public class RpcTimerDanmuServiceHystrix implements RpcTimerDanmuService {
     }
 
     @Override
-    public boolean findTimerDanmuIsExistAfterCurrentTime(long currentTime) {
+    public boolean findTimerDanmuIsExistAfterCurrentTime(String partyId, long time) {
         return true;
     }
+
 }

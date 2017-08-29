@@ -7,6 +7,8 @@ import cn.partytime.common.constants.AlarmConst;
 import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.util.DateUtils;
+import cn.partytime.common.util.ListUtils;
+import cn.partytime.dataRpc.RpcDanmuService;
 import cn.partytime.dataRpc.RpcMovieScheduleService;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.dataRpc.RpcTimerDanmuService;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,6 +63,9 @@ public class RpcDanmuAlarmService {
 
     @Autowired
     private RpcTimerDanmuService rpcTimerDanmuService;
+
+    @Autowired
+    private RpcDanmuService rpcDanmuService;
 
     @RequestMapping(value = "/danmuAlarm" ,method = RequestMethod.GET)
     public void danmuAlarm(@RequestParam String type, @RequestParam String code,@RequestParam String idd) {
@@ -179,19 +185,31 @@ public class RpcDanmuAlarmService {
                 log.info("{}:告警发出的次数超过上限",typeName);
                 return;
             }
+            long  time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
+            log.info("当前活动进行的时间:{}",time);
 
+            log.info("==========:{}",typeName);
             if(AlarmKeyConst.ALARM_KEY_HISTORYDANMU.equals(typeName)){
+                if(time==0){
+                    return;
+                }
+                List<String> danmuPoolIdList = rpcDanmuService.findDanmuPoolIdListByPartyIdAndAddressId(partyId,addressId);
+                log.info("弹幕池编号:{}");
+                if(ListUtils.checkListIsNotNull(danmuPoolIdList)){
+                   long danmuCount = rpcDanmuService.countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan(danmuPoolIdList,1,false,time);
+                   if(danmuCount<1){
+                      return;
+                   }
+                }
 
             }else if(AlarmKeyConst.ALARM_KEY_TIMERDANMU.equals(typeName)){
-                long  time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
-                log.info("time:{}",time);
                 if(time==0){
                     //电影结束了
                     return;
                 }
-                boolean isExist =  rpcTimerDanmuService.findTimerDanmuIsExistAfterCurrentTime(DateUtils.getCurrentDate().getTime());
+                boolean isExist =  rpcTimerDanmuService.findTimerDanmuIsExistAfterCurrentTime(partyId,DateUtils.getCurrentDate().getTime());
                 log.info("没有定时弹幕:{}",isExist);
-                if(isExist){
+                if(!isExist){
                     log.info("没有定时弹幕了");
                     return;
                 }

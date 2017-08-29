@@ -12,6 +12,7 @@ import cn.partytime.service.DanmuPoolService;
 import cn.partytime.service.DanmuService;
 import cn.partytime.service.danmu.DanmuLogService;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/rpcDanmu")
+@Slf4j
 public class RpcDanmuService {
 
     private static final Logger logger = LoggerFactory.getLogger(RpcDanmuService.class);
@@ -52,6 +54,7 @@ public class RpcDanmuService {
 
     @Autowired
     private CmdLogicService cmdLogicService;
+
 
     @RequestMapping(value = "/danmuLogSave" ,method = RequestMethod.POST)
     public DanmuLog danmuLogSave(@RequestBody DanmuLog danmuLog){
@@ -82,6 +85,22 @@ public class RpcDanmuService {
         Page<Danmu> danmuModelPage = danmuRepository.findByIsBlocked(isBlocked,pageRequest);
         return danmuModelPage.getContent();
     }
+
+
+    @RequestMapping(value = "/findDanmuPoolIdListByPartyIdAndAddressId" ,method = RequestMethod.GET)
+    public List<String> findDanmuPoolIdListByPartyIdAndAddressId(@RequestParam String partyId,String addressId){
+        List<String> addressIdList = new ArrayList<String>();
+        addressIdList.add(addressId);
+        List<DanmuPool>  danmuPoolList =  danmuPoolService.findByPartyIdAndAddressList(partyId,addressIdList);
+        List<String> poolIdList = new ArrayList<String>();
+        danmuPoolList.forEach(pool->poolIdList.add(pool.getId()));
+        return poolIdList;
+    }
+    @RequestMapping(value = "/countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan" ,method = RequestMethod.GET)
+    public long findTimerDanmuIsExistAfterCurrentTime(@RequestParam List<String> danmuPoolIdList,@RequestParam int danmuSrc,boolean isBlocked,@RequestParam long time){
+        return danmuRepository.countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan(danmuPoolIdList,danmuSrc,isBlocked,true,time);
+    }
+
 
     @RequestMapping(value = "/findHistoryDanmu" ,method = RequestMethod.GET)
     public  List<Map<String,Object>> findHistoryDanmu(@RequestParam String partyId, @RequestParam int count, @RequestParam String id){
