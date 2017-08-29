@@ -37,7 +37,9 @@
         </div>
         </#if>
     <#else>
-        <div style="text-align:center"><h1>目前没有弹幕</h1></div>
+        <div style="position:absolute;left:0;right:0;top:0;bottom:0;">
+            <image src="/images/wechat/meiyoudanmu.jpeg" style="position: absolute;height:100%;width: 100%;overflow: hidden;"/>
+        </div>
     </#if>
 <script>
   function next(){
