@@ -10,6 +10,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="screen-orientation" content="portrait">
   <meta name="x5-orientation" content="portrait">
+  <script src="../js/wechat/jquery.min.js"></script>
 </head>
 <body>
     <#if dataList?? && total gt 0>
@@ -21,6 +22,7 @@
             <div style="margin-left:50px;">
                 <div style="background-color:#f5f8fd;font-size:13px;color:#aaa;margin-top:2px;">
                     <span>发送于:${obj.createTime?string("yyyy-MM-dd HH:mm:ss")}</span>
+                    <div style="float:right;margin-right:2px;"><a onclick="reportDanmu('${obj.msg}','${obj.id}')">举报</a></div>
                 </div>
                 <div style="word-wrap:break-word;margin-top:2px;">
                     <span>${obj.msg}</span>
@@ -42,8 +44,19 @@
         window.location.href="/wechat/historyDM?openId=${openId}&pageNumber=${pageNumber+2}";
   }
   function last(){
-          window.location.href="/wechat/historyDM?openId=${openId}&pageNumber=${pageNumber-1}";
-    }
+        window.location.href="/wechat/historyDM?openId=${openId}&pageNumber=${pageNumber-1}";
+  }
+
+  function reportDanmu(String msg,String danmuId){
+        if(confirm("是否要举报"+msg)){
+            $.ajax({
+              url: "/wechat/report?openId=${openId}&danmuId="+danmuId,
+              type: "get"
+            }).done(function (data) {
+                  alert('举报成功，我们会尽快处理!');
+            });
+        }
+  }
 
 </script>
 </body>
