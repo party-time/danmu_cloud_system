@@ -66,13 +66,22 @@ public class BmsReportService {
         return pageResultModel;
     }
 
-    public void reportDanmu(String openId,String danmuId){
+    public String reportDanmu(String openId,String danmuId){
         WechatUser wechatUser = wechatUserService.findByOpenId(openId);
         Danmu danmu = danmuService.findById(danmuId);
         if( null != wechatUser && null != danmu){
-            reportService.findByWechatIdAndDanmuId(wechatUser.getId(),danmuId);
+            Report report = reportService.findByWechatIdAndDanmuId(wechatUser.getId(),danmuId);
+            if( null == report){
+                report = new Report();
+                report.setDanmuId(danmuId);
+                report.setWechatId(wechatUser.getId());
+                reportService.save(report);
+                return null;
+            }else{
+                return "请不要重复举报";
+            }
         }
-
+        return "参数错误";
     }
 
 

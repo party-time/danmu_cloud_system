@@ -107,7 +107,7 @@ public class WechatRestController {
     private RpcDanmuAddressService danmuAddressLogicService;
 
     @Autowired
-    private ReportService reportService;
+    private BmsReportService  bmsReportService;
 
     @Value("${env}")
     private Integer env;
@@ -615,11 +615,14 @@ public class WechatRestController {
     @RequestMapping(value = "/report", method = RequestMethod.GET)
     public RestResultModel report(String openId,String danmuId){
         RestResultModel restResultModel = new RestResultModel();
-        Report report = new Report();
-
-        reportService.save(report);
+        String result = bmsReportService.reportDanmu(openId,danmuId);
+        if(StringUtils.isEmpty(result)){
+            restResultModel.setResult(200);
+        }else{
+            restResultModel.setResult(500);
+            restResultModel.setResult_msg(result);
+        }
         return restResultModel;
-
     }
 
 
