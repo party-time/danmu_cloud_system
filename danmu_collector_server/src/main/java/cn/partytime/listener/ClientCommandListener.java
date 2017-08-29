@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ClientCommandListener implements MessageListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(ClientCommandListener.class);
 
 
     @Autowired
@@ -29,7 +28,7 @@ public class ClientCommandListener implements MessageListener {
     public void onMessage(Message message, byte[] bytes) {
         if(message!=null){
             String addressId = JSON.parseObject(String.valueOf(message),String.class).replace("'","");
-            logger.info("get pub addressId command:{}",addressId);
+            log.info("get pub addressId command:{}",addressId);
             clientCommandService.pubCommandToJavaClient(addressId);
         }
     }
