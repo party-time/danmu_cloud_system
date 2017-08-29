@@ -46,7 +46,6 @@
   function last(){
         window.location.href="/wechat/historyDM?openId=${openId}&pageNumber=${pageNumber-1}";
   }
-
   function reportDanmu(String msg,String danmuId){
         if(confirm("是否要举报"+msg)){
             $.ajax({
