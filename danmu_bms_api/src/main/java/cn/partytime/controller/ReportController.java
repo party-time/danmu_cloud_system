@@ -37,7 +37,7 @@ public class ReportController {
     @RequestMapping(value = "/noProcess", method = RequestMethod.GET)
     public RestResultModel noProcess(String openId,String reportId){
         RestResultModel restResultModel = new RestResultModel();
-        bmsReportService.reportDanmu(openId,reportId);
+        bmsReportService.noProcess(openId,reportId);
         restResultModel.setResult(200);
         return restResultModel;
     }
