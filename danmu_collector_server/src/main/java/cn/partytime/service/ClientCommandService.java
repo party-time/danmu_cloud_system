@@ -44,6 +44,7 @@ public class ClientCommandService {
                     if (addressId.equals(danmuClientModel.getAddressId()) && danmuClientModel.getClientType()==Integer.parseInt(ClientConst.CLIENT_TYPE_JAVACLIENT)) {
                         Channel channel = entry.getKey();
                         String message = JSON.toJSONString(protocolModel);
+                        log.info("向地址:{}Javaclient发送命令:{}",addressId,message);
                         channel.writeAndFlush(new TextWebSocketFrame(message));
                     }
                 }
