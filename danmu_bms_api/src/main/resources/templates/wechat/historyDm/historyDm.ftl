@@ -30,8 +30,8 @@
     </#list>
     <#if total gt 20>
     <div style="text-align:center;margin-top: 5px;">
-        <span style="<#if pageNumber==0>color:#aaa</#if>"><a onclick="next()"><前</a></span>
-        <span style="margin-left:20px;<#if pageNumber==lastPage>color:#aaa</#if>"><a onclick="last()">后></a></span>
+        <span style="<#if pageNumber==0>color:#aaa</#if>"><a <#if pageNumber gt 0>onclick="last()"</#if>><前</a></span>
+        <span style="margin-left:20px;<#if pageNumber==lastPage-1>color:#aaa</#if>"><a <#if pageNumber lt lastPage-1>onclick="next()"</#if>>后></a></span>
     </div>
     </#if>
     <#else>
@@ -39,10 +39,10 @@
     </#if>
 <script>
   function next(){
-        window.location.href="/wechat/historyDM?partyId=${partyId}&addressId=${addressId}&openId=${openId}&pageNumber=${pageNumber+2}";
+        window.location.href="/wechat/historyDM?openId=${openId}&pageNumber=${pageNumber+2}";
   }
   function last(){
-          window.location.href="/wechat/historyDM?partyId=${partyId}&addressId=${addressId}&openId=${openId}&pageNumber=${pageNumber-1}";
+          window.location.href="/wechat/historyDM?openId=${openId}&pageNumber=${pageNumber-1}";
     }
 
 </script>
