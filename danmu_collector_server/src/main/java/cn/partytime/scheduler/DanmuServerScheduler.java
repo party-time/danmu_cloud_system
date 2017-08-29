@@ -79,6 +79,7 @@ public class DanmuServerScheduler {
         if(ListUtils.checkListIsNotNull(addressIdList)){
             for(String addressId:addressIdList){
                 int  count = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,clientType);
+                logger.info("addressId:{},clientType:{},count:{}",addressId,clientType,count);
                 collectorCacheService.setClientCount(clientType,addressId,host,count);
             }
         }
