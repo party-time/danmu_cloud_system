@@ -43,6 +43,7 @@ public class ClientCommandService {
                 log.info("size==================================================================================>{}",danmuClientModelConcurrentHashMap.size());
                 for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : danmuClientModelConcurrentHashMap.entrySet()) {
                     DanmuClientModel danmuClientModel = entry.getValue();
+                    log.info("java clientType:{}",danmuClientModel.getClientType());
                     if (addressId.equals(danmuClientModel.getAddressId()) && danmuClientModel.getClientType()==Integer.parseInt(ClientConst.CLIENT_TYPE_JAVACLIENT)) {
                         Channel channel = entry.getKey();
                         String message = JSON.toJSONString(protocolModel);
