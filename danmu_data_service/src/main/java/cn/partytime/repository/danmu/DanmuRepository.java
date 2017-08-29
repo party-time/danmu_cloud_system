@@ -52,4 +52,6 @@ public interface DanmuRepository extends MongoRepository<Danmu, String> {
 
     public long countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan(List<String> danmuPoolIdList,int danmuSrc,boolean isBlocked,boolean viewFlg,long time);
 
+    public List<Danmu> findDanmuByIdIn(List<String> ids);
+
 }

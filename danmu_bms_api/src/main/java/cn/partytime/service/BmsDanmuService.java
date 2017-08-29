@@ -180,8 +180,18 @@ public class BmsDanmuService {
 
 
 
-    public PageResultModel findPageResultModel(int index, int size, String addressIdArray, String partyId, int danmuSrc) {
+    public List<DanmuLogicModel> findDanmuListByIdList(List<String> idList){
 
+        if(ListUtils.checkListIsNull(idList)){
+            return null;
+        }
+        return  findDanmuLogicModelList(danmuService.findDanmuByIdList(idList));
+
+    }
+
+
+
+    public PageResultModel findPageResultModel(int index, int size, String addressIdArray, String partyId, int danmuSrc) {
 
         String[] addressArray = {};
         List<String> addressList = new ArrayList<String>();
@@ -193,9 +203,6 @@ public class BmsDanmuService {
         }
 
         PageResultModel pageResultModel = new PageResultModel();
-        List<String> userIdList = new ArrayList<String>();
-        List<String> danmuIdList = new ArrayList<String>();
-        List<DanmuLogicModel> danmuLogicModelList = new ArrayList<DanmuLogicModel>();
 
         Map<String, Object> result = new HashMap<String, Object>();
         //DanmuPool danmuPool = findDanmuPool(addressId, partyId);
@@ -207,7 +214,7 @@ public class BmsDanmuService {
         }else{
             danmuPoolList = danmuPoolService.findByPartyId(partyId);
         }
-
+        List<DanmuLogicModel> danmuLogicModelList = new ArrayList<DanmuLogicModel>();
         logger.info("当前活动下绑定的弹幕池信息:{}",JSON.toJSONString(danmuPoolList));
         List<String> danmuPoolIdLIST = new ArrayList<String>();
         if(ListUtils.checkListIsNotNull(danmuPoolList)){
@@ -228,11 +235,21 @@ public class BmsDanmuService {
             pageResultModel.setRows(danmuLogicModelList);
             return pageResultModel;
         }
+        List<Danmu> timerDanmuList = danmuListByPage.getContent();
 
+        pageResultModel.setRows(findDanmuLogicModelList(timerDanmuList));
+        return pageResultModel;
+    }
+
+
+    public List<DanmuLogicModel> findDanmuLogicModelList(List<Danmu> danmuIdList){
+        List<DanmuLogicModel> danmuLogicModelList = new ArrayList<DanmuLogicModel>();
+        List<String> userIdList = new ArrayList<String>();
+        List<String> IdList = new ArrayList<String>();
         CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(ComponentKeyConst.P_DANMU);
 
-        List<Danmu> timerDanmuList = danmuListByPage.getContent();
-        for (Danmu danmuModel : timerDanmuList) {
+
+        for (Danmu danmuModel : danmuIdList) {
             userIdList.add(danmuModel.getCreateUserId());
             //DanmuLogicModel danmuLogicModel = new DanmuLogicModel();
             //BeanUtils.copyProperties(danmuModel, danmuLogicModel);
@@ -250,7 +267,7 @@ public class BmsDanmuService {
                 danmuLogicModel.setMsg(objectMsg);
             }
 
-            danmuIdList.add(danmuModel.getId());
+            IdList.add(danmuModel.getId());
             BeanUtils.copyProperties(danmuModel, danmuLogicModel);
             logger.info("danmuLogicModel对象:{}",JSON.toJSONString(danmuLogicModel));
             danmuLogicModelList.add(danmuLogicModel);
@@ -258,7 +275,7 @@ public class BmsDanmuService {
 
         //查询弹幕获奖信息
         Map<String, UserPrize> userPrizeMap = new HashMap<String, UserPrize>();
-        List<UserPrize> userPrizeList = userPrizeService.findUserPrizeByDanmuList(danmuIdList);
+        List<UserPrize> userPrizeList = userPrizeService.findUserPrizeByDanmuList(IdList);
         if (ListUtils.checkListIsNotNull(userPrizeList)) {
             for (UserPrize userPrize : userPrizeList) {
                 userPrizeMap.put(userPrize.getDanmuId(), userPrize);
@@ -284,9 +301,11 @@ public class BmsDanmuService {
             danmuLogicModel.setSend(userPrizeMap.get(danmuLogicModel.getId()) == null ? false : true);
         }
 
-        pageResultModel.setRows(danmuLogicModelList);
-        return pageResultModel;
+        return danmuLogicModelList;
     }
+
+
+
 
 
     /**

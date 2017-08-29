@@ -138,6 +138,11 @@ public class DanmuService {
         return danmuRepository.countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(danmuPoolIdList,danmuSrc,isBlocked,viewFlg);
     }
 
+
+    public List<Danmu> findDanmuByIdList(List<String> idList){
+        return danmuRepository.findDanmuByIdIn(idList);
+    }
+
     /**
      * 屏蔽弹幕
      * @param id
