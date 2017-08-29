@@ -53,7 +53,7 @@ public class RpcMovieScheduleService {
         if(movieTime==0){
             return 180 - subTime;
         }
-        return  movieTime/1000 - subTime;
+        return  Math.abs(movieTime/1000 - subTime);
     }
 
     @RequestMapping(value = "/findByPartyIdAndAddressId" ,method = RequestMethod.GET)

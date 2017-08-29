@@ -52,7 +52,7 @@ public class RpcAdminAlarmService {
         long subTime = date.getTime() - time;
         long minute = subTime/1000/60;
         if(minute<=adminOfflineTime){
-            log.info("当前时间与离线时间小于5分钟");
+            log.info("当前时间与离线时间小于{}分钟",adminOfflineTime);
             return;
         }
         Map<String,String> map = new HashMap<String,String>();
