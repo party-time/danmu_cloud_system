@@ -63,6 +63,7 @@ public class RpcClientAlarmService {
             return;
         }
         alarmCacheService.addAlarmCount(0,CollectorCacheKey.BASE_ALARM_KEY,AlarmKeyConst.ALARM_KEY_NETWORKERROR,addressId);
+        log.info("地址:{} 客户端告警",addressId);
 
         DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findById(addressId);
         Map<String,String> map = new HashMap<String,String>();
@@ -76,7 +77,6 @@ public class RpcClientAlarmService {
                 sendMessage(LogCodeConst.CLientLogCode.FLASH_NETWORK_EXCEPTION,map);
             }
         }
-
     }
 
     private void sendMessage(String type,Map<String,String> map){
