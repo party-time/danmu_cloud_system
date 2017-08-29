@@ -13,6 +13,7 @@ import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.service.ClientServiceAlarmService;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +67,7 @@ public class RpcClientAlarmService {
         log.info("地址:{} 客户端告警",addressId);
 
         DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findById(addressId);
+        log.info("地址信息：{}", JSON.toJSONString(danmuAddressModel));
         Map<String,String> map = new HashMap<String,String>();
         map.put("key", AlarmKeyConst.ALARM_KEY_NETWORKERROR);
         map.put("addressId", addressId);
