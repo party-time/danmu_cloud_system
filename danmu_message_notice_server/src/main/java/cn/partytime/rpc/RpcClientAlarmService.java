@@ -71,7 +71,7 @@ public class RpcClientAlarmService {
         Map<String,String> map = new HashMap<String,String>();
         map.put("key", AlarmKeyConst.ALARM_KEY_NETWORKERROR);
         map.put("addressId", addressId);
-        map.put("addressName", danmuAddressModel.getAddress());
+        map.put("addressName", danmuAddressModel.getName());
         List<String> registerCodeList =  collectorCacheService.findFlahOfflineCLientList(addressId);
         if(ListUtils.checkListIsNotNull(registerCodeList)){
             for(int i=0; i<registerCodeList.size(); i++){
