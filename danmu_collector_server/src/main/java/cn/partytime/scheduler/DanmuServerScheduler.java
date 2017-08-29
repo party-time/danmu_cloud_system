@@ -73,7 +73,7 @@ public class DanmuServerScheduler {
 
     @Scheduled(cron = "0/30 * * * * *")
     public void resetClientCount(){
-        logger.info("重置客户端在线数量");
+        logger.info("++++++++++++++++++++++++++++++++++++++重置客户端在线数量+++++++++++++++++++++++++++++++++++++++++");
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
         List<String> addressIdList =  clientChannelService.findScreenAddresIdList(clientType);
         if(ListUtils.checkListIsNotNull(addressIdList)){
