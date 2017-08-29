@@ -2,6 +2,7 @@ package cn.partytime.listener;
 
 import cn.partytime.service.ClientCommandService;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component("clientCommandListener")
+@Slf4j
 public class ClientCommandListener implements MessageListener {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientCommandListener.class);
@@ -27,6 +29,7 @@ public class ClientCommandListener implements MessageListener {
     public void onMessage(Message message, byte[] bytes) {
         if(message!=null){
             String addressId = JSON.parseObject(String.valueOf(message),String.class).replace("'","");
+            logger.info("get pub addressId command:{}",addressId);
             clientCommandService.pubCommandToJavaClient(addressId);
         }
     }
