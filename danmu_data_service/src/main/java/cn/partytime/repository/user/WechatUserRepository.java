@@ -27,4 +27,6 @@ public interface WechatUserRepository extends MongoRepository<WechatUser, String
 
     public WechatUser findByUserId(String userId);
 
+    public List<WechatUser> findByIdIn(List<String> idList);
+
 }

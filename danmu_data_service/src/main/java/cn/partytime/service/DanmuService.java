@@ -168,4 +168,8 @@ public class DanmuService {
         }
     }
 
+    public List<Danmu> findByIds(List<String> danmuIdList){
+        return danmuRepository.findByIdIn(danmuIdList);
+    }
+
 }
