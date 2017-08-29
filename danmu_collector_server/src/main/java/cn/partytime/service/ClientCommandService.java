@@ -39,8 +39,6 @@ public class ClientCommandService {
             log.info("接收的命令是:{}",command);
             ProtocolModel protocolModel = JSON.parseObject(command,ProtocolModel.class);
             if (danmuClientModelConcurrentHashMap != null && danmuClientModelConcurrentHashMap.size() > 0) {
-                log.info("==================================================================================>");
-                log.info("size==================================================================================>{}",danmuClientModelConcurrentHashMap.size());
                 for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : danmuClientModelConcurrentHashMap.entrySet()) {
                     DanmuClientModel danmuClientModel = entry.getValue();
                     log.info("java clientType:{}",danmuClientModel.getClientType());

@@ -100,7 +100,6 @@ public class ClientChannelService {
                 DanmuClientModel danmuClientModel = entry.getValue();
 
                 if (code.equals(danmuClientModel.getRegistCode()) && danmuClientModel.getClientType() == clientType) {
-                    logger.info("danmuClientModel==========================={}",JSON.toJSONString(danmuClientModel));
                     return entry.getKey();
                 }
             }

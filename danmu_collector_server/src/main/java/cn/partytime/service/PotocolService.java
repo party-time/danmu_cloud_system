@@ -82,9 +82,26 @@ public class PotocolService {
             //移动端弹幕处理
             logger.info("当前接收的是移动端提交的信息");
             moblieClientHandler(map, channel);
+        }else if (ClientConst.CLIENT_TYPE_JAVACLIENT.equals(clientType)) {
+            javaClientHandler(map,channel);
         }
     }
 
+    private void javaClientHandler(Map<String,Object> map, Channel channel) {
+        String type = String.valueOf(map.get("type"));
+        if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
+            DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
+            if(clientInfoModel==null){
+                forceLogout(channel);
+            }else{
+                logger.info("当前客户JAVACLIENT端信息:{}接受ping",JSON.toJSONString(clientInfoModel));
+            }
+
+        } else {
+
+            logger.info("客户端JAVACLIENT发送给服务器信息:{},不处理", JSON.toJSONString(map));
+        }
+    }
 
     private void moblieClientHandler(Map<String,Object> map, Channel channel) {
         logger.info("手机端登录服务器,客户端发送给服务器信息:{}", JSON.toJSONString(map));
