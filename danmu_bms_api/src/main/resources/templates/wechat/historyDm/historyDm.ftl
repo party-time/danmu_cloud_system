@@ -54,9 +54,9 @@
             }).done(function (data) {
                   alert('举报成功，我们会尽快处理!');
             });
+
         }
   }
-
 </script>
 </body>
 </html>
