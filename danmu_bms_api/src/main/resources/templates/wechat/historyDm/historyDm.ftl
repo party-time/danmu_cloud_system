@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>聚时代-历史弹幕</title>
+    <title>${partyName!"null"}的历史弹幕</title>
     <base href="/">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,9 +12,6 @@
   <meta name="x5-orientation" content="portrait">
 </head>
 <body>
-    <div style="text-align:center">
-        <h1>${partyName!"null"}的历史弹幕</h1>
-    </div>
     <#if dataList??>
     <#list dataList as obj>
     <div style="background-color:#fff;border:1px solid #eee;min-height:50px;margin-top:2px;">
@@ -32,13 +29,22 @@
     </div>
     </#list>
     <#if total gt 20>
-    <div>
-        <span style="<#if pageNum==0>color:#aaa</#if>"><前</span>
-        <span style="<#if pageNum==lastPage>color:#aaa</#if>">后></span>
+    <div style="text-align:center;margin-top: 5px;">
+        <span style="<#if pageNumber==0>color:#aaa</#if>"><a onclick="next()"><前</a></span>
+        <span style="margin-left:20px;<#if pageNumber==lastPage>color:#aaa</#if>"><a onclick="last()">后></a></span>
     </div>
     </#if>
     <#else>
         <div style="text-align:center">目前没有弹幕</div>
     </#if>
+<script>
+  function next(){
+        window.location.href="/wechat/historyDM?partyId=${partyId}&addressId=${addressId}&openId=${openId}&pageNumber=${pageNumber+2}";
+  }
+  function last(){
+          window.location.href="/wechat/historyDM?partyId=${partyId}&addressId=${addressId}&openId=${openId}&pageNumber=${pageNumber-1}";
+    }
+
+</script>
 </body>
 </html>

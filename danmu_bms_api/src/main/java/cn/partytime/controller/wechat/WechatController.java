@@ -349,7 +349,7 @@ public class WechatController {
     }
 
     @RequestMapping(value = "/historyDM", method = RequestMethod.GET)
-    public String historyDM(String code,Model model,Integer pageNumber){
+    public String historyDM(String code,Model model,Integer pageNumber,String partyId,String addressId,String openId){
         /**
         PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(0,20,"","59917cd2c556f03edcf5259e",1);
         Party party = partyService.findById("59917cd2c556f03edcf5259e");
@@ -359,36 +359,49 @@ public class WechatController {
         model.addAttribute("pageSize",pageSize);
         model.addAttribute("party",party);
          **/
-        String openId = WeixinUtil.getUserOpenId(code);
+        if(StringUtils.isEmpty(openId)){
+            openId = WeixinUtil.getUserOpenId(code);
+        }
         if(StringUtils.isEmpty(openId)){
             return "redirect:https://open.weixin.qq.com/connect/oauth2/authorize?appid="+partyTimeConfig.getAppId()+"&redirect_uri="+partyTimeConfig.getUrl()+"/wechat/historyDM&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
         }
-        PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
-        if( null != party){
-            if( null == pageNumber){
-                pageNumber = 0;
-            }else if(pageNumber>0){
-                pageNumber=pageNumber-1;
-            }
-            model.addAttribute("partyName",party.getPartyName());
-            if(!StringUtils.isEmpty(party.getPartyId())){
-                PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(pageNumber,20,party.getAddressId(),party.getPartyId(),1);
-                model.addAttribute("dataList",pageResultModel.getRows());
-                model.addAttribute("total",pageResultModel.getTotal());
-                model.addAttribute("pageNumber",pageNumber);
-                long index = 0;
-                if (pageResultModel.getTotal() % 20 > 0) {
-                    index = pageResultModel.getTotal() / 20 + 1;
-                } else {
-                    index = pageResultModel.getTotal() / 20;
-                }
-                model.addAttribute("lastPage",index);
+        PartyLogicModel party = null;
+        if(StringUtils.isEmpty(partyId) ){
+            party = bmsWechatUserService.findPartyByOpenId(openId);
+            if( null != party){
+                partyId = party.getPartyId();
+                addressId = party.getAddressId();
             }else{
                 return "redirect:/htm/nodanmu.html";
             }
+        }
+
+
+        if( null == pageNumber){
+            pageNumber = 0;
+        }else if(pageNumber>0){
+            pageNumber=pageNumber-1;
+        }
+        model.addAttribute("partyName",party.getPartyName());
+        if(!StringUtils.isEmpty(partyId)){
+            PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(pageNumber,20,addressId,partyId,1);
+            model.addAttribute("dataList",pageResultModel.getRows());
+            model.addAttribute("total",pageResultModel.getTotal());
+            model.addAttribute("pageNumber",pageNumber);
+            long index = 0;
+            if (pageResultModel.getTotal() % 20 > 0) {
+                index = pageResultModel.getTotal() / 20 + 1;
+            } else {
+                index = pageResultModel.getTotal() / 20;
+            }
+            model.addAttribute("lastPage",index);
+            model.addAttribute("openId",openId);
+            model.addAttribute("partyId",partyId);
+            model.addAttribute("addressId",addressId);
         }else{
             return "redirect:/htm/nodanmu.html";
         }
+
 
         return "wechat/historyDm/historyDm";
     }
