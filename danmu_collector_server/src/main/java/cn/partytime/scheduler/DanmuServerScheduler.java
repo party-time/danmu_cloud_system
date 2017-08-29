@@ -1,5 +1,7 @@
 package cn.partytime.scheduler;
 
+import cn.partytime.cache.collector.CollectorCacheService;
+import cn.partytime.common.util.SetUtils;
 import cn.partytime.config.DanmuChannelRepository;
 import cn.partytime.model.DanmuCollectorInfo;
 import cn.partytime.common.cachekey.CollectorServerCacheKey;
@@ -66,7 +68,23 @@ public class DanmuServerScheduler {
     @Autowired
     private ClientCacheService clientCacheService;
 
+    @Autowired
+    private CollectorCacheService collectorCacheService;
 
+
+    @Scheduled(cron = "0/30 * * * * *")
+    public void resetClientCount(){
+        logger.info("++++++++++++++++++++++++++++++++++++++重置客户端在线数量+++++++++++++++++++++++++++++++++++++++++");
+        int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
+        Set<String> addressIdList =  clientChannelService.findScreenAddresIdList(clientType);
+        if(SetUtils.checkSetIsNotNull(addressIdList)){
+            for(String addressId:addressIdList){
+                int  count = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,clientType);
+                logger.info("addressId:{},clientType:{},count:{}",addressId,clientType,count);
+                collectorCacheService.setClientCount(clientType,addressId,host,count);
+            }
+        }
+    }
 
     @Scheduled(cron = "0/30 * * * * *")
     public void reportCurrentByCron() {
@@ -85,13 +103,13 @@ public class DanmuServerScheduler {
         logger.info("将连接的客户端数量入缓存------------>end");
     }
 
-    @Scheduled(cron="0/5 * * * * ?")
+    @Scheduled(cron="0/10 * * * * ?")
     public void repeatSendCommand() {
         logger.info("重新向客户端发送新的命令");
         long time = DateUtils.getCurrentDate().getTime();
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
-        List<String> addressIdList =  clientChannelService.findScreenAddresIdList(clientType);
-        if(ListUtils.checkListIsNotNull(addressIdList)){
+        Set<String> addressIdList =  clientChannelService.findScreenAddresIdList(clientType);
+        if(SetUtils.checkSetIsNotNull(addressIdList)){
             for(String addressId:addressIdList){
                 Map<String,Object>  stringObjectMap = clientCacheService.getFirstCommandFromCache(addressId);
                 if(stringObjectMap!=null){
@@ -116,8 +134,8 @@ public class DanmuServerScheduler {
         logger.info("预制弹幕补充逻辑定时任务开始");
         long time = DateUtils.getCurrentDate().getTime();
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
-        List<String> addressIdList =  clientChannelService.findScreenAddresIdList(clientType);
-        if(ListUtils.checkListIsNotNull(addressIdList)){
+        Set<String> addressIdList =  clientChannelService.findScreenAddresIdList(clientType);
+        if(SetUtils.checkSetIsNotNull(addressIdList)){
             for(String addressId:addressIdList){
                long lastTime = screenDanmuService.getlastDanmuTime(addressId);
                String partyId = clientPartyService.findCurrentPatyId(addressId);

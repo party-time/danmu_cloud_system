@@ -9,6 +9,7 @@ import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 @Service
+@Slf4j
 public class ClientCommandService {
 
 
@@ -33,8 +35,9 @@ public class ClientCommandService {
         String key = ClientCommandCacheKey.PUB_ClIENT_COMMAND_CACHE + addressId;
         Object data = redisService.get(key);
         if(data!=null){
-            ProtocolModel protocolModel = JSON.parseObject(String.valueOf(data),ProtocolModel.class);
-
+            String command  = String.valueOf(data);
+            log.info("接收的命令是:{}",command);
+            ProtocolModel protocolModel = JSON.parseObject(command,ProtocolModel.class);
             if (danmuClientModelConcurrentHashMap != null && danmuClientModelConcurrentHashMap.size() > 0) {
                 for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : danmuClientModelConcurrentHashMap.entrySet()) {
                     DanmuClientModel danmuClientModel = entry.getValue();
