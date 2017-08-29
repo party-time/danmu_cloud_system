@@ -21,6 +21,7 @@ import cn.partytime.util.*;
 import cn.partytime.wechat.payService.WechatPayService;
 import cn.partytime.wechat.pojo.UserInfo;
 import cn.partytime.wechat.pojo.WxJsConfig;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -373,7 +374,7 @@ public class WechatController {
                 pageNumber=pageNumber-1;
             }
             model.addAttribute("partyName",party.getPartyName());
-            log.info("##############partyId:"+party.getPartyId());
+            log.info("##############partyId:"+ JSON.toJSONString(party));
             if(!StringUtils.isEmpty(party.getPartyId())){
                 PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(pageNumber,20,party.getAddressId(),party.getPartyId(),1);
                 model.addAttribute("dataList",pageResultModel.getRows());
