@@ -11,7 +11,7 @@ public class ReportListModel {
 
     private Report report;
 
-    private Danmu danmu;
+    private DanmuLogicModel danmu;
 
     private WechatUser wechatUser;
 
@@ -23,11 +23,11 @@ public class ReportListModel {
         this.report = report;
     }
 
-    public Danmu getDanmu() {
+    public DanmuLogicModel getDanmu() {
         return danmu;
     }
 
-    public void setDanmu(Danmu danmu) {
+    public void setDanmu(DanmuLogicModel danmu) {
         this.danmu = danmu;
     }
 

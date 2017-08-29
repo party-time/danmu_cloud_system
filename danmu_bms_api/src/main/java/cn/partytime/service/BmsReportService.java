@@ -1,5 +1,6 @@
 package cn.partytime.service;
 
+import cn.partytime.model.DanmuLogicModel;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.ReportListModel;
 import cn.partytime.model.danmu.Danmu;
@@ -24,7 +25,7 @@ public class BmsReportService {
     private WechatUserService wechatUserService;
 
     @Autowired
-    private DanmuService danmuService;
+    private BmsDanmuService bmsDanmuService;
 
     public PageResultModel findAll(Integer pageNum,Integer pageSize){
         PageResultModel pageResultModel = new PageResultModel();
@@ -37,12 +38,12 @@ public class BmsReportService {
                 danmuIdList.add(report.getDanmuId());
             }
             List<WechatUser> wechatUserList = wechatUserService.findByIds(wechatUserIdList);
-            List<Danmu> danmuList = danmuService.findByIds(danmuIdList);
+            List<DanmuLogicModel> danmuList = bmsDanmuService.findDanmuListByIdList(danmuIdList);
             List<ReportListModel> reportListModelList = new ArrayList<>();
             for(Report report : reportPage.getContent()){
                 ReportListModel reportListModel = new ReportListModel();
                 reportListModel.setReport(report);
-                for(Danmu danmu : danmuList){
+                for(DanmuLogicModel danmu : danmuList){
                     if(danmu.getId().equals(report.getDanmuId())){
                         reportListModel.setDanmu(danmu);
                     }

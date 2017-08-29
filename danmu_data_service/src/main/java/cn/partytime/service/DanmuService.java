@@ -140,7 +140,7 @@ public class DanmuService {
 
 
     public List<Danmu> findDanmuByIdList(List<String> idList){
-        return danmuRepository.findDanmuByIdIn(idList);
+        return danmuRepository.findByIdIn(idList);
     }
 
     /**
