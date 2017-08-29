@@ -17,4 +17,5 @@ public class DanmuDataRpcApplication {
 		SpringApplication.run(DanmuDataRpcApplication.class, args);
 	}
 
+
 }
