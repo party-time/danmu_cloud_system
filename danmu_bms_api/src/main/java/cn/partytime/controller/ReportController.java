@@ -1,6 +1,7 @@
 package cn.partytime.controller;
 
 import cn.partytime.model.PageResultModel;
+import cn.partytime.model.RestResultModel;
 import cn.partytime.service.BmsReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,22 @@ public class ReportController {
     @RequestMapping(value = "/page", method = RequestMethod.GET)
     public PageResultModel reportPage(Integer pageNumber, Integer pageSize) {
         return bmsReportService.findAll(pageNumber-1,pageSize);
+    }
+
+    @RequestMapping(value = "/blockDanmu", method = RequestMethod.GET)
+    public RestResultModel blockDanmu(String openId, String danmuId, String reportId){
+        RestResultModel restResultModel = new RestResultModel();
+        bmsReportService.blockDanmu(openId,danmuId,reportId);
+        restResultModel.setResult(200);
+        return restResultModel;
+    }
+
+    @RequestMapping(value = "/noProcess", method = RequestMethod.GET)
+    public RestResultModel noProcess(String openId,String reportId){
+        RestResultModel restResultModel = new RestResultModel();
+        bmsReportService.reportDanmu(openId,reportId);
+        restResultModel.setResult(200);
+        return restResultModel;
     }
 
 }
