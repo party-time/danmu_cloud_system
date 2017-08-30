@@ -17,6 +17,7 @@ import cn.partytime.model.*;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.rpc.RpcAdminAlarmService;
 import cn.partytime.rpc.RpcClientAlarmService;
+import cn.partytime.rpc.RpcMovieAlarmService;
 import cn.partytime.rpc.RpcProjectorAlarmService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -76,7 +77,8 @@ public class AlarmScheduler {
     @Autowired
     private RpcClientAlarmService rpcClientAlarmService;
 
-
+    @Autowired
+    private RpcMovieAlarmService rpcMovieAlarmService;
 
     @Value("${alarm.admin.offlineTime}")
     private int clientOfflineTime;
@@ -168,39 +170,38 @@ public class AlarmScheduler {
                         }else if(minute>=clientOfflineTime){
                             rpcClientAlarmService.clientNetError(addressId);
                         }
-                        /*Object object = redisService.get(ClientCacheKey.ClIENT_OFFLINE_TIME+addressId);
-                        if(object!=null){
-                            long time = Long.parseLong(String.valueOf(object));
-                            sendAlaram(time,addressId);
-                        }else{
-                            //管理员从来未登陆过
-                            MovieScheduleModel movieScheduleModel = rpcMovieScheduleService.findCurrentMovie(partyId,addressId);
-                            if(movieScheduleModel.getStartTime()!=null){
-                                Date movieStartTime = movieScheduleModel.getStartTime();
-                                sendAlaram(movieStartTime.getTime(),addressId);
-                            }
-                        }*/
                     }
                 }
             }
         }
     }
-    /*public void sendAlaram(long  time,String addressId){
-        Date date =  DateUtils.getCurrentDate();
-        int alarmCount = flashClientLogicService.findClientAlarmCount(addressId);
-        if(alarmCount>0){
-            logger.info("告警已经发出");
-            return;
+    @Scheduled(cron = "0/30 * * * * ?")
+    private void moviePlayTimeListener(){
+        log.info("电影播放时长监听");
+        List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
+        if(ListUtils.checkListIsNotNull(danmuAddressList)){
+            for(DanmuAddressModel danmuAddress:danmuAddressList){
+                String addressId = danmuAddress.getId();
+                PartyLogicModel partyLogicModel = rpcPartyService.findFilmByAddressId(addressId);
+                if(partyLogicModel!=null){
+                    String partyId = partyLogicModel.getPartyId();
+                    long movieTime = partyLogicModel.getMovieTime();
+                    List<MovieScheduleModel>  movieScheduleList =  rpcMovieScheduleService.findByPartyIdAndAddressId(partyId,addressId);
+                    if(ListUtils.checkListIsNotNull(movieScheduleList)){
+                        MovieScheduleModel movieSchedule = movieScheduleList.get(0);
+                        if(movieSchedule.getEndTime()==null){
+                            Date currentDate = DateUtils.getCurrentDate();
+                            Date danmuStartTime = movieSchedule.getStartTime();
+                            long subTime = currentDate.getTime() - danmuStartTime.getTime();
+                            if(subTime>movieTime && movieTime!=0){
+                                rpcMovieAlarmService.movieTime(partyId,addressId,subTime);
+                            }
+                        }
+                    }
+                }
+            }
         }
-        long subTime = date.getTime() - time;
-        long minute = subTime/1000/60;
-        if(minute>5){
-            Map<String,String> map = commonDataService.setCommonMapByAddressId(AlarmKeyConst.ALARM_KEY_NETWORKERROR,addressId);
-            MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.CLientLogCode.FLASH_NETWORK_EXCEPTION,map);
-            messageLogicService.sendMessage(mapMessageObject);
-            flashClientLogicService.addClientAlarmCount(1,addressId);
-        }
-    }*/
+    }
 
 
 }

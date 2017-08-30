@@ -121,7 +121,7 @@ public class DanmuService {
 
 
     public Page<Danmu> findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(int danmuSrc, boolean isBlocked, boolean viewFlg, Integer page, Integer size, List<String> danmuPoolIdList) {
-        Sort sort = new Sort(Sort.Direction.ASC, "createTime");
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return danmuRepository.findByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(danmuPoolIdList,danmuSrc,isBlocked,viewFlg,pageRequest);
     }
