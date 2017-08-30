@@ -38,7 +38,7 @@ public interface RpcDanmuService {
     @RequestMapping(value = "/rpcDanmu/findDanmuPoolIdListByPartyIdAndAddressId" ,method = RequestMethod.GET)
     public List<String> findDanmuPoolIdListByPartyIdAndAddressId(@RequestParam(value = "partyId") String partyId,@RequestParam(value = "addressId") String addressId);
 
-    @RequestMapping(value = "/rpcDanmu/countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan" ,method = RequestMethod.GET)
-    public long countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan(@RequestParam(value = "danmuPoolIdList") List<String> danmuPoolIdList,@RequestParam(value = "danmuSrc") int danmuSrc,@RequestParam(value = "isBlocked") boolean isBlocked,@RequestParam(value = "time") long time);
+    @RequestMapping(value = "/rpcDanmu/countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeGreaterThan" ,method = RequestMethod.GET)
+    public long countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeGreaterThan(@RequestParam(value = "danmuPoolIdList") List<String> danmuPoolIdList,@RequestParam(value = "danmuSrc") int danmuSrc,@RequestParam(value = "isBlocked") boolean isBlocked,@RequestParam(value = "time") long time);
 
 }

@@ -21,8 +21,8 @@ public interface RpcTimerDanmuService {
     public List<TimerDanmuFileModel> findTimerDanmuFileList(@RequestParam(value = "partyIdList") List<String> partyIdList);
 
 
-    @RequestMapping(value = "/rpcTimerDanmu/findTimerDanmuIsExistAfterCurrentTime" ,method = RequestMethod.GET)
-    public boolean findTimerDanmuIsExistAfterCurrentTime(@RequestParam(value = "partyId") String partyId,@RequestParam(value = "time") long time);
+    @RequestMapping(value = "/rpcTimerDanmu/countByPartyIdAndBeginTimeGreaterThan" ,method = RequestMethod.GET)
+    public boolean countByPartyIdAndBeginTimeGreaterThan(@RequestParam(value = "partyId") String partyId,@RequestParam(value = "time") long time);
 
 
 }

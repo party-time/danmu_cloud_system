@@ -84,7 +84,7 @@ public class TimerDanmuService {
         return dbObject;
     }
 
-    public long countByPartyIdLessThanBAndBeginTime(String parytId,long time){
-        return timerDanmuRepository.countByPartyIdAndBeginTimeLessThan(parytId,time);
+    public long countByPartyIdAndBeginTimeGreaterThan(String parytId,long time){
+        return timerDanmuRepository.countByPartyIdAndBeginTimeGreaterThan(parytId,time);
     }
 }

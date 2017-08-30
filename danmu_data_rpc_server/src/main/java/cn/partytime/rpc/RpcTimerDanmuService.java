@@ -35,9 +35,9 @@ public class RpcTimerDanmuService {
         return timerDanmuFileList;
     }
 
-    @RequestMapping(value = "/findTimerDanmuIsExistAfterCurrentTime" ,method = RequestMethod.GET)
-    public boolean findTimerDanmuIsExistAfterCurrentTime(@RequestParam String partyId,@RequestParam long time){
-        long count =  timerDanmuService.countByPartyIdLessThanBAndBeginTime(partyId,time);
+    @RequestMapping(value = "/countByPartyIdAndBeginTimeGreaterThan" ,method = RequestMethod.GET)
+    public boolean countByPartyIdAndBeginTimeGreaterThan(@RequestParam String partyId,@RequestParam long time){
+        long count =  timerDanmuService.countByPartyIdAndBeginTimeGreaterThan(partyId,time);
         log.info("count:{}",count);
         if(count>0){
             return true;

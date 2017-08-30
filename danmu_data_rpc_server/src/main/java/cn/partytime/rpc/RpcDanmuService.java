@@ -96,9 +96,9 @@ public class RpcDanmuService {
         danmuPoolList.forEach(pool->poolIdList.add(pool.getId()));
         return poolIdList;
     }
-    @RequestMapping(value = "/countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan" ,method = RequestMethod.GET)
-    public long findTimerDanmuIsExistAfterCurrentTime(@RequestParam List<String> danmuPoolIdList,@RequestParam int danmuSrc,boolean isBlocked,@RequestParam long time){
-        return danmuRepository.countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan(danmuPoolIdList,danmuSrc,isBlocked,true,time);
+    @RequestMapping(value = "/countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeGreaterThan" ,method = RequestMethod.GET)
+    public long countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeGreaterThan(@RequestParam List<String> danmuPoolIdList,@RequestParam int danmuSrc,boolean isBlocked,@RequestParam long time){
+        return danmuRepository.countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeGreaterThan(danmuPoolIdList,danmuSrc,isBlocked,true,time);
     }
 
 

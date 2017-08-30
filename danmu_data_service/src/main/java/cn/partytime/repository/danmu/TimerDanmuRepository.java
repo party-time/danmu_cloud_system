@@ -20,6 +20,6 @@ public interface TimerDanmuRepository extends MongoRepository<TimerDanmu, String
     List<TimerDanmu> findByPartyId(String partyId);
 
 
-    long countByPartyIdAndBeginTimeLessThan(String partyId,long time);
+    long countByPartyIdAndBeginTimeGreaterThan(String partyId,long time);
 
 }

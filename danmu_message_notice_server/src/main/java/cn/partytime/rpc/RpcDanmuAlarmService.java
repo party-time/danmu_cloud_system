@@ -198,10 +198,13 @@ public class RpcDanmuAlarmService {
                 List<String> danmuPoolIdList = rpcDanmuService.findDanmuPoolIdListByPartyIdAndAddressId(partyId,addressId);
                 log.info("弹幕池编号:{}", JSON.toJSONString(danmuPoolIdList));
                 if(ListUtils.checkListIsNotNull(danmuPoolIdList)){
-                   long danmuCount = rpcDanmuService.countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan(danmuPoolIdList,1,false,time);
+                   long danmuCount = rpcDanmuService.countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeGreaterThan(danmuPoolIdList,1,false,time);
                    if(danmuCount<1){
                       return;
                    }
+                }else{
+                    log.info("弹幕池编不存在");
+                    return;
                 }
 
             }else if(AlarmKeyConst.ALARM_KEY_TIMERDANMU.equals(typeName)){
@@ -209,7 +212,7 @@ public class RpcDanmuAlarmService {
                     //电影结束了
                     return;
                 }
-                boolean isExist =  rpcTimerDanmuService.findTimerDanmuIsExistAfterCurrentTime(partyId,DateUtils.getCurrentDate().getTime());
+                boolean isExist =  rpcTimerDanmuService.countByPartyIdAndBeginTimeGreaterThan(partyId,DateUtils.getCurrentDate().getTime());
                 log.info("没有定时弹幕:{}",isExist);
                 if(!isExist){
                     log.info("没有定时弹幕了");
