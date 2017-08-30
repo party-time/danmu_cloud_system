@@ -17,6 +17,12 @@ public interface RpcMovieScheduleService {
     @RequestMapping(value = "/rpcMovieSchedule/findByCurrentMovieLastTime" ,method = RequestMethod.GET)
     public long findByCurrentMovieLastTime(@RequestParam (value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId);
 
+
+    @RequestMapping(value = "/rpcMovieSchedule/findByCurrentMoviePastTime" ,method = RequestMethod.GET)
+    public long findByCurrentMoviePastTime(@RequestParam (value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId);
+
+
+
     @RequestMapping(value = "/rpcMovieSchedule/findByPartyIdAndAddressId" ,method = RequestMethod.GET)
     public List<MovieScheduleModel> findByPartyIdAndAddressId(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId);
 

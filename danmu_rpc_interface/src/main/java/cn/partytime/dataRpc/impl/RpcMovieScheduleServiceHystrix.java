@@ -16,6 +16,11 @@ public class RpcMovieScheduleServiceHystrix implements RpcMovieScheduleService {
     }
 
     @Override
+    public long findByCurrentMoviePastTime(String partyId, String addressId) {
+        return 0;
+    }
+
+    @Override
     public List<MovieScheduleModel> findByPartyIdAndAddressId(String partyId, String addressId) {
         return null;
     }

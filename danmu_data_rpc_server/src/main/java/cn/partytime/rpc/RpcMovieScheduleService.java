@@ -25,6 +25,32 @@ public class RpcMovieScheduleService {
     @Autowired
     private PartyLogicService partyLogicService;
 
+    @RequestMapping(value = "/findByCurrentMoviePastTime" ,method = RequestMethod.GET)
+    public long findByCurrentMoviePastTime(@RequestParam String partyId, @RequestParam String addressId){
+        Page<MovieSchedule> movieSchedulePage = movieScheduleService.findPageByPartyIdAndAddressIsAndCreateTimeDesc(partyId,addressId,1,0);
+
+        PartyLogicModel partyLogicModel = partyLogicService.findFilmParty(addressId);
+        long movieTime = partyLogicModel.getMovieTime();
+
+        long result = 0;
+
+        //第一场
+        if(movieSchedulePage.getTotalElements()==0){
+            return 0;
+        }
+
+        //获取最后一条数据
+        MovieSchedule movieSchedule = movieSchedulePage.getContent().get(0);
+        if(movieSchedule.getEndTime()!=null){
+            //电影结束了
+            return 0;
+        }
+        Date startDate = movieSchedule.getStartTime();
+        Date currentDate = DateUtils.getCurrentDate();
+        long subTime = (currentDate.getTime() - startDate.getTime())/1000;
+
+        return subTime;
+    }
 
     @RequestMapping(value = "/findByCurrentMovieLastTime" ,method = RequestMethod.GET)
     public long findByCurrentMovieLastTime(@RequestParam String partyId, @RequestParam String addressId){

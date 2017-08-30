@@ -138,7 +138,7 @@ public class RpcDanmuAlarmService {
                 log.info("场地:{},编号:{}资源告警已经发送过",addressId,idd);
                 return;
             }
-            danmuAlarmCacheService.addTimerDanmuNotPlayResource(addressId,idd,time);
+            danmuAlarmCacheService.addTimerDanmuNotPlayResource(addressId,idd,time*60);
             //执行告警发送
             MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(type,map);
             mapMessageObject.setValue(0);
@@ -169,7 +169,7 @@ public class RpcDanmuAlarmService {
             long time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
             log.info("计数缓存时长:{}",time);
             //告警计数
-            alarmCacheService.addAlarmCount(time,addressId,typeName);
+            alarmCacheService.addAlarmCount(time*60,addressId,typeName);
             //执行告警发送
             MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(type,map);
             mapMessageObject.setValue(0);
@@ -188,7 +188,10 @@ public class RpcDanmuAlarmService {
                 return;
             }
             long  time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
-            log.info("当前活动进行的时间:{}",time);
+            log.info("当前活动进行剩余时间的时间:{}",time);
+
+            long pastSeconds = rpcMovieScheduleService.findByCurrentMoviePastTime(partyId,addressId);
+            log.info("当前活动进行进行时间的时间:{}",pastSeconds);
 
             log.info("==========:{}",typeName);
             if(AlarmKeyConst.ALARM_KEY_HISTORYDANMU.equals(typeName)){
@@ -198,7 +201,7 @@ public class RpcDanmuAlarmService {
                 List<String> danmuPoolIdList = rpcDanmuService.findDanmuPoolIdListByPartyIdAndAddressId(partyId,addressId);
                 log.info("弹幕池编号:{}", JSON.toJSONString(danmuPoolIdList));
                 if(ListUtils.checkListIsNotNull(danmuPoolIdList)){
-                   long danmuCount = rpcDanmuService.countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeGreaterThan(danmuPoolIdList,1,false,time);
+                   long danmuCount = rpcDanmuService.countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeGreaterThan(danmuPoolIdList,1,false,pastSeconds);
                    if(danmuCount<1){
                       return;
                    }
@@ -212,7 +215,7 @@ public class RpcDanmuAlarmService {
                     //电影结束了
                     return;
                 }
-                long timerDanmuCount =  rpcTimerDanmuService.countByPartyIdAndBeginTimeGreaterThan(partyId,time*60);
+                long timerDanmuCount =  rpcTimerDanmuService.countByPartyIdAndBeginTimeGreaterThan(partyId,pastSeconds);
                 log.info("定时弹幕数量:{}",timerDanmuCount);
                 if(timerDanmuCount==0){
                     log.info("没有定时弹幕了");
