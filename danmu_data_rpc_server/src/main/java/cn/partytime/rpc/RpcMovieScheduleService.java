@@ -49,11 +49,12 @@ public class RpcMovieScheduleService {
         Date startDate = movieSchedule.getStartTime();
         Date currentDate = DateUtils.getCurrentDate();
 
-        long subTime = (currentDate.getTime() - startDate.getTime())/1000;
+        long subTime = (currentDate.getTime() - startDate.getTime())/1000/60;
         if(movieTime==0){
+
             return Math.abs(180 - subTime);
         }
-        return  Math.abs(movieTime/1000 - subTime);
+        return  Math.abs(movieTime/1000/60 - subTime);
     }
 
     @RequestMapping(value = "/findByPartyIdAndAddressId" ,method = RequestMethod.GET)
