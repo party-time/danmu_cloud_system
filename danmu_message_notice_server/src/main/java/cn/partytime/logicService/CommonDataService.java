@@ -54,6 +54,7 @@ public class CommonDataService {
             DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findById(danmuClientModel.getAddressId());
             map = new HashMap<String, String>();
             map.put("key", key);
+            map.put("screen", danmuClientModel.getName());
             map.put("addressName", danmuAddressModel.getAddress());
             map.put("addressId",danmuAddressModel.getId());
             return map;
