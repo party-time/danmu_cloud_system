@@ -1,6 +1,7 @@
 package cn.partytime.dataRpc.impl;
 
 import cn.partytime.dataRpc.RpcUpdatePlanService;
+import cn.partytime.model.JavaUpdatePlanModel;
 import cn.partytime.model.UpdatePlanModel;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public class RpcUpdatePlanServiceHystrix implements RpcUpdatePlanService {
 
     @Override
-    public List<UpdatePlanModel> findByAddressId(String addressId) {
+    public List<JavaUpdatePlanModel> findByAddressId(String addressId) {
         return null;
     }
 

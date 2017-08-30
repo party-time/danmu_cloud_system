@@ -1,6 +1,7 @@
 package cn.partytime.dataRpc;
 
 import cn.partytime.dataRpc.impl.RpcUpdatePlanServiceHystrix;
+import cn.partytime.model.JavaUpdatePlanModel;
 import cn.partytime.model.UpdatePlanModel;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ import java.util.List;
 public interface RpcUpdatePlanService {
 
     @RequestMapping(value = "/rpcUpdatePlan/findByAddressId" ,method = RequestMethod.GET)
-    public List<UpdatePlanModel> findByAddressId(@RequestParam(value = "addressId") String addressId);
+    public List<JavaUpdatePlanModel> findByAddressId(@RequestParam(value = "addressId") String addressId);
 
 
     @RequestMapping(value = "/rpcUpdatePlan/update" ,method = RequestMethod.GET)
