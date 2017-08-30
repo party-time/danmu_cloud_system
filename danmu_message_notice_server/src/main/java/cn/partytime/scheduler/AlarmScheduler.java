@@ -134,8 +134,11 @@ public class AlarmScheduler {
                     if(count==0){
                         if(offlineTime==0){
                             MovieScheduleModel movieScheduleModel = rpcMovieScheduleService.findCurrentMovie(partyId,addressId);
-                            Date movieStartTime = movieScheduleModel.getStartTime();
-                            rpcAdminAlarmService.admiOffLineAlarm(movieStartTime.getTime());
+                            if(movieScheduleModel!=null){
+                                Date movieStartTime = movieScheduleModel.getStartTime();
+                                log.info("movieStartTime:{}",movieStartTime);
+                                rpcAdminAlarmService.admiOffLineAlarm(movieStartTime.getTime());
+                            }
                         }else{
                             rpcAdminAlarmService.admiOffLineAlarm(offlineTime);
                         }
