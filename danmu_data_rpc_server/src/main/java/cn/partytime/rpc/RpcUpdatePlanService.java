@@ -36,6 +36,9 @@ public class RpcUpdatePlanService {
     public List<JavaUpdatePlanModel> findByAddressId(@RequestParam String addressId){
         //return updatePlanService.findByAddressId(addressId);
         List<UpdatePlan> updatePlanList = updatePlanService.findByAddressIdAndStatus(addressId,0);
+        log.info("addressId:{}",addressId);
+        log.info("updatePlanList:{}",JSON.toJSONString(updatePlanList));
+
         List<JavaUpdatePlanModel> javaUpdatePlanResults = new ArrayList<>();
         if( null != updatePlanList){
             for(UpdatePlan updatePlan : updatePlanList){
