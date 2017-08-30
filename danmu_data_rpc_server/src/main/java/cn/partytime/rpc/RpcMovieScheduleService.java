@@ -51,7 +51,7 @@ public class RpcMovieScheduleService {
 
         long subTime = (currentDate.getTime() - startDate.getTime())/1000;
         if(movieTime==0){
-            return 180 - subTime;
+            return Math.abs(180 - subTime);
         }
         return  Math.abs(movieTime/1000 - subTime);
     }
