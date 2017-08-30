@@ -206,7 +206,7 @@ public class RpcDanmuAlarmService {
                     log.info("弹幕池编不存在");
                     return;
                 }
-
+                alarmCacheService.addAlarmCount(0,addressId,typeName);
             }else if(AlarmKeyConst.ALARM_KEY_TIMERDANMU.equals(typeName)){
                 if(time==0){
                     //电影结束了
@@ -218,7 +218,7 @@ public class RpcDanmuAlarmService {
                     log.info("没有定时弹幕了");
                     return;
                 }
-                alarmCacheService.addAlarmCount(time,addressId,typeName);
+                alarmCacheService.addAlarmCount(0,addressId,typeName);
             }else{
                 alarmCacheService.addAlarmCount(0,addressId,typeName);
             }
