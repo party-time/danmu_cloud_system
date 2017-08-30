@@ -212,7 +212,7 @@ public class RpcDanmuAlarmService {
                     //电影结束了
                     return;
                 }
-                boolean isExist =  rpcTimerDanmuService.countByPartyIdAndBeginTimeGreaterThan(partyId,DateUtils.getCurrentDate().getTime());
+                boolean isExist =  rpcTimerDanmuService.countByPartyIdAndBeginTimeGreaterThan(partyId,time);
                 log.info("没有定时弹幕:{}",isExist);
                 if(!isExist){
                     log.info("没有定时弹幕了");

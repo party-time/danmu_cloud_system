@@ -150,7 +150,7 @@ public class AlarmScheduler {
         }
     }
 
-   @Scheduled(cron = "0/30 * * * * *")
+   @Scheduled(cron = "0 0/1 * * * ?")
     public void clientOffLineScheduler() {
         log.info("客户端在线数量监听");
         List<DanmuAddressModel> danmuAddressModels = rpcDanmuAddressService.findByType(0);
