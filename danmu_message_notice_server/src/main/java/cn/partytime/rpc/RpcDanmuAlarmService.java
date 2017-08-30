@@ -16,6 +16,7 @@ import cn.partytime.logicService.CommonDataService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.service.DanmuAlarmService;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -195,7 +196,7 @@ public class RpcDanmuAlarmService {
                     return;
                 }
                 List<String> danmuPoolIdList = rpcDanmuService.findDanmuPoolIdListByPartyIdAndAddressId(partyId,addressId);
-                log.info("弹幕池编号:{}");
+                log.info("弹幕池编号:{}", JSON.toJSONString(danmuPoolIdList));
                 if(ListUtils.checkListIsNotNull(danmuPoolIdList)){
                    long danmuCount = rpcDanmuService.countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeLessThan(danmuPoolIdList,1,false,time);
                    if(danmuCount<1){
