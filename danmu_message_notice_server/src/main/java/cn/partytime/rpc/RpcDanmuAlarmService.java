@@ -212,9 +212,9 @@ public class RpcDanmuAlarmService {
                     //电影结束了
                     return;
                 }
-                boolean isExist =  rpcTimerDanmuService.countByPartyIdAndBeginTimeGreaterThan(partyId,time);
-                log.info("没有定时弹幕:{}",isExist);
-                if(!isExist){
+                long timerDanmuCount =  rpcTimerDanmuService.countByPartyIdAndBeginTimeGreaterThan(partyId,time);
+                log.info("定时弹幕数量:{}",timerDanmuCount);
+                if(timerDanmuCount==0){
                     log.info("没有定时弹幕了");
                     return;
                 }

@@ -22,7 +22,7 @@ public interface RpcTimerDanmuService {
 
 
     @RequestMapping(value = "/rpcTimerDanmu/countByPartyIdAndBeginTimeGreaterThan" ,method = RequestMethod.GET)
-    public boolean countByPartyIdAndBeginTimeGreaterThan(@RequestParam(value = "partyId") String partyId,@RequestParam(value = "time") long time);
+    public long countByPartyIdAndBeginTimeGreaterThan(@RequestParam(value = "partyId") String partyId,@RequestParam(value = "time") long time);
 
 
 }

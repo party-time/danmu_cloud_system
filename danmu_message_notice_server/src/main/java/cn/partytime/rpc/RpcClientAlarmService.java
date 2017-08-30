@@ -9,9 +9,11 @@ import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
+import cn.partytime.dataRpc.RpcDanmuClientService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.model.DanmuAddressModel;
+import cn.partytime.model.DanmuClientModel;
 import cn.partytime.service.ClientServiceAlarmService;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -55,8 +57,12 @@ public class RpcClientAlarmService {
     @Autowired
     private CollectorCacheService collectorCacheService;
 
+    @Autowired
+    private RpcDanmuClientService danmuClientService;
+
     @RequestMapping(value = "/clientNetError" ,method = RequestMethod.GET)
     public void clientNetError(@RequestParam String addressId) {
+
 
         int cacheCount = alarmCacheService.findAlarmCount(CollectorCacheKey.BASE_ALARM_KEY,AlarmKeyConst.ALARM_KEY_NETWORKERROR,addressId);
         if(cacheCount>0){
@@ -75,7 +81,8 @@ public class RpcClientAlarmService {
         List<String> registerCodeList =  collectorCacheService.findFlahOfflineCLientList(addressId);
         if(ListUtils.checkListIsNotNull(registerCodeList)){
             for(int i=0; i<registerCodeList.size(); i++){
-                map.put("screen", registerCodeList.get(i));
+                DanmuClientModel danmuClient = danmuClientService.findByRegistCode(registerCodeList.get(i));
+                map.put("screen",danmuClient.getName());
                 sendMessage(LogCodeConst.CLientLogCode.FLASH_NETWORK_EXCEPTION,map);
             }
         }

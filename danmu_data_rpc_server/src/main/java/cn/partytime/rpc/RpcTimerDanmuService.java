@@ -36,13 +36,8 @@ public class RpcTimerDanmuService {
     }
 
     @RequestMapping(value = "/countByPartyIdAndBeginTimeGreaterThan" ,method = RequestMethod.GET)
-    public boolean countByPartyIdAndBeginTimeGreaterThan(@RequestParam String partyId,@RequestParam long time){
-        long count =  timerDanmuService.countByPartyIdAndBeginTimeGreaterThan(partyId,time);
-        log.info("count:{}",count);
-        if(count>0){
-            return true;
-        }
-        return false;
+    public long countByPartyIdAndBeginTimeGreaterThan(@RequestParam String partyId,@RequestParam long time){
+        return timerDanmuService.countByPartyIdAndBeginTimeGreaterThan(partyId,time);
     }
 
 }
