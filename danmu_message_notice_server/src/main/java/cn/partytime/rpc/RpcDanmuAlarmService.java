@@ -166,6 +166,7 @@ public class RpcDanmuAlarmService {
                 }
             }
             long time = rpcMovieScheduleService.findByCurrentMovieLastTime(partyId,addressId);
+            log.info("计数缓存时长:{}",time);
             //告警计数
             alarmCacheService.addAlarmCount(time,addressId,typeName);
             //执行告警发送
