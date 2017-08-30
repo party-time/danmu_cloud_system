@@ -175,6 +175,7 @@ public class AlarmScheduler {
             }
         }
     }
+
     @Scheduled(cron = "0/30 * * * * ?")
     private void moviePlayTimeListener(){
         log.info("电影播放时长监听");
