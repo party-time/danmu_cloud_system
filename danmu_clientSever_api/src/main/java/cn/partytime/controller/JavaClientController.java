@@ -7,6 +7,7 @@ import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.*;
 import cn.partytime.model.*;
 import cn.partytime.service.*;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -178,10 +179,11 @@ public class JavaClientController {
     @RequestMapping(value = "/findUpdatePlan", method = RequestMethod.GET)
     public RestResultModel findUpdatePlan(String addressId){
         RestResultModel restResultModel = new RestResultModel();
-
+        log.info("get updateplan");
         restResultModel.setResult(200);
-
-        restResultModel.setData(rpcUpdatePlanService.findByAddressId(addressId));
+        List<JavaUpdatePlanModel> javaUpdatePlanModels = rpcUpdatePlanService.findByAddressId(addressId);
+        log.info("get updateplan:{}", JSON.toJSONString(javaUpdatePlanModels));
+        restResultModel.setData(javaUpdatePlanModels);
         return restResultModel;
     }
 

@@ -35,7 +35,6 @@ public class RpcUpdatePlanService {
     @RequestMapping(value = "/findByAddressId" ,method = RequestMethod.GET)
     public List<JavaUpdatePlanModel> findByAddressId(@RequestParam String addressId){
         //return updatePlanService.findByAddressId(addressId);
-
         List<UpdatePlan> updatePlanList = updatePlanService.findByAddressIdAndStatus(addressId,0);
         List<JavaUpdatePlanModel> javaUpdatePlanResults = new ArrayList<>();
         if( null != updatePlanList){
