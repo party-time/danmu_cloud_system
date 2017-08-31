@@ -35,6 +35,8 @@ public class AdminUser extends BaseModel {
     //微信表的id
     private String wechatId;
 
+    private int checkFlg;
+
     public String getId() {
         return id;
     }
@@ -113,5 +115,13 @@ public class AdminUser extends BaseModel {
 
     public void setWechatId(String wechatId) {
         this.wechatId = wechatId;
+    }
+
+    public int getCheckFlg() {
+        return checkFlg;
+    }
+
+    public void setCheckFlg(int checkFlg) {
+        this.checkFlg = checkFlg;
     }
 }

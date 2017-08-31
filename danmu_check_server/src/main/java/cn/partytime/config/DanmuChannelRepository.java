@@ -29,6 +29,23 @@ public class DanmuChannelRepository {
     private  ConcurrentHashMap<Channel, AdminTaskModel> channelFilmConcurrentHashMap = new ConcurrentHashMap<Channel, AdminTaskModel>();
 
 
+    public Channel getChannelByPartyTypeAndAuthKey(int partyType,String authKey){
+        ConcurrentHashMap<Channel, AdminTaskModel>  adminTaskModelConcurrentHashMap = new ConcurrentHashMap<Channel, AdminTaskModel>();
+        if(partyType==0){
+            adminTaskModelConcurrentHashMap = channelPartyConcurrentHashMap;
+        }else{
+            adminTaskModelConcurrentHashMap = channelFilmConcurrentHashMap;
+        }
+        Iterator<Map.Entry<Channel, AdminTaskModel>> entries = adminTaskModelConcurrentHashMap.entrySet().iterator();
+        while (entries.hasNext()) {
+            Map.Entry<Channel, AdminTaskModel> entry = entries.next();
+            AdminTaskModel adminTaskModel =  entry.getValue();
+            if(authKey.equals(adminTaskModel.getAuthKey())){
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
 
     public int getAdminCount(int type){
         if(type==0){
@@ -90,8 +107,6 @@ public class DanmuChannelRepository {
         }
         return channelList;
     }
-
-
 
 
     public AdminTaskModel  findAdminTaskModel(int partyType,Channel channel) {

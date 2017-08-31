@@ -72,8 +72,6 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<FullHttp
             //判断session是否存在，如果不存在就下线
             if(adminLoginService.isLogin(key)){
                 //userSessionService.addSessionTime(key);
-                adminLoginService.adminLogin(key,channelFuture.channel(),Integer.parseInt(partyType));
-
             } else {
                 sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));
                 return;

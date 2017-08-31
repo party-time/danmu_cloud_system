@@ -57,4 +57,10 @@ public class CommandTypeConst {
      */
     public static final String DANMU_DENSITY = "danmuDensity";
 
+
+    /**
+     * 弹幕密度
+     */
+    public static final String CHECK_CHECKSTATUS = "checkStatus";
+
 }

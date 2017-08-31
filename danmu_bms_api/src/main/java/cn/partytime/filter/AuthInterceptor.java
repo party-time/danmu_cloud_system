@@ -52,6 +52,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                             //每次操作后增加session时间
                             addSessionTime(cookieValue, response);
                         }
+
                     } else {
                         response.setStatus(444);
                         return false;
@@ -67,6 +68,10 @@ public class AuthInterceptor implements HandlerInterceptor {
                 BaseAdminController baseAdminController = (BaseAdminController) handlerMethod.getBean();
                 baseAdminController.setAdminUser(adminUser);
             }
+            if(url.indexOf("/v1/api/admin/fileDanmuCheck") !=-1 || url.indexOf("/v1/api/admin/updateCheckStatus")!=-1){
+                return true;
+            }
+
             if( null != adminUser){
                 if(!StringUtils.isEmpty(adminUser.getRoleId()) && adminUser.getRoleId().equals("589a98cd77c8afdcbdeaeeb6")){
                     if( url.indexOf("/film/danmuCheck") ==-1 && !url.equals("/v1/logout") ){

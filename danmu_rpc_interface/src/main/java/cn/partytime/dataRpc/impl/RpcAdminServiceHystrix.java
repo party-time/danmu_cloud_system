@@ -12,7 +12,19 @@ public class RpcAdminServiceHystrix implements RpcAdminService {
     }
 
     @Override
+    public AdminUserDto findById(String id) {
+        return null;
+    }
+
+    @Override
     public AdminUserDto getAdminUser(String authKey) {
         return null;
     }
+
+    @Override
+    public AdminUserDto updateCheckFlg(String id, Integer checkFlg) {
+        return null;
+    }
+
+
 }

@@ -132,9 +132,37 @@ public class CommandHanderService {
         } else if (CommandTypeConst.DANMU_DENSITY.equals(type)) {
             //设置弹幕密度
             setDanmuDensity(type, addressId, partyId, object, channel,partyType);
+        }else if (CommandTypeConst.CHECK_CHECKSTATUS.equals(type)) {
+            //设置弹幕密度
+            setCheckStatus(type,object,channel,partyId);
         }
     }
 
+
+    private void setCheckStatus(String type,Object object,Channel channel,String partyId){
+        Map<String,Object> map = convertObjectToMap(object);
+        int status = Integer.parseInt(String.valueOf(map.get("status")));
+        String key = String.valueOf(map.get("key"));
+        AdminUserDto adminUserDto = rpcAdminService.getAdminUser(key);
+
+
+        if(adminUserDto!=null){
+            adminUserDto = rpcAdminService.updateCheckFlg(adminUserDto.getId(),status);
+        }
+        Map<String,Object>result = new HashMap<String,Object>();
+        result.put("data",status);
+        sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
+
+
+
+        //通知其他管理员在线数量
+        int partyType = "null".equals(partyId)?1:0;
+        AdminTaskModel adminTaskModel =  danmuChannelRepository.findAdminTaskModel(channel);
+        adminTaskModel.setCheckFlg(adminUserDto.getCheckFlg());
+        danmuChannelRepository.saveChannelAdminRelation(partyType,channel,adminTaskModel);
+        pushCommandToPartyAdmin(partyType,partyId, CommandTypeConst.ONLINE_AMDIN_COUNT, null);
+
+    }
 
 
     /**
@@ -715,26 +743,63 @@ public class CommandHanderService {
 
         AdminUserDto adminUser =  rpcAdminService.getAdminUser(key);
         log.info("key:{}",key);
-        Object object = redisService.get(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+key);
+
+        Channel oldChannel = null;
+        if("null".equals(partyId)){
+            oldChannel = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(1,key);
+        }else{
+            oldChannel = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(0,key);
+        }
+
+
+
+        String newId =channel.id().asLongText();
+        if(oldChannel!=null){
+            String oldId =oldChannel.id().asLongText();
+            if(!oldId.equals(newId)){
+                log.info("=======踢下线以前的登录===========");
+                forceLogout(oldChannel);
+            }
+        }
+        //log.info("long==>oldChannel:{}",oldChannel.id().asLongText());
+        //log.info("long==>channel:{}",channel.id().asLongText());
+
+        //log.info("short==>oldChannel:{}",oldChannel.id().asShortText());
+        //log.info("short==>channel:{}",channel.id().asShortText());
+        /*String cacheKey = AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+key;
+        Object object = redisService.get(cacheKey);
         if(object!=null){
             result.put("message","审核界面已经打开过!");
             sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms("isRepeateLogin", result)));
             return;
         }else{
-            redisService.set(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+key,adminUser.getId());
-            redisService.expire(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+key,60*5);
-        }
+            log.info("重来未登录过");
+            redisService.set(cacheKey,adminUser.getId());
+            //redisService.expire(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+key,60*5);
+        }*/
 
         //缓存管理员与通道的关系
-        AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(partyType,channel);
-        adminTaskModel.setAdminId(channel.id().asLongText());
+        //AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(partyType,channel);
+        AdminUserDto adminUserDto = rpcAdminService.getAdminUser(key);
+
+
+        AdminUserDto adminInfo = rpcAdminService.findById(adminUserDto.getId());
+        AdminTaskModel adminTaskModel = new AdminTaskModel();
+        adminTaskModel.setAuthKey(key);
+        adminTaskModel.setAdminName(adminUser.getUserName());
+        adminTaskModel.setAdminId(adminUser.getId());
+        adminTaskModel.setLongChannelId(channel.id().asLongText());
+        adminTaskModel.setShortChannelId(channel.id().asShortText());
         adminTaskModel.setPartyId(partyId);
         adminTaskModel.setPartyType(partyType);
         adminTaskModel.setAddressId(addressId);
+        adminTaskModel.setCheckFlg(adminInfo.getCheckFlg());
 
         //缓存管理信息
         danmuChannelRepository.saveChannelAdminRelation(partyType,channel, adminTaskModel);
 
+        //adminLoginService.adminLogin(key,channelFuture.channel(),Integer.parseInt(partyType));
+        result.put("checkStatus", adminInfo.getCheckFlg());
         if(partyType==0){
             //获取活动信息
             PartyModel party = rpcPartyService.getPartyByPartyId(partyId);
@@ -767,6 +832,7 @@ public class CommandHanderService {
             checkAdminCacheService.addCheckAdminCount(partyType,1);
             checkAdminAlarmCacheService.removeAlarmAllCache(partyType);
         }else{
+
             sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
             checkAdminCacheService.addCheckAdminCount(partyType,1);
             checkAdminAlarmCacheService.removeAlarmAllCache(partyType);
@@ -867,7 +933,7 @@ public class CommandHanderService {
             //清除屏幕与地址关系
             danmuChannelRepository.remove(channel);
 
-            redisService.expire(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+adminTaskModel.getAuthKey(),0);
+            //redisService.expire(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+adminTaskModel.getAuthKey(),0);
             //移除通道信息
             danmuChannelRepository.remove(channel);
             //通知其他管理员在线数量
@@ -914,12 +980,12 @@ public class CommandHanderService {
         logger.info("获取当前活动下管理员数量");
         try {
             List<Channel> channelList = danmuChannelRepository.findAdminTaskModelChnnelListByPartyId(partyType,partyId);
-            List<String> managerNameList = new ArrayList<>();
+            Set<AdminTaskModel> managerNameList = new HashSet<>();
             if (ListUtils.checkListIsNotNull(channelList)) {
                 if (CommandTypeConst.ONLINE_AMDIN_COUNT.equals(commandType)) {
                     for (Channel channel : channelList) {
                         AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(channel);
-                        managerNameList.add(adminTaskModel.getAdminName());
+                        managerNameList.add(adminTaskModel);
                     }
                     message = JSON.toJSONString(setObjectToBms(commandType, managerNameList));
                 }
@@ -927,8 +993,6 @@ public class CommandHanderService {
                 for (Channel channel : channelList) {
                     sendMessageToBMS(channel, message);
                 }
-
-                //cacheDataService.setAdminOnlineCount(partyType,channelList.size());
             }
 
         } catch (Exception e) {

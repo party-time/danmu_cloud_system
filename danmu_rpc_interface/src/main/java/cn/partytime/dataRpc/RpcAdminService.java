@@ -24,6 +24,10 @@ public interface RpcAdminService {
     public Boolean checkAuthKey(@RequestParam(value = "authKey") String authKey);
 
 
+    @RequestMapping(value = "/rpcAdmin/findById" ,method = RequestMethod.GET)
+    public AdminUserDto findById(@RequestParam(value = "id") String id);
+
+
     /**
      * 根据authKey获得管理员
      * @param authKey
@@ -31,4 +35,8 @@ public interface RpcAdminService {
      */
     @RequestMapping(value = "/rpcAdmin/getAdminUser" ,method = RequestMethod.GET)
     public AdminUserDto getAdminUser(@RequestParam(value = "authKey") String authKey);
+
+
+    @RequestMapping(value = "/rpcAdmin/updateCheckFlg" ,method = RequestMethod.GET)
+    public AdminUserDto updateCheckFlg(@RequestParam(value = "id") String id,@RequestParam(value = "checkFlg") Integer checkFlg);
 }

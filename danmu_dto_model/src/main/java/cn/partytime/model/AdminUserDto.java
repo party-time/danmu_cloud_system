@@ -33,4 +33,6 @@ public class AdminUserDto {
     //微信表的id
     private String wechatId;
 
+    private int checkFlg;
+
 }

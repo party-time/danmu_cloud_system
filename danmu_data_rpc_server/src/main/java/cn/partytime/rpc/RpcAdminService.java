@@ -58,4 +58,18 @@ public class RpcAdminService {
     public AdminUser findById(@RequestParam String id){
         return adminUserService.findById(id);
     }
+
+
+    @RequestMapping(value = "/updateCheckFlg" ,method = RequestMethod.GET)
+    public AdminUser updateCheckFlg(@RequestParam String id,@RequestParam Integer checkFlg){
+        AdminUser adminUser =  adminUserService.findById(id);
+        if(adminUser!=null){
+            adminUser.setCheckFlg(checkFlg);
+            return adminUserService.save(adminUser);
+        }
+        return null;
+    }
+
+
+
 }

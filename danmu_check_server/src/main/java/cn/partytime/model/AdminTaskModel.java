@@ -1,13 +1,20 @@
 package cn.partytime.model;
 
 import io.netty.channel.Channel;
+import lombok.Data;
 
 /**
  * Created by lENOVO on 2016/10/11.
  */
+
+@Data
 public class AdminTaskModel {
     /*管理员编号*/
     private String adminId;
+
+    private String longChannelId;
+
+    private String shortChannelId;
 
     private String adminName;
 
@@ -32,77 +39,5 @@ public class AdminTaskModel {
 
     private Channel channel;
 
-
-    public String getAdminId() {
-        return adminId;
-    }
-
-    public void setAdminId(String adminId) {
-        this.adminId = adminId;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public String getPartyId() {
-        return partyId;
-    }
-
-    public void setPartyId(String partyId) {
-        this.partyId = partyId;
-    }
-
-    public String getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(String addressId) {
-        this.addressId = addressId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getAuthKey() {
-        return authKey;
-    }
-
-    public void setAuthKey(String authKey) {
-        this.authKey = authKey;
-    }
-
-
-    public String getAdminName() {
-        return adminName;
-    }
-
-    public void setAdminName(String adminName) {
-        this.adminName = adminName;
-    }
-
-    public Integer getPartyType() {
-        return partyType;
-    }
-
-    public void setPartyType(Integer partyType) {
-        this.partyType = partyType;
-    }
-
-    public Channel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(Channel channel) {
-        this.channel = channel;
-    }
+    private int checkFlg;
 }

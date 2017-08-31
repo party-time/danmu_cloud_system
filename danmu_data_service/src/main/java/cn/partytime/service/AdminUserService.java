@@ -30,6 +30,11 @@ public class AdminUserService {
     @Autowired
     private RedisService redisService;
 
+
+    public AdminUser updateAdminUser(AdminUser adminUser){
+        return  save(adminUser);
+    }
+
     /**
      * 创建一个管理员账号
      * @param userName
@@ -62,7 +67,6 @@ public class AdminUserService {
             return false;
         }
         return BCrypt.checkpw(password,adminUser.getPassword());
-
     }
 
 
@@ -103,7 +107,7 @@ public class AdminUserService {
 
     public AdminUser save(AdminUser adminUser){
 
-        return  adminUserRepository.insert(adminUser);
+        return  adminUserRepository.save(adminUser);
     }
 
     public void deleteByUserName(String userName){
