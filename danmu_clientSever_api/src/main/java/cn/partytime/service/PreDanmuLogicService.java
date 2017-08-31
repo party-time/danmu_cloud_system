@@ -41,7 +41,7 @@ public class PreDanmuLogicService {
         log.info("加载活动{}的预置弹幕",partyId);
         String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
 
-        String libraryId = rpcPreDanmuService.findDanmuLibraryIdByParty(partyId);
+        /*String libraryId = rpcPreDanmuService.findDanmuLibraryIdByParty(partyId);
         if(StringUtils.isEmpty(libraryId)){
             log.info("未找到弹幕库");
             return;
@@ -58,11 +58,13 @@ public class PreDanmuLogicService {
         for(int i=0; i<index; i++){
             List<PreDanmuModel> preDanmuModelTempList = rpcPreDanmuService.findPreDanmuByLibraryId(libraryId,i,pageSize);
             preDanmuModelList.addAll(preDanmuModelTempList);
-        }
+        }*/
+        List<PreDanmuModel> preDanmuModelList = rpcPreDanmuService.findByPartyId(partyId);
 
         if (ListUtils.checkListIsNotNull(preDanmuModelList)) {
             log.info("获取预置弹幕的数量:{}",preDanmuModelList.size());
             for(PreDanmuModel preDanmuModel:preDanmuModelList){
+                log.info("预置弹幕:{}",JSON.toJSONString(preDanmuModel));
                 Map<String,Object> preDanmuMap = new HashMap<String,Object>();
                 String templateId = preDanmuModel.getTemplateId();
                 Map<String,Object> contentMap = preDanmuModel.getContent();

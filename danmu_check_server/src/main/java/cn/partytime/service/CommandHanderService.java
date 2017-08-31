@@ -714,7 +714,7 @@ public class CommandHanderService {
         Map<String, Object> result = new HashMap<String, Object>();
 
         AdminUserDto adminUser =  rpcAdminService.getAdminUser(key);
-
+        log.info("key:{}",key);
         Object object = redisService.get(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+key);
         if(object!=null){
             result.put("message","审核界面已经打开过!");
@@ -732,7 +732,7 @@ public class CommandHanderService {
         adminTaskModel.setPartyType(partyType);
         adminTaskModel.setAddressId(addressId);
 
-
+        //缓存管理信息
         danmuChannelRepository.saveChannelAdminRelation(partyType,channel, adminTaskModel);
 
         if(partyType==0){
@@ -765,7 +765,6 @@ public class CommandHanderService {
             //初始化内容发送个管理界面
             sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
             checkAdminCacheService.addCheckAdminCount(partyType,1);
-
             checkAdminAlarmCacheService.removeAlarmAllCache(partyType);
         }else{
             sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
