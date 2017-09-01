@@ -151,6 +151,7 @@ public class CommandHanderService {
         if(adminUserDto!=null){
             adminUserDto = rpcAdminService.updateCheckFlg(adminUserDto.getId(),status);
         }
+        log.info("adminUserInfo:{}",JSON.toJSONString(adminUserDto));
         Map<String,Object>result = new HashMap<String,Object>();
         result.put("data",status);
 
