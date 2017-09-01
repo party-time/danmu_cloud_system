@@ -151,7 +151,7 @@ public class CommandHanderService {
         }
         Map<String,Object>result = new HashMap<String,Object>();
         result.put("data",status);
-        sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
+
 
 
 
@@ -164,21 +164,23 @@ public class CommandHanderService {
         danmuChannelRepository.saveChannelAdminRelation(partyType,channel,adminTaskModel);*/
 
         int partyType =1;
-        Channel channelFilmTemp = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(partyType,key);
+        Channel channelFilmTemp = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(partyType,adminUserDto.getId());
         if(channelFilmTemp!=null){
             AdminTaskModel adminTaskModel =  danmuChannelRepository.findAdminTaskModel(channelFilmTemp);
             adminTaskModel.setCheckFlg(adminUserDto.getCheckFlg());
-            danmuChannelRepository.saveChannelAdminRelation(partyType,channel,adminTaskModel);
-            pushCommandToPartyAdmin(partyType,partyId, CommandTypeConst.ONLINE_AMDIN_COUNT, null);
+            danmuChannelRepository.saveChannelAdminRelation(partyType,channelFilmTemp,adminTaskModel);
+            pushCommandToPartyAdmin(partyType,"null", CommandTypeConst.ONLINE_AMDIN_COUNT, null);
+            sendMessageToBMS(channelFilmTemp, JSON.toJSONString(setObjectToBms(type, result)));
         }
 
         partyType =0;
-        Channel channelPartyTemp = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(0,key);
-        if(channelFilmTemp!=null){
-            AdminTaskModel adminTaskModel =  danmuChannelRepository.findAdminTaskModel(channelFilmTemp);
+        Channel channelPartyTemp = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(0,adminUserDto.getId());
+        if(channelPartyTemp!=null){
+            AdminTaskModel adminTaskModel =  danmuChannelRepository.findAdminTaskModel(channelPartyTemp);
             adminTaskModel.setCheckFlg(adminUserDto.getCheckFlg());
-            danmuChannelRepository.saveChannelAdminRelation(partyType,channel,adminTaskModel);
-            pushCommandToPartyAdmin(partyType,"null", CommandTypeConst.ONLINE_AMDIN_COUNT, null);
+            danmuChannelRepository.saveChannelAdminRelation(partyType,channelPartyTemp,adminTaskModel);
+            pushCommandToPartyAdmin(partyType,adminTaskModel.getPartyId(), CommandTypeConst.ONLINE_AMDIN_COUNT, null);
+            sendMessageToBMS(channelPartyTemp, JSON.toJSONString(setObjectToBms(type, result)));
         }
 
 
@@ -784,9 +786,9 @@ public class CommandHanderService {
 
         Channel oldChannel = null;
         if("null".equals(partyId)){
-            oldChannel = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(1,key);
+            oldChannel = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(1,adminUser.getId());
         }else{
-            oldChannel = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(0,key);
+            oldChannel = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(0,adminUser.getId());
         }
 
 
@@ -823,6 +825,7 @@ public class CommandHanderService {
 
         AdminUserDto adminInfo = rpcAdminService.findById(adminUserDto.getId());
         AdminTaskModel adminTaskModel = new AdminTaskModel();
+
         adminTaskModel.setAuthKey(key);
         adminTaskModel.setAdminName(adminUser.getUserName());
         adminTaskModel.setAdminId(adminUser.getId());

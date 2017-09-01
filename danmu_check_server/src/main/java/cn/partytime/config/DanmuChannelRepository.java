@@ -29,7 +29,7 @@ public class DanmuChannelRepository {
     private  ConcurrentHashMap<Channel, AdminTaskModel> channelFilmConcurrentHashMap = new ConcurrentHashMap<Channel, AdminTaskModel>();
 
 
-    public Channel getChannelByPartyTypeAndAuthKey(int partyType,String authKey){
+    public Channel getChannelByPartyTypeAndAuthKey(int partyType,String adminId){
         ConcurrentHashMap<Channel, AdminTaskModel>  adminTaskModelConcurrentHashMap = new ConcurrentHashMap<Channel, AdminTaskModel>();
         if(partyType==0){
             adminTaskModelConcurrentHashMap = channelPartyConcurrentHashMap;
@@ -40,7 +40,7 @@ public class DanmuChannelRepository {
         while (entries.hasNext()) {
             Map.Entry<Channel, AdminTaskModel> entry = entries.next();
             AdminTaskModel adminTaskModel =  entry.getValue();
-            if(authKey.equals(adminTaskModel.getAuthKey())){
+            if(adminId.equals(adminTaskModel.getAdminId())){
                 return entry.getKey();
             }
         }

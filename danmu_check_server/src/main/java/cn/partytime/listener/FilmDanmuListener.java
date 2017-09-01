@@ -58,13 +58,15 @@ public class FilmDanmuListener  implements MessageListener {
         List<AdminTaskModel> adminTaskModelList = new ArrayList<AdminTaskModel>();
         for (Channel channel : channelList) {
             AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(channel);
-            String channelId = channel.id().asLongText();
-            adminTaskModel.setAdminId(channelId);
-            adminTaskModel.setChannel(channel);
-            int count = managerCachService.appointTaskCount(channelId);
-            adminTaskModel.setCount(count);
-            adminTaskModelList.add(adminTaskModel);
-            logger.info("管理员信息:{}", JSON.toJSONString(adminTaskModel));
+            if(adminTaskModel.getCheckFlg()==0){
+                String channelId = channel.id().asLongText();
+                adminTaskModel.setAdminId(channelId);
+                adminTaskModel.setChannel(channel);
+                int count = managerCachService.appointTaskCount(channelId);
+                adminTaskModel.setCount(count);
+                adminTaskModelList.add(adminTaskModel);
+                logger.info("管理员信息:{}", JSON.toJSONString(adminTaskModel));
+            }
         }
 
         if (ListUtils.checkListIsNotNull(adminTaskModelList)) {
