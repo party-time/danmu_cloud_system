@@ -145,7 +145,6 @@ public class UploadFlashUtil {
         }
 
         return sb.toString();
-
     }
 
     public void createVersion(Integer type , String versionNum){

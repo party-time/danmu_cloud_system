@@ -60,6 +60,9 @@ public class FileUploadUtil {
     @Value("${fileUpload.screenSavePath}")
     private String screenSavePath;
 
+    @Value("${fileUpload.partyResourcePath}")
+    private String partyResourcePath;
+
 
     public String checkFile(MultipartFile file){
         if( null == file || file.isEmpty()){
@@ -296,5 +299,13 @@ public class FileUploadUtil {
 
     public void setShopImagePath(String shopImagePath) {
         this.shopImagePath = shopImagePath;
+    }
+
+    public String getPartyResourcePath() {
+        return partyResourcePath;
+    }
+
+    public void setPartyResourcePath(String partyResourcePath) {
+        this.partyResourcePath = partyResourcePath;
     }
 }
