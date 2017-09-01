@@ -55,13 +55,16 @@ public class RpcMovieAlarmService {
         Map<String,String> map = new HashMap<String,String>();
         if(party!=null && party.getMovieTime()!=0){
             long movieTime = party.getMovieTime();
-            log.info("time:{},moviTime:{}",time/1000/60,party.getMovieTime()/1000/60);
-            if(time<movieTime){
+
+            long timeMinute = time/1000/60;
+            long movieMinute = party.getMovieTime()/1000/60;
+            log.info("time:{},moviTime:{}",timeMinute,movieMinute);
+            if(timeMinute < movieMinute){
                 //触发事件过短
                 map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT,addressId,partyId);
                 //mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);
                 sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map,AlarmKeyConst.ALARM_KEY_MOVIESHORT);
-            }else if(time >movieTime) {
+            }else if(timeMinute > movieMinute) {
                 //触发时间过
                 map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME,addressId,partyId);
                 //mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map);

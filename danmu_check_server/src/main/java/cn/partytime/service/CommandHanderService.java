@@ -156,11 +156,49 @@ public class CommandHanderService {
 
 
         //通知其他管理员在线数量
-        int partyType = "null".equals(partyId)?1:0;
-        AdminTaskModel adminTaskModel =  danmuChannelRepository.findAdminTaskModel(channel);
+        //int partyType = "null".equals(partyId)?1:0;
+
+
+        /*AdminTaskModel adminTaskModel =  danmuChannelRepository.findAdminTaskModel(channel);
         adminTaskModel.setCheckFlg(adminUserDto.getCheckFlg());
-        danmuChannelRepository.saveChannelAdminRelation(partyType,channel,adminTaskModel);
-        pushCommandToPartyAdmin(partyType,partyId, CommandTypeConst.ONLINE_AMDIN_COUNT, null);
+        danmuChannelRepository.saveChannelAdminRelation(partyType,channel,adminTaskModel);*/
+
+        int partyType =1;
+        Channel channelFilmTemp = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(partyType,key);
+        if(channelFilmTemp!=null){
+            AdminTaskModel adminTaskModel =  danmuChannelRepository.findAdminTaskModel(channelFilmTemp);
+            adminTaskModel.setCheckFlg(adminUserDto.getCheckFlg());
+            danmuChannelRepository.saveChannelAdminRelation(partyType,channel,adminTaskModel);
+            pushCommandToPartyAdmin(partyType,partyId, CommandTypeConst.ONLINE_AMDIN_COUNT, null);
+        }
+
+        partyType =0;
+        Channel channelPartyTemp = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(0,key);
+        if(channelFilmTemp!=null){
+            AdminTaskModel adminTaskModel =  danmuChannelRepository.findAdminTaskModel(channelFilmTemp);
+            adminTaskModel.setCheckFlg(adminUserDto.getCheckFlg());
+            danmuChannelRepository.saveChannelAdminRelation(partyType,channel,adminTaskModel);
+            pushCommandToPartyAdmin(partyType,"null", CommandTypeConst.ONLINE_AMDIN_COUNT, null);
+        }
+
+
+
+
+
+
+
+
+
+
+
+        /*if(partyType.equals(partyId)){
+            oldChannel = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(1,key);
+        }else{
+            oldChannel = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(0,key);
+        }*/
+
+
+
 
     }
 
