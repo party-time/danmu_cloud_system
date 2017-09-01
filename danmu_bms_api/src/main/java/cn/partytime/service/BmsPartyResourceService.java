@@ -89,7 +89,7 @@ public class BmsPartyResourceService {
             File file = new File(fileDirStr);
             if(!file.exists()){
                 log.info("mkdir "+fileDirStr);
-                file.mkdir();
+                file.mkdirs();
             }
             for(ResourceFile resourceFile : resourceFileList){
                 String fileTypePath = null;
