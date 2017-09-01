@@ -91,18 +91,28 @@ public class BmsPartyResourceService {
                 file.mkdir();
             }
             for(ResourceFile resourceFile : resourceFileList){
+                String fileTypePath = null;
+                if(resourceFile.getFileType() == Const.RESOURCE_SPECIAL_VIDEOS){
+                    fileTypePath = "specialVideos";
+                }
+                if(resourceFile.getFileType() == Const.RESOURCE_SPECIAL_IMAGES){
+                    fileTypePath = "specialImages";
+                }
+                if(resourceFile.getFileType() == Const.RESOURCE_EXPRESSIONS){
+                    fileTypePath = "expressions";
+                }
                String filePath = resourceFile.getFilePath();
-               String cpFileCmd = "cp "+filePath+" "+fileDirStr;
+               String cpFileCmd = "cp "+filePath+" "+fileDirStr+File.separator+fileTypePath;
                 execShell(cpFileCmd);
                log.info(cpFileCmd);
             }
-            String zipCmdStr = "zip -mr "+fileUploadUtil.getPartyResourcePath()+File.separator+partyId+".zip "+fileDirStr+"/*";
+            String zipCmdStr = "zip -rj "+fileUploadUtil.getPartyResourcePath()+File.separator+partyId+".zip "+fileDirStr+"/*";
             execShell(zipCmdStr);
             log.info(zipCmdStr);
             if(file.exists()){
                 file.delete();
             }
-            return fileUploadUtil.getPartyResourcePath()+File.pathSeparator+partyId+".zip";
+            return fileUploadUtil.getPartyResourcePath()+File.separator+partyId+".zip";
 
         }
         return null;
