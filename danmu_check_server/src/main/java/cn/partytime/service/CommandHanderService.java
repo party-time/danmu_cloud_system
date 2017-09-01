@@ -151,23 +151,14 @@ public class CommandHanderService {
         if(adminUserDto!=null){
             adminUserDto = rpcAdminService.updateCheckFlg(adminUserDto.getId(),status);
         }
+        log.info("adminUserInfo:{}",JSON.toJSONString(adminUserDto));
         Map<String,Object>result = new HashMap<String,Object>();
         result.put("data",status);
-
-
-
-
-        //通知其他管理员在线数量
-        //int partyType = "null".equals(partyId)?1:0;
-
-
-        /*AdminTaskModel adminTaskModel =  danmuChannelRepository.findAdminTaskModel(channel);
-        adminTaskModel.setCheckFlg(adminUserDto.getCheckFlg());
-        danmuChannelRepository.saveChannelAdminRelation(partyType,channel,adminTaskModel);*/
 
         int partyType =1;
         Channel channelFilmTemp = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(partyType,adminUserDto.getId());
         if(channelFilmTemp!=null){
+            log.info("电影通道广播");
             AdminTaskModel adminTaskModel =  danmuChannelRepository.findAdminTaskModel(channelFilmTemp);
             adminTaskModel.setCheckFlg(adminUserDto.getCheckFlg());
             danmuChannelRepository.saveChannelAdminRelation(partyType,channelFilmTemp,adminTaskModel);
@@ -178,6 +169,7 @@ public class CommandHanderService {
         partyType =0;
         Channel channelPartyTemp = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(0,adminUserDto.getId());
         if(channelPartyTemp!=null){
+            log.info("活动通道广播");
             AdminTaskModel adminTaskModel =  danmuChannelRepository.findAdminTaskModel(channelPartyTemp);
             adminTaskModel.setCheckFlg(adminUserDto.getCheckFlg());
             danmuChannelRepository.saveChannelAdminRelation(partyType,channelPartyTemp,adminTaskModel);
