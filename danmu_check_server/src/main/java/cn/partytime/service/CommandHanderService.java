@@ -819,7 +819,7 @@ public class CommandHanderService {
 
         AdminUserDto adminInfo = rpcAdminService.findById(adminUserDto.getId());
         AdminTaskModel adminTaskModel = new AdminTaskModel();
-
+        log.info("adminInfo:{}",JSON.toJSONString(adminInfo));
         adminTaskModel.setAuthKey(key);
         adminTaskModel.setAdminName(adminUser.getUserName());
         adminTaskModel.setAdminId(adminUser.getId());

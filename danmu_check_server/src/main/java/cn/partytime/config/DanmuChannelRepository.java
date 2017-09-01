@@ -2,6 +2,7 @@ package cn.partytime.config;
 
 
 import cn.partytime.model.AdminTaskModel;
+import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,7 @@ public class DanmuChannelRepository {
         while (entries.hasNext()) {
             Map.Entry<Channel, AdminTaskModel> entry = entries.next();
             AdminTaskModel adminTaskModel =  entry.getValue();
+            logger.info("adminTaskModel:{}", JSON.toJSONString(adminTaskModel));
             if(adminId.equals(adminTaskModel.getAdminId())){
                 return entry.getKey();
             }
