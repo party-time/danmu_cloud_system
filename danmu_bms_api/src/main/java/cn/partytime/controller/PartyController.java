@@ -66,7 +66,25 @@ public class PartyController extends BaseAdminController {
         return bmsPartyService.findAllByPage(pageNumber, pageSize,type,status);
     }
 
-
+    @RequestMapping(value = "/partyReOpen", method = RequestMethod.GET)
+    public RestResultModel partyList(String id) {
+        log.info("id:{}",id);
+        RestResultModel restResultModel = new RestResultModel();
+        Party party =  partyService.findById(id);
+        if(party!=null){
+            party.setStartTime(null);
+            party.setActivityStartTime(null);
+            party.setEndTime(null);
+            party.setStatus(0);
+            partyService.updateParty(party);
+            restResultModel.setResult(200);
+            restResultModel.setResult_msg("OK");
+        }else{
+            restResultModel.setResult(500);
+            restResultModel.setResult_msg("活动不存在");
+        }
+        return  restResultModel;
+    }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public RestResultModel saveParty(String id,String name, Integer type, String movieAlias,String startTimeStr, String endTimeStr,
