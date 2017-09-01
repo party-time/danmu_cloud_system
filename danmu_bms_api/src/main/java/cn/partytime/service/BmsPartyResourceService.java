@@ -88,8 +88,8 @@ public class BmsPartyResourceService {
             String fileDirStr = fileUploadUtil.getPartyResourcePath()+"/"+partyId;
             File file = new File(fileDirStr);
             if(!file.exists()){
+                file.mkdir();
                 log.info("mkdir "+fileDirStr);
-                file.mkdirs();
             }
             for(ResourceFile resourceFile : resourceFileList){
                 String fileTypePath = null;
