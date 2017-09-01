@@ -102,7 +102,7 @@ public class BmsPartyResourceService {
                     fileTypePath = "expressions";
                 }
                String filePath = resourceFile.getFilePath();
-               String cpFileCmd = "cp "+filePath+" "+fileDirStr+File.separator+fileTypePath;
+               String cpFileCmd = "cp "+filePath+" "+fileDirStr+File.separator+fileTypePath+File.separator;
                 execShell(cpFileCmd);
                log.info(cpFileCmd);
             }
