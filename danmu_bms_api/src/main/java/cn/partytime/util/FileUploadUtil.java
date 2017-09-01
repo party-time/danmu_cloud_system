@@ -60,7 +60,7 @@ public class FileUploadUtil {
     @Value("${fileUpload.screenSavePath}")
     private String screenSavePath;
 
-    @Value("${fileUpload.screenSavePath}")
+    @Value("${fileUpload.partyResourcePath}")
     private String partyResourcePath;
 
 
