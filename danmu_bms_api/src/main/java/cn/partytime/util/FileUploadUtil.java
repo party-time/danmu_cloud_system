@@ -63,7 +63,6 @@ public class FileUploadUtil {
     @Value("${fileUpload.partyResourcePath}")
     private String partyResourcePath;
 
-
     public String checkFile(MultipartFile file){
         if( null == file || file.isEmpty()){
             return "文件不存在";
