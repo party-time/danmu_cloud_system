@@ -90,6 +90,7 @@ public class BmsPartyResourceService {
             if(!file.exists()){
                 file.mkdir();
                 log.info("mkdir "+fileDirStr);
+                execShell("mkdir "+fileDirStr);
                 execShell("mkdir /home/workspace/resource/image/upload/liuwei");
             }
             for(ResourceFile resourceFile : resourceFileList){
