@@ -140,9 +140,11 @@ public class CommandHanderService {
 
 
     private void setCheckStatus(String type,Object object,Channel channel,String partyId){
+        log.info("==============设置审核状态===============");
         Map<String,Object> map = convertObjectToMap(object);
         int status = Integer.parseInt(String.valueOf(map.get("status")));
         String key = String.valueOf(map.get("key"));
+        log.info("设置审核状态 status:{},key:{}",status,key);
         AdminUserDto adminUserDto = rpcAdminService.getAdminUser(key);
 
 
