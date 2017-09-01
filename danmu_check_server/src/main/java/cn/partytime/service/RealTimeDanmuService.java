@@ -62,7 +62,6 @@ public class RealTimeDanmuService {
             AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(channel);
             if(adminTaskModel.getCheckFlg()==0){
                 String channelId = channel.id().asLongText();
-                adminTaskModel.setAdminId(channelId);
                 adminTaskModel.setChannel(channel);
                 int count = managerCachService.appointTaskCount(channelId, partyId);
                 adminTaskModel.setPartyId(partyId);
