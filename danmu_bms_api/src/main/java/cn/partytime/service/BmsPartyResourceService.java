@@ -88,7 +88,7 @@ public class BmsPartyResourceService {
             String fileDirStr = fileUploadUtil.getPartyResourcePath()+File.separator+partyId;
             File file = new File("/home/workspace/resource/image/liuwei/"+partyId);
             if(!file.exists()){
-                file.mkdir();
+                file.mkdirs();
                 log.info(" mkdir "+fileDirStr);
                 execShell("mkdir "+fileDirStr);
             }
