@@ -112,7 +112,7 @@ public class BmsPartyResourceService {
             if(file.exists()){
                 file.delete();
             }
-            return fileUploadUtil.getPartyResourcePath()+File.separator+partyId+".zip";
+            return "resourceDownload"+File.separator+partyId+".zip";
 
         }
         return null;
