@@ -23,6 +23,6 @@ public interface AdDanmuLibraryRepository  extends MongoRepository<AdDanmuLibrar
 
     AdDanmuLibrary findByName(String name);
 
-    Page<AdDanmuLibrary> findByIsDeleteLessThanEqual(int isDelete, Pageable pageable);
+    Page<AdDanmuLibrary> findByIsDelete(Integer isDelete, Pageable pageable);
 
 }
