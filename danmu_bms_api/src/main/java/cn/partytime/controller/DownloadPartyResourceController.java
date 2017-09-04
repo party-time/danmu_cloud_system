@@ -26,13 +26,10 @@ public class DownloadPartyResourceController {
 
     @RequestMapping(value = "/downloadPartyResource", method = RequestMethod.GET)
     public String downloadPartyResource(String partyId, Model model) {
-        RestResultModel restResultModel = new RestResultModel();
         String result = bmsPartyResourceService.downLoadPartyResource(partyId);
         if( StringUtils.isEmpty(result)){
-            log.info("ytfytfytfyfyfytyfytytyytyfytyfyt");
-            return "error";
+            return "downloadError";
         }else{
-            log.info("ytfytfytfyfyfytyfytytyytyfytyfyt123123123123");
             return "redirect:/"+result;
         }
 
