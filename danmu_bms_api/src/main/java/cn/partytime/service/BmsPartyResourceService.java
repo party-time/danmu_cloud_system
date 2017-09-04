@@ -110,7 +110,7 @@ public class BmsPartyResourceService {
                 execShell(cpFileCmd);
                 log.info(cpFileCmd);
             }
-            String zipCmdStr = "cd "+fileUploadUtil.getPartyResourcePath()+" && zip -rmj "+partyId+".zip "+partyId+"/*";
+            String zipCmdStr = "cd "+fileUploadUtil.getPartyResourcePath()+" && zip -rm "+partyId+".zip "+partyId+"/*";
             execShell(zipCmdStr);
             log.info(zipCmdStr);
             if(file.exists()){
