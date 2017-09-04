@@ -5,6 +5,7 @@ import cn.partytime.service.BmsPartyResourceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +25,7 @@ public class DownloadPartyResourceController {
 
 
     @RequestMapping(value = "/downloadPartyResource", method = RequestMethod.GET)
-    public String downloadPartyResource( String partyId) {
+    public String downloadPartyResource(String partyId, Model model) {
         RestResultModel restResultModel = new RestResultModel();
         String result = bmsPartyResourceService.downLoadPartyResource(partyId);
         if( StringUtils.isEmpty(result)){
