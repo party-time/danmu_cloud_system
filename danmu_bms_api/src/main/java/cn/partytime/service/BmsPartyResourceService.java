@@ -86,7 +86,10 @@ public class BmsPartyResourceService {
         List<ResourceFile> resourceFileList = resourceFileService.findByPartyId(partyId);
         if( null != resourceFileList && resourceFileList.size() > 0){
             String fileDirStr = fileUploadUtil.getPartyResourcePath()+File.separator+partyId;
-
+            File file = new File(fileDirStr);
+            if(file.exists()){
+                file.delete();
+            }
             for(ResourceFile resourceFile : resourceFileList){
                 String fileTypePath = null;
                 if(resourceFile.getFileType() == Const.RESOURCE_SPECIAL_VIDEOS){
@@ -98,19 +101,18 @@ public class BmsPartyResourceService {
                 if(resourceFile.getFileType() == Const.RESOURCE_EXPRESSIONS){
                     fileTypePath = "expressions";
                 }
-                File file = new File(fileDirStr+File.separator+fileTypePath);
-                if(!file.exists()){
-                    file.mkdirs();
+                File file1 = new File(fileDirStr+File.separator+fileTypePath);
+                if(!file1.exists()){
+                    file1.mkdirs();
                     log.info(" mkdir "+fileDirStr);
                 }
                 String cpFileCmd = "cp "+resourceFile.getFilePath()+" "+fileDirStr+File.separator+fileTypePath+File.separator;
                 execShell(cpFileCmd);
                 log.info(cpFileCmd);
             }
-            String zipCmdStr = "zip -rmj "+fileUploadUtil.getPartyResourcePath()+File.separator+partyId+".zip "+fileDirStr+"/*";
+            String zipCmdStr = "cd "+fileUploadUtil.getPartyResourcePath()+" && zip -rmj "+partyId+".zip "+partyId+"/*";
             execShell(zipCmdStr);
             log.info(zipCmdStr);
-            File file = new File(fileDirStr);
             if(file.exists()){
                 file.delete();
             }
