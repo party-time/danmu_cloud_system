@@ -91,6 +91,10 @@ public class BmsPartyResourceService {
             if(file.exists()){
                 file.delete();
             }
+            File zipFile = new File(fileDirStr+".zip");
+            if(zipFile.exists()){
+                zipFile.delete();
+            }
             for(ResourceFile resourceFile : resourceFileList){
                 String fileTypePath = null;
                 if(resourceFile.getFileType() == Const.RESOURCE_SPECIAL_VIDEOS){
