@@ -8,6 +8,7 @@ import cn.partytime.util.FileUploadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -101,14 +102,16 @@ public class BmsPartyResourceService {
                 if(resourceFile.getFileType() == Const.RESOURCE_EXPRESSIONS){
                     fileTypePath = "expressions";
                 }
-                File file1 = new File(fileDirStr+File.separator+fileTypePath);
-                if(!file1.exists()){
-                    file1.mkdirs();
-                    log.info(" mkdir "+fileDirStr);
+                if(!StringUtils.isEmpty(fileTypePath)){
+                    File file1 = new File(fileDirStr+File.separator+fileTypePath);
+                    if(!file1.exists()){
+                        file1.mkdirs();
+                        log.info(" mkdir "+fileDirStr);
+                    }
+                    String cpFileCmd = "cp "+resourceFile.getFilePath()+" "+fileDirStr+File.separator+fileTypePath+File.separator;
+                    execShell(cpFileCmd);
+                    log.info(cpFileCmd);
                 }
-                String cpFileCmd = "cp "+resourceFile.getFilePath()+" "+fileDirStr+File.separator+fileTypePath+File.separator;
-                execShell(cpFileCmd);
-                log.info(cpFileCmd);
             }
             String zipCmdStr = "cd "+fileUploadUtil.getPartyResourcePath()+" && zip -rm "+partyId+".zip "+partyId+"/*";
             execShell(zipCmdStr);
