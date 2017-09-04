@@ -107,12 +107,12 @@ public class BmsPartyResourceService {
                 execShell(cpFileCmd);
                 log.info(cpFileCmd);
             }
-            String zipCmdStr = "zip -rj "+fileUploadUtil.getPartyResourcePath()+File.separator+partyId+".zip "+fileDirStr+"/*";
+            String zipCmdStr = "zip -rmj "+fileUploadUtil.getPartyResourcePath()+File.separator+partyId+".zip "+fileDirStr+"/*";
             execShell(zipCmdStr);
             log.info(zipCmdStr);
             File file = new File(fileDirStr);
             if(file.exists()){
-                //file.delete();
+                file.delete();
             }
             return "resourceDownload"+File.separator+partyId+".zip";
 

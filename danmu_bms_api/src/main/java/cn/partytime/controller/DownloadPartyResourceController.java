@@ -30,7 +30,7 @@ public class DownloadPartyResourceController {
         if( StringUtils.isEmpty(result)){
             return "error";
         }else{
-            return "redirect:"+result;
+            return "redirect:/"+result;
         }
 
     }
