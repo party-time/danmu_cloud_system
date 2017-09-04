@@ -87,34 +87,33 @@ public class BmsPartyResourceService {
         if( null != resourceFileList && resourceFileList.size() > 0){
             String fileDirStr = fileUploadUtil.getPartyResourcePath()+File.separator+partyId;
 
-            log.info("fileUploadUtil.getPartyResourcePath():{}",fileUploadUtil.getPartyResourcePath());
-            File file = new File(fileDirStr);
-            if(!file.exists()){
-                file.mkdirs();
-                log.info(" mkdir "+fileDirStr);
+            for(ResourceFile resourceFile : resourceFileList){
+                String fileTypePath = null;
+                if(resourceFile.getFileType() == Const.RESOURCE_SPECIAL_VIDEOS){
+                    fileTypePath = "specialVideos";
+                }
+                if(resourceFile.getFileType() == Const.RESOURCE_SPECIAL_IMAGES){
+                    fileTypePath = "specialImages";
+                }
+                if(resourceFile.getFileType() == Const.RESOURCE_EXPRESSIONS){
+                    fileTypePath = "expressions";
+                }
+                File file = new File(fileDirStr+File.separator+fileTypePath);
+                if(!file.exists()){
+                    file.mkdirs();
+                    log.info(" mkdir "+fileDirStr);
+                }
+                String cpFileCmd = "cp "+resourceFile.getFilePath()+" "+fileDirStr+File.separator+fileTypePath+File.separator;
+                execShell(cpFileCmd);
+                log.info(cpFileCmd);
             }
-//            for(ResourceFile resourceFile : resourceFileList){
-//                String fileTypePath = null;
-//                if(resourceFile.getFileType() == Const.RESOURCE_SPECIAL_VIDEOS){
-//                    fileTypePath = "specialVideos";
-//                }
-//                if(resourceFile.getFileType() == Const.RESOURCE_SPECIAL_IMAGES){
-//                    fileTypePath = "specialImages";
-//                }
-//                if(resourceFile.getFileType() == Const.RESOURCE_EXPRESSIONS){
-//                    fileTypePath = "expressions";
-//                }
-//               String filePath = resourceFile.getFilePath();
-//               String cpFileCmd = "cp "+filePath+" "+fileDirStr+File.separator+fileTypePath+File.separator;
-//                execShell(cpFileCmd);
-//               log.info(cpFileCmd);
-//            }
-//            String zipCmdStr = "zip -rj "+fileUploadUtil.getPartyResourcePath()+File.separator+partyId+".zip "+fileDirStr+"/*";
-//            execShell(zipCmdStr);
-//            log.info(zipCmdStr);
-//            if(file.exists()){
-//                file.delete();
-//            }
+            String zipCmdStr = "zip -rj "+fileUploadUtil.getPartyResourcePath()+File.separator+partyId+".zip "+fileDirStr+"/*";
+            execShell(zipCmdStr);
+            log.info(zipCmdStr);
+            File file = new File(fileDirStr);
+            if(file.exists()){
+                //file.delete();
+            }
             return "resourceDownload"+File.separator+partyId+".zip";
 
         }
