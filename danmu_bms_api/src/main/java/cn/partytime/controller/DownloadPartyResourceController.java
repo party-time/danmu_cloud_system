@@ -29,8 +29,10 @@ public class DownloadPartyResourceController {
         RestResultModel restResultModel = new RestResultModel();
         String result = bmsPartyResourceService.downLoadPartyResource(partyId);
         if( StringUtils.isEmpty(result)){
+            log.info("ytfytfytfyfyfytyfytytyytyfytyfyt");
             return "error";
         }else{
+            log.info("ytfytfytfyfyfytyfytytyytyfytyfyt123123123123");
             return "redirect:/"+result;
         }
 
