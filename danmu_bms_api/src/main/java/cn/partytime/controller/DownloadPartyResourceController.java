@@ -32,8 +32,6 @@ public class DownloadPartyResourceController {
         }else{
             return "redirect:/"+result;
         }
-
     }
-
 
 }
