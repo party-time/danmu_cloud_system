@@ -346,7 +346,7 @@ public class JavaClientController {
 
                 long usedTime = 0;
                 Date start = projectorAction.getStartTime();
-                long time = nowDate.getTime() - start.getTime();
+                long time = (nowDate.getTime() - start.getTime())/1000;
                 usedTime = time + projector.getUsedTime();
                 projector.setUsedTime(usedTime);
                 projector.setUpdateTime(nowDate);

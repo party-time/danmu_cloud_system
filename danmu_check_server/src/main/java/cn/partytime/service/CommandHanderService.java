@@ -2,6 +2,7 @@ package cn.partytime.service;
 
 import cn.partytime.cache.admin.CheckAdminAlarmCacheService;
 import cn.partytime.cache.admin.CheckAdminCacheService;
+import cn.partytime.cache.collector.CollectorCacheService;
 import cn.partytime.common.cachekey.*;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
@@ -88,6 +89,9 @@ public class CommandHanderService {
     @Autowired
     private CacheDataService cacheDataService;
 
+    @Autowired
+    private CollectorCacheService collectorCacheService;
+
 
     public void commandHandler(Map<String, Object> map, Channel channel) {
         //类型
@@ -128,7 +132,7 @@ public class CommandHanderService {
             testModelHander(partyId, addressId, object, channel,partyType);
         } else if (CommandTypeConst.FIND_CLIENTLIST.equals(type)) {
             //查找客户端数量
-            ///findClientList(type, addressId, channel,partyType);
+            findClientList(type,channel,partyType,addressId);
         } else if (CommandTypeConst.DANMU_DENSITY.equals(type)) {
             //设置弹幕密度
             setDanmuDensity(type, addressId, partyId, object, channel,partyType);
@@ -136,6 +140,19 @@ public class CommandHanderService {
             //设置弹幕密度
             setCheckStatus(type,object,channel,partyId);
         }
+    }
+
+    //int count  = collectorCacheService.getClientCount(0,addressId);
+
+    private void findClientList(String type,Channel channel,int partyType,String addressId){
+
+        Map<String,Object>result = new HashMap<String,Object>();
+        if(partyType==1){
+            result.put("data",collectorCacheService.getClientCount(0,"584a1a9a0cf2fdb8406efdce"));
+        }else{
+            result.put("data",collectorCacheService.getClientCount(0,addressId));
+        }
+        sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
     }
 
 

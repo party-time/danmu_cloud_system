@@ -42,14 +42,14 @@ public class ProjectorController extends BaseAdminController {
         Projector projector = projectorService.findByRegisterCode(registerCode);
         if(projector!=null){
             projector.setRealUsedHours(realUsedHours);
-            projector.setUsedTime(realUsedHours*60*60*1000);
+            projector.setUsedTime(realUsedHours*60*60);
             projector.setUpdateTime(date);
             projector.setUpdateUserId(userId);
         }else{
             projector = new Projector();
             projector.setRegisterCode(registerCode);
             projector.setRealUsedHours(realUsedHours);
-            projector.setUsedTime(realUsedHours*60*60*1000);
+            projector.setUsedTime(realUsedHours*60*60);
             projector.setCreateTime(date);
             projector.setUpdateTime(date);
             projector.setCreateUserId(userId);
