@@ -13,9 +13,9 @@ import java.util.List;
 @EnableMongoRepositories(mongoTemplateRef = "danmuMongoTemplate")
 public interface DanmuLibraryPartyRepository  extends MongoRepository<DanmuLibraryParty,String> {
 
-    DanmuLibraryParty findByPartyIdAndDanmuLibraryId(String partyId,String danmuLibraryId);
+    DanmuLibraryParty findByPartyIdAndDanmuLibraryId(String partyId,String libraryId);
 
-    DanmuLibraryParty findByPartyId(String partyId);
+    List<DanmuLibraryParty> findByPartyId(String partyId);
 
     List<DanmuLibraryParty> findByDanmuLibraryId(String danmuLibraryId);
 }

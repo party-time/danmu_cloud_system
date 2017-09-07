@@ -35,21 +35,23 @@ public class ProjectorController extends BaseAdminController {
 
 
     @RequestMapping(value = "/setRealHours", method = RequestMethod.GET)
-    public RestResultModel setRealHours(String registerCode,Integer realUsedHours){
+    public RestResultModel setRealHours(String registerCode,Integer realUsedHours,Integer realUsedMinute){
         RestResultModel restResultModel = new RestResultModel();
         String userId = getAdminUser().getId();
         Date date = DateUtils.getCurrentDate();
         Projector projector = projectorService.findByRegisterCode(registerCode);
         if(projector!=null){
             projector.setRealUsedHours(realUsedHours);
-            projector.setUsedTime(realUsedHours*60*60);
+            projector.setRealUsedMinute(realUsedMinute);
+            projector.setUsedTime(realUsedHours*60*60+realUsedMinute*60);
             projector.setUpdateTime(date);
             projector.setUpdateUserId(userId);
         }else{
             projector = new Projector();
             projector.setRegisterCode(registerCode);
             projector.setRealUsedHours(realUsedHours);
-            projector.setUsedTime(realUsedHours*60*60);
+            projector.setRealUsedMinute(realUsedMinute);
+            projector.setUsedTime(realUsedHours*60*60+realUsedMinute*60);
             projector.setCreateTime(date);
             projector.setUpdateTime(date);
             projector.setCreateUserId(userId);

@@ -38,13 +38,15 @@ public class PreDanmuLogicService {
     private RedisService redisService;
 
     public void danmuListenHandler(String partyId) {
-
-
-        String libraryId = rpcPreDanmuService.findDanmuLibraryIdByParty(partyId);
-        if(StringUtils.isEmpty(libraryId)){
+        List<String> libraryIdList = rpcPreDanmuService.findDanmuLibraryIdByParty(partyId);
+        if(ListUtils.checkListIsNull(libraryIdList)){
             log.info("未找到弹幕库");
             return;
         }
+        libraryIdList.forEach(libraryId->addAllLibraryUnderPartyIntoCache(libraryId,partyId));
+    }
+
+    private void addAllLibraryUnderPartyIntoCache(String libraryId,String partyId){
         long count = rpcPreDanmuService.findPreDanmuCountByLibraryId(libraryId);
         long index = 0;
         int pageSize = 100;

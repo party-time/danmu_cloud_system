@@ -41,20 +41,22 @@ public class RpcPreDanmuService {
      * @param partyId
      * @return
      */
-    @RequestMapping(value = "/findByPartyId" ,method = RequestMethod.GET)
+    /*@RequestMapping(value = "/findByPartyId" ,method = RequestMethod.GET)
     public List<PreDanmu> findByPartyId(@RequestParam String partyId){
         log.info("获取活动:{}下预置弹幕",partyId);
         return  preDanmuService.findByPartyId(partyId);
-    }
+    }*/
 
     @RequestMapping(value = "/findDanmuLibraryIdByParty" ,method = RequestMethod.GET)
-    public String findDanmuLibraryIdByParty(@RequestParam String partyId) {
+    public List<String> findDanmuLibraryIdByParty(@RequestParam String partyId) {
         log.info("获取活动的预置弹幕库编号");
-        DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyRepository.findByPartyId(partyId);
-        if(danmuLibraryParty!=null){
-            return danmuLibraryParty.getDanmuLibraryId();
+        List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyId(partyId);
+        List<String> libraryIdList = new ArrayList<String>();
+        if(ListUtils.checkListIsNotNull(danmuLibraryPartyList)){
+            danmuLibraryPartyList.forEach(danmuLibraryParty->libraryIdList.add(danmuLibraryParty.getDanmuLibraryId()));
+            return libraryIdList;
         }
-        return "";
+        return null;
     }
 
 

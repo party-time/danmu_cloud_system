@@ -30,6 +30,8 @@ public class Projector extends BaseModel {
 
     private int realUsedHours;
 
+    private int realUsedMinute;
+
 
     public String getId() {
         return id;
@@ -70,5 +72,13 @@ public class Projector extends BaseModel {
 
     public void setUsedTime(long usedTime) {
         this.usedTime = usedTime;
+    }
+
+    public int getRealUsedMinute() {
+        return realUsedMinute;
+    }
+
+    public void setRealUsedMinute(int realUsedMinute) {
+        this.realUsedMinute = realUsedMinute;
     }
 }

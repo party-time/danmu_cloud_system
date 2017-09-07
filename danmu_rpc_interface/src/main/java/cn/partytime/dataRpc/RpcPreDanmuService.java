@@ -23,7 +23,7 @@ public interface RpcPreDanmuService {
 
 
     @RequestMapping(value = "/rpcRepDanmu/findDanmuLibraryIdByParty" ,method = RequestMethod.GET)
-    public String findDanmuLibraryIdByParty(@RequestParam(name = "partyId") String partyId);
+    public List<String> findDanmuLibraryIdByParty(@RequestParam(name = "partyId") String partyId);
 
 
     @RequestMapping(value = "/rpcRepDanmu/findPreDanmuByLibraryId" ,method = RequestMethod.GET)

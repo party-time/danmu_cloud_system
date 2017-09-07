@@ -172,16 +172,6 @@ public class BmsPreDanmuService {
         }
     }
 
-    /**
-     * 通过活动编号查询预制弹幕数
-     *
-     * @param partyId
-     * @return
-     */
-    public long findPreDanmuCountByParty(String partyId) {
-        return preDanmuService.findPreDanmuCountByParty(partyId);
-    }
-
     public long findPreDanmuCountByDanmuLibrary(String dlId) {
         return preDanmuService.findPreDanmuCountByDanmuLibrary(dlId);
     }

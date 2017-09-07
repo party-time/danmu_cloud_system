@@ -112,31 +112,23 @@ public class PreDanmuService {
 
     /**
      * 查找活动下的预制弹幕
-     * @param partyId
+     * @param
      * @return
      */
-    public List<PreDanmu> findByPartyId(String partyId){
+    /*public List<PreDanmu> findByPartyId(String partyId){
         DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyRepository.findByPartyId(partyId);
         if( null == danmuLibraryParty){
             throw new IllegalArgumentException("该活动没有关联弹幕库");
         }
         Sort sort = new Sort(Sort.Direction.ASC,"createTime");
         return preDanmuRepository.findByDanmuLibraryId(danmuLibraryParty.getDanmuLibraryId(),sort);
-    }
+    }*/
 
 
-    /**
-     * 分页查询预制弹幕
-     * @param page
-     * @param size
-     * @return
-     */
-    public Page<PreDanmu> findByPage(int page, int size, String partyId){
-        DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyRepository.findByPartyId(partyId);
-        Sort sort = new Sort(Sort.Direction.DESC,"createTime");
-        PageRequest pageRequest = new PageRequest(page,size,sort);
-        return preDanmuRepository.findByDanmuLibraryId(danmuLibraryParty.getDanmuLibraryId(),pageRequest);
-    }
+
+
+
+
 
     public long countByDanmuLibraryId(String dlId){
         return preDanmuRepository.countByDanmuLibraryId(dlId);
@@ -181,16 +173,6 @@ public class PreDanmuService {
         return preDanmuModelPageResultModel;
     }
 
-    /**
-     * 通过活动编号查询预制弹幕数
-     * @param partyId
-     * @return
-     */
-    public long findPreDanmuCountByParty(String partyId){
-        DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyRepository.findByPartyId(partyId);
-        return preDanmuRepository.findByDanmuLibraryId(danmuLibraryParty.getDanmuLibraryId()).size();
-
-    }
 
     /**
      * 通过活动编号查询预制弹幕数
@@ -209,6 +191,8 @@ public class PreDanmuService {
         return danmuLibraryRepository.findAll();
     }
 
+
+
     public DanmuLibrary save(String name){
         DanmuLibrary danmuLibraryList = danmuLibraryRepository.findByName(name);
         if( null != danmuLibraryList){
@@ -220,7 +204,13 @@ public class PreDanmuService {
     }
 
     public void delDanmuLibrary(String id){
-
         danmuLibraryRepository.delete(id);
+    }
+    public List<DanmuLibrary> findByIdIn(List<String> ids){
+        return danmuLibraryRepository.findByIdIn(ids);
+    }
+
+    public List<DanmuLibrary> findByIdNotIn(List<String> ids){
+        return danmuLibraryRepository.findByIdNotIn(ids);
     }
 }
