@@ -8,10 +8,7 @@ import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.danmu.*;
-import cn.partytime.service.BmsPreDanmuService;
-import cn.partytime.service.DanmuCommonService;
-import cn.partytime.service.DanmuService;
-import cn.partytime.service.PreDanmuService;
+import cn.partytime.service.*;
 import cn.partytime.service.danmuCmd.BmsCmdService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -38,7 +35,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/v1/api")
+@RequestMapping(value = "/v1/api/admin")
 public class PreDmController  extends BaseAdminController {
 
     @Autowired
@@ -46,6 +43,9 @@ public class PreDmController  extends BaseAdminController {
 
     @Autowired
     private PreDanmuService preDanmuService;
+
+    @Autowired
+    private DanmuLibraryPartyService danmuLibraryPartyService;
 
     @Autowired
     private BmsPreDanmuService bmsPreDanmuService;
@@ -56,12 +56,10 @@ public class PreDmController  extends BaseAdminController {
     @Value("${danmu.templetPath}")
     private String templetPath;
 
-
-
     @Autowired
     private RpcCmdService rpcCmdService;
 
-    @RequestMapping(value = "/admin/getAllDanmuLibrary", method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllDanmuLibrary", method = RequestMethod.GET)
     public RestResultModel getAllDanmuLibrary() {
         RestResultModel restResultModel = new RestResultModel();
         List<DanmuLibrary> danmuLibraryList = preDanmuService.findAllDanmuLibrary();
@@ -70,7 +68,7 @@ public class PreDmController  extends BaseAdminController {
         return restResultModel;
     }
 
-    @RequestMapping(value = "/admin/saveDanmuLibrary", method = RequestMethod.GET)
+    @RequestMapping(value = "/saveDanmuLibrary", method = RequestMethod.GET)
     public RestResultModel saveDanmuLibrary(String name) {
         RestResultModel restResultModel = new RestResultModel();
         DanmuLibrary danmuLibraryList = preDanmuService.save(name);
@@ -79,7 +77,24 @@ public class PreDmController  extends BaseAdminController {
     }
 
 
-    @RequestMapping(value = "/admin/historyDMList", method = RequestMethod.GET)
+    @RequestMapping(value = "/preDm/getAllLibraryNotInIds", method = RequestMethod.GET)
+    public RestResultModel findPreDanmuLibaryByPartyId(@RequestParam("ids")String[] ids){
+        RestResultModel restResultModel = new RestResultModel();
+        List<DanmuLibrary> danmuLibraryList = new ArrayList<>();
+        if(ids!=null && ids.length>0){
+            List<String> idList = new ArrayList<>();
+            for(String id:ids){
+                idList.add(id);
+            }
+            danmuLibraryList =preDanmuService.findByIdNotIn(idList);
+        }
+        restResultModel.setResult(200);
+        restResultModel.setData(danmuLibraryList);
+        return restResultModel;
+    }
+
+
+    @RequestMapping(value = "/historyDMList", method = RequestMethod.GET)
     public PageResultModel historyDMList(String msg, Integer pageNumber, Integer pageSize) {
         pageNumber = pageNumber -1;
         Page<Danmu> danmuModelPage = null;
@@ -164,7 +179,7 @@ public class PreDmController  extends BaseAdminController {
      * 总预制弹幕数量
      * @return
      */
-    @RequestMapping(value = "/admin/countPreDM", method = RequestMethod.GET)
+    @RequestMapping(value = "/countPreDM", method = RequestMethod.GET)
     public RestResultModel countPreDM(String dlId) {
         RestResultModel restResultModel = new RestResultModel();
         try {
@@ -185,7 +200,7 @@ public class PreDmController  extends BaseAdminController {
      * @param pageSize
      * @return
      */
-    @RequestMapping(value = "/admin/preDMList", method = RequestMethod.GET)
+    @RequestMapping(value = "/preDMList", method = RequestMethod.GET)
     public RestResultModel preDMList(Integer pageNo, Integer pageSize,String dlId,String msg) {
         pageNo = pageNo-1;
         RestResultModel restResultModel = new RestResultModel();
@@ -257,7 +272,7 @@ public class PreDmController  extends BaseAdminController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/admin/deletePreDm", method = RequestMethod.GET)
+    @RequestMapping(value = "/deletePreDm", method = RequestMethod.GET)
     public RestResultModel deletePreDm(String dmId, HttpServletRequest request) {
         RestResultModel restResultModel = new RestResultModel();
         try {
@@ -279,7 +294,7 @@ public class PreDmController  extends BaseAdminController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/admin/addPreDm", method = RequestMethod.GET)
+    @RequestMapping(value = "/addPreDm", method = RequestMethod.GET)
     public RestResultModel addPreDM(String dmId,String dlId, HttpServletRequest request) {
         RestResultModel restResultModel = new RestResultModel();
         try {
@@ -296,7 +311,7 @@ public class PreDmController  extends BaseAdminController {
 
     }
 
-    @RequestMapping(value = "/admin/preDanmu/addNewDanmu", method = RequestMethod.POST)
+    @RequestMapping(value = "/preDanmu/addNewDanmu", method = RequestMethod.POST)
     public RestResultModel addNewDanmu(HttpServletRequest request) {
         String userId = getAdminUser().getId();
         RestResultModel restResultModel = new RestResultModel();
@@ -312,7 +327,7 @@ public class PreDmController  extends BaseAdminController {
         return restResultModel;
     }
 
-    @RequestMapping(value = "/admin/delDanmuLibrary", method = RequestMethod.GET)
+    @RequestMapping(value = "/delDanmuLibrary", method = RequestMethod.GET)
     public RestResultModel delDanmuLibrary(String id) {
         RestResultModel restResultModel = new RestResultModel();
         bmsPreDanmuService.deleteDanmuLibrary(id);

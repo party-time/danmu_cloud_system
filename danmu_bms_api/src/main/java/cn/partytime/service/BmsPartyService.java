@@ -107,10 +107,12 @@ public class BmsPartyService {
                  partyResult.setType(party.getType());
                  partyResult.setStatus(party.getStatus());
                  partyResult.setMovieAlias(party.getMovieAlias());
-                 DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyService.findByPartyId(party.getId());
+
+                 //TODO:
+                 /*DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyService.findByPartyId(party.getId());
                  if( null != danmuLibraryParty){
                      partyResult.setDanmuLibraryId(danmuLibraryParty.getDanmuLibraryId());
-                 }
+                 }*/
                  partyResultList.add(partyResult);
              }
 
@@ -120,10 +122,6 @@ public class BmsPartyService {
         return pageResultModel;
     }
 
-    public DanmuLibraryParty updatePartyLibrary(String partyId,String danmuLibraryId){
-
-        return danmuLibraryPartyService.save(danmuLibraryId,partyId);
-    }
 
     public UpdatePartyModel findByPartyId(String partyId){
         Party party = partyService.findById(partyId);
@@ -137,16 +135,17 @@ public class BmsPartyService {
             }
         }
 
-        DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyService.findByPartyId(partyId);
+        //TODO:
+        //DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyService.findByPartyId(partyId);
 
         List<DanmuAddress> danmuAddressList = danmuAddressService.findAddressByPartyId(partyId);
 
         UpdatePartyModel updatePartyModel = new UpdatePartyModel();
         updatePartyModel.setParty(party);
         updatePartyModel.setDanmuAddressList(danmuAddressList);
-        if( null != danmuLibraryParty){
+        /*if( null != danmuLibraryParty){
             updatePartyModel.setDanmuLibraryId(danmuLibraryParty.getDanmuLibraryId());
-        }
+        }*/
         updatePartyModel.setMovieAlias(movieAlias);
         return updatePartyModel;
     }

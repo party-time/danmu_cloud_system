@@ -70,7 +70,7 @@ public class PartyService {
         redisService.set(key,dmDensity);
 
 
-        danmuLibraryPartyService.save(danmuLibraryId,partyModel.getId());
+        //danmuLibraryPartyService.save(danmuLibraryId,partyModel.getId());
         return party;
     }
 
@@ -82,7 +82,7 @@ public class PartyService {
             party.setType(type);
             party.setMovieAlias(movieAlias);
             party.setDmDensity(dmDensity);
-            danmuLibraryPartyService.save(danmuLibraryId,party.getId());
+            //danmuLibraryPartyService.save(danmuLibraryId,party.getId());
             partyRepository.save(party);
 
             String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();

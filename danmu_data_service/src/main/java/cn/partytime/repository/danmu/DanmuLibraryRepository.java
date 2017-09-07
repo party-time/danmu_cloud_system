@@ -16,6 +16,11 @@ public interface DanmuLibraryRepository  extends MongoRepository<DanmuLibrary,St
 
     DanmuLibrary findByName(String name);
 
+    List<DanmuLibrary> findByIdIn(List<String> ids);
+
+
+    List<DanmuLibrary> findByIdNotIn(List<String> ids);
+
 
 }
 
