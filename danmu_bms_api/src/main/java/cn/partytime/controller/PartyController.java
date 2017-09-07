@@ -12,10 +12,7 @@ import cn.partytime.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,6 +41,9 @@ public class PartyController extends BaseAdminController {
 
     @Autowired
     private PartyAddressRelationService partyAddressRelationService;
+
+    @Autowired
+    private DanmuLibraryPartyService danmuLibraryPartyService;
 
     /**
      *
@@ -87,7 +87,7 @@ public class PartyController extends BaseAdminController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public RestResultModel saveParty(String id,String name, Integer type, String movieAlias,String startTimeStr, String endTimeStr,
+    public RestResultModel saveParty(String id,String name, Integer type, String movieAlias,@RequestParam(value = "ids",required = false)String[] ids,@RequestParam(value = "densitrys",required = false)Integer[] densitrys,
                                      String shortName,String danmuLibraryId,String addressIds,Integer dmDensity) {
         RestResultModel restResultModel = new RestResultModel();
 
@@ -171,6 +171,11 @@ public class PartyController extends BaseAdminController {
                     }
                 }else{
                     partyAddressRelationService.save(party.getId(),addressIds);
+                }
+            }
+            if(null != ids && ids.length > 0){
+                for(int i=0;i<ids.length;i++){
+                    danmuLibraryPartyService.save(ids[i],party.getId(),densitrys[i]);
                 }
             }
         } catch (IllegalArgumentException e) {

@@ -78,15 +78,17 @@ public class PreDmController  extends BaseAdminController {
 
 
     @RequestMapping(value = "/preDm/getAllLibraryNotInIds", method = RequestMethod.GET)
-    public RestResultModel findPreDanmuLibaryByPartyId(@RequestParam("ids")String[] ids){
+    public RestResultModel findPreDanmuLibaryByPartyId(@RequestParam(value = "ids",required = false)String[] ids){
         RestResultModel restResultModel = new RestResultModel();
-        List<DanmuLibrary> danmuLibraryList = new ArrayList<>();
+        List<DanmuLibrary> danmuLibraryList = null;
         if(ids!=null && ids.length>0){
             List<String> idList = new ArrayList<>();
             for(String id:ids){
                 idList.add(id);
             }
             danmuLibraryList =preDanmuService.findByIdNotIn(idList);
+        }else{
+            danmuLibraryList = preDanmuService.findAllDanmuLibrary();
         }
         restResultModel.setResult(200);
         restResultModel.setData(danmuLibraryList);
