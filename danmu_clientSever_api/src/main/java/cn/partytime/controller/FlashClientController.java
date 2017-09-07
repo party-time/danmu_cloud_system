@@ -20,6 +20,7 @@ public class FlashClientController {
     @Autowired
     private FlashConfigService flashConfigService;
 
+
     @RequestMapping(value = "/config", method = RequestMethod.GET)
     public JSONObject config(String code){
         JSONObject jsonObject = null;
