@@ -2,6 +2,7 @@ package cn.partytime.service.adDanmu;
 
 import cn.partytime.model.danmu.AdDanmuLibrary;
 import cn.partytime.repository.danmu.AdDanmuLibraryRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import java.util.List;
  * Created by Administrator on 2017/1/16.
  */
 @Service
+@Slf4j
 public class AdDanmuLibraryService {
 
     @Autowired
@@ -50,7 +52,7 @@ public class AdDanmuLibraryService {
     public Page<AdDanmuLibrary> findByIsDeleteLessThan(int page, int size,int isDelete){
         Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
-        return  adDanmuLibraryRepository.findByIsDeleteLessThanEqual(isDelete,pageRequest);
+        return  adDanmuLibraryRepository.findByIsDelete(isDelete,pageRequest);
     }
 
     public AdDanmuLibrary findByName(String name){

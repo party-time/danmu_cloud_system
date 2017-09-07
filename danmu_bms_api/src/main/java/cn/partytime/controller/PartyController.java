@@ -194,15 +194,6 @@ public class PartyController extends BaseAdminController {
         return restResultModel;
     }
 
-    @RequestMapping(value = "/updatePartyDanmuLibrary", method = RequestMethod.GET)
-    public RestResultModel updatePartyDanmuLibrary(String partyId, String danmuLibraryId) {
-        RestResultModel restResultModel = new RestResultModel();
-        //partyService.deleteById(id);
-        bmsPartyService.updatePartyLibrary(partyId, danmuLibraryId);
-        restResultModel.setResult(200);
-        restResultModel.setResult_msg("success");
-        return restResultModel;
-    }
 
 
     @RequestMapping(value = "/name", method = RequestMethod.GET)

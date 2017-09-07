@@ -30,6 +30,7 @@ public class CollectorCacheService {
     public void setClientCount(int type,String addressId,String ip,int count){
         String key = CollectorCacheKey.BASE_KEY+CommonConst.COLON+addressId+CommonConst.COLON+ip+CommonConst.COLON+type;
         redisService.set(key,count);
+        redisService.expire(key,60*60*3);
     }
 
     public int  getClientCount(int type,String addressId){

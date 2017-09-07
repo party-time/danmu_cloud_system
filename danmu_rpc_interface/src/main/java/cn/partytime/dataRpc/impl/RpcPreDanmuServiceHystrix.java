@@ -17,7 +17,7 @@ public class RpcPreDanmuServiceHystrix implements RpcPreDanmuService {
     }
 
     @Override
-    public String findDanmuLibraryIdByParty(String partyId) {
+    public List<String> findDanmuLibraryIdByParty(String partyId) {
         return null;
     }
 
