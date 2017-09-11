@@ -1,31 +1,13 @@
 package cn.partytime.scheduler;
 
 import cn.partytime.cache.admin.CheckAdminCacheService;
-import cn.partytime.common.cachekey.AdminUserCacheKey;
-import cn.partytime.common.util.DateUtils;
-import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.DanmuChannelRepository;
-import cn.partytime.dataRpc.RpcDanmuAddressService;
-import cn.partytime.dataRpc.RpcMovieScheduleService;
-import cn.partytime.dataRpc.RpcPartyService;
-import cn.partytime.model.DanmuAddressModel;
-import cn.partytime.model.MovieScheduleModel;
-import cn.partytime.model.PartyLogicModel;
-import cn.partytime.redis.service.RedisService;
-import cn.partytime.service.CacheDataService;
-import cn.partytime.service.CommandHanderService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 @Component
 @EnableScheduling

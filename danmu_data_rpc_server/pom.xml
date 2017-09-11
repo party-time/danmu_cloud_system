@@ -71,6 +71,12 @@
             <artifactId>danmu_logic_model</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <artifactId>danmu_cache_service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <groupId>cn.party-time</groupId>
+        </dependency>
+
 
     </dependencies>
 

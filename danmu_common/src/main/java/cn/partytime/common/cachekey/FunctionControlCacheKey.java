@@ -15,7 +15,8 @@ public class FunctionControlCacheKey {
 
     //预制弹幕开启
     public static final String FUNCITON_CONTROL_PREDANMU = "function:control:party:preDanmu:";
+
     //弹幕密度
-    public static final String FUNCITON_CONTROL_DANMU_DENSITY = "function:control:party:danmu:density";
+    //public static final String FUNCITON_CONTROL_DANMU_DENSITY = "function:control:party:danmu:density";
 
 }

@@ -15,7 +15,9 @@ public interface DanmuLibraryPartyRepository  extends MongoRepository<DanmuLibra
 
     DanmuLibraryParty findByPartyIdAndDanmuLibraryId(String partyId,String libraryId);
 
-    List<DanmuLibraryParty> findByPartyId(String partyId);
+    List<DanmuLibraryParty> findByPartyIdOrderByCreateTimeDesc(String partyId);
 
     List<DanmuLibraryParty> findByDanmuLibraryId(String danmuLibraryId);
+
+    void deleteByPartyId(String partyId);
 }

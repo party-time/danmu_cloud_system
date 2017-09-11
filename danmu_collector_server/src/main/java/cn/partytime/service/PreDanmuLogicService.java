@@ -54,7 +54,7 @@ public class PreDanmuLogicService {
                 int addressDanmuCount = screenDanmuService.getAddressDanmuCount(addressId);
                 int count2 = screenDanmuService.danmuCount(addressId,addressDanmuCount,partyId);
                 if(count2>0){
-                    danmuSendService.sendPreDanmu(addressId,partyId);
+                    danmuSendService.sendPreDanmu(addressId,partyId,count2);
                 }
                 /*String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;
                 Object object =  redisService.get(key);

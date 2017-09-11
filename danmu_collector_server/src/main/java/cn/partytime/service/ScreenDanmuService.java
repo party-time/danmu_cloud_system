@@ -4,6 +4,7 @@ import cn.partytime.common.cachekey.ScreenClientCacheKey;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.RpcPreDanmuService;
 import cn.partytime.redis.service.RedisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,9 @@ public class ScreenDanmuService {
 
     @Autowired
     private RpcPartyService rpcPartyService;
+
+    @Autowired
+    private RpcPreDanmuService rpcPreDanmuService;
 
     public void addScreenDanmuCount(String addressId){
         String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;
@@ -73,7 +77,7 @@ public class ScreenDanmuService {
      * @return
      */
     public int danmuCount(String addressId,int danmuCount,String partyId) {
-        int danmuDensity = rpcPartyService.getPartyDmDensity(addressId,partyId);
+        int danmuDensity = rpcPreDanmuService.getPartyDanmuDensity(partyId);
         logger.info("当前活动{}的弹幕密度是:{}",partyId,danmuDensity);
         if (danmuCount < danmuDensity) {
             return danmuDensity - danmuCount;

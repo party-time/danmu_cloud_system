@@ -1,4 +1,4 @@
-package cn.partytime.common.cachekey;
+package cn.partytime.common.cachekey.client;
 
 /**
  * Created by Administrator on 2017/4/5 0005.

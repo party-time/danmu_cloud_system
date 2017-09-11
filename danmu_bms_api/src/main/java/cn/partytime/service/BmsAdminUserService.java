@@ -1,6 +1,6 @@
 package cn.partytime.service;
 
-import cn.partytime.common.cachekey.AdminUserCacheKey;
+import cn.partytime.common.cachekey.admin.AdminUserCacheKey;
 import cn.partytime.common.cachekey.LoginCodeCacheKey;
 import cn.partytime.model.manager.AdminRole;
 import cn.partytime.model.manager.AdminUser;

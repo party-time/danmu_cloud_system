@@ -2,11 +2,9 @@ package cn.partytime.rpc;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
-import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.cachekey.collector.CollectorCacheKey;
 import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
-import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
 import cn.partytime.dataRpc.RpcDanmuClientService;
@@ -25,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.naming.ldap.PagedResultsControl;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

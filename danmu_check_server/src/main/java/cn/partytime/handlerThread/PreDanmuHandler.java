@@ -1,6 +1,6 @@
 package cn.partytime.handlerThread;
 
-import cn.partytime.common.cachekey.PreDanmuCacheKey;
+import cn.partytime.common.cachekey.danmu.PreDanmuCacheKey;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.dataRpc.RpcPreDanmuService;
@@ -38,13 +38,6 @@ public class PreDanmuHandler {
     private RpcPreDanmuService rpcPreDanmuService;
 
 
-    @Autowired
-    private RedisService redisService;
-
-
-    @Autowired
-    private RpcCmdService rpcCmdService;
-
 
     public void danmuListenHandler(String partyId) {
         logger.info("预制弹幕装载线程启动");
@@ -52,7 +45,9 @@ public class PreDanmuHandler {
             threadPoolTaskExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
+
+                    rpcPreDanmuService.initPreDanmuIntoCache(partyId);
+                    /*String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
 
 
                     Map<String,Object> preDanmuMap = new HashMap<String,Object>();
@@ -88,7 +83,7 @@ public class PreDanmuHandler {
                     }
 
                     //预制弹幕缓存时间
-                    redisService.expire(preDanmuCacheKey, 60 * 60 * 24);
+                    redisService.expire(preDanmuCacheKey, 60 * 60 * 24);*/
                 }
             });
         } catch (Exception e) {

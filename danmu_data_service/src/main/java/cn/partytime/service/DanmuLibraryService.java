@@ -17,6 +17,11 @@ public class DanmuLibraryService {
     @Autowired
     private DanmuLibraryRepository danmuLibraryRepository;
 
+
+    public DanmuLibrary findById(String id){
+        return danmuLibraryRepository.findOne(id);
+    }
+
     public DanmuLibrary save(String name){
         if(StringUtils.isEmpty(name)){
             throw new IllegalArgumentException("创建弹幕库名称过长");

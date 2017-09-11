@@ -266,6 +266,28 @@ public class RedisService {
             return redisTemplate.opsForZSet().reverseRange(key, startRange, endRange);
         }
     }
+
+
+    /**
+     * 通过score获取sorset范围内的值
+     *
+     * @param key
+     * @param minScore
+     * @param maxScore
+     * @return
+     */
+    public Set<String> findSortSetRangeByScoreWithScores(String key, Double minScore, Double maxScore,long startRange, long endRange,boolean orderByDesc) {
+        if (key == null || key.equals("")) {
+            return null;
+        }
+        if(orderByDesc){
+            return redisTemplate.opsForZSet().rangeByScore(key,minScore,maxScore,startRange,endRange);
+        }else{
+            return redisTemplate.opsForZSet().reverseRangeByScore(key,minScore,maxScore,startRange,endRange);
+        }
+    }
+
+
     /**************************************************************sortSet***************************************************************/
     /**
      * redis订阅发布

@@ -1,11 +1,15 @@
 package cn.partytime.service.movie;
 
 import cn.partytime.common.cachekey.*;
+import cn.partytime.common.cachekey.client.ClientCommandCacheKey;
+import cn.partytime.common.cachekey.danmu.PreDanmuCacheKey;
+import cn.partytime.common.cachekey.party.PartyCacheKey;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.RpcPreDanmuService;
 import cn.partytime.handlerThread.PreDanmuHandler;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.RestResultModel;
@@ -55,6 +59,9 @@ public class MovieService {
 
     @Autowired
     private RpcPartyService rpcPartyService;
+
+    @Autowired
+    private RpcPreDanmuService rpcPreDanmuService;
 
 
     /*public RestResultModel movieHandler(String movieStartCommand,String command,String addressId){
@@ -199,7 +206,11 @@ public class MovieService {
 
                     movieScheduleService.updateMovieSchedule(movieSchedule);
 
-                    redisService.expire(FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId,0);
+                    //redisService.expire(FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId,0);
+                    rpcPreDanmuService.removePreDanmuCache(partyId);
+
+
+
                     //清空预置弹幕
                     clearPreDanmu(addressId,partyId);
                     sendPartyStatusToClient(partyId,"3",addressId,clientTime);
@@ -217,7 +228,7 @@ public class MovieService {
                     movieScheduleService.updateMovieSchedule(movieSchedule);
 
 
-                    redisService.expire(FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId,0);
+                    rpcPreDanmuService.removePreDanmuCache(partyId);
 
                     //清空预置弹幕
                     clearPreDanmu(addressId,partyId);

@@ -1,13 +1,14 @@
 package cn.partytime.rpc;
 
-import cn.partytime.common.cachekey.PreDanmuCacheKey;
+import cn.partytime.cache.danmu.PreDanmuCacheService;
+import cn.partytime.cache.danmu.PreDanmuLibraryCacheService;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.model.CmdTempAllData;
+import cn.partytime.logicService.PreDanmuLogicService;
 import cn.partytime.model.danmu.DanmuLibraryParty;
 import cn.partytime.model.danmu.PreDanmu;
 import cn.partytime.repository.danmu.DanmuLibraryPartyRepository;
+import cn.partytime.service.DanmuLibraryPartyService;
 import cn.partytime.service.PreDanmuService;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,21 +36,53 @@ public class RpcPreDanmuService {
 
     @Autowired
     private DanmuLibraryPartyRepository danmuLibraryPartyRepository;
-    /**
-     * 查找活动下的预制弹幕
-     * @param partyId
-     * @return
-     */
-    /*@RequestMapping(value = "/findByPartyId" ,method = RequestMethod.GET)
-    public List<PreDanmu> findByPartyId(@RequestParam String partyId){
-        log.info("获取活动:{}下预置弹幕",partyId);
-        return  preDanmuService.findByPartyId(partyId);
-    }*/
+
+    @Autowired
+    private PreDanmuCacheService preDanmuCacheService;
+
+    @Autowired
+    private PreDanmuLogicService preDanmuLogicService;
+
+    @Autowired
+    private DanmuLibraryPartyService danmuLibraryPartyService;
+
+    @Autowired
+    private PreDanmuLibraryCacheService preDanmuLibraryCacheService;
+
+    @RequestMapping(value = "/getPartyDanmuDensity" ,method = RequestMethod.GET)
+    public int getPartyDanmuDensity(@RequestParam String partyId) {
+        return preDanmuLogicService.getPartyDanmuDensity(partyId);
+    }
+
+    @RequestMapping(value = "/initPreDanmuIntoCache" ,method = RequestMethod.GET)
+    public void initPreDanmuIntoCache(@RequestParam String partyId) {
+        preDanmuLogicService.initPreDanmu(partyId);
+    }
+
+    @RequestMapping(value = "/getPreDanmuFromCache" ,method = RequestMethod.GET)
+    public Map<String,Object> getPreDanmuFromCache(@RequestParam String partyId, @RequestParam int danmuCount) {
+        return preDanmuLogicService.getPreDanmuFromCache(partyId,danmuCount);
+    }
+
+    @RequestMapping(value = "/setPreDanmuLibrarySortRule" ,method = RequestMethod.GET)
+    public void setPreDanmuLibrarySortRule(@RequestParam String partyId) {
+        preDanmuLogicService.setPreDanmuLibrarySortRule(partyId);
+    }
+    @RequestMapping(value = "/removePreDanmuCache" ,method = RequestMethod.GET)
+    public void removePreDanmuCache(@RequestParam String partyId) {
+
+        List<DanmuLibraryParty> danmuLibraryPartyList =   danmuLibraryPartyService.findByPartyId(partyId);
+        if(ListUtils.checkListIsNotNull(danmuLibraryPartyList)){
+            danmuLibraryPartyList.forEach(danmuLibraryParty -> preDanmuCacheService.removePreDanmuFromCache(partyId,danmuLibraryParty.getDanmuLibraryId()));
+        }
+
+        preDanmuLibraryCacheService.removePreDanmuLibrary(partyId);
+    }
 
     @RequestMapping(value = "/findDanmuLibraryIdByParty" ,method = RequestMethod.GET)
     public List<String> findDanmuLibraryIdByParty(@RequestParam String partyId) {
         log.info("获取活动的预置弹幕库编号");
-        List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyId(partyId);
+        List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeDesc(partyId);
         List<String> libraryIdList = new ArrayList<String>();
         if(ListUtils.checkListIsNotNull(danmuLibraryPartyList)){
             danmuLibraryPartyList.forEach(danmuLibraryParty->libraryIdList.add(danmuLibraryParty.getDanmuLibraryId()));

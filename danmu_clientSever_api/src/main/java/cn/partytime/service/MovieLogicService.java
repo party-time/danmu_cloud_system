@@ -5,14 +5,14 @@ import cn.partytime.alarmRpc.RpcProjectorAlarmService;
 import cn.partytime.cache.danmu.DanmuAlarmCacheService;
 import cn.partytime.cache.party.PartyAlarmCacheService;
 import cn.partytime.common.cachekey.*;
+import cn.partytime.common.cachekey.client.ClientCommandCacheKey;
+import cn.partytime.common.cachekey.danmu.PreDanmuCacheKey;
+import cn.partytime.common.cachekey.party.PartyCacheKey;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.dataRpc.RpcDanmuClientService;
-import cn.partytime.dataRpc.RpcMovieScheduleService;
-import cn.partytime.dataRpc.RpcPartyService;
-import cn.partytime.dataRpc.RpcProjectorService;
+import cn.partytime.dataRpc.*;
 import cn.partytime.model.*;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
@@ -57,8 +57,6 @@ public class MovieLogicService {
     @Autowired
     private RpcPartyService partyService;
 
-    @Autowired
-    private PreDanmuLogicService preDanmuLogicService;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -71,6 +69,12 @@ public class MovieLogicService {
 
     @Autowired
     private PartyAlarmCacheService partyAlarmCacheService;
+
+    @Autowired
+    private PreDanmuLogicService preDanmuLogicService;
+
+    @Autowired
+    private RpcPreDanmuService rpcPreDanmuService;
 
 
     public RestResultModel partyStart(String registCode,String command,long clientTime) {
@@ -257,7 +261,7 @@ public class MovieLogicService {
                     //stop movie
                     stopMovie(movieSchedule,party);
 
-                    redisService.expire(FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId,0);
+
                     //清空预置弹幕
                     clearPreDanmu(addressId,partyId);
 
@@ -276,8 +280,6 @@ public class MovieLogicService {
                     movieSchedule.setClientEndTime(clientTime);
 
                     stopMovie(movieSchedule,party);
-
-                    redisService.expire(FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId,0);
 
                     //清空预置弹幕
                     clearPreDanmu(addressId,partyId);
@@ -492,8 +494,7 @@ public class MovieLogicService {
         redisService.expire(key,0);
 
 
-        String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
-        redisService.expire(preDanmuCacheKey,0);
+        rpcPreDanmuService.removePreDanmuCache(partyId);
 
     }
 

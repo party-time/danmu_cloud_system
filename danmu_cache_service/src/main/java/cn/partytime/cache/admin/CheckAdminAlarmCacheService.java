@@ -3,11 +3,8 @@ package cn.partytime.cache.admin;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.cache.common.CommonCacheService;
-import cn.partytime.common.cachekey.AdminUserCacheKey;
+import cn.partytime.common.cachekey.admin.AdminUserCacheKey;
 import cn.partytime.common.constants.AlarmKeyConst;
-import cn.partytime.common.constants.LogCodeConst;
-import cn.partytime.common.util.IntegerUtils;
-import cn.partytime.redis.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

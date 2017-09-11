@@ -1,9 +1,5 @@
 package cn.partytime.logicService;
 
-import cn.partytime.common.cachekey.AddressCacheKey;
-import cn.partytime.common.cachekey.ClientCacheKey;
-import cn.partytime.common.util.IntegerUtils;
-import cn.partytime.common.util.LongUtils;
 import cn.partytime.redis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -4,6 +4,7 @@ import cn.partytime.cache.admin.CheckAdminAlarmCacheService;
 import cn.partytime.cache.admin.CheckAdminCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
 import cn.partytime.common.cachekey.*;
+import cn.partytime.common.cachekey.danmu.PreDanmuCacheKey;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.BooleanUtils;
@@ -135,7 +136,7 @@ public class CommandHanderService {
             findClientList(type,channel,partyType,addressId);
         } else if (CommandTypeConst.DANMU_DENSITY.equals(type)) {
             //设置弹幕密度
-            setDanmuDensity(type, addressId, partyId, object, channel,partyType);
+            //setDanmuDensity(type, addressId, partyId, object, channel,partyType);
         }else if (CommandTypeConst.CHECK_CHECKSTATUS.equals(type)) {
             //设置弹幕密度
             setCheckStatus(type,object,channel,partyId);
@@ -221,7 +222,7 @@ public class CommandHanderService {
      *
      * @param channel
      */
-    public void setDanmuDensity(String type, String addressId, String partyId, Object object, Channel channel,int partyType) {
+    /*public void setDanmuDensity(String type, String addressId, String partyId, Object object, Channel channel,int partyType) {
 
 
 
@@ -240,7 +241,7 @@ public class CommandHanderService {
         String msg = JSON.toJSONString(setObjectToBms(type, danmuDensity));
         logger.info("反馈给管理员的消息,{}", msg);
         pushCommandToPartyAdmin(partyType,partyId, type, msg);
-    }
+    }*/
 
 
     /**
@@ -603,21 +604,10 @@ public class CommandHanderService {
             String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
             if (status) {
 
-                /*DanmuLibraryParty danmuLibraryParty = rpcDanmuLibraryPartyService.findByPartyId(partyId);
-                if (danmuLibraryParty == null) {
-                    result.put("message", "活动没有关联弹幕库");
-                    sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms("error", result)));
-                    return;
-                }*/
-
-                //TODO:活动没有关联弹幕库
 
                 logger.info("开启预制弹幕");
                 redisService.set(key, status);
                 redisService.expire(key,60*60*24*7);
-
-
-
                 //开启预制弹幕处理线程
                 preDanmuHandler.danmuListenHandler(partyId);
             } else {
@@ -875,8 +865,6 @@ public class CommandHanderService {
             result.put("testIsOpen", functionService.testModeIsOpen(partyId));
             //特效视频
             result.put("specialVideo", functionService.getSpecialMovStatus(partyId));
-            //弹幕密度
-            result.put("danmuDensity", functionService.getDanmuDensity(partyId));
             //活动名称
             result.put("partyName", party.getName());
             //初始化内容发送个管理界面
@@ -945,8 +933,6 @@ public class CommandHanderService {
         redisService.expire(FunctionControlCacheKey.FUNCITON_CONTROL_PREDANMU + partyId, 0);
         //动画特效
         redisService.expire(FunctionControlCacheKey.FUNCITON_CONTROL_SPECIALMOV + partyId, 0);
-        //弹幕密度
-        redisService.expire(FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId, 0);
     }
 
 

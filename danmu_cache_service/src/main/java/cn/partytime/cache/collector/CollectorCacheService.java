@@ -1,15 +1,12 @@
 package cn.partytime.cache.collector;
 
 
-import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.cachekey.collector.CollectorCacheKey;
 import cn.partytime.common.constants.CommonConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
-import cn.partytime.common.util.ListUtils;
 import cn.partytime.common.util.LongUtils;
 import cn.partytime.redis.service.RedisService;
-import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

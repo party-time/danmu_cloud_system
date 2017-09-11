@@ -1,4 +1,4 @@
-package cn.partytime.common.cachekey;
+package cn.partytime.common.cachekey.admin;
 
 /**
  * 用户缓存缓存key标识

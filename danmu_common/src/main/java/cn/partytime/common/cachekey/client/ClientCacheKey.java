@@ -1,4 +1,4 @@
-package cn.partytime.common.cachekey;
+package cn.partytime.common.cachekey.client;
 
 import org.omg.CORBA.PUBLIC_MEMBER;
 

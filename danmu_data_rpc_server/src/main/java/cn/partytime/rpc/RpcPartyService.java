@@ -1,15 +1,19 @@
 package cn.partytime.rpc;
 
+import cn.partytime.cache.party.PartyCacheService;
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
+import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.logicService.DanmuAddressLogicService;
 import cn.partytime.logicService.PartyLogicService;
+import cn.partytime.model.MovieScheduleModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.PartyModel;
 import cn.partytime.model.danmu.Danmu;
 import cn.partytime.model.danmu.DanmuPool;
 import cn.partytime.model.manager.DanmuAddress;
+import cn.partytime.model.manager.MovieSchedule;
 import cn.partytime.model.manager.Party;
 import cn.partytime.model.manager.PartyAddressRelation;
 import cn.partytime.redis.service.RedisService;
@@ -20,9 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,6 +66,47 @@ public class RpcPartyService {
     @Autowired
     private DanmuService danmuService;
 
+    @Autowired
+    private PartyCacheService partyCacheService;
+
+    @Autowired
+    private MovieScheduleService movieScheduleService;
+
+
+    @RequestMapping(value = "/findCurrentPartyByPartyId" ,method = RequestMethod.GET)
+    public boolean findCurrentPartyByPartyId(@RequestBody Party party){
+        String partyId = party.getId();
+       int type =  party.getType();
+       if(type == 0){
+           int status = party.getStatus();
+           if(status>0 && status<=3){
+               return true;
+           }
+       }else{
+           Page<MovieSchedule> movieSchedulePage = movieScheduleService.findAll(partyId,1,0);
+           List<MovieSchedule> movieScheduleList = movieSchedulePage.getContent();
+           if(ListUtils.checkListIsNotNull(movieScheduleList)){
+               MovieSchedule  movieSchedule = movieScheduleList.get(0);
+               Date endDate = movieSchedule.getEndTime();
+               long movieMinute = 0;
+               if(party.getMovieTime()!=0){
+                   movieMinute = 180;
+               }else{
+                   movieMinute = party.getMovieTime()/1000/60;
+               }
+               if(endDate==null){
+                   endDate = DateUtils.getCurrentDate();
+               }
+               long subMinute = DateUtils.subMinute(endDate,endDate);
+               if(subMinute>=movieMinute){
+                   return true;
+               }else{
+                   return false;
+               }
+           }
+       }
+       return false;
+    }
 
     /**
      * 获取在线的电影
@@ -204,12 +251,8 @@ public class RpcPartyService {
      */
     @RequestMapping(value = "/getPartyDmDensity" ,method = RequestMethod.GET)
     public int getPartyDmDensity(@RequestParam String addressId,@RequestParam String partyId){
-        String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId;
-        Object object = redisService.get(key);
-        int danmuDensity = 0;
-        if(object!=null){
-            danmuDensity = IntegerUtils.objectConvertToInt(object);
-        }else{
+        int danmuDensity = partyCacheService.getPartyDensity(partyId);
+        if(danmuDensity==0){
             PartyLogicModel partyLogicModel =  findPartyAddressId(addressId);
             if(partyLogicModel!=null){
                 return partyLogicModel.getDmDensity();

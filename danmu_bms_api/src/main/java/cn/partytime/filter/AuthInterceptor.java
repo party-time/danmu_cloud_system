@@ -1,6 +1,6 @@
 package cn.partytime.filter;
 
-import cn.partytime.common.cachekey.AdminUserCacheKey;
+import cn.partytime.common.cachekey.admin.AdminUserCacheKey;
 import cn.partytime.common.constants.CommonConst;
 import cn.partytime.controller.base.BaseAdminController;
 import cn.partytime.model.manager.AdminUser;

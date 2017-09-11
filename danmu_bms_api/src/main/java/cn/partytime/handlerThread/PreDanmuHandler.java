@@ -1,13 +1,12 @@
 package cn.partytime.handlerThread;
 
-import cn.partytime.common.cachekey.PreDanmuCacheKey;
+import cn.partytime.common.cachekey.danmu.PreDanmuCacheKey;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.dataRpc.RpcPreDanmuService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
 import cn.partytime.model.PreDanmuModel;
-import cn.partytime.model.danmu.PreDanmu;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.service.PreDanmuService;
 import com.alibaba.fastjson.JSON;

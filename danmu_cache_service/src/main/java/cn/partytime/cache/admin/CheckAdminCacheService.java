@@ -1,8 +1,7 @@
 package cn.partytime.cache.admin;
 
 
-import cn.partytime.cache.common.CommonCacheService;
-import cn.partytime.common.cachekey.AdminUserCacheKey;
+import cn.partytime.common.cachekey.admin.AdminUserCacheKey;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.common.util.LongUtils;

@@ -21,6 +21,10 @@ public class DanmuLibraryPartyService {
 
 
 
+    public void deleteByPartyId(String partyId){
+        danmuLibraryPartyRepository.deleteByPartyId(partyId);
+    }
+
     public DanmuLibraryParty save(String danmuLibraryId,String partyId,int densitry){
         Date date = DateUtils.getCurrentDate();
         DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyRepository.findByPartyIdAndDanmuLibraryId(partyId,danmuLibraryId);
@@ -55,7 +59,7 @@ public class DanmuLibraryPartyService {
     }
 
     public List<DanmuLibraryParty> findByPartyId(String partyId){
-        return danmuLibraryPartyRepository.findByPartyId(partyId);
+        return danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeDesc(partyId);
     }
 
 

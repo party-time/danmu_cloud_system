@@ -1,7 +1,6 @@
 package cn.partytime.service;
 
-import cn.partytime.common.cachekey.AdminUserCacheKey;
-import cn.partytime.common.constants.CommonConst;
+import cn.partytime.common.cachekey.admin.AdminUserCacheKey;
 import cn.partytime.model.manager.AdminUser;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.repository.manager.AdminUserRepository;

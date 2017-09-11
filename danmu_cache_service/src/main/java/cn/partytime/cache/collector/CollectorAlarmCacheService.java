@@ -2,10 +2,8 @@ package cn.partytime.cache.collector;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.cache.common.CommonCacheService;
-import cn.partytime.common.cachekey.AdminUserCacheKey;
 import cn.partytime.common.cachekey.collector.CollectorCacheKey;
 import cn.partytime.common.constants.AlarmKeyConst;
-import cn.partytime.common.constants.LogCodeConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

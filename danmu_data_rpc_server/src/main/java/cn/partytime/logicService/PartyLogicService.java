@@ -49,6 +49,9 @@ public class PartyLogicService {
     @Autowired
     private PartyAddressRelationService partyAddressRelationService;
 
+    @Autowired
+    private PreDanmuLogicService preDanmuLogicService;
+
     public Party getPartyId(String addressId) {
         Party partyResult = null;
         //通过日期查找活动
@@ -122,13 +125,9 @@ public class PartyLogicService {
             partyLogicModel.setH5TempId(party.getH5TempId());
             //partyLogicModel.setMovieTime(party.getMovieTime());
 
-            String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyLogicModel.getPartyId();
-            Object object = redisService.get(key);
-            if(object!=null){
-                partyLogicModel.setDmDensity(IntegerUtils.objectConvertToInt(object));
-            }else{
-                partyLogicModel.setDmDensity(PartyConst.danmuDensity);
-            }
+
+            partyLogicModel.setDmDensity(preDanmuLogicService.getPartyDanmuDensity(partyLogicModel.getPartyId()));
+
         }
         return partyLogicModel;
     }
@@ -191,13 +190,7 @@ public class PartyLogicService {
                 partyLogicModel.setDmDensity(party.getDmDensity());
                 partyLogicModel.setMovieTime(party.getMovieTime());
 
-                String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyLogicModel.getPartyId();
-                Object object = redisService.get(key);
-                if(object!=null){
-                    partyLogicModel.setDmDensity(IntegerUtils.objectConvertToInt(object));
-                }else{
-                    partyLogicModel.setDmDensity(party.getDmDensity());
-                }
+                partyLogicModel.setDmDensity(preDanmuLogicService.getPartyDanmuDensity(partyLogicModel.getPartyId()));
             }
         }
         return partyLogicModel;

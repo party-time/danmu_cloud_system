@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dm on 2017/7/10.
@@ -15,6 +16,22 @@ import java.util.List;
 
 @FeignClient(value = "${dataRpcServer}",fallback = RpcPreDanmuServiceHystrix.class)
 public interface RpcPreDanmuService {
+
+
+    @RequestMapping(value = "/rpcRepDanmu/getPartyDanmuDensity" ,method = RequestMethod.GET)
+    public int getPartyDanmuDensity(@RequestParam(name = "partyId") String partyId);
+
+    @RequestMapping(value = "/rpcRepDanmu/initPreDanmuIntoCache" ,method = RequestMethod.GET)
+    public void initPreDanmuIntoCache(@RequestParam(name = "partyId") String partyId);
+
+    @RequestMapping(value = "/rpcRepDanmu/getPreDanmuFromCache" ,method = RequestMethod.GET)
+    public Map<String,Object> getPreDanmuFromCache(@RequestParam(name = "partyId") String partyId, @RequestParam(name = "danmuCount") int danmuCount);
+
+    @RequestMapping(value = "/rpcRepDanmu/setPreDanmuLibrarySortRule" ,method = RequestMethod.GET)
+    public void setPreDanmuLibrarySortRule(@RequestParam(name = "partyId") String partyId) ;
+
+    @RequestMapping(value = "/rpcRepDanmu/removePreDanmuCache" ,method = RequestMethod.GET)
+    public void removePreDanmuCache(@RequestParam(name = "partyId") String partyId) ;
 
 
 

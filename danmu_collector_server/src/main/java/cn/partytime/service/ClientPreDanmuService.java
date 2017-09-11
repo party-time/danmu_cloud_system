@@ -1,7 +1,7 @@
 package cn.partytime.service;
 
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
-import cn.partytime.common.cachekey.PreDanmuCacheKey;
+import cn.partytime.common.cachekey.danmu.PreDanmuCacheKey;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.redis.service.RedisService;

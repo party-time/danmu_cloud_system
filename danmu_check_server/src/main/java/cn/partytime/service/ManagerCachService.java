@@ -1,6 +1,6 @@
 package cn.partytime.service;
 
-import cn.partytime.common.cachekey.AdminTaskCacheKey;
+import cn.partytime.common.cachekey.admin.AdminTaskCacheKey;
 import cn.partytime.common.constants.CommonConst;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.redis.service.RedisService;

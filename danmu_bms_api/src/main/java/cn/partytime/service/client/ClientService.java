@@ -1,6 +1,6 @@
 package cn.partytime.service.client;
 
-import cn.partytime.common.cachekey.ClientCommandCacheKey;
+import cn.partytime.common.cachekey.client.ClientCommandCacheKey;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;

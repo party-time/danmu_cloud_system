@@ -66,8 +66,8 @@ public class PartyService {
         partyModel.setDmDensity(dmDensity);
         Party party = partyRepository.insert(partyModel);
 
-        String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();
-        redisService.set(key,dmDensity);
+        //String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();
+        //redisService.set(key,dmDensity);
 
 
         //danmuLibraryPartyService.save(danmuLibraryId,partyModel.getId());
@@ -85,8 +85,8 @@ public class PartyService {
             //danmuLibraryPartyService.save(danmuLibraryId,party.getId());
             partyRepository.save(party);
 
-            String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();
-            redisService.set(key,dmDensity);
+            //String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();
+            //redisService.set(key,dmDensity);
         }
 
         return party;

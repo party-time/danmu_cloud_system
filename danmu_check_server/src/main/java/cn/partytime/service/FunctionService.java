@@ -83,18 +83,4 @@ public class FunctionService {
         return id;
     }
 
-
-    /**
-     * 获取弹幕密度
-     * @param partyId
-     * @return
-     */
-    public int getDanmuDensity(String partyId) {
-        String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId;
-        int status = PartyConst.danmuDensity;
-        Object object = redisService.get(key);
-        status = IntegerUtils.objectConvertToInt(object) == 0 ? status : IntegerUtils.objectConvertToInt(object);
-        return status;
-    }
-
 }

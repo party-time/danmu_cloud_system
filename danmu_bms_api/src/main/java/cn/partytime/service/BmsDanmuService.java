@@ -1,6 +1,6 @@
 package cn.partytime.service;
 
-import cn.partytime.common.cachekey.ClientCacheKey;
+import cn.partytime.common.cachekey.client.ClientCacheKey;
 import cn.partytime.common.cachekey.DanmuCacheKey;
 import cn.partytime.common.constants.CommonConst;
 import cn.partytime.common.util.ComponentKeyConst;
@@ -14,7 +14,6 @@ import cn.partytime.model.*;
 import cn.partytime.model.danmu.Danmu;
 import cn.partytime.model.danmu.DanmuLog;
 import cn.partytime.model.danmu.DanmuPool;
-import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.danmuCmdJson.CmdTemp;
 import cn.partytime.model.user.UserPrize;
 import cn.partytime.model.wechat.WechatUser;

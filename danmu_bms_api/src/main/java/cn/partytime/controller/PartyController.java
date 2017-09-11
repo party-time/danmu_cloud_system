@@ -2,6 +2,7 @@ package cn.partytime.controller;
 
 import cn.partytime.controller.base.BaseAdminController;
 import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.RpcPreDanmuService;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.RestResultModel;
@@ -44,6 +45,9 @@ public class PartyController extends BaseAdminController {
 
     @Autowired
     private DanmuLibraryPartyService danmuLibraryPartyService;
+
+    @Autowired
+    private RpcPreDanmuService rpcPreDanmuService;
 
     /**
      *
@@ -159,9 +163,13 @@ public class PartyController extends BaseAdminController {
         try {
             if( StringUtils.isEmpty(id)){
                 party = partyService.save(name, type, movieAlias ,startTime, endTime, shortName,danmuLibraryId,dmDensity);
+
             }else{
                 party = partyService.update(id,name,type,movieAlias,danmuLibraryId,dmDensity);
             }
+
+            //
+            rpcPreDanmuService.setPreDanmuLibrarySortRule(party.getId());
 
             if(!StringUtils.isEmpty(addressIds)){
                 if(addressIds.indexOf(",")!=-1){

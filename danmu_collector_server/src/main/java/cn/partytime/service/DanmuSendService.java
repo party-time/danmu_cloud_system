@@ -4,6 +4,7 @@ import cn.partytime.alarmRpc.RpcDanmuAlarmService;
 import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.dataRpc.RpcDanmuClientService;
 import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.RpcPreDanmuService;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.PartyModel;
 import cn.partytime.model.ProtocolDanmuModel;
@@ -54,19 +55,23 @@ public class DanmuSendService {
     @Autowired
     private AlarmCacheService alarmCacheService;
 
+
+    @Autowired
+    private RpcPreDanmuService rpcPreDanmuService;
+
     /**
      * 发送预制弹幕
      *
      * @param addressId
      */
-    public void sendPreDanmu(String addressId,String partyId) {
+    public void sendPreDanmu(String addressId,String partyId,int danmuCount) {
         Date nowDate = DateUtils.getCurrentDate();
-        Object preObject = clientPreDanmuService.getPreDanmu(addressId,nowDate,partyId);
+        Map<String,Object> preDanmuMap= rpcPreDanmuService.getPreDanmuFromCache(partyId,danmuCount);
 
 
 
-        logger.info("获取的预制弹幕信息：{}",JSON.toJSONString(preObject));
-        if (preObject == null) {
+        logger.info("获取的预制弹幕信息：{}",JSON.toJSONString(preDanmuMap));
+        if (preDanmuMap == null) {
             //获取活动信息
             PartyModel partyModel =rpcPartyService.getPartyByPartyId(partyId);
             int cacheCount = alarmCacheService.findAlarmCount(addressId,AlarmKeyConst.ALARM_KEY_PREDANMU);
@@ -80,7 +85,7 @@ public class DanmuSendService {
         String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;
 
         screenDanmuService.addScreenDanmuCount(addressId);
-        sendMessageToAllClient(addressId,preObject);
+        sendMessageToAllClient(addressId,preDanmuMap);
 
     }
 
@@ -113,6 +118,38 @@ public class DanmuSendService {
 
 
 
+    public void sendMessageToAllClient(String addressId,Map<String,Object> map){
+        int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
+        List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
+
+        if(ListUtils.checkListIsNotNull(screenChannelList)){
+            logger.info("当前在线的flash客户端数量是:{}",screenChannelList.size());
+            for(Channel channel:screenChannelList){
+                String message = JSON.toJSONString(map);
+                logger.info("向flash客户端:{},推送弹幕:{}",channel.id(),message);
+                channel.writeAndFlush(new TextWebSocketFrame(message));
+            }
+        }
+        Object objectMessage =map.get("isSendH5");
+        if(objectMessage!=null){
+            int isSendH5 = Integer.parseInt(String.valueOf(objectMessage));
+            //是否发送到H5界面 0 发送 1不发送
+            if(isSendH5==1){
+                return;
+            }
+        }
+
+        clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_MOBILE);
+        List<Channel> channelMobileList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
+
+        if(ListUtils.checkListIsNotNull(channelMobileList)){
+            logger.info("当前在线的手机客户端数量是:{}",channelMobileList.size());
+            for(Channel channel:channelMobileList){
+                logger.info("向手机客户端:{},推送弹幕",channel.id());
+                channel.writeAndFlush(new TextWebSocketFrame(String.valueOf(map)));
+            }
+        }
+    }
 
     public void sendMessageToAllClient(String addressId,Object object){
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);

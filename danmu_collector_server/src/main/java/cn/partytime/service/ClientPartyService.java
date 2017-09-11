@@ -1,6 +1,6 @@
 package cn.partytime.service;
 
-import cn.partytime.common.cachekey.PartyCacheKey;
+import cn.partytime.common.cachekey.party.PartyCacheKey;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.redis.service.RedisService;
