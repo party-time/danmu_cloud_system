@@ -20,6 +20,9 @@ public class UpdatePartyModel {
 
     private MovieAlias movieAlias;
 
+    //预制弹幕库是否可以修改 0可以  1不可以
+    private Integer canUse;
+
     public Party getParty() {
         return party;
     }
@@ -50,5 +53,13 @@ public class UpdatePartyModel {
 
     public void setMovieAlias(MovieAlias movieAlias) {
         this.movieAlias = movieAlias;
+    }
+
+    public Integer getCanUse() {
+        return canUse;
+    }
+
+    public void setCanUse(Integer canUse) {
+        this.canUse = canUse;
     }
 }

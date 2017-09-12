@@ -3,18 +3,18 @@ package cn.partytime.controller;
 import cn.partytime.controller.base.BaseAdminController;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.dataRpc.RpcPreDanmuService;
-import cn.partytime.model.PageResultModel;
-import cn.partytime.model.PartyLogicModel;
-import cn.partytime.model.RestResultModel;
-import cn.partytime.model.UpdatePartyModel;
+import cn.partytime.model.*;
 import cn.partytime.model.manager.MovieAlias;
 import cn.partytime.model.manager.Party;
 import cn.partytime.service.*;
+import com.thoughtworks.xstream.mapper.Mapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -312,11 +312,18 @@ public class PartyController extends BaseAdminController {
 
 
     @RequestMapping(value = "/getUpdateParty", method = RequestMethod.GET)
-    public RestResultModel getUpdateParty( String partyId) {
+    public RestResultModel getUpdateParty( String partyId) throws InvocationTargetException, IllegalAccessException {
         RestResultModel restResultModel = new RestResultModel();
         UpdatePartyModel updatePartyModel = bmsPartyService.findByPartyId(partyId);
-
+        PartyModel partyModel = new PartyModel();
+        BeanUtils.copyProperties(partyModel,updatePartyModel.getParty());
+        boolean canUse = rpcPartyService.findCurrentParyIsInProgress(partyModel);
         if(null != updatePartyModel){
+            if(canUse){
+                updatePartyModel.setCanUse(1);
+            }else{
+                updatePartyModel.setCanUse(0);
+            }
             restResultModel.setResult(200);
             restResultModel.setData(updatePartyModel);
         }else{
