@@ -83,7 +83,7 @@ public class RpcPreDanmuService {
     @RequestMapping(value = "/findDanmuLibraryIdByParty" ,method = RequestMethod.GET)
     public List<String> findDanmuLibraryIdByParty(@RequestParam String partyId) {
         log.info("获取活动的预置弹幕库编号");
-        List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeDesc(partyId);
+        List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeAsc(partyId);
         List<String> libraryIdList = new ArrayList<String>();
         if(ListUtils.checkListIsNotNull(danmuLibraryPartyList)){
             danmuLibraryPartyList.forEach(danmuLibraryParty->libraryIdList.add(danmuLibraryParty.getDanmuLibraryId()));

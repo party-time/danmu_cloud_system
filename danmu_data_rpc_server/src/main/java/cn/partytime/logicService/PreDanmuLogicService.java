@@ -61,7 +61,7 @@ public class PreDanmuLogicService {
 
 
     private int resetLibraryInfotoCache(String partyId){
-        List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeDesc(partyId);
+        List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeAsc(partyId);
         int sum = 0;
         //String key = PartyCacheKey
         if(ListUtils.checkListIsNotNull(danmuLibraryPartyList)){
@@ -110,7 +110,7 @@ public class PreDanmuLogicService {
 
         resetLibraryInfotoCache(partyId);
 
-        List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeDesc(partyId);
+        List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeAsc(partyId);
         if(ListUtils.checkListIsNotNull(danmuLibraryPartyList)){
             for(DanmuLibraryParty danmuLibraryParty:danmuLibraryPartyList){
                 new Thread(new Runnable() {
