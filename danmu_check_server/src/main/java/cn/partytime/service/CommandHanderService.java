@@ -3,8 +3,9 @@ package cn.partytime.service;
 import cn.partytime.cache.admin.CheckAdminAlarmCacheService;
 import cn.partytime.cache.admin.CheckAdminCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
-import cn.partytime.common.cachekey.*;
-import cn.partytime.common.cachekey.danmu.PreDanmuCacheKey;
+import cn.partytime.common.cachekey.CommandCacheKey;
+import cn.partytime.common.cachekey.DanmuCacheKey;
+import cn.partytime.common.cachekey.FunctionControlCacheKey;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.BooleanUtils;
@@ -604,7 +605,6 @@ public class CommandHanderService {
             boolean status = BooleanUtils.objectConvertToBoolean(map.get("status"));
             logger.info("预制弹幕处理操作,接收参数,活动:{},状态:{},类型:{}", partyId, status, type);
             String key = FunctionControlCacheKey.FUNCITON_CONTROL_PREDANMU + partyId;
-            String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
             if (status) {
 
 

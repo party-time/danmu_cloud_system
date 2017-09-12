@@ -79,7 +79,7 @@ public class RpcPartyService {
        int type =  party.getType();
        if(type == 0){
            int status = party.getStatus();
-           if(status>0 && status<=3){
+           if(status>0 && status<3){
                return true;
            }
        }else{
