@@ -93,6 +93,9 @@ public class CommandHanderService {
     @Autowired
     private CollectorCacheService collectorCacheService;
 
+    @Autowired
+    private RpcPreDanmuService rpcPreDanmuService;
+
 
     public void commandHandler(Map<String, Object> map, Channel channel) {
         //类型
@@ -612,9 +615,10 @@ public class CommandHanderService {
                 preDanmuHandler.danmuListenHandler(partyId);
             } else {
                 //关闭预制弹幕
-                redisService.expire(key, 0);
+                //redisService.expire(key, 0);
                 //清除缓存中的预置弹幕
-                redisService.expire(preDanmuCacheKey, 0);
+                //redisService.expire(preDanmuCacheKey, 0);
+                rpcPreDanmuService.removePreDanmuCache(partyId);
             }
 
             result.put("type", type);
