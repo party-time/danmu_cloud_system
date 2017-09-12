@@ -57,7 +57,7 @@ public class DanmuLibraryPartyController {
     public RestResultModel findPreDanmuLibaryByPartyId(String partyId){
         RestResultModel restResultModel = new RestResultModel();
         List<DanmuLibraryParty> danmuLibraryPartyList =  danmuLibraryPartyService.findByPartyId(partyId);
-
+        log.info("获取活动下预置弹幕库");
         List<DanmuLibraryPartyModel> danmuLibraryPartyModelList = new ArrayList<DanmuLibraryPartyModel>();
         if(ListUtils.checkListIsNotNull(danmuLibraryPartyList)) {
             for (DanmuLibraryParty danmuLibraryParty : danmuLibraryPartyList) {
