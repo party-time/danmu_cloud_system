@@ -73,7 +73,7 @@ public class RpcPartyService {
     private MovieScheduleService movieScheduleService;
 
 
-    @RequestMapping(value = "/findCurrentParyIsInProgress" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/findCurrentParyIsInProgress" ,method = RequestMethod.POST)
     public boolean findCurrentParyIsInProgress(@RequestBody Party party){
         String partyId = party.getId();
        int type =  party.getType();

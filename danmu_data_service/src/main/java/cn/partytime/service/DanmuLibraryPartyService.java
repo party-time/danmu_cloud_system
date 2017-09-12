@@ -59,7 +59,7 @@ public class DanmuLibraryPartyService {
     }
 
     public List<DanmuLibraryParty> findByPartyId(String partyId){
-        return danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeDesc(partyId);
+        return danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeAsc(partyId);
     }
 
 
