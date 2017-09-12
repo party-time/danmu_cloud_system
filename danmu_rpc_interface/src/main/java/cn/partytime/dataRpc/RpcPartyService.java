@@ -4,6 +4,7 @@ import cn.partytime.dataRpc.impl.RpcPartyServiceHystrix;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.PartyModel;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -128,5 +129,9 @@ public interface RpcPartyService {
      */
     @RequestMapping(value = "/rpcParty/saveParty" ,method = RequestMethod.POST)
     public PartyModel saveParty(PartyModel party);
+
+
+    @RequestMapping(value = "/rpcParty/findCurrentParyIsInProgress" ,method = RequestMethod.GET)
+    public boolean findCurrentParyIsInProgress(PartyModel party);
 
 }

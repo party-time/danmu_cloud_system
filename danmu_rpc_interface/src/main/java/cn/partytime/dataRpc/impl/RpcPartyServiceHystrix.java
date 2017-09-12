@@ -79,5 +79,10 @@ public class RpcPartyServiceHystrix implements RpcPartyService {
         return null;
     }
 
+    @Override
+    public boolean findCurrentParyIsInProgress(PartyModel party) {
+        return false;
+    }
+
 
 }
