@@ -18,6 +18,11 @@ import java.util.Map;
 public interface RpcPreDanmuService {
 
 
+
+
+    @RequestMapping(value = "/rpcRepDanmu/updateDensityByPartyIdAndLiBraryIdAndDensity" ,method = RequestMethod.GET)
+    public void updateDensityByPartyIdAndLiBraryIdAndDensity(@RequestParam(name = "partyId")  String partyId,@RequestParam(name = "libraryId")  String libraryId,@RequestParam(name = "density")  Integer density);
+
     @RequestMapping(value = "/rpcRepDanmu/getPartyDanmuDensity" ,method = RequestMethod.GET)
     public int getPartyDanmuDensity(@RequestParam(name = "partyId") String partyId);
 

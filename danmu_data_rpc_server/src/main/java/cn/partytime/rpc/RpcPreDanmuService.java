@@ -49,6 +49,14 @@ public class RpcPreDanmuService {
     @Autowired
     private PreDanmuLibraryCacheService preDanmuLibraryCacheService;
 
+
+
+
+    @RequestMapping(value = "/updateDensityByPartyIdAndLiBraryIdAndDensity" ,method = RequestMethod.GET)
+    public void updateDensityByPartyIdAndLiBraryIdAndDensity(@RequestParam String partyId,@RequestParam String libraryId,@RequestParam Integer density) {
+        danmuLibraryPartyService.save(libraryId,partyId,density);
+    }
+
     @RequestMapping(value = "/getPartyDanmuDensity" ,method = RequestMethod.GET)
     public int getPartyDanmuDensity(@RequestParam String partyId) {
         return preDanmuLogicService.getPartyDanmuDensity(partyId);

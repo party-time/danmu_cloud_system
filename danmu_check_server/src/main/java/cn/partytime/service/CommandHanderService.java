@@ -98,6 +98,7 @@ public class CommandHanderService {
     private RpcPreDanmuService rpcPreDanmuService;
 
 
+
     public void commandHandler(Map<String, Object> map, Channel channel) {
         //类型
         String type = String.valueOf(map.get("type"));
@@ -140,7 +141,7 @@ public class CommandHanderService {
             findClientList(type,channel,partyType,addressId);
         } else if (CommandTypeConst.DANMU_DENSITY.equals(type)) {
             //设置弹幕密度
-            //setDanmuDensity(type, addressId, partyId, object, channel,partyType);
+            setDanmuDensity(partyId,partyType,type,channel,object);
         }else if (CommandTypeConst.CHECK_CHECKSTATUS.equals(type)) {
             //设置弹幕密度
             setCheckStatus(type,object,channel,partyId);
@@ -148,6 +149,23 @@ public class CommandHanderService {
     }
 
     //int count  = collectorCacheService.getClientCount(0,addressId);
+
+    private void setDanmuDensity(String partyId,int partyType,String type,Channel channel,Object object){
+
+        Map<String,Object> map = convertObjectToMap(object);
+        List<DanmuLibraryPartyDto> danmuLibraryPartyDtoList = JSON.parseArray(map.get("danmuDensity").toString(),DanmuLibraryPartyDto.class);
+        if(ListUtils.checkListIsNotNull(danmuLibraryPartyDtoList)){
+            for(DanmuLibraryPartyDto danmuLibraryPartyDto:danmuLibraryPartyDtoList){
+                rpcPreDanmuService.updateDensityByPartyIdAndLiBraryIdAndDensity(danmuLibraryPartyDto.getPartyId(),danmuLibraryPartyDto.getDanmuLibraryId(),danmuLibraryPartyDto.getDensitry());
+            }
+        }
+        Map<String,Object> result = new HashMap<>();
+        //消息推送给管理端
+        result.put("type", type);
+        //广播命令给所有管理员
+        pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, result)));
+
+    }
 
     private void findClientList(String type,Channel channel,int partyType,String addressId){
 

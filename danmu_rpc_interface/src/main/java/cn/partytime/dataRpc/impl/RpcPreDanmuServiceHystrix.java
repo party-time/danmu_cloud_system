@@ -12,6 +12,11 @@ import java.util.Map;
 @Slf4j
 public class RpcPreDanmuServiceHystrix implements RpcPreDanmuService {
     @Override
+    public void updateDensityByPartyIdAndLiBraryIdAndDensity(String partyId, String libraryId, Integer density) {
+
+    }
+
+    @Override
     public int getPartyDanmuDensity(String partyId) {
         return 0;
     }

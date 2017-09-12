@@ -53,6 +53,7 @@ public class DistributionServerHandler extends SimpleChannelInboundHandler<TextW
         }
         Map<String, Object> map = (Map<String, Object>) JSON.parse(msg.text());
         //CommandModel commandModel = JSON.parseObject(msg.text(),CommandModel.class);
+        logger.info("commad:{}",JSON.toJSONString(map));
         commandHanderService.commandHandler(map, channel);
     }
 
