@@ -61,6 +61,7 @@ public class RpcPreDanmuService {
 
     @RequestMapping(value = "/getPreDanmuFromCache" ,method = RequestMethod.GET)
     public Map<String,Object> getPreDanmuFromCache(@RequestParam String partyId, @RequestParam int danmuCount) {
+        log.info("获取活动:{},弹幕级别:{}",partyId,danmuCount);
         return preDanmuLogicService.getPreDanmuFromCache(partyId,danmuCount);
     }
 
