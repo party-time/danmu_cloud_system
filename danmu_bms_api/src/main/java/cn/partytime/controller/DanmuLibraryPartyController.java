@@ -1,6 +1,7 @@
 package cn.partytime.controller;
 
 import cn.partytime.common.util.ListUtils;
+import cn.partytime.dataRpc.RpcPreDanmuService;
 import cn.partytime.model.DanmuLibraryPartyModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.danmu.DanmuLibrary;
@@ -27,6 +28,9 @@ public class DanmuLibraryPartyController {
     @Autowired
     private DanmuLibraryService danmuLibraryService;
 
+    @Autowired
+    private RpcPreDanmuService rpcPreDanmuService;
+
     @RequestMapping(value = "/del", method = RequestMethod.GET)
     public RestResultModel del(String id){
         RestResultModel restResultModel = new RestResultModel();
@@ -40,8 +44,11 @@ public class DanmuLibraryPartyController {
 
         RestResultModel restResultModel = new RestResultModel();
         if(ListUtils.checkListIsNotNull(danmuLibraryPartyModelList)){
+            String partyId = danmuLibraryPartyModelList.get(0).getPartyId();
             danmuLibraryPartyModelList.forEach(danmuLibraryPartyModel -> danmuLibraryPartyService.save(danmuLibraryPartyModel.getDanmuLibraryId(),danmuLibraryPartyModel.getPartyId(),danmuLibraryPartyModel.getDensitry()));
+            rpcPreDanmuService.setPreDanmuLibrarySortRule(partyId);
         }
+
         restResultModel.setResult(200);
         return restResultModel;
     }

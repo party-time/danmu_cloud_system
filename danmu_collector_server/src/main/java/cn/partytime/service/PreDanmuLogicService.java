@@ -31,7 +31,7 @@ public class PreDanmuLogicService {
      */
     public void     sendPreDanmu(String addressId,int danmuCount,String partyId) {
         int count = screenDanmuService.danmuCount(addressId,danmuCount,partyId);
-        logger.info("需要向客户端补充的弹幕数量:{}",count);
+        logger.info("************************************************需要向客户端补充的弹幕数量:{}",count);
         int time = 0;
         if (count > 0) {
 
