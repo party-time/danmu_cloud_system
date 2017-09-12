@@ -182,6 +182,7 @@ public class PartyController extends BaseAdminController {
                 }
             }
             if(null != ids && ids.length > 0){
+                danmuLibraryPartyService.deleteByPartyId(party.getId());
                 for(int i=0;i<ids.length;i++){
                     danmuLibraryPartyService.save(ids[i],party.getId(),densitrys[i]);
                 }
