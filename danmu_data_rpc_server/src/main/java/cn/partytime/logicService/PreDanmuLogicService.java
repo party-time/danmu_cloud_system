@@ -106,6 +106,10 @@ public class PreDanmuLogicService {
 
 
     public void initPreDanmu(String partyId){
+
+
+        resetLibraryInfotoCache(partyId);
+
         List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeDesc(partyId);
         if(ListUtils.checkListIsNotNull(danmuLibraryPartyList)){
             for(DanmuLibraryParty danmuLibraryParty:danmuLibraryPartyList){
