@@ -87,6 +87,7 @@ public class PreDanmuLogicService {
     public Map<String,Object> getPreDanmuFromCache(String partyId,double danmuCount){
         Set<String> stringSet = preDanmuLibraryCacheService.getLibraryIdFromCache(partyId,danmuCount,Double.parseDouble(String.valueOf(100)),0,1,true);
         String libaryId = "";
+        log.info("弹幕librarySet:{}",JSON.toJSONString(stringSet));
         if(SetUtils.checkSetIsNotNull(stringSet)){
             for(String str:stringSet){
                 libaryId = str;
