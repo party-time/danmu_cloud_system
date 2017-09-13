@@ -110,25 +110,6 @@ public class PreDanmuService {
         return preDanmuRepository.findAll(sort);
     }
 
-    /**
-     * 查找活动下的预制弹幕
-     * @param
-     * @return
-     */
-    /*public List<PreDanmu> findByPartyId(String partyId){
-        DanmuLibraryParty danmuLibraryParty = danmuLibraryPartyRepository.findByPartyId(partyId);
-        if( null == danmuLibraryParty){
-            throw new IllegalArgumentException("该活动没有关联弹幕库");
-        }
-        Sort sort = new Sort(Sort.Direction.ASC,"createTime");
-        return preDanmuRepository.findByDanmuLibraryId(danmuLibraryParty.getDanmuLibraryId(),sort);
-    }*/
-
-
-
-
-
-
 
     public long countByDanmuLibraryId(String dlId){
         return preDanmuRepository.countByDanmuLibraryId(dlId);
