@@ -27,21 +27,4 @@ public class DanmuCheckController extends BaseAdminController {
         restResultModel.setResult_msg("OK");
         return restResultModel;
     }
-
-
-    /*@RequestMapping(value = "/updateCheckStatus", method = RequestMethod.GET)
-    public RestResultModel updateCheckStatus(Integer checkStatus) {
-        RestResultModel restResultModel = new RestResultModel();
-        AdminUser adminUser = getAdminUser();
-        if(adminUser!=null){
-            adminUser.setCheckFlg(checkStatus);
-            adminUserService.save(adminUser);
-            restResultModel.setResult(200);
-            restResultModel.setResult_msg("OK");
-        }else{
-            restResultModel.setResult(500);
-            restResultModel.setResult_msg("更新失败");
-        }
-        return restResultModel;
-    }*/
 }
