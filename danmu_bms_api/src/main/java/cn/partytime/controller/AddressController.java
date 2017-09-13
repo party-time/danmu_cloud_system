@@ -37,7 +37,6 @@ public class AddressController {
 
     @RequestMapping(value = "/page", method = RequestMethod.GET)
     public PageResultModel addressPage(Integer pageNumber , Integer pageSize ){
-
         pageNumber = pageNumber-1;
         return  danmuAddressService.findAll(pageNumber,pageSize);
     }
