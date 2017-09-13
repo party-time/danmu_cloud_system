@@ -15,7 +15,6 @@ import lombok.Data;
 public class ResourceFileModel {
 
     private String id;
-
     /**
      * 文件原始名称
      */
