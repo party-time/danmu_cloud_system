@@ -23,6 +23,7 @@ public class FlashClientController {
 
     @RequestMapping(value = "/config", method = RequestMethod.GET)
     public JSONObject config(String code){
+
         JSONObject jsonObject = null;
         try{
             jsonObject = flashConfigService.createConfig(code);
