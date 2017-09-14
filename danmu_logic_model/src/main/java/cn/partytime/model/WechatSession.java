@@ -15,4 +15,5 @@ public class WechatSession {
 
     //private DanmuAddress danmuAddress;
 
+
 }
