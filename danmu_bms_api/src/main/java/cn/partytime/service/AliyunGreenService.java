@@ -34,7 +34,7 @@ public class AliyunGreenService {
 
 
     private void writeDanmuToFile(String text){
-        String fileName = DateUtils.dateToString(DateUtils.getCurrentDate(),"YYYY-MM-DD");
+        String fileName = DateUtils.dateToString(DateUtils.getCurrentDate(),"yyyy-MM-dd");
         String filePath = getFilePath()+ File.separator + fileName;
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append(DateUtils.dateToString(DateUtils.getCurrentDate(),"yyyy-MM-dd HH:mm:ss")).append(",");
