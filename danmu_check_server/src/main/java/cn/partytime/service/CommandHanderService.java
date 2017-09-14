@@ -158,6 +158,8 @@ public class CommandHanderService {
             for(DanmuLibraryPartyDto danmuLibraryPartyDto:danmuLibraryPartyDtoList){
                 rpcPreDanmuService.updateDensityByPartyIdAndLiBraryIdAndDensity(danmuLibraryPartyDto.getPartyId(),danmuLibraryPartyDto.getDanmuLibraryId(),danmuLibraryPartyDto.getDensitry());
             }
+
+            rpcPreDanmuService.setPreDanmuLibrarySortRule(partyId);
         }
         Map<String,Object> result = new HashMap<>();
         //消息推送给管理端
