@@ -14,4 +14,5 @@ public class WechatSession {
     private PartyLogicModel partyLogicModel;
 
     //private DanmuAddress danmuAddress;
+
 }
