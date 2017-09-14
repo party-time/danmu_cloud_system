@@ -3,6 +3,9 @@ package cn.partytime.cache.danmu;
 
 import cn.partytime.common.cachekey.danmu.PreDanmuCacheKey;
 import cn.partytime.common.constants.CommonConst;
+import cn.partytime.common.util.DateUtils;
+import cn.partytime.common.util.LongUtils;
+import cn.partytime.common.util.NumberUtils;
 import cn.partytime.redis.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,23 @@ public class PreDanmuCacheService {
     private RedisService redisService;
 
 
+
+
+    public long findPreDanmAlarmDelayTime(String partyId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_DELAY_ALARM_DELAY_TIME+partyId;
+        return LongUtils.objectConvertToLong(redisService.get(key));
+    }
+
+    public void setPreDanmAlarmDelayTime(String partyId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_DELAY_ALARM_DELAY_TIME+partyId;
+        redisService.set(key, DateUtils.getCurrentDate().getTime());
+        redisService.expire(key,60*5);
+    }
+
+    public void removePreDanmAlarmDelayTime(String partyId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_DELAY_ALARM_DELAY_TIME+partyId;
+        redisService.expire(key,0);
+    }
 
     public Object findPreDanmu(String partyId,String libraryId){
         String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+libraryId;

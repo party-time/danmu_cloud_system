@@ -2,6 +2,7 @@ package cn.partytime.service;
 
 import cn.partytime.alarmRpc.RpcDanmuAlarmService;
 import cn.partytime.cache.alarm.AlarmCacheService;
+import cn.partytime.cache.danmu.PreDanmuCacheService;
 import cn.partytime.dataRpc.RpcDanmuClientService;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.dataRpc.RpcPreDanmuService;
@@ -59,6 +60,8 @@ public class DanmuSendService {
     @Autowired
     private RpcPreDanmuService rpcPreDanmuService;
 
+    @Autowired
+    private PreDanmuCacheService preDanmuCacheService;
     /**
      * 发送预制弹幕
      *
@@ -68,17 +71,25 @@ public class DanmuSendService {
         Date nowDate = DateUtils.getCurrentDate();
         Map<String,Object> preDanmuMap= rpcPreDanmuService.getPreDanmuFromCache(partyId,danmuCount);
 
-
-
         logger.info("获取的预制弹幕信息：{}",JSON.toJSONString(preDanmuMap));
         if (preDanmuMap == null) {
             //获取活动信息
             PartyModel partyModel =rpcPartyService.getPartyByPartyId(partyId);
             int cacheCount = alarmCacheService.findAlarmCount(addressId,AlarmKeyConst.ALARM_KEY_PREDANMU);
             if(partyModel.getType()==1 && cacheCount==0){
-                Map<String,Object> map = new HashMap<String,Object>();
-                //service.messageHandler(preDanmuMessageService, new MessageObject<Map<String,Object>>(LogCodeConst.DanmuLogCode.PREDANMU_ISNULL_CODE,map));
-                rpcDanmuAlarmService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,addressId,"null");
+
+                long time = preDanmuCacheService.findPreDanmAlarmDelayTime(partyId);
+                if(time==0){
+                    preDanmuCacheService.setPreDanmAlarmDelayTime(partyId);
+                    return;
+                }
+                Date now = DateUtils.getCurrentDate();
+                long subMinute = (now.getTime()-time)/1000/60;
+                if(subMinute>1){
+                    rpcDanmuAlarmService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,addressId,"null");
+                    preDanmuCacheService.removePreDanmAlarmDelayTime(partyId);
+                }
+
             }
             return;
         }

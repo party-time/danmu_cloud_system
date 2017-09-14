@@ -11,5 +11,8 @@ public class PreDanmuCacheKey {
     public static final String PARTY_PREDANMU_CACHE_LIST="predanmu:cache:list:";
 
 
+    public static final String PARTY_PREDANMU_DELAY_ALARM_DELAY_TIME="party:predanmu:alarm:delay:time:";
+
+
 
 }
