@@ -731,6 +731,7 @@ public class CommandHanderService {
             party.setActivityStartTime(now);
             party.setStatus(status);
             rpcPartyService.saveParty(party);
+            map.put("time",now.getTime());
             pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, map)));
 
         } else if (status == 1) {
