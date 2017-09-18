@@ -12,7 +12,7 @@ import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.DanmuClientModel;
-import cn.partytime.service.ClientServiceAlarmService;
+import cn.partytime.service.DanmuAlarmService;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class RpcClientAlarmService {
     private RpcDanmuAddressService rpcDanmuAddressService;
 
     @Autowired
-    private ClientServiceAlarmService clientServiceAlarmService;
+    private DanmuAlarmService danmuAlarmService;
 
     @Autowired
     private MessageHandlerService messageHandlerService;
@@ -88,6 +88,6 @@ public class RpcClientAlarmService {
         MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(type,map);
         mapMessageObject.setValue(0);
         mapMessageObject.setThreshold(0);
-        messageHandlerService.messageHandler(clientServiceAlarmService,mapMessageObject);
+        messageHandlerService.messageHandler(danmuAlarmService,mapMessageObject);
     }
 }
