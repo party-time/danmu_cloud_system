@@ -98,6 +98,10 @@ public class CommandHanderService {
     private RpcPreDanmuService rpcPreDanmuService;
 
 
+    @Autowired
+    private RpcDanmuAddressService danmuAddressService;
+
+
 
     public void commandHandler(Map<String, Object> map, Channel channel) {
         //类型
@@ -892,6 +896,13 @@ public class CommandHanderService {
             result.put("specialVideo", functionService.getSpecialMovStatus(partyId));
             //活动名称
             result.put("partyName", party.getName());
+
+
+            DanmuAddressModel danmuAddressModel = danmuAddressService.findById(addressId);
+
+
+
+            result.put("addressName", danmuAddressModel.getName());
             //初始化内容发送个管理界面
             sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
             checkAdminCacheService.addCheckAdminCount(partyType,1);
