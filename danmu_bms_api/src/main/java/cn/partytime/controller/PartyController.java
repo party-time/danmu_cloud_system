@@ -321,6 +321,7 @@ public class PartyController extends BaseAdminController {
         try{
             canUse = rpcPartyService.findCurrentParyIsInProgress(partyModel);
         }catch (Exception e){
+
             log.error("",e);
         }
         if(null != updatePartyModel){
