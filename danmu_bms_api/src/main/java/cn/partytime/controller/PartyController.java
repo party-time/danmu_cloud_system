@@ -317,7 +317,12 @@ public class PartyController extends BaseAdminController {
         UpdatePartyModel updatePartyModel = bmsPartyService.findByPartyId(partyId);
         PartyModel partyModel = new PartyModel();
         BeanUtils.copyProperties(partyModel,updatePartyModel.getParty());
-        boolean canUse = rpcPartyService.findCurrentParyIsInProgress(partyModel);
+        boolean canUse = false;
+        try{
+            canUse = rpcPartyService.findCurrentParyIsInProgress(partyModel);
+        }catch (Exception e){
+            log.error("",e);
+        }
         if(null != updatePartyModel){
             if(canUse){
                 updatePartyModel.setCanUse(1);
