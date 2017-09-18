@@ -97,6 +97,8 @@ public class RpcPartyService {
                }
                if(endDate==null){
                    endDate = DateUtils.getCurrentDate();
+               }else{
+                   return false;
                }
                long subMinute = DateUtils.subMinute(startDate,endDate);
                if(subMinute<=movieMinute){
