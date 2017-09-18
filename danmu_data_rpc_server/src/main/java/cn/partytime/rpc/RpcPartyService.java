@@ -88,6 +88,7 @@ public class RpcPartyService {
            if(ListUtils.checkListIsNotNull(movieScheduleList)){
                MovieSchedule  movieSchedule = movieScheduleList.get(0);
                Date endDate = movieSchedule.getEndTime();
+               Date startDate = movieSchedule.getStartTime();
                long movieMinute = 0;
                if(party.getMovieTime()!=0){
                    movieMinute = 180;
@@ -97,8 +98,8 @@ public class RpcPartyService {
                if(endDate==null){
                    endDate = DateUtils.getCurrentDate();
                }
-               long subMinute = DateUtils.subMinute(endDate,endDate);
-               if(subMinute>=movieMinute){
+               long subMinute = DateUtils.subMinute(startDate,endDate);
+               if(subMinute<=movieMinute){
                    return true;
                }else{
                    return false;
