@@ -6,8 +6,8 @@ import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.message.bean.MessageObject;
-import cn.partytime.service.AdminIsOnLineAlarmService;
 import cn.partytime.message.proxy.MessageHandlerService;
+import cn.partytime.service.DanmuAlarmService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +30,7 @@ import java.util.Map;
 public class RpcAdminAlarmService {
 
     @Autowired
-    private AdminIsOnLineAlarmService adminIsOnLineAlarmService;
+    private DanmuAlarmService danmuAlarmService;
 
 
     @Autowired
@@ -75,7 +75,7 @@ public class RpcAdminAlarmService {
             MessageObject<Map<String,String>>  mapMessageObject = new MessageObject<Map<String,String>>(type,map);
             mapMessageObject.setValue(0);
             mapMessageObject.setThreshold(0);
-            messageHandlerService.messageHandler(adminIsOnLineAlarmService,mapMessageObject);
+            messageHandlerService.messageHandler(danmuAlarmService,mapMessageObject);
         }
     }
 

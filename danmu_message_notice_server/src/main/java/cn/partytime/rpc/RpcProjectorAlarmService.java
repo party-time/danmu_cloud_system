@@ -7,8 +7,8 @@ import cn.partytime.dataRpc.RpcDanmuClientService;
 import cn.partytime.logicService.CommonDataService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.proxy.MessageHandlerService;
-import cn.partytime.service.ProjectorCloseAlarmService;
 import cn.partytime.model.DanmuClientModel;
+import cn.partytime.service.DanmuAlarmService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class RpcProjectorAlarmService {
     private static final Logger logger = LoggerFactory.getLogger(RpcProjectorAlarmService.class);
 
     @Autowired
-    private ProjectorCloseAlarmService projectorCloseAlarmService;
+    private DanmuAlarmService danmuAlarmService;
 
     @Autowired
     private MessageHandlerService messageHandlerService;
@@ -76,7 +76,7 @@ public class RpcProjectorAlarmService {
             MessageObject<Map<String,String>>  mapMessageObject = new MessageObject<Map<String,String>>(type,map);
             mapMessageObject.setValue(0);
             mapMessageObject.setThreshold(0);
-            messageHandlerService.messageHandler(projectorCloseAlarmService,mapMessageObject);
+            messageHandlerService.messageHandler(danmuAlarmService,mapMessageObject);
         }
     }
 

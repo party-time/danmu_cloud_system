@@ -5,9 +5,9 @@ import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.dataRpc.RpcDanmuClientService;
 import cn.partytime.logicService.CommonDataService;
 import cn.partytime.message.bean.MessageObject;
-import cn.partytime.service.BulbLifeAlarmService;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.model.DanmuClientModel;
+import cn.partytime.service.DanmuAlarmService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,7 +31,7 @@ public class RpcBulbAlarmService {
 
     private static final Logger logger = LoggerFactory.getLogger(RpcBulbAlarmService.class);
     @Autowired
-    private BulbLifeAlarmService bulbLifeAlarmService;
+    private DanmuAlarmService danmuAlarmService;
 
     @Autowired
     private RpcDanmuClientService danmuClientService;
@@ -54,7 +53,7 @@ public class RpcBulbAlarmService {
             MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.CLientLogCode.BULB_LIFE_TIME,map);
             mapMessageObject.setValue(0);
             mapMessageObject.setValue(0);
-            messageHandlerService.messageHandler(bulbLifeAlarmService,mapMessageObject);
+            messageHandlerService.messageHandler(danmuAlarmService,mapMessageObject);
         }
 
     }

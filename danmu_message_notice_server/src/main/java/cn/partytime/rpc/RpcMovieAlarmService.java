@@ -1,18 +1,15 @@
 package cn.partytime.rpc;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
-import cn.partytime.cache.party.PartyAlarmCacheService;
 import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.logicService.CommonDataService;
 import cn.partytime.message.bean.MessageObject;
-import cn.partytime.service.MovieTimeAlaramService;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.model.PartyModel;
+import cn.partytime.service.DanmuAlarmService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +27,7 @@ import java.util.Map;
 @Slf4j
 public class RpcMovieAlarmService {
     @Autowired
-    private MovieTimeAlaramService movieTimeAlaramService;
+    private DanmuAlarmService danmuAlarmService;
 
     @Autowired
     private MessageHandlerService messageHandlerService;
@@ -101,7 +98,7 @@ public class RpcMovieAlarmService {
             MessageObject<Map<String,String>>  mapMessageObject = new MessageObject<Map<String,String>>(type,map);
             mapMessageObject.setValue(0);
             mapMessageObject.setThreshold(0);
-            messageHandlerService.messageHandler(movieTimeAlaramService,mapMessageObject);
+            messageHandlerService.messageHandler(danmuAlarmService,mapMessageObject);
         }
     }
 }
