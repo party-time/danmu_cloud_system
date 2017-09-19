@@ -39,7 +39,7 @@ public class PreDanmuLogicService {
 
     public void danmuListenHandler(String partyId) {
 
-        rpcPreDanmuService.initPreDanmuIntoCache(partyId);
+        //rpcPreDanmuService.initPreDanmuIntoCache(partyId);
         /*List<String> libraryIdList = rpcPreDanmuService.findDanmuLibraryIdByParty(partyId);
         if(ListUtils.checkListIsNull(libraryIdList)){
             log.info("未找到弹幕库");

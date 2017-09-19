@@ -258,12 +258,12 @@ public class MovieLogicService {
                     movieSchedule.setEndTime(DateUtils.getCurrentDate());
                     movieSchedule.setUpdateTime(DateUtils.getCurrentDate());
                     movieSchedule.setClientEndTime(clientTime);
-                    //stop movie
-                    stopMovie(movieSchedule,party);
-
 
                     //清空预置弹幕
                     clearPreDanmu(addressId,partyId);
+
+                    //stop movie
+                    stopMovie(movieSchedule,party);
 
                     sendPartyStatusToClient(partyId,"3",addressId,clientTime);
                     restResultModel = new RestResultModel();
@@ -279,10 +279,12 @@ public class MovieLogicService {
 
                     movieSchedule.setClientEndTime(clientTime);
 
-                    stopMovie(movieSchedule,party);
-
                     //清空预置弹幕
                     clearPreDanmu(addressId,partyId);
+
+                    stopMovie(movieSchedule,party);
+
+
 
                     sendPartyStatusToClient(partyId,"3",addressId,clientTime);
                     restResultModel = new RestResultModel();
@@ -477,6 +479,9 @@ public class MovieLogicService {
             party.setMovieTime(time);
             party = partyService.saveParty(party);
         }
+
+        //加载预置弹幕
+        rpcPreDanmuService.initPreDanmuIntoCache(party.getId());
         //TODO:
         rpcMovieAlarmService.movieTime(party.getId(),movieSchedule.getAddressId(),time);
 

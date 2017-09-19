@@ -163,9 +163,12 @@ public class PartyController extends BaseAdminController {
         try {
             if( StringUtils.isEmpty(id)){
                 party = partyService.save(name, type, movieAlias ,startTime, endTime, shortName,danmuLibraryId,dmDensity);
-
             }else{
                 party = partyService.update(id,name,type,movieAlias,danmuLibraryId,dmDensity);
+            }
+            if(party!=null){
+                //加载预置弹幕
+                rpcPreDanmuService.initPreDanmuIntoCache(party.getId());
             }
 
             //

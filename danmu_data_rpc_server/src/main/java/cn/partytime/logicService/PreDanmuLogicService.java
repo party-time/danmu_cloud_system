@@ -179,6 +179,6 @@ public class PreDanmuLogicService {
             log.info("获取预置弹幕的数量:{}",0);
         }
         //预制弹幕缓存时间
-        preDanmuCacheService.setPreDanmuIntoCacheUnderPartyTime(partyId,libraryId, 60 * 60 * 24);
+        preDanmuCacheService.setPreDanmuIntoCacheUnderPartyTime(partyId,libraryId, 60 * 60 * 24*7);
     }
 }

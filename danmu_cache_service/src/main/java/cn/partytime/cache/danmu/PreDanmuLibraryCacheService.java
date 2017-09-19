@@ -33,7 +33,7 @@ public class PreDanmuLibraryCacheService {
         String key = PreDanmuLibraryCacheKey.PARTY_PREDANMU_LIBRARY_SORT_RULE +partyId;
         redisService.setSortSet(key,score,value);
         if(time==0){
-            redisService.expire(key,60*60*24);
+            redisService.expire(key,60*60*24*7);
         }
     }
 
