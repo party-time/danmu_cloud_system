@@ -61,6 +61,10 @@ public class PreDanmuLogicService {
 
 
     private int resetLibraryInfotoCache(String partyId){
+
+        //清除以前的旧的记录
+        preDanmuLibraryCacheService.removePreDanmuLibrary(partyId);
+
         List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeAsc(partyId);
         int sum = 0;
         //String key = PartyCacheKey
@@ -76,10 +80,7 @@ public class PreDanmuLogicService {
                 preDanmuLibraryCacheService.setPreDanmuLibraryIntoCache(partyId,danmuLibraryParty.getDanmuLibraryId(),sum,0);
             }
             partyCacheService.setPartyDensity(partyId,sum,0);
-        }else{
-            preDanmuLibraryCacheService.removePreDanmuLibrary(partyId);
         }
-
         return sum;
 
     }
@@ -87,28 +88,73 @@ public class PreDanmuLogicService {
     public Map<String,Object> getPreDanmuFromCache(String partyId,double danmuCount){
         Set<String> stringSet = preDanmuLibraryCacheService.getLibraryIdFromCache(partyId,danmuCount,Double.parseDouble(String.valueOf(100)),0,1,true);
         String libaryId = "";
-        log.info("弹幕librarySet:{}",JSON.toJSONString(stringSet));
+        log.info("将要从弹幕库:{}中获取弹幕",JSON.toJSONString(stringSet));
         if(SetUtils.checkSetIsNotNull(stringSet)){
             for(String str:stringSet){
                 libaryId = str;
             }
             Object object = preDanmuCacheService.findPreDanmu(partyId,libaryId);
             if(object==null){
-                preDanmuLibraryCacheService.removeDanmuLibraryIdFromCache(partyId,libaryId);
-                return getPreDanmuFromCache(partyId,danmuCount);
-            }else {
+                log.info("从弹幕库:{}中获取弹幕:{}",libaryId,object);
+                stringSet = preDanmuLibraryCacheService.getAllLibraryIdFromCache(partyId);
+                log.info("当前活动的所有预置弹幕库:{}",JSON.toJSONString(stringSet));
+                stringSet.remove(libaryId);
+                if(SetUtils.checkSetIsNotNull(stringSet)){
+                    for(String str:stringSet){
+                        object = preDanmuCacheService.findPreDanmu(partyId,str);
+                        if(object!=null){
+                            log.info("从弹幕库:{}中没有获取到弹幕,将从:{}中获取弹幕:{}",libaryId,str,object);
+                            return ((Map<String,Object>)JSON.parseObject(String.valueOf(object)));
+                        }
+                    }
+                }
+            }else{
                 return ((Map<String,Object>)JSON.parseObject(String.valueOf(object)));
             }
         }
+
         return null;
     }
 
 
+    /**
+     * 是否重新加载预置弹幕
+     * @param partyId 活动编号
+     */
+    public void checkIsReInitPreDanmu(String partyId){
+        log.info("验证是否要重新加载预置弹幕");
+        List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeAsc(partyId);
+        Set<String> stringSet = preDanmuLibraryCacheService.getAllLibraryIdFromCache(partyId);
+        if(ListUtils.checkListIsNotNull(danmuLibraryPartyList)){
+            Set<String> tempSet = new HashSet<>();
+            danmuLibraryPartyList.forEach(temp->tempSet.add(temp.getDanmuLibraryId()));
+            if(tempSet.equals(stringSet)){
+                log.info("缓存中的预置弹幕库与管理员设置预置弹幕库一致");
+                //判断缓存中的每个弹幕库是否有弹幕，如果没有重新加载
+                for(String str:tempSet){
+                    long size = preDanmuCacheService.getPreDanmuListSize(partyId,str);
+                    if(size==0){
+                        log.info("缓存中的预置弹幕库:{}中的弹幕数量是0，需要将此预置弹幕中的弹幕加载到缓存中");
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                addAllLibraryUnderPartyIntoCache(str,partyId);
+                            }
+                        }).start();
+                    }
+                }
+            }else{
+                //重新初始化弹幕缓存队列
+                initPreDanmu(partyId);
+            }
+        }
+    }
 
+    /**
+     * 初始化预置弹幕到缓存中
+     * @param partyId
+     */
     public void initPreDanmu(String partyId){
-
-
-        resetLibraryInfotoCache(partyId);
 
         List<DanmuLibraryParty> danmuLibraryPartyList = danmuLibraryPartyRepository.findByPartyIdOrderByCreateTimeAsc(partyId);
         if(ListUtils.checkListIsNotNull(danmuLibraryPartyList)){
@@ -121,8 +167,16 @@ public class PreDanmuLogicService {
                 }).start();
             }
         }
+
+        //将预置弹幕库加载到缓存中
+        resetLibraryInfotoCache(partyId);
     }
 
+    /**
+     * 将预制弹幕加载到缓存中
+     * @param libraryId
+     * @param partyId
+     */
     private void addAllLibraryUnderPartyIntoCache(String libraryId,String partyId){
         long count = preDanmuService.countByDanmuLibraryId(libraryId);
         long index = 0;
@@ -135,7 +189,6 @@ public class PreDanmuLogicService {
         List<PreDanmuModel> preDanmuModelList = new ArrayList<PreDanmuModel>();
         for(int i=0; i<index; i++){
             Page<PreDanmu> preDanmuModelPage = preDanmuService.findPageByDLId(i,pageSize,libraryId);
-            //preDanmuModelList.addAll(preDanmuModelTempList);
             if(preDanmuModelPage.getContent()!=null){
                 setPreDanmuIntoCache(partyId,libraryId,preDanmuModelPage.getContent());
             }
@@ -173,7 +226,6 @@ public class PreDanmuLogicService {
                 }
                 preDanmuMap.put("type",cmdTempAllData.getKey());
                 preDanmuCacheService.addPreDanmuIntoCacheUnderParty(partyId,libraryId, JSON.toJSONString(preDanmuMap));
-                //preDanmuModelList.forEach(preDanmuModel -> redisService.setValueToList(preDanmuCacheKey, JSON.toJSONString(preDanmuModel)));
             }
         }else{
             log.info("获取预置弹幕的数量:{}",0);

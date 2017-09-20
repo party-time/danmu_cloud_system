@@ -62,9 +62,22 @@ public class RpcPreDanmuService {
         return preDanmuLogicService.getPartyDanmuDensity(partyId);
     }
 
+    /**
+     * 初始化弹幕队列
+     * @param partyId
+     */
     @RequestMapping(value = "/initPreDanmuIntoCache" ,method = RequestMethod.GET)
     public void initPreDanmuIntoCache(@RequestParam String partyId) {
         preDanmuLogicService.initPreDanmu(partyId);
+    }
+
+    /**
+     * 初始化弹幕队列
+     * @param partyId
+     */
+    @RequestMapping(value = "/checkIsReInitPreDanmuIntoCache" ,method = RequestMethod.GET)
+    public void checkIsReInitPreDanmuIntoCache(@RequestParam String partyId) {
+        preDanmuLogicService.checkIsReInitPreDanmu(partyId);
     }
 
     @RequestMapping(value = "/getPreDanmuFromCache" ,method = RequestMethod.GET)

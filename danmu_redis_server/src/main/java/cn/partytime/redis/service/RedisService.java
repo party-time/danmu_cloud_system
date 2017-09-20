@@ -137,6 +137,14 @@ public class RedisService {
         return redisTemplate.opsForList().leftPushAll(key, list);
     }
 
+
+    public long getListLength(String key){
+        if (key == null || key.equals("")) {
+            return 0L;
+        }
+        return redisTemplate.opsForList().size(key);
+    }
+
     public long setValueToList(String key, Object object) {
         if (key == null || key.equals("")) {
             return 0L;

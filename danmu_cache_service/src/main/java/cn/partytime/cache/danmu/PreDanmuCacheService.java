@@ -61,6 +61,11 @@ public class PreDanmuCacheService {
         redisService.setValueToList(key, danmu);
     }
 
+    public long getPreDanmuListSize(String partyId,String libraryId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+libraryId;
+        return redisService.getListLength(key);
+    }
+
     /**
      * 设置预置弹幕时间
      * @param partyId

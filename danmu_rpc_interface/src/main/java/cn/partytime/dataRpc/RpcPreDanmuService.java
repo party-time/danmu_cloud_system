@@ -29,6 +29,9 @@ public interface RpcPreDanmuService {
     @RequestMapping(value = "/rpcRepDanmu/initPreDanmuIntoCache" ,method = RequestMethod.GET)
     public void initPreDanmuIntoCache(@RequestParam(name = "partyId") String partyId);
 
+    @RequestMapping(value = "/rpcRepDanmu/checkIsReInitPreDanmuIntoCache" ,method = RequestMethod.GET)
+    public void checkIsReInitPreDanmuIntoCache(@RequestParam(name = "partyId") String partyId);
+
     @RequestMapping(value = "/rpcRepDanmu/getPreDanmuFromCache" ,method = RequestMethod.GET)
     public Map<String,Object> getPreDanmuFromCache(@RequestParam(name = "partyId") String partyId, @RequestParam(name = "danmuCount") int danmuCount);
 

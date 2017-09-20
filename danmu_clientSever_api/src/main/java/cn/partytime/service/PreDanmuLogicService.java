@@ -38,7 +38,7 @@ public class PreDanmuLogicService {
 
 
     public void danmuListenHandler(String partyId) {
-
+        rpcPreDanmuService.checkIsReInitPreDanmuIntoCache(partyId);
         //rpcPreDanmuService.initPreDanmuIntoCache(partyId);
         /*List<String> libraryIdList = rpcPreDanmuService.findDanmuLibraryIdByParty(partyId);
         if(ListUtils.checkListIsNull(libraryIdList)){
@@ -46,6 +46,7 @@ public class PreDanmuLogicService {
             return;
         }
         libraryIdList.forEach(libraryId->addAllLibraryUnderPartyIntoCache(libraryId,partyId));*/
+
     }
 
     private void addAllLibraryUnderPartyIntoCache(String libraryId,String partyId){

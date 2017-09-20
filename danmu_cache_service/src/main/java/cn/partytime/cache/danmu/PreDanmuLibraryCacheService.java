@@ -19,6 +19,11 @@ public class PreDanmuLibraryCacheService {
     private RedisService redisService;
 
 
+    public Set<String> getAllLibraryIdFromCache(String partyId){
+        String key = PreDanmuLibraryCacheKey.PARTY_PREDANMU_LIBRARY_SORT_RULE +partyId;
+        return redisService.getSortSetByRnage(key,0,-1,true);
+    }
+
     public Set<String> getLibraryIdFromCache(String partyId,Double minScore, Double maxScore,long startRange, long endRange,boolean orderByDesc){
         String key = PreDanmuLibraryCacheKey.PARTY_PREDANMU_LIBRARY_SORT_RULE +partyId;
         return redisService.findSortSetRangeByScoreWithScores(key,minScore,maxScore,startRange,endRange,true);

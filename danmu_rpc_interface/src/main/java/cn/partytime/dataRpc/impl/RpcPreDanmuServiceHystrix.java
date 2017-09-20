@@ -26,6 +26,11 @@ public class RpcPreDanmuServiceHystrix implements RpcPreDanmuService {
     }
 
     @Override
+    public void checkIsReInitPreDanmuIntoCache(String partyId) {
+
+    }
+
+    @Override
     public Map<String,Object> getPreDanmuFromCache(String partyId, int danmuCount) {
         return null;
     }
