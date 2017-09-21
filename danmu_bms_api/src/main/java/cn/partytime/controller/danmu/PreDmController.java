@@ -337,7 +337,7 @@ public class PreDmController  extends BaseAdminController {
         return restResultModel;
     }
 
-    @RequestMapping(value = "/admin/preDanmu/downloadTemplet", method = RequestMethod.POST)
+    @RequestMapping(value = "/preDanmu/downloadTemplet", method = RequestMethod.POST)
     public ResponseEntity<byte[]> downloadTemplet() {
         try{
             File file=new File(templetPath+"/preDanmu.xls");
@@ -355,7 +355,7 @@ public class PreDmController  extends BaseAdminController {
         }
         return null;
     }
-    @RequestMapping(value = "/admin/preDanmu/upload/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/preDanmu/upload/{id}", method = RequestMethod.POST)
     public RestResultModel uploadFile(@RequestParam("uploadFileName") MultipartFile multipartFile, @PathVariable("id") String id, HttpServletRequest request)  {
         RestResultModel restResultModel = new RestResultModel();
 
