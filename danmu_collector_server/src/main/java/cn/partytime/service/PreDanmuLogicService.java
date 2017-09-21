@@ -24,6 +24,9 @@ public class PreDanmuLogicService {
     @Autowired
     private DanmuSendService danmuSendService;
 
+    @Autowired
+    private ClientPartyService clientPartyService;
+
     /**
      * 发送预制弹幕
      *
@@ -31,8 +34,9 @@ public class PreDanmuLogicService {
      */
     public void     sendPreDanmu(String addressId,int danmuCount,String partyId) {
         int count = screenDanmuService.danmuCount(addressId,danmuCount,partyId);
-        logger.info("************************************************需要向客户端补充的弹幕数量:{}",count);
+        logger.info("************需要向活动:{}客户端补充的弹幕数量:{}",partyId,count);
         int time = 0;
+
         if (count > 0) {
 
             for (int i = 1; i <= count; i++) {
@@ -53,21 +57,12 @@ public class PreDanmuLogicService {
                 }
                 int addressDanmuCount = screenDanmuService.getAddressDanmuCount(addressId);
                 int count2 = screenDanmuService.danmuCount(addressId,addressDanmuCount,partyId);
-                if(count2>0){
+                String cachePartyId = clientPartyService.findCurrentPatyId(addressId);
+                logger.info("当前活动编号:{},cache中的互动编号是:{}",partyId,cachePartyId);
+                if(count2>0 && partyId.equals(cachePartyId)){
+
                     danmuSendService.sendPreDanmu(addressId,partyId,count2);
                 }
-                /*String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;
-                Object object =  redisService.get(key);
-                if(object!=null){
-                    DanmuClientModel danmuClientModel = JSON.parseObject(String.valueOf(object),DanmuClientModel.class);
-                    int count2 = screenDanmuService.danmuCount(addressId,danmuClientModel.getDanmuCount(),partyId);
-                    logger.info("向客户端补充弹幕的时候，此时客户端弹幕数:{}",count2);
-                    if(count2>0){
-                        danmuSendService.sendPreDanmu(addressId,partyId);
-                    }else{
-                        return;
-                    }
-                }*/
             }
         }
     }

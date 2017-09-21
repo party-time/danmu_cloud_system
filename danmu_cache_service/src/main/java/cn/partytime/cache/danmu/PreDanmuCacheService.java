@@ -21,32 +21,32 @@ public class PreDanmuCacheService {
 
 
 
-    public long findPreDanmAlarmDelayTime(String partyId){
-        String key = PreDanmuCacheKey.PARTY_PREDANMU_DELAY_ALARM_DELAY_TIME+partyId;
+    public long findPreDanmAlarmDelayTime(String partyId,String addressId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_DELAY_ALARM_DELAY_TIME+partyId+ CommonConst.COLON+addressId;
         return LongUtils.objectConvertToLong(redisService.get(key));
     }
 
-    public void setPreDanmAlarmDelayTime(String partyId){
-        String key = PreDanmuCacheKey.PARTY_PREDANMU_DELAY_ALARM_DELAY_TIME+partyId;
+    public void setPreDanmAlarmDelayTime(String partyId,String addressId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_DELAY_ALARM_DELAY_TIME+partyId+ CommonConst.COLON+addressId;
         redisService.set(key, DateUtils.getCurrentDate().getTime());
         redisService.expire(key,60*5);
     }
 
-    public void removePreDanmAlarmDelayTime(String partyId){
-        String key = PreDanmuCacheKey.PARTY_PREDANMU_DELAY_ALARM_DELAY_TIME+partyId;
+    public void removePreDanmAlarmDelayTime(String partyId,String addressId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_DELAY_ALARM_DELAY_TIME+partyId+ CommonConst.COLON+addressId;
         redisService.expire(key,0);
     }
 
-    public Object findPreDanmu(String partyId,String libraryId){
-        String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+libraryId;
+    public Object findPreDanmu(String partyId,String addressId,String libraryId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
         Object object =  redisService.popFromList(key);
         log.info("object:{}",object);
         return object;
     }
 
 
-    public void removePreDanmuFromCache(String partyId,String libraryId){
-        String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+libraryId;
+    public void removePreDanmuFromCache(String partyId,String addressId,String libraryId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
         redisService.expire(key,0);
     }
 
@@ -56,13 +56,13 @@ public class PreDanmuCacheService {
      * @param libraryId
      * @param danmu
      */
-    public void addPreDanmuIntoCacheUnderParty(String partyId,String libraryId, String danmu){
-        String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+libraryId;
+    public void addPreDanmuIntoCacheUnderParty(String partyId,String addressId, String libraryId, String danmu){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
         redisService.setValueToList(key, danmu);
     }
 
-    public long getPreDanmuListSize(String partyId,String libraryId){
-        String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+libraryId;
+    public long getPreDanmuListSize(String partyId,String addressId, String libraryId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
         return redisService.getListLength(key);
     }
 
@@ -72,8 +72,8 @@ public class PreDanmuCacheService {
      * @param libraryId
      * @param time
      */
-    public void setPreDanmuIntoCacheUnderPartyTime(String partyId,String libraryId, long time){
-        String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+libraryId;
+    public void setPreDanmuIntoCacheUnderPartyTime(String partyId,String addressId,String libraryId, long time){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
         redisService.expire(key,time);
     }
 }

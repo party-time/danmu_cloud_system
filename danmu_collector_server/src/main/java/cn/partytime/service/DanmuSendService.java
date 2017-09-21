@@ -69,7 +69,7 @@ public class DanmuSendService {
      */
     public void sendPreDanmu(String addressId,String partyId,int danmuCount) {
         Date nowDate = DateUtils.getCurrentDate();
-        Map<String,Object> preDanmuMap= rpcPreDanmuService.getPreDanmuFromCache(partyId,danmuCount);
+        Map<String,Object> preDanmuMap= rpcPreDanmuService.getPreDanmuFromCache(partyId,addressId,danmuCount);
 
         logger.info("获取的预制弹幕信息：{}",JSON.toJSONString(preDanmuMap));
         if (preDanmuMap == null) {
@@ -78,16 +78,16 @@ public class DanmuSendService {
             int cacheCount = alarmCacheService.findAlarmCount(addressId,AlarmKeyConst.ALARM_KEY_PREDANMU);
             if(partyModel.getType()==1 && cacheCount==0){
 
-                long time = preDanmuCacheService.findPreDanmAlarmDelayTime(partyId);
+                long time = preDanmuCacheService.findPreDanmAlarmDelayTime(partyId,addressId);
                 if(time==0){
-                    preDanmuCacheService.setPreDanmAlarmDelayTime(partyId);
+                    preDanmuCacheService.setPreDanmAlarmDelayTime(partyId,addressId);
                     return;
                 }
                 Date now = DateUtils.getCurrentDate();
                 long subMinute = (now.getTime()-time)/1000/60;
                 if(subMinute>1){
                     rpcDanmuAlarmService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,addressId,"null");
-                    preDanmuCacheService.removePreDanmAlarmDelayTime(partyId);
+                    preDanmuCacheService.removePreDanmAlarmDelayTime(partyId,addressId);
                 }
 
             }

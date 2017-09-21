@@ -37,8 +37,8 @@ public class PreDanmuLogicService {
     private RedisService redisService;
 
 
-    public void danmuListenHandler(String partyId) {
-        rpcPreDanmuService.checkIsReInitPreDanmuIntoCache(partyId);
+    public void danmuListenHandler(String partyId,String addressId) {
+        rpcPreDanmuService.checkIsReInitPreDanmuIntoCache(partyId,addressId);
         //rpcPreDanmuService.initPreDanmuIntoCache(partyId);
         /*List<String> libraryIdList = rpcPreDanmuService.findDanmuLibraryIdByParty(partyId);
         if(ListUtils.checkListIsNull(libraryIdList)){

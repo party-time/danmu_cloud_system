@@ -1,5 +1,6 @@
 package cn.partytime.logicService;
 
+import cn.partytime.cache.party.PartyCacheService;
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
 import cn.partytime.common.constants.PartyConst;
 import cn.partytime.common.util.DateUtils;
@@ -52,6 +53,10 @@ public class PartyLogicService {
     @Autowired
     private PreDanmuLogicService preDanmuLogicService;
 
+
+    @Autowired
+    private PartyCacheService partyCacheService;
+
     public Party getPartyId(String addressId) {
         Party partyResult = null;
         //通过日期查找活动
@@ -103,6 +108,10 @@ public class PartyLogicService {
         }
         if(partyLogicModel!=null){
             partyLogicModel.setAddressType(danmuAddressType);
+
+            partyCacheService.setCurrentParty(addressId,partyLogicModel.getPartyId());
+        }else{
+            partyCacheService.removeCurrentParty(addressId);
         }
         return partyLogicModel;
     }

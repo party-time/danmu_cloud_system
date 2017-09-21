@@ -207,7 +207,7 @@ public class MovieService {
                     movieScheduleService.updateMovieSchedule(movieSchedule);
 
                     //redisService.expire(FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId,0);
-                    rpcPreDanmuService.removePreDanmuCache(partyId);
+                    rpcPreDanmuService.removePreDanmuCache(partyId,addressId);
 
 
 
@@ -228,7 +228,7 @@ public class MovieService {
                     movieScheduleService.updateMovieSchedule(movieSchedule);
 
 
-                    rpcPreDanmuService.removePreDanmuCache(partyId);
+                    rpcPreDanmuService.removePreDanmuCache(partyId,addressId);
 
                     //清空预置弹幕
                     clearPreDanmu(addressId,partyId);
@@ -257,6 +257,8 @@ public class MovieService {
 
         key = PartyCacheKey.CURRENT_PARTY+addressId;
         redisService.expire(key,0);
+
+
 
 
         String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;

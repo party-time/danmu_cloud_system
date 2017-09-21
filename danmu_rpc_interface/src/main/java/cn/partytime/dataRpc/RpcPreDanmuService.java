@@ -27,19 +27,19 @@ public interface RpcPreDanmuService {
     public int getPartyDanmuDensity(@RequestParam(name = "partyId") String partyId);
 
     @RequestMapping(value = "/rpcRepDanmu/initPreDanmuIntoCache" ,method = RequestMethod.GET)
-    public void initPreDanmuIntoCache(@RequestParam(name = "partyId") String partyId);
+    public void initPreDanmuIntoCache(@RequestParam(name = "partyId") String partyId,@RequestParam(name = "addressId") String addressId);
 
     @RequestMapping(value = "/rpcRepDanmu/checkIsReInitPreDanmuIntoCache" ,method = RequestMethod.GET)
-    public void checkIsReInitPreDanmuIntoCache(@RequestParam(name = "partyId") String partyId);
+    public void checkIsReInitPreDanmuIntoCache(@RequestParam(name = "partyId") String partyId,@RequestParam(name = "addressId") String addressId);
 
     @RequestMapping(value = "/rpcRepDanmu/getPreDanmuFromCache" ,method = RequestMethod.GET)
-    public Map<String,Object> getPreDanmuFromCache(@RequestParam(name = "partyId") String partyId, @RequestParam(name = "danmuCount") int danmuCount);
+    public Map<String,Object> getPreDanmuFromCache(@RequestParam(name = "partyId") String partyId,@RequestParam(name = "addressId") String addressId, @RequestParam(name = "danmuCount") int danmuCount);
 
     @RequestMapping(value = "/rpcRepDanmu/setPreDanmuLibrarySortRule" ,method = RequestMethod.GET)
     public void setPreDanmuLibrarySortRule(@RequestParam(name = "partyId") String partyId) ;
 
     @RequestMapping(value = "/rpcRepDanmu/removePreDanmuCache" ,method = RequestMethod.GET)
-    public void removePreDanmuCache(@RequestParam(name = "partyId") String partyId) ;
+    public void removePreDanmuCache(@RequestParam(name = "partyId") String partyId,@RequestParam(name = "addressId") String addressId) ;
 
 
 

@@ -22,16 +22,17 @@ public class RpcPreDanmuServiceHystrix implements RpcPreDanmuService {
     }
 
     @Override
-    public void initPreDanmuIntoCache(String partyId) {
-    }
-
-    @Override
-    public void checkIsReInitPreDanmuIntoCache(String partyId) {
+    public void initPreDanmuIntoCache(String partyId, String addressId) {
 
     }
 
     @Override
-    public Map<String,Object> getPreDanmuFromCache(String partyId, int danmuCount) {
+    public void checkIsReInitPreDanmuIntoCache(String partyId, String addressId) {
+
+    }
+
+    @Override
+    public Map<String, Object> getPreDanmuFromCache(String partyId, String addressId, int danmuCount) {
         return null;
     }
 
@@ -41,9 +42,10 @@ public class RpcPreDanmuServiceHystrix implements RpcPreDanmuService {
     }
 
     @Override
-    public void removePreDanmuCache(String partyId) {
+    public void removePreDanmuCache(String partyId, String addressId) {
 
     }
+
 
     @Override
     public List<PreDanmuModel> findByPartyId(String partyId) {

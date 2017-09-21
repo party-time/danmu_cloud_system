@@ -39,14 +39,14 @@ public class PreDanmuHandler {
 
 
 
-    public void danmuListenHandler(String partyId) {
+    public void danmuListenHandler(String partyId,String addressId) {
         logger.info("预制弹幕装载线程启动");
         try {
             threadPoolTaskExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
 
-                    rpcPreDanmuService.initPreDanmuIntoCache(partyId);
+                    rpcPreDanmuService.checkIsReInitPreDanmuIntoCache(partyId,addressId);
                     /*String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
 
 

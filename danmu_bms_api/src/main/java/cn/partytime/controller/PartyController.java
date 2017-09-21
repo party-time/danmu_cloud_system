@@ -168,7 +168,21 @@ public class PartyController extends BaseAdminController {
             }
             if(party!=null){
                 //加载预置弹幕
-                rpcPreDanmuService.initPreDanmuIntoCache(party.getId());
+                /*String[] addressIdStrs = addressIds.split(",");
+                for(String address:addressIdStrs){
+                    rpcPreDanmuService.initPreDanmuIntoCache(party.getId(),addressIds);
+                }*/
+                if(!StringUtils.isEmpty(addressIds)){
+                    if(addressIds.indexOf(",")!=-1){
+                        String[] addressIdStrs = addressIds.split(",");
+                        for( String addressId : addressIdStrs){
+                            rpcPreDanmuService.checkIsReInitPreDanmuIntoCache(party.getId(),addressId);
+                        }
+                    }else{
+                        rpcPreDanmuService.checkIsReInitPreDanmuIntoCache(party.getId(),addressIds);
+                    }
+                }
+
             }
 
             //

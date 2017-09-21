@@ -67,8 +67,8 @@ public class RpcPreDanmuService {
      * @param partyId
      */
     @RequestMapping(value = "/initPreDanmuIntoCache" ,method = RequestMethod.GET)
-    public void initPreDanmuIntoCache(@RequestParam String partyId) {
-        preDanmuLogicService.initPreDanmu(partyId);
+    public void initPreDanmuIntoCache(@RequestParam String partyId,@RequestParam String addressId) {
+        preDanmuLogicService.initPreDanmu(partyId,addressId);
     }
 
     /**
@@ -76,14 +76,14 @@ public class RpcPreDanmuService {
      * @param partyId
      */
     @RequestMapping(value = "/checkIsReInitPreDanmuIntoCache" ,method = RequestMethod.GET)
-    public void checkIsReInitPreDanmuIntoCache(@RequestParam String partyId) {
-        preDanmuLogicService.checkIsReInitPreDanmu(partyId);
+    public void checkIsReInitPreDanmuIntoCache(@RequestParam String partyId,@RequestParam String addressId) {
+        preDanmuLogicService.checkIsReInitPreDanmu(partyId,addressId);
     }
 
     @RequestMapping(value = "/getPreDanmuFromCache" ,method = RequestMethod.GET)
-    public Map<String,Object> getPreDanmuFromCache(@RequestParam String partyId, @RequestParam int danmuCount) {
+    public Map<String,Object> getPreDanmuFromCache(@RequestParam String partyId,@RequestParam String addressId, @RequestParam int danmuCount) {
         log.info("获取活动:{},弹幕级别:{}",partyId,danmuCount);
-        return preDanmuLogicService.getPreDanmuFromCache(partyId,danmuCount);
+        return preDanmuLogicService.getPreDanmuFromCache(partyId,addressId,danmuCount);
     }
 
     @RequestMapping(value = "/setPreDanmuLibrarySortRule" ,method = RequestMethod.GET)
@@ -91,11 +91,11 @@ public class RpcPreDanmuService {
         preDanmuLogicService.setPreDanmuLibrarySortRule(partyId);
     }
     @RequestMapping(value = "/removePreDanmuCache" ,method = RequestMethod.GET)
-    public void removePreDanmuCache(@RequestParam String partyId) {
+    public void removePreDanmuCache(@RequestParam String partyId,@RequestParam String addressId) {
 
         List<DanmuLibraryParty> danmuLibraryPartyList =   danmuLibraryPartyService.findByPartyId(partyId);
         if(ListUtils.checkListIsNotNull(danmuLibraryPartyList)){
-            danmuLibraryPartyList.forEach(danmuLibraryParty -> preDanmuCacheService.removePreDanmuFromCache(partyId,danmuLibraryParty.getDanmuLibraryId()));
+            danmuLibraryPartyList.forEach(danmuLibraryParty -> preDanmuCacheService.removePreDanmuFromCache(partyId,addressId,danmuLibraryParty.getDanmuLibraryId()));
         }
 
         preDanmuLibraryCacheService.removePreDanmuLibrary(partyId);

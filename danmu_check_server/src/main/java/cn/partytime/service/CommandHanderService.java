@@ -636,13 +636,21 @@ public class CommandHanderService {
                 redisService.set(key, status);
                 redisService.expire(key,60*60*24*7);
                 //开启预制弹幕处理线程
-                preDanmuHandler.danmuListenHandler(partyId);
+                List<String> addressIdList = rpcPartyService.findAddressIdListByPartyId(partyId);
+                for(String addressIdStr:addressIdList){
+                    preDanmuHandler.danmuListenHandler(partyId,addressIdStr);
+                }
+
             } else {
                 //关闭预制弹幕
-                //redisService.expire(key, 0);
+                redisService.expire(key, 0);
                 //清除缓存中的预置弹幕
                 //redisService.expire(preDanmuCacheKey, 0);
-                rpcPreDanmuService.removePreDanmuCache(partyId);
+                //rpcPreDanmuService.removePreDanmuCache(partyId,addressId);
+                List<String> addressIdList = rpcPartyService.findAddressIdListByPartyId(partyId);
+                for(String addressIdStr:addressIdList){
+                    rpcPreDanmuService.removePreDanmuCache(partyId,addressIdStr);
+                }
             }
 
             result.put("type", type);

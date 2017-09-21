@@ -4,6 +4,7 @@ import cn.partytime.alarmRpc.RpcMovieAlarmService;
 import cn.partytime.alarmRpc.RpcProjectorAlarmService;
 import cn.partytime.cache.danmu.DanmuAlarmCacheService;
 import cn.partytime.cache.party.PartyAlarmCacheService;
+import cn.partytime.cache.party.PartyCacheService;
 import cn.partytime.common.cachekey.*;
 import cn.partytime.common.cachekey.client.ClientCommandCacheKey;
 import cn.partytime.common.cachekey.danmu.PreDanmuCacheKey;
@@ -75,6 +76,10 @@ public class MovieLogicService {
 
     @Autowired
     private RpcPreDanmuService rpcPreDanmuService;
+
+
+    @Autowired
+    private PartyCacheService partyCacheService;
 
 
     public RestResultModel partyStart(String registCode,String command,long clientTime) {
@@ -284,8 +289,6 @@ public class MovieLogicService {
 
                     stopMovie(movieSchedule,party);
 
-
-
                     sendPartyStatusToClient(partyId,"3",addressId,clientTime);
                     restResultModel = new RestResultModel();
                     restResultModel.setResult(200);
@@ -391,7 +394,7 @@ public class MovieLogicService {
 
         //开启预制弹幕
         logger.info("电影开始，开启预制弹幕");
-        preDanmuLogicService.danmuListenHandler(partyId);
+        preDanmuLogicService.danmuListenHandler(partyId,addressId);
     }
 
     private void insertmovieSchedule(String partyId, String addressId,long clientTime) {
@@ -408,7 +411,7 @@ public class MovieLogicService {
 
         //开启预制弹幕
         logger.info("弹幕开始，开启预制弹幕");
-        preDanmuLogicService.danmuListenHandler(partyId);
+        preDanmuLogicService.danmuListenHandler(partyId,addressId);
 
     }
 
@@ -481,7 +484,7 @@ public class MovieLogicService {
         }
 
         //加载预置弹幕
-        rpcPreDanmuService.initPreDanmuIntoCache(party.getId());
+        rpcPreDanmuService.initPreDanmuIntoCache(party.getId(),movieSchedule.getAddressId());
         //TODO:
         rpcMovieAlarmService.movieTime(party.getId(),movieSchedule.getAddressId(),time);
 
@@ -495,11 +498,11 @@ public class MovieLogicService {
         key = ScreenClientCacheKey.SCREEN_DANMU_Time+addressId;
         redisService.expire(key,0);
 
-        key = PartyCacheKey.CURRENT_PARTY+addressId;
-        redisService.expire(key,0);
+
+        partyCacheService.removeCurrentParty(addressId);
 
 
-        rpcPreDanmuService.removePreDanmuCache(partyId);
+        rpcPreDanmuService.removePreDanmuCache(partyId,addressId);
 
     }
 

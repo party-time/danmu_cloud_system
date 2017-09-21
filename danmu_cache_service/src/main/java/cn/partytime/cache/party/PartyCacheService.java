@@ -14,6 +14,28 @@ public class PartyCacheService {
     @Autowired
     private RedisService redisService;
 
+
+    public void setCurrentParty(String addressId,String partyId){
+        String key = PartyCacheKey.CURRENT_PARTY+addressId;
+        redisService.set(key,partyId);
+        redisService.expire(key,30);
+    }
+
+    public String  getCurrentPartyId(String addressId){
+        String key = PartyCacheKey.CURRENT_PARTY+addressId;
+        Object object = redisService.get(key);
+        if(object!=null){
+            return String.valueOf(object);
+        }
+        return "";
+    }
+
+    public void removeCurrentParty(String addressId){
+        String key = PartyCacheKey.CURRENT_PARTY+addressId;
+        redisService.expire(key,0);
+    }
+
+
     public int getPartyDensity(String partyId){
         String key = PartyCacheKey.PARTY_DENSITY + partyId;
         return IntegerUtils.objectConvertToInt(redisService.get(key));
@@ -33,8 +55,6 @@ public class PartyCacheService {
         }else{
             redisService.expire(key,time);
         }
-
     }
-
 
 }
