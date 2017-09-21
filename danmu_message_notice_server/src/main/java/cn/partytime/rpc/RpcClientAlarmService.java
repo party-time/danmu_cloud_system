@@ -2,9 +2,11 @@ package cn.partytime.rpc;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
+import cn.partytime.common.cachekey.client.ClientCommandCacheKey;
 import cn.partytime.common.cachekey.collector.CollectorCacheKey;
 import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
+import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
 import cn.partytime.dataRpc.RpcDanmuClientService;
@@ -12,6 +14,7 @@ import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.DanmuClientModel;
+import cn.partytime.redis.service.RedisService;
 import cn.partytime.service.DanmuAlarmService;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +59,10 @@ public class RpcClientAlarmService {
     @Autowired
     private RpcDanmuClientService danmuClientService;
 
+
+    @Autowired
+    private RedisService redisService;
+
     @RequestMapping(value = "/clientNetError" ,method = RequestMethod.GET)
     public void clientNetError(@RequestParam String addressId) {
 
@@ -65,6 +72,23 @@ public class RpcClientAlarmService {
             log.info("客户端不在线的告警超过上限");
             return;
         }
+
+        //发送重启指令
+
+        Map<String,Object> commandMap = new HashMap<>();
+        commandMap.put("type", ProtocolConst.PROTOCOL_CLIENT_COMMAND);
+        Map<String,Object> dataMap = new HashMap<>();
+        dataMap.put("bcallBack",null);
+        dataMap.put("name","appRestart");
+        commandMap.put("data",dataMap);
+        //rpcClientService.sendCommandToClinet(addressId,commandMap);
+        String key = ClientCommandCacheKey.PUB_ClIENT_COMMAND_CACHE + addressId;
+        String message = JSON.toJSONString(commandMap);
+        redisService.set(key, message);
+        redisService.expire(key, 60);
+        redisService.subPub("client:command",addressId);
+
+
         alarmCacheService.addAlarmCount(0,CollectorCacheKey.BASE_ALARM_KEY,AlarmKeyConst.ALARM_KEY_NETWORKERROR,addressId);
         log.info("地址:{} 客户端告警",addressId);
 
