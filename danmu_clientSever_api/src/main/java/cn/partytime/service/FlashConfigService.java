@@ -4,8 +4,10 @@ import cn.partytime.common.constants.Const;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.*;
 import cn.partytime.model.*;
+import cn.partytime.util.HttpUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -54,7 +56,12 @@ public class FlashConfigService {
         jsonObject.put("result",200);
         DanmuClientModel danmuClientModel = rpcDanmuClientService.findByRegistCode(code);
         if( null == danmuClientModel){
-            return null;
+            String jsonStr = HttpUtils.httpRequestStr("http://test.party-time.cn/v1/api/javaClient/config?code="+code,"GET",null);
+            if( !StringUtils.isEmpty(jsonStr)){
+                return JSONObject.parseObject(jsonStr);
+            }else{
+                return null;
+            }
         }
 
         //放入服务器端自定义配置表
