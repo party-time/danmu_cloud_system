@@ -58,7 +58,7 @@ public class PreDanmuLogicService {
                 int addressDanmuCount = screenDanmuService.getAddressDanmuCount(addressId);
                 int count2 = screenDanmuService.danmuCount(addressId,addressDanmuCount,partyId);
                 String cachePartyId = clientPartyService.findCurrentPatyId(addressId);
-                logger.info("当前活动编号:{},cache中的互动编号是:{}",partyId,cachePartyId);
+                logger.info("》》》》》》》》》》》》》》》》》当前活动编号:{},cache中的活动编号是:{}",partyId,cachePartyId);
                 if(count2>0 && partyId.equals(cachePartyId)){
 
                     danmuSendService.sendPreDanmu(addressId,partyId,count2);
