@@ -32,6 +32,11 @@ public interface RpcPreDanmuService {
     @RequestMapping(value = "/rpcRepDanmu/checkIsReInitPreDanmuIntoCache" ,method = RequestMethod.GET)
     public void checkIsReInitPreDanmuIntoCache(@RequestParam(name = "partyId") String partyId,@RequestParam(name = "addressId") String addressId);
 
+
+    @RequestMapping(value = "/rpcRepDanmu/reInitPreDanmuIntoCache" ,method = RequestMethod.GET)
+    public void reInitPreDanmuIntoCache(@RequestParam(name = "partyId") String partyId,@RequestParam(name = "addressId") String addressId);
+
+
     @RequestMapping(value = "/rpcRepDanmu/getPreDanmuFromCache" ,method = RequestMethod.GET)
     public Map<String,Object> getPreDanmuFromCache(@RequestParam(name = "partyId") String partyId,@RequestParam(name = "addressId") String addressId, @RequestParam(name = "danmuCount") int danmuCount);
 

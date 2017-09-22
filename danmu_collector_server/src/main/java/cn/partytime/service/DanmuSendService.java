@@ -69,34 +69,40 @@ public class DanmuSendService {
      */
     public void sendPreDanmu(String addressId,String partyId,int danmuCount) {
         Date nowDate = DateUtils.getCurrentDate();
-        Map<String,Object> preDanmuMap= rpcPreDanmuService.getPreDanmuFromCache(partyId,addressId,danmuCount);
 
-        logger.info("获取的预制弹幕信息：{}",JSON.toJSONString(preDanmuMap));
-        if (preDanmuMap == null) {
-            //获取活动信息
-            PartyModel partyModel =rpcPartyService.getPartyByPartyId(partyId);
-            int cacheCount = alarmCacheService.findAlarmCount(addressId,AlarmKeyConst.ALARM_KEY_PREDANMU);
-            if(partyModel.getType()==1 && cacheCount==0){
+        int density = rpcPreDanmuService.getPartyDanmuDensity(partyId);
+        int danmmuClass = density - danmuCount;
+        if(danmmuClass>=0){
+            Map<String,Object> preDanmuMap= rpcPreDanmuService.getPreDanmuFromCache(partyId,addressId,danmmuClass);
 
-                long time = preDanmuCacheService.findPreDanmAlarmDelayTime(partyId,addressId);
-                if(time==0){
-                    preDanmuCacheService.setPreDanmAlarmDelayTime(partyId,addressId);
-                    return;
+            logger.info("获取的预制弹幕信息：{}",JSON.toJSONString(preDanmuMap));
+            if (preDanmuMap == null) {
+                //获取活动信息
+                PartyModel partyModel =rpcPartyService.getPartyByPartyId(partyId);
+                int cacheCount = alarmCacheService.findAlarmCount(addressId,AlarmKeyConst.ALARM_KEY_PREDANMU);
+                if(partyModel.getType()==1 && cacheCount==0){
+
+                    long time = preDanmuCacheService.findPreDanmAlarmDelayTime(partyId,addressId);
+                    if(time==0){
+                        preDanmuCacheService.setPreDanmAlarmDelayTime(partyId,addressId);
+                        return;
+                    }
+                    Date now = DateUtils.getCurrentDate();
+                    long subMinute = (now.getTime()-time)/1000/60;
+                    if(subMinute>1){
+                        rpcDanmuAlarmService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,addressId,"null");
+                        preDanmuCacheService.removePreDanmAlarmDelayTime(partyId,addressId);
+                    }
+
                 }
-                Date now = DateUtils.getCurrentDate();
-                long subMinute = (now.getTime()-time)/1000/60;
-                if(subMinute>1){
-                    rpcDanmuAlarmService.danmuAlarm(AlarmConst.DanmuAlarmType.PRE_DANMU_IS_NULL,addressId,"null");
-                    preDanmuCacheService.removePreDanmAlarmDelayTime(partyId,addressId);
-                }
-
+                return;
             }
-            return;
-        }
-        String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;
+            String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;
 
-        screenDanmuService.addScreenDanmuCount(addressId);
-        sendMessageToAllClient(addressId,preDanmuMap);
+            screenDanmuService.addScreenDanmuCount(addressId);
+            sendMessageToAllClient(addressId,preDanmuMap);
+        }
+
 
     }
 

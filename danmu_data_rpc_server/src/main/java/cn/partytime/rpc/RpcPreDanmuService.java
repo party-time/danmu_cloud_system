@@ -68,7 +68,14 @@ public class RpcPreDanmuService {
      */
     @RequestMapping(value = "/initPreDanmuIntoCache" ,method = RequestMethod.GET)
     public void initPreDanmuIntoCache(@RequestParam String partyId,@RequestParam String addressId) {
-        preDanmuLogicService.initPreDanmu(partyId,addressId);
+        log.info("================================初始化预置弹幕库");
+        preDanmuLogicService.initPreDanmuIntoCache(partyId,addressId);
+    }
+
+    @RequestMapping(value = "/reInitPreDanmuIntoCache" ,method = RequestMethod.GET)
+    public void reInitPreDanmuIntoCache(@RequestParam String partyId,@RequestParam String addressId) {
+        log.info("---------------------------------重新对预置弹幕库进行加载");
+        preDanmuLogicService.reInitPreDanmuIntoCache(partyId,addressId);
     }
 
     /**
@@ -77,11 +84,14 @@ public class RpcPreDanmuService {
      */
     @RequestMapping(value = "/checkIsReInitPreDanmuIntoCache" ,method = RequestMethod.GET)
     public void checkIsReInitPreDanmuIntoCache(@RequestParam String partyId,@RequestParam String addressId) {
-        preDanmuLogicService.checkIsReInitPreDanmu(partyId,addressId);
+        log.info("++++++++++++++++++++++++++++++++电影开始的时候检测预置弹幕是否加载成功");
+        preDanmuLogicService.initPreDanmuIntoCache(partyId,addressId);
     }
 
     @RequestMapping(value = "/getPreDanmuFromCache" ,method = RequestMethod.GET)
     public Map<String,Object> getPreDanmuFromCache(@RequestParam String partyId,@RequestParam String addressId, @RequestParam int danmuCount) {
+
+        int density =  preDanmuLogicService.getPartyDanmuDensity(partyId);
         log.info("获取活动:{},弹幕级别:{}",partyId,danmuCount);
         return preDanmuLogicService.getPreDanmuFromCache(partyId,addressId,danmuCount);
     }

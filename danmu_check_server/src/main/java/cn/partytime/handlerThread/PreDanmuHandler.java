@@ -46,7 +46,7 @@ public class PreDanmuHandler {
                 @Override
                 public void run() {
 
-                    rpcPreDanmuService.checkIsReInitPreDanmuIntoCache(partyId,addressId);
+                    rpcPreDanmuService.reInitPreDanmuIntoCache(partyId,addressId);
                     /*String preDanmuCacheKey = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId;
 
 

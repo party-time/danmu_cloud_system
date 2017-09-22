@@ -264,8 +264,8 @@ public class MovieLogicService {
                     movieSchedule.setUpdateTime(DateUtils.getCurrentDate());
                     movieSchedule.setClientEndTime(clientTime);
 
-                    //清空预置弹幕
-                    clearPreDanmu(addressId,partyId);
+                    //清除活动缓存
+                    clearPartyCacheInfo(addressId,partyId);
 
                     //stop movie
                     stopMovie(movieSchedule,party);
@@ -284,8 +284,8 @@ public class MovieLogicService {
 
                     movieSchedule.setClientEndTime(clientTime);
 
-                    //清空预置弹幕
-                    clearPreDanmu(addressId,partyId);
+                    //清空活动缓存信息
+                    clearPartyCacheInfo(addressId,partyId);
 
                     stopMovie(movieSchedule,party);
 
@@ -484,25 +484,21 @@ public class MovieLogicService {
         }
 
         //加载预置弹幕
-        rpcPreDanmuService.initPreDanmuIntoCache(party.getId(),movieSchedule.getAddressId());
+        rpcPreDanmuService.reInitPreDanmuIntoCache(party.getId(),movieSchedule.getAddressId());
         //TODO:
         rpcMovieAlarmService.movieTime(party.getId(),movieSchedule.getAddressId(),time);
 
     }
 
-    private void clearPreDanmu(String addressId,String partyId ){
+    private void clearPartyCacheInfo(String addressId,String partyId ){
         String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;
         redisService.expire(key,0);
-
-
         key = ScreenClientCacheKey.SCREEN_DANMU_Time+addressId;
         redisService.expire(key,0);
-
-
         partyCacheService.removeCurrentParty(addressId);
 
 
-        rpcPreDanmuService.removePreDanmuCache(partyId,addressId);
+        //rpcPreDanmuService.removePreDanmuCache(partyId,addressId);
 
     }
 

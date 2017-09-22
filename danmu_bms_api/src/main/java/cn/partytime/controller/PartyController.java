@@ -1,9 +1,11 @@
 package cn.partytime.controller;
 
+import cn.partytime.common.util.ListUtils;
 import cn.partytime.controller.base.BaseAdminController;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.dataRpc.RpcPreDanmuService;
 import cn.partytime.model.*;
+import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.MovieAlias;
 import cn.partytime.model.manager.Party;
 import cn.partytime.service.*;
@@ -49,6 +51,10 @@ public class PartyController extends BaseAdminController {
     @Autowired
     private RpcPreDanmuService rpcPreDanmuService;
 
+    @Autowired
+    private DanmuAddressService danmuAddressService;
+
+
     /**
      *
      * @param pageNumber
@@ -88,6 +94,16 @@ public class PartyController extends BaseAdminController {
             restResultModel.setResult_msg("活动不存在");
         }
         return  restResultModel;
+    }
+
+    @RequestMapping(value = "/reinitPreDanmu", method = RequestMethod.GET)
+    public void reinitPreDanmu(String addressId) {
+        log.info("重新加载预置弹幕");
+
+        PartyLogicModel partyLogicModel = rpcPartyService.findFilmByAddressId(addressId);
+        if(partyLogicModel!=null){
+            rpcPreDanmuService.initPreDanmuIntoCache(partyLogicModel.getPartyId(),addressId);
+        }
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -166,27 +182,26 @@ public class PartyController extends BaseAdminController {
             }else{
                 party = partyService.update(id,name,type,movieAlias,danmuLibraryId,dmDensity);
             }
-            if(party!=null){
-                //加载预置弹幕
-                /*String[] addressIdStrs = addressIds.split(",");
-                for(String address:addressIdStrs){
-                    rpcPreDanmuService.initPreDanmuIntoCache(party.getId(),addressIds);
-                }*/
-                if(!StringUtils.isEmpty(addressIds)){
-                    if(addressIds.indexOf(",")!=-1){
-                        String[] addressIdStrs = addressIds.split(",");
-                        for( String addressId : addressIdStrs){
-                            rpcPreDanmuService.checkIsReInitPreDanmuIntoCache(party.getId(),addressId);
-                        }
-                    }else{
-                        rpcPreDanmuService.checkIsReInitPreDanmuIntoCache(party.getId(),addressIds);
+
+            try {
+                PartyModel partyModel = new PartyModel();
+                BeanUtils.copyProperties(partyModel,party);
+                boolean canUse = false;
+                canUse = rpcPartyService.findCurrentParyIsInProgress(partyModel);
+                String partyId = party.getId();
+                if(!canUse){
+                    List<DanmuAddress> danmuAddressList = danmuAddressService.findByType(0);
+                    if(ListUtils.checkListIsNotNull(danmuAddressList)){
+                        danmuAddressList.forEach(danmuAddress -> rpcPreDanmuService.initPreDanmuIntoCache(partyId,danmuAddress.getId()));
                     }
                 }
-
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
 
-            //
-            rpcPreDanmuService.setPreDanmuLibrarySortRule(party.getId());
+
 
             if(!StringUtils.isEmpty(addressIds)){
                 if(addressIds.indexOf(",")!=-1){
