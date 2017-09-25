@@ -183,6 +183,23 @@ public class PartyController extends BaseAdminController {
                 party = partyService.update(id,name,type,movieAlias,danmuLibraryId,dmDensity);
             }
 
+            if(!StringUtils.isEmpty(addressIds)){
+                if(addressIds.indexOf(",")!=-1){
+                    String[] addressIdStrs = addressIds.split(",");
+                    for( String addressId : addressIdStrs){
+                        partyAddressRelationService.save(party.getId(),addressId);
+                    }
+                }else{
+                    partyAddressRelationService.save(party.getId(),addressIds);
+                }
+            }
+            if(null != ids && ids.length > 0){
+                danmuLibraryPartyService.deleteByPartyId(party.getId());
+                for(int i=0;i<ids.length;i++){
+                    danmuLibraryPartyService.save(ids[i],party.getId(),densitrys[i]);
+                }
+            }
+
             try {
                 PartyModel partyModel = new PartyModel();
                 BeanUtils.copyProperties(partyModel,party);
@@ -199,25 +216,6 @@ public class PartyController extends BaseAdminController {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
-            }
-
-
-
-            if(!StringUtils.isEmpty(addressIds)){
-                if(addressIds.indexOf(",")!=-1){
-                    String[] addressIdStrs = addressIds.split(",");
-                    for( String addressId : addressIdStrs){
-                        partyAddressRelationService.save(party.getId(),addressId);
-                    }
-                }else{
-                    partyAddressRelationService.save(party.getId(),addressIds);
-                }
-            }
-            if(null != ids && ids.length > 0){
-                danmuLibraryPartyService.deleteByPartyId(party.getId());
-                for(int i=0;i<ids.length;i++){
-                    danmuLibraryPartyService.save(ids[i],party.getId(),densitrys[i]);
-                }
             }
         } catch (IllegalArgumentException e) {
             restResultModel.setResult(501);
