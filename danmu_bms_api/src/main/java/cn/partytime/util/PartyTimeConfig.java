@@ -18,6 +18,9 @@ public class PartyTimeConfig {
     @Value("${partyTime.appSecret}")
     private String appSecret;
 
+    @Value("${partyTime.appKey}")
+    private String appKey;
+
     public String getUrl() {
         return url;
     }
@@ -40,5 +43,13 @@ public class PartyTimeConfig {
 
     public void setAppSecret(String appSecret) {
         this.appSecret = appSecret;
+    }
+
+    public String getAppKey() {
+        return appKey;
+    }
+
+    public void setAppKey(String appKey) {
+        this.appKey = appKey;
     }
 }

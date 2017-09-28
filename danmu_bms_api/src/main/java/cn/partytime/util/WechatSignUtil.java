@@ -27,8 +27,6 @@ public class WechatSignUtil {
 
     private static String BASE_CHAR = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    private static final String API_KEY ="Hf78ryb6d53mgjKi9098hvnetxs4G7ss";
-
     @PostConstruct
     public void init() {
         wechatSignUtil = this;
@@ -162,11 +160,11 @@ public class WechatSignUtil {
     }
 
     public static String createGroupRedPackSign(String str){
-        return MD5Encode(str+"&key="+API_KEY,"UTF-8").toUpperCase();
+        return MD5Encode(str+"&key="+wechatSignUtil.partyTimeConfig.getAppKey(),"UTF-8").toUpperCase();
     }
 
     public static String createPaySign(String str){
-        return MD5Encode(str+"&key="+API_KEY,"UTF-8").toUpperCase();
+        return MD5Encode(str+"&key="+wechatSignUtil.partyTimeConfig.getAppKey(),"UTF-8").toUpperCase();
     }
 
     private static String byteArrayToHexString(byte b[]) {
