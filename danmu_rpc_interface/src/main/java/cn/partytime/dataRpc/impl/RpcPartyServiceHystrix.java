@@ -4,6 +4,7 @@ import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.PartyModel;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -70,6 +71,11 @@ public class RpcPartyServiceHystrix implements RpcPartyService {
     }
 
     @Override
+    public List<PartyModel> findByAddressIdAndType(@RequestParam(name = "addressId") String addressId, @RequestParam(name = "type") Integer type) {
+        return null;
+    }
+
+    @Override
     public List<PartyModel> findByTypeAndStatus(Integer type, Integer status) {
         return null;
     }
@@ -83,6 +89,8 @@ public class RpcPartyServiceHystrix implements RpcPartyService {
     public boolean findCurrentParyIsInProgress(PartyModel party) {
         return false;
     }
+
+
 
 
 }
