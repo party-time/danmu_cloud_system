@@ -20,6 +20,7 @@ import cn.partytime.redis.service.RedisService;
 import cn.partytime.repository.manager.PartyRepository;
 import cn.partytime.service.*;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -34,7 +35,7 @@ import java.util.List;
 /**
  * Created by dm on 2017/7/10.
  */
-
+@Slf4j
 @RestController
 @RequestMapping("/rpcParty")
 public class RpcPartyService {
@@ -277,6 +278,7 @@ public class RpcPartyService {
 
     @RequestMapping(value = "/findByAddressIdAndType" ,method = RequestMethod.GET)
     public List<Party> findByAddressIdAndType(@RequestParam String addressId, @RequestParam Integer type){
+        log.info("##############ytf:status=3");
         return partyService.findByAddressIdAndType(addressId,type);
     }
 
