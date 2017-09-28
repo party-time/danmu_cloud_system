@@ -113,6 +113,9 @@ public interface RpcPartyService {
     @RequestMapping(value = "/rpcParty/findByAddressIdAndStatus" ,method = RequestMethod.GET)
     public List<PartyModel> findByAddressIdAndStatus(@RequestParam(name = "addressId") String addressId, @RequestParam(name = "status") Integer status);
 
+    @RequestMapping(value = "/rpcParty/findByAddressIdAndType" ,method = RequestMethod.GET)
+    public List<PartyModel> findByAddressIdAndType(@RequestParam(name = "addressId") String addressId, @RequestParam(name = "status") Integer status);
+
     /**
      * 通过活动类型和活动状态获取活动列表
      * @param type

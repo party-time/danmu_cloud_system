@@ -51,7 +51,7 @@ public class ResourceLogicService {
 
     public List<PartyResourceResult> findPartyResource(String addressId){
         List<PartyResourceResult> partyResourceResultList = new ArrayList<>();
-        List<PartyModel> partyList = rpcPartyService.findByAddressIdAndStatus(addressId,0);
+        List<PartyModel> partyList = rpcPartyService.findByAddressIdAndType(addressId,0);
 
         if(!ListUtils.checkListIsNotNull(partyList)){
             return partyResourceResultList;

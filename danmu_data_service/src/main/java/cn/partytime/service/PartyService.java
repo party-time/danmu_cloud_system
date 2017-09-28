@@ -215,6 +215,25 @@ public class PartyService {
     }
 
     /**
+     * 查找该场地下所有未结束的活动
+     * @param addressId
+     * @param type
+     * @return
+     */
+    public List<Party> findByAddressIdAndType(String addressId , Integer type) {
+        List<PartyAddressRelation> partyAddressRelationList = partyAddressRelationService.findByAddressId(addressId);
+        if( null != partyAddressRelationList && partyAddressRelationList.size() > 0){
+            List<String> ids = new ArrayList<>();
+            for(PartyAddressRelation partyAddressRelation : partyAddressRelationList){
+                ids.add(partyAddressRelation.getPartyId());
+            }
+            return partyRepository.findByIdInAndStatusLessThanAndType(ids,3,type);
+        }else{
+            return null;
+        }
+    }
+
+    /**
      * 根据类型
      * @param type
      * @return

@@ -78,7 +78,6 @@ public class FlashConfigService {
         List<PartyResourceResult> partyResourceResultList2 = null;
         //如果是固定场地,下载电影和活动
         if( danmuAddress.getType() == 0){
-
             partyResourceResultList1 = resourceLogicService.findFilmResource();
             partyResourceResultList2 = resourceLogicService.findPartyResource(danmuClientModel.getAddressId());
             //log.info("全部电影"+partyResourceResultList1.size());

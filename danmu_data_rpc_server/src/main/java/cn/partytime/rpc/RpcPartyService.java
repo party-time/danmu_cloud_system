@@ -275,6 +275,11 @@ public class RpcPartyService {
         return partyService.findByAddressIdAndStatus(addressId,status);
     }
 
+    @RequestMapping(value = "/findByAddressIdAndType" ,method = RequestMethod.GET)
+    public List<Party> findByAddressIdAndType(@RequestParam String addressId, @RequestParam Integer type){
+        return partyService.findByAddressIdAndType(addressId,type);
+    }
+
     /**
      * 通过活动类型和活动状态获取活动列表
      * @param type
