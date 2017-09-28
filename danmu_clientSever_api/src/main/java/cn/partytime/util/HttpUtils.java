@@ -44,10 +44,7 @@ public class HttpUtils {
             httpUrlConn.setReadTimeout(6000);
             httpUrlConn.setConnectTimeout(6000);
             if ("GET".equalsIgnoreCase(requestMethod))
-
                 httpUrlConn.connect();
-
-
             // 当有数据需要提交时
             if (null != outputStr) {
                 OutputStream outputStream = httpUrlConn.getOutputStream();
