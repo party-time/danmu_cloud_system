@@ -10,6 +10,7 @@ import cn.partytime.model.*;
 import cn.partytime.util.HttpUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,7 +20,7 @@ import java.util.*;
 /**
  * Created by administrator on 2017/9/5.
  */
-
+@Slf4j
 @Service
 public class FlashConfigService {
 
@@ -50,6 +51,7 @@ public class FlashConfigService {
     private String saveFilePath = "resource";
 
     public String createConfig(String code){
+        log.info("##########createConfig##############"+code);
         JSONObject jsonObject= new JSONObject(true);
         jsonObject.put("result",200);
         DanmuClientModel danmuClientModel = rpcDanmuClientService.findByRegistCode(code);
