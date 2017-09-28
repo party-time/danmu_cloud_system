@@ -190,7 +190,7 @@ public class FlashConfigService {
             jsonObject.put("adVideoUrl",specialVideoList);
         }
 
-        return jsonObject.toString();
+        return jsonObject.toJSONString();
     }
 
     public List<TimerDanmuPathModel> findTimerDanmuFile () {
