@@ -12,13 +12,13 @@ public class PartyTimeConfig {
     @Value("${partyTime.url}")
     private String url;
 
-    @Value("${partyTime.appId}")
+    @Value("${appId}")
     private String appId;
 
-    @Value("${partyTime.appSecret}")
+    @Value("${appSecret}")
     private String appSecret;
 
-    @Value("${partyTime.appKey}")
+    @Value("${appKey}")
     private String appKey;
 
     public String getUrl() {
