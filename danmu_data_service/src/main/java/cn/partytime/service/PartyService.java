@@ -227,6 +227,7 @@ public class PartyService {
             for(PartyAddressRelation partyAddressRelation : partyAddressRelationList){
                 ids.add(partyAddressRelation.getPartyId());
             }
+            log.info("##############ytf:status=3");
             return partyRepository.findByIdInAndStatusLessThanAndType(ids,3,type);
         }else{
             return null;
