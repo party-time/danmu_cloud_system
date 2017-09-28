@@ -278,7 +278,6 @@ public class RpcPartyService {
 
     @RequestMapping(value = "/findByAddressIdAndType" ,method = RequestMethod.GET)
     public List<Party> findByAddressIdAndType(@RequestParam String addressId, @RequestParam Integer type){
-        log.info("##############ytf:status=3");
         return partyService.findByAddressIdAndType(addressId,type);
     }
 

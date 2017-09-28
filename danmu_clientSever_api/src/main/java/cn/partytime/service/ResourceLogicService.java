@@ -51,7 +51,6 @@ public class ResourceLogicService {
 
     public List<PartyResourceResult> findPartyResource(String addressId){
         List<PartyResourceResult> partyResourceResultList = new ArrayList<>();
-        log.info("##########teterterterter");
         List<PartyModel> partyList = rpcPartyService.findByAddressIdAndType(addressId,0);
 
         if(!ListUtils.checkListIsNotNull(partyList)){

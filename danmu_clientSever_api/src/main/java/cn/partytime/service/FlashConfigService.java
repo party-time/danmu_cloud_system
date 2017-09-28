@@ -51,7 +51,6 @@ public class FlashConfigService {
     private String saveFilePath = "resource";
 
     public String createConfig(String code){
-        log.info("##########createConfig##############"+code);
         JSONObject jsonObject= new JSONObject(true);
         jsonObject.put("result",200);
         DanmuClientModel danmuClientModel = rpcDanmuClientService.findByRegistCode(code);
