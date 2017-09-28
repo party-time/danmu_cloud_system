@@ -5,6 +5,7 @@ import cn.partytime.service.FlashConfigService;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,20 +23,20 @@ public class FlashClientController {
 
 
     @RequestMapping(value = "/config", method = RequestMethod.GET)
-    public JSONObject config(String code){
-        JSONObject jsonObject = null;
+    public String config(String code){
+        String jsonStr = null;
         try{
-            jsonObject = flashConfigService.createConfig(code);
+            jsonStr = flashConfigService.createConfig(code);
         }catch (Exception e){
             log.error("",e);
         }
 
-        if( null == jsonObject){
-            jsonObject = new JSONObject();
+        if(StringUtils.isEmpty(jsonStr)){
+            JSONObject jsonObject = new JSONObject();
             jsonObject.put("result",500);
-            return jsonObject;
+            return jsonObject.toJSONString();
         }else{
-            return jsonObject;
+            return jsonStr;
         }
 
 

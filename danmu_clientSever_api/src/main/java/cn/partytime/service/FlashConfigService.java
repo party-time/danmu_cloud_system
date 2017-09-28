@@ -2,21 +2,19 @@ package cn.partytime.service;
 
 import cn.partytime.common.constants.Const;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.dataRpc.*;
+import cn.partytime.dataRpc.RpcDanmuAddressService;
+import cn.partytime.dataRpc.RpcDanmuClientService;
+import cn.partytime.dataRpc.RpcParamService;
+import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.*;
 import cn.partytime.util.HttpUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by administrator on 2017/9/5.
@@ -51,14 +49,14 @@ public class FlashConfigService {
 
     private String saveFilePath = "resource";
 
-    public JSONObject createConfig(String code){
+    public String createConfig(String code){
         JSONObject jsonObject= new JSONObject(true);
         jsonObject.put("result",200);
         DanmuClientModel danmuClientModel = rpcDanmuClientService.findByRegistCode(code);
         if( null == danmuClientModel){
             String jsonStr = HttpUtils.httpRequestStr("http://test.party-time.cn/v1/api/javaClient/config?code="+code,"GET",null);
             if( !StringUtils.isEmpty(jsonStr)){
-                return JSONObject.parseObject(jsonStr);
+                return jsonStr;
             }else{
                 return null;
             }
@@ -192,10 +190,7 @@ public class FlashConfigService {
             jsonObject.put("adVideoUrl",specialVideoList);
         }
 
-
-
-
-        return jsonObject;
+        return jsonObject.toJSONString();
     }
 
     public List<TimerDanmuPathModel> findTimerDanmuFile () {

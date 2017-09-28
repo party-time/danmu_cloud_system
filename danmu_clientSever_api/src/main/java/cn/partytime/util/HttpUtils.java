@@ -41,6 +41,8 @@ public class HttpUtils {
             httpUrlConn.setRequestProperty("Content-type", "text/html");
             httpUrlConn.setRequestProperty("Accept-Charset", "utf-8");
             httpUrlConn.setRequestProperty("contentType", "utf-8");
+            httpUrlConn.setReadTimeout(6000);
+            httpUrlConn.setConnectTimeout(6000);
             if ("GET".equalsIgnoreCase(requestMethod))
 
                 httpUrlConn.connect();
