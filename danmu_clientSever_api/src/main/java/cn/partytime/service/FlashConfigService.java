@@ -146,8 +146,6 @@ public class FlashConfigService {
             partyJson.setExpressions(bigExpressionList);
             partyJson.setSpecialEffects(specialImageList);
             partyJson.setLocalVideoUrl(specialVideoList);
-
-            partyJson.setTimerDanmuUrl(new ArrayList<>());
             partyJsonList.add(partyJson);
         }
         jsonObject.put("partys",partyJsonList);
