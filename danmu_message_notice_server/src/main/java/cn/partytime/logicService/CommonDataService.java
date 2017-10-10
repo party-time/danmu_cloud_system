@@ -43,7 +43,7 @@ public class CommonDataService {
         map = new HashMap<String, String>();
         map.put("key", key);
 
-        map.put("addressName", danmuAddressModel.getAddress());
+        map.put("addressName", danmuAddressModel.getName());
         map.put("addressId",addressId);
         if(partyModel!=null){
             map.put("partyId",partyModel.getId());
