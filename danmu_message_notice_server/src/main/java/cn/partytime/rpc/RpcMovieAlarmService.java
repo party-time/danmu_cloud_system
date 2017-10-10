@@ -44,6 +44,7 @@ public class RpcMovieAlarmService {
 
     @RequestMapping(value = "/movieStartError" ,method = RequestMethod.GET)
     public void movieStartError(@RequestParam String partyId,@RequestParam String addressId, @RequestParam long time) {
+        log.info("==================================movieStartError");
         PartyModel party = rpcPartyService.getPartyByPartyId(partyId);
         Map<String,String> map = new HashMap<String,String>();
         if(time==0){
