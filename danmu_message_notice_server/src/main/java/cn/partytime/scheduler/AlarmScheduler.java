@@ -186,13 +186,33 @@ public class AlarmScheduler {
                     if(ListUtils.checkListIsNotNull(movieScheduleList)){
                         MovieScheduleModel movieSchedule = movieScheduleList.get(0);
                         if(movieSchedule.getEndTime()==null){
+                            Date movieStartTime = movieSchedule.getMoviceStartTime();
+                            Date startTime = movieSchedule.getStartTime();
+                            Date currentDate = DateUtils.getCurrentDate();
+                            if(movieStartTime==null){
+                                long subTime = currentDate.getTime()/1000 - startTime.getTime()/1000;
+                                long tempTime = 30 * 60;
+                                if(subTime > tempTime){
+                                    log.info("发送电影开始异常告警");
+                                    rpcMovieAlarmService.movieStartError(partyId,addressId,0);
+                                }
+                            }else{
+                                long subTime = currentDate.getTime() - movieStartTime.getTime();
+                                if(subTime>movieTime && movieTime!=0){
+                                    log.info("发送电影是否超时告警");
+                                    rpcMovieAlarmService.movieTime(partyId,addressId,subTime);
+                                }
+                            }
+                        }
+
+                        /*if(movieSchedule.getEndTime()==null){
                             Date currentDate = DateUtils.getCurrentDate();
                             Date danmuStartTime = movieSchedule.getStartTime();
                             long subTime = currentDate.getTime() - danmuStartTime.getTime();
                             if(subTime>movieTime && movieTime!=0){
                                 rpcMovieAlarmService.movieTime(partyId,addressId,subTime);
                             }
-                        }
+                        }*/
                     }
                 }
             }

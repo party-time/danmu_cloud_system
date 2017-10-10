@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "${alarmRpcServer}",fallback = RpcMovieAlarmServiceHystrix.class)
 public interface RpcMovieAlarmService {
 
+    @RequestMapping(value = "/rpcMovie/movieStartError" ,method = RequestMethod.GET)
+    public void movieStartError(@RequestParam(value = "partyId") String partyId,@RequestParam(value = "addressId") String addressId, @RequestParam(value = "time") long time);
+
+
     @RequestMapping(value = "/rpcMovie/movieTime" ,method = RequestMethod.GET)
     public void movieTime(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId, @RequestParam(value = "time") long time);
 }

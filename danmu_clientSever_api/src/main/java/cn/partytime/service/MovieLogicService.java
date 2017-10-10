@@ -477,17 +477,25 @@ public class MovieLogicService {
 
     private void stopMovie(MovieScheduleModel movieSchedule,PartyModel party){
         movieSchedule = rpcMovieScheduleService.updateMovieSchedule(movieSchedule);
-        long time = movieSchedule.getEndTime().getTime()-movieSchedule.getStartTime().getTime();
-        if(party!=null && party.getMovieTime()==0){
+        long time = 0;
+        if(party!=null && party.getMovieTime()==0 && movieSchedule.getMoviceStartTime()!=null){
+            time = movieSchedule.getEndTime().getTime()-movieSchedule.getMoviceStartTime().getTime();
             party.setMovieTime(time);
             party = partyService.saveParty(party);
         }
 
         //加载预置弹幕
         rpcPreDanmuService.reInitPreDanmuIntoCache(party.getId(),movieSchedule.getAddressId());
-        //TODO:
-        rpcMovieAlarmService.movieTime(party.getId(),movieSchedule.getAddressId(),time);
 
+        String partyId = party.getId();
+        String addressId = movieSchedule.getAddressId();
+        if(movieSchedule.getMoviceStartTime()==null){
+            log.info("电影未正常开始，告警请求");
+            rpcMovieAlarmService.movieStartError(partyId,addressId,time);
+        }else{
+            log.info("电影告警请求");
+            rpcMovieAlarmService.movieTime(partyId,addressId,time);
+        }
     }
 
     private void clearPartyCacheInfo(String addressId,String partyId ){

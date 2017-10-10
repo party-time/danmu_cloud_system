@@ -18,8 +18,13 @@ public interface LogCodeConst {
     }
 
     public class PartyLogCode{
+
+        //电影时间过长
         public static final String MOVIE_TIME_TOO_LONG="1000";
+        //电影时间过短
         public static final String MOVIE_TIME_TOO_SHORT="1001";
+        //电影开始异常
+        public static final String MOVIE_START_ERROR="1002";
 
     }
 

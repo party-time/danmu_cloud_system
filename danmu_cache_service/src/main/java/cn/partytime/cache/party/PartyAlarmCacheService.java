@@ -38,7 +38,8 @@ public class PartyAlarmCacheService {
         //清除电影时间过长或者过短的告警
         String typeArray[]={
                 AlarmKeyConst.ALARM_KEY_MOVIESHORT,
-                AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME
+                AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME,
+                AlarmKeyConst.ALARM_MOVIESTARTERROR
         };
         for(int i=0; i<typeArray.length; i++) {
             alarmCacheService.removeAlarmCount(addressId, typeArray[i]);

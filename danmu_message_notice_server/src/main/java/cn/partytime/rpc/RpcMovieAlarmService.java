@@ -42,6 +42,16 @@ public class RpcMovieAlarmService {
     private AlarmCacheService alarmCacheService;
 
 
+    @RequestMapping(value = "/movieStartError" ,method = RequestMethod.GET)
+    public void movieStartError(@RequestParam String partyId,@RequestParam String addressId, @RequestParam long time) {
+        PartyModel party = rpcPartyService.getPartyByPartyId(partyId);
+        Map<String,String> map = new HashMap<String,String>();
+        if(time==0){
+            log.info("当time为0的时候，电影没有正常开始");
+            map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_MOVIESTARTERROR,addressId,partyId);
+            sendMessage(LogCodeConst.PartyLogCode.MOVIE_START_ERROR,map,AlarmKeyConst.ALARM_MOVIESTARTERROR);
+        }
+    }
 
     @RequestMapping(value = "/movieTime" ,method = RequestMethod.GET)
     public void movieTime(@RequestParam String partyId,@RequestParam String addressId, @RequestParam long time) {
