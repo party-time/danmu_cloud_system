@@ -7,6 +7,8 @@ import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.DanmuClientModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.PartyModel;
+import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+
+@Slf4j
 @Service
 public class CommonDataService {
     private static final Logger logger = LoggerFactory.getLogger(CommonDataService.class);
@@ -33,6 +37,7 @@ public class CommonDataService {
         Map<String, String> map = null;
         DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findById(addressId);
 
+        log.info("danmuAddressModel:{}", JSON.toJSONString(danmuAddressModel));
         PartyModel partyModel = rpcPartyService.getPartyByPartyId(partyId);
 
         map = new HashMap<String, String>();
