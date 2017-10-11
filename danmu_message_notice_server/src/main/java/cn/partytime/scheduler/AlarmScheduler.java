@@ -2,6 +2,7 @@ package cn.partytime.scheduler;
 
 import cn.partytime.cache.admin.CheckAdminCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
+import cn.partytime.cache.projector.ProjectorAlarmCacheService;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.*;
@@ -72,14 +73,40 @@ public class AlarmScheduler {
     @Autowired
     private RpcMovieAlarmService rpcMovieAlarmService;
 
+    @Autowired
+    private ProjectorAlarmCacheService projectorAlarmCacheService;
+
     @Value("${alarm.admin.offlineTime}")
     private int clientOfflineTime;
 
     @Value("${client.online.count}")
     private int clientOnlineCount;
 
+    /**
+     * 投影未开启告警计数清0
+     */
+    @Scheduled(cron = "0 0/5 * * * ?")
+    private void projectorA(){
+        List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
+        if(ListUtils.checkListIsNotNull(danmuAddressList)) {
+            for (DanmuAddressModel danmuAddress : danmuAddressList) {
+                String addressId = danmuAddress.getId();
+                log.info("场地:{}投影未开启告警计数清0",danmuAddress.getName());
+                List<DanmuClientModel>  danmuClientList = rpcDanmuClientService.findByAddressId(addressId);
+                if(ListUtils.checkListIsNotNull(danmuClientList)){
+                    for(DanmuClientModel danmuClient:danmuClientList){
+                        String regsitrorCode = danmuClient.getRegistCode();
+                        DanmuClientModel danmuClientModel =  rpcDanmuClientService.findByRegistCode(regsitrorCode);
+                        projectorAlarmCacheService.removeAlarmAllCache(danmuClientModel.getAddressId(),regsitrorCode);
+                    }
+                }
+            }
+        }
+    }
 
-
+    /**
+     * 投影关闭监听逻辑
+     */
     @Scheduled(cron = "0 5 2 * * ?")
     private void projectorCloseCommandListener(){
         log.info("投影关闭监听逻辑");
@@ -87,7 +114,7 @@ public class AlarmScheduler {
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
             for(DanmuAddressModel danmuAddress:danmuAddressList){
                 String addressId = danmuAddress.getId();
-                log.info("场地{}:{}投影",addressId,danmuAddress.getName());
+                log.info("检测场地{}，投影{}是否收到Tms发出的指令",addressId,danmuAddress.getName());
                 List<DanmuClientModel>  danmuClientList = rpcDanmuClientService.findByAddressId(addressId);
                 if(ListUtils.checkListIsNotNull(danmuClientList)){
                     for(DanmuClientModel danmuClient:danmuClientList){

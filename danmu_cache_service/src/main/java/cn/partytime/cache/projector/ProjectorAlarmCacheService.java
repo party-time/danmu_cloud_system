@@ -1,6 +1,7 @@
 package cn.partytime.cache.projector;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
+import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,8 @@ public class ProjectorAlarmCacheService {
      */
     public void removeAlarmAllCache(String addressId,String regiterCode){
         String typeArray[]={
-                LogCodeConst.DeviceLogCode.PROJECTOR_NOT_CLOSE,
-                LogCodeConst.DeviceLogCode.PROJECTOR_NOT_OPEN
+                AlarmKeyConst.ALARM_KEY_PROJECTORNOTCLOSE,
+                AlarmKeyConst.ALARM_KEY_PROJECTORNOTOPEN
         };
         for(int i=0; i<typeArray.length; i++) {
             alarmCacheService.removeAlarmCount(addressId, typeArray[i],regiterCode);
