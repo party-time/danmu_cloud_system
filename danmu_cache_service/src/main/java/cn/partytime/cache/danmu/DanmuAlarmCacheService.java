@@ -43,8 +43,6 @@ public class DanmuAlarmCacheService {
         redisService.expire(key,0);
     }
 
-
-
     /**
      * 电影开始或者结束
      * @param addressId
