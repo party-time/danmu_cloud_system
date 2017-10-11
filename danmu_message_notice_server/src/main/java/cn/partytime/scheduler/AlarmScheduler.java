@@ -85,7 +85,7 @@ public class AlarmScheduler {
     /**
      * 投影未开启告警计数清0
      */
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0 0 6 * * ?")
     private void projectorA(){
         List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)) {
