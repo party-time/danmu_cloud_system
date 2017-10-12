@@ -494,6 +494,7 @@ public class MovieLogicService {
             rpcMovieAlarmService.movieStartError(partyId,addressId,time);
         }else{
             log.info("电影告警请求");
+            time = movieSchedule.getEndTime().getTime()-movieSchedule.getMoviceStartTime().getTime();
             rpcMovieAlarmService.movieTime(partyId,addressId,time);
         }
     }
