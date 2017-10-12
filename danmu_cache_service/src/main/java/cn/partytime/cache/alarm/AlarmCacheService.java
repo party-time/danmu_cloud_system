@@ -44,6 +44,7 @@ public class AlarmCacheService {
         return IntegerUtils.objectConvertToInt(redisService.get(key));
     }
 
+
     /**
      * @param expireTime 时间
      * @param args 参数
