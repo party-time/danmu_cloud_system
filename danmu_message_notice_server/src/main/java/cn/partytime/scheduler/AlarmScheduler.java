@@ -123,7 +123,7 @@ public class AlarmScheduler {
                         List<ProjectorActionModel> projectorActionList = projectorActions.getRows();
                         if(ListUtils.checkListIsNotNull(projectorActionList)){
                             ProjectorActionModel projectorAction = projectorActionList.get(0);
-                            if(projectorAction.getEndTime()==null && DateUtils.checkDataIsCurrentDate(projectorAction.getCreateTime())){
+                            if(projectorAction.getEndTime()==null && DateUtils.checkDateIsBeforeCurrentDate(projectorAction.getCreateTime())){
                                 rpcProjectorAlarmService.projectorClose(regsitrorCode);
                             }
                         }

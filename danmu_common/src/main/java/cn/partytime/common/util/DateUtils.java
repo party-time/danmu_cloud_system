@@ -83,6 +83,18 @@ public class DateUtils {
         return false;
     }
 
+    public static boolean checkDateIsBeforeCurrentDate(Date date){
+        if(date==null){
+            return false;
+        }
+        Date currentDate = DateUtils.getCurrentDate();
+        return currentDate.after(date);
+    }
+
+
+
+
+
 
     /*public static void main(String[] args) {
         System.out.println(transferLongToDate("MM/ dd/yyyy HH:mm:ss",Long.parseLong("1496210882091")));
@@ -113,5 +125,12 @@ public class DateUtils {
             e.printStackTrace();
         }
         return date;
+    }
+
+    public static int getCurrentHour(){
+        Calendar calendar = Calendar.getInstance();
+        // 或者用 Date 来初始化 Calendar 对象
+        calendar.setTime(new Date());
+        return calendar.get(Calendar.HOUR_OF_DAY);
     }
 }
