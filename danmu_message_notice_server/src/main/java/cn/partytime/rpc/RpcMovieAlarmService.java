@@ -113,17 +113,21 @@ public class RpcMovieAlarmService {
                 log.info("{}:告警发出的次数超过上限",typeName);
                 return;
             }
+
+            if(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME.equals(typeName)){
+                log.info("电影超时告警发出后判断当前时间是否是零点以后 三点之前发出的报警");
+                int hour = DateUtils.getCurrentHour();
+                log.info("当前时间是:{}",hour);
+                if(hour>=0 && hour<=3 ){
+                    sendCommand("projectClose",addressId,"");
+                }
+            }
+
             alarmCacheService.addAlarmCount(0,addressId,typeName);
             MessageObject<Map<String,String>>  mapMessageObject = new MessageObject<Map<String,String>>(type,map);
             mapMessageObject.setValue(0);
             mapMessageObject.setThreshold(0);
             messageHandlerService.messageHandler(danmuAlarmService,mapMessageObject);
-
-            log.info("电影超时告警发出后判断当前时间是否是零点以后 三点之前发出的报警");
-            int hour = DateUtils.getCurrentHour();
-            if(hour>=0 && hour<=3 ){
-                sendCommand("projectClose",addressId,"");
-            }
         }
     }
 
