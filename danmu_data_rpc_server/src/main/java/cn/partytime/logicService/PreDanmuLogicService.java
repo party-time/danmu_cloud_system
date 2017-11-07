@@ -83,7 +83,7 @@ public class PreDanmuLogicService {
             for(String library:librarySet){
                 //long count = findDanmuLibraryCount(library);
                 long cacheCount = preDanmuCacheService.getPreDanmuListSize(partyId,addressId,library);
-                log.info("预置弹幕数量:{}",cacheCount);
+                log.info("缓存中预置弹幕数量:{}",cacheCount);
                 if(cacheCount==0){
                     removePreDanmuCache(partyId,addressId,library);
                     addAllLibraryUnderPartyIntoCache(library,partyId,addressId);
@@ -104,8 +104,9 @@ public class PreDanmuLogicService {
             log.info("预置弹幕库信息:{}",JSON.toJSONString(librarySet));
             for(String library:librarySet){
                 long count = findDanmuLibraryCount(library);
+                log.info("预置弹幕数量:{}",count);
                 long cacheCount = preDanmuCacheService.getPreDanmuListSize(partyId,addressId,library);
-                log.info("预置弹幕数量:{}",cacheCount);
+                log.info("缓存中预置弹幕数量:{}",cacheCount);
                 if(cacheCount==count){
                     return;
                 }else{
