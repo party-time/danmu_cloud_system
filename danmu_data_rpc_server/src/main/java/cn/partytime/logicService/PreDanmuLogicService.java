@@ -108,7 +108,7 @@ public class PreDanmuLogicService {
                 long cacheCount = preDanmuCacheService.getPreDanmuListSize(partyId,addressId,library);
                 log.info("缓存中预置弹幕数量:{}",cacheCount);
                 if(cacheCount==count){
-                    return;
+                    continue;
                 }else{
                     removePreDanmuCache(partyId,addressId,library);
                     addAllLibraryUnderPartyIntoCache(library,partyId,addressId);
