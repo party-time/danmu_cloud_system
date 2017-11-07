@@ -76,12 +76,14 @@ public class PreDanmuLogicService {
      * @param partyId 活动编号
      */
     public void initPreDanmuIntoCache(String partyId,String addressId){
-        log.info("验证是否要重新加载预置弹幕");
+        log.info("initPreDanmuIntoCache:验证是否要重新加载预置弹幕");
         Set<String> librarySet = restPreDanmuLibraryList(partyId);
         if(SetUtils.checkSetIsNotNull(librarySet)){
+            log.info("预置弹幕库信息:{}",JSON.toJSONString(librarySet));
             for(String library:librarySet){
-                long count = findDanmuLibraryCount(library);
+                //long count = findDanmuLibraryCount(library);
                 long cacheCount = preDanmuCacheService.getPreDanmuListSize(partyId,addressId,library);
+                log.info("预置弹幕数量:{}",cacheCount);
                 if(cacheCount==0){
                     removePreDanmuCache(partyId,addressId,library);
                     addAllLibraryUnderPartyIntoCache(library,partyId,addressId);
@@ -96,12 +98,14 @@ public class PreDanmuLogicService {
      * @param partyId 活动编号
      */
     public void reInitPreDanmuIntoCache(String partyId,String addressId){
-        log.info("验证是否要重新加载预置弹幕");
+        log.info("reInitPreDanmuIntoCache:验证是否要重新加载预置弹幕");
         Set<String> librarySet = restPreDanmuLibraryList(partyId);
         if(SetUtils.checkSetIsNotNull(librarySet)){
+            log.info("预置弹幕库信息:{}",JSON.toJSONString(librarySet));
             for(String library:librarySet){
                 long count = findDanmuLibraryCount(library);
                 long cacheCount = preDanmuCacheService.getPreDanmuListSize(partyId,addressId,library);
+                log.info("预置弹幕数量:{}",cacheCount);
                 if(cacheCount==count){
                     return;
                 }else{
