@@ -207,6 +207,7 @@ public class PartyController extends BaseAdminController {
                 canUse = rpcPartyService.findCurrentParyIsInProgress(partyModel);
                 String partyId = party.getId();
                 if(!canUse && party.getType()==1){
+                    log.info("partyType:{}",party.getType());
                     List<DanmuAddress> danmuAddressList = danmuAddressService.findByType(0);
                     if(ListUtils.checkListIsNotNull(danmuAddressList)){
                         danmuAddressList.forEach(danmuAddress -> rpcPreDanmuService.initPreDanmuIntoCache(partyId,danmuAddress.getId()));
