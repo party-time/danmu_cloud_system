@@ -2,6 +2,7 @@ package cn.partytime.controller;
 
 import cn.partytime.alarmRpc.RpcDanmuAlarmService;
 import cn.partytime.model.RestResultModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/v1/api/javaClient")
+@Slf4j
 public class ClientAlarmController {
 
     @Autowired
@@ -26,4 +28,10 @@ public class ClientAlarmController {
         restResultModel.setResult(200);
         return restResultModel;
     }
+
+    @RequestMapping(value = "/alarm/{addressId}/{number}/{type}", method = RequestMethod.GET)
+    public void danmuNotice(@PathVariable("addressId") String addressId, @PathVariable("number") Integer number, @PathVariable("type") Integer type){
+        log.info("addressId:{},number:{}",addressId,number);
+    }
+
 }
