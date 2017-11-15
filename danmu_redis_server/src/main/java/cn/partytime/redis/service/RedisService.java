@@ -152,6 +152,14 @@ public class RedisService {
         return redisTemplate.opsForList().leftPush(key, object);
     }
 
+    public long setValueToListFromRight(String key, Object object) {
+        if (key == null || key.equals("")) {
+            return 0L;
+        }
+        return redisTemplate.opsForList().rightPush(key, object);
+    }
+
+
     public Long setListToList(String key, Object[] objects) {
         if (key == null || key.equals("")) {
             return 0L;

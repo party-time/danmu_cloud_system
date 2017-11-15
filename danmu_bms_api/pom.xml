@@ -225,6 +225,9 @@
                 <resources>
                     <resource>
                         <directory>src/main/resources</directory>
+                        <includes>
+                            <include>bootstrap.properties</include>
+                        </includes>
                         <excludes>
                             <exclude>application.properties</exclude>
                             <exclude>**/*</exclude>
@@ -239,6 +242,9 @@
                 <resources>
                     <resource>
                         <directory>src/main/resources</directory>
+                        <includes>
+                            <include>bootstrap.properties</include>
+                        </includes>
                         <excludes>
                             <exclude>application.properties</exclude>
                             <exclude>**/*</exclude>

@@ -31,7 +31,9 @@ public interface LogCodeConst {
     public class DeviceLogCode{
         public static final String PROJECTOR_NOT_OPEN="2000";
         public static final String PROJECTOR_NOT_CLOSE="2001";
-        public static final String PROJECTOR_BULB_LIFE_MORE_THAN_PRECENT80="2001";
+
+        /**Java客户端执行脚本异常*/
+        public static final String JAVACLIENT_EXECUTESHELL_EXCEPTION="2002";
     }
 
     public class CLientLogCode{

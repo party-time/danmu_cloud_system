@@ -1,16 +1,21 @@
 package cn.partytime.rpc;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
+import cn.partytime.cache.projector.ProjectorAlarmCacheService;
 import cn.partytime.common.cachekey.client.ClientCommandCacheKey;
 import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.DateUtils;
+import cn.partytime.common.util.ListUtils;
+import cn.partytime.dataRpc.RpcDanmuClientService;
 import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.RpcProjectorService;
+import cn.partytime.dataRpc.RpcPromoService;
 import cn.partytime.logicService.CommonDataService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.proxy.MessageHandlerService;
-import cn.partytime.model.PartyModel;
+import cn.partytime.model.*;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.service.DanmuAlarmService;
 import com.alibaba.fastjson.JSON;
@@ -21,7 +26,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,6 +55,12 @@ public class RpcMovieAlarmService {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private RpcDanmuClientService rpcDanmuClientService;
+
+    @Autowired
+    private RpcProjectorService rpcProjectorService;
 
 
     @RequestMapping(value = "/movieStartError" ,method = RequestMethod.GET)
@@ -120,6 +133,10 @@ public class RpcMovieAlarmService {
                 log.info("当前时间是:{}",hour);
                 if(hour>=0 && hour<=3 ){
                     sendCommand("projectClose",addressId,"");
+                    /*List<DanmuClientModel> danmuClientList = rpcDanmuClientService.findByAddressId(addressId);
+                    if(ListUtils.checkListIsNotNull(danmuClientList)){
+                        danmuClientList.forEach(danmuClientModel -> rpcProjectorService.closeProjector(danmuClientModel.getRegistCode()));
+                    }*/
                 }
             }
 
@@ -152,4 +169,5 @@ public class RpcMovieAlarmService {
 
         redisService.subPub("client:command",addressId);
     }
+
 }

@@ -1,6 +1,7 @@
 package cn.partytime.controller;
 
 import cn.partytime.alarmRpc.RpcDanmuAlarmService;
+import cn.partytime.alarmRpc.RpcJavaClientAlarmService;
 import cn.partytime.model.RestResultModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class ClientAlarmController {
     @Autowired
     private RpcDanmuAlarmService rpcDanmuAlarmService;
 
+    @Autowired
+    private RpcJavaClientAlarmService rpcJavaClientAlarmService;
+
     @RequestMapping(value = "/alarm/{code}/{type}/{idd}", method = RequestMethod.GET)
     public RestResultModel danmuNotice(@PathVariable("code") String code, @PathVariable("type") String type, @PathVariable("idd") String idd){
         RestResultModel restResultModel = new RestResultModel();
@@ -29,9 +33,11 @@ public class ClientAlarmController {
         return restResultModel;
     }
 
-    @RequestMapping(value = "/alarm/{addressId}/{number}/{type}", method = RequestMethod.GET)
-    public void danmuNotice(@PathVariable("addressId") String addressId, @PathVariable("number") Integer number, @PathVariable("type") Integer type){
-        log.info("addressId:{},number:{}",addressId,number);
+    @RequestMapping(value = "/alarm",method = {RequestMethod.GET,RequestMethod.POST})
+    public void danmuNotice( String addressId,Integer number,String type){
+        log.info("addressId:{},number:{},type:{}",addressId,number,type);
+
+        rpcJavaClientAlarmService.javaClientAlarm(type,number,addressId);
     }
 
 }

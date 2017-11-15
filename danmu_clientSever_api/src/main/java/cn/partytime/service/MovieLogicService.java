@@ -484,11 +484,17 @@ public class MovieLogicService {
             party = partyService.saveParty(party);
         }
 
-        //加载预置弹幕
-        rpcPreDanmuService.reInitPreDanmuIntoCache(party.getId(),movieSchedule.getAddressId());
-
         String partyId = party.getId();
         String addressId = movieSchedule.getAddressId();
+
+        //加载预置弹幕
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                rpcPreDanmuService.reInitPreDanmuIntoCache(partyId,addressId);
+            }
+        }).start();
+
         if(movieSchedule.getMoviceStartTime()==null){
             log.info("电影未正常开始，告警请求");
             rpcMovieAlarmService.movieStartError(partyId,addressId,time);

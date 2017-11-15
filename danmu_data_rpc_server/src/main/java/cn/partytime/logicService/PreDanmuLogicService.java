@@ -86,7 +86,7 @@ public class PreDanmuLogicService {
                 log.info("缓存中预置弹幕数量:{}",cacheCount);
                 if(cacheCount==0){
                     removePreDanmuCache(partyId,addressId,library);
-                    addAllLibraryUnderPartyIntoCache(library,partyId,addressId);
+                    addAllLibraryUnderPartyIntoCache(library,partyId,addressId,cacheCount);
                 }
             }
         }
@@ -111,7 +111,7 @@ public class PreDanmuLogicService {
                     continue;
                 }else{
                     removePreDanmuCache(partyId,addressId,library);
-                    addAllLibraryUnderPartyIntoCache(library,partyId,addressId);
+                    addAllLibraryUnderPartyIntoCache(library,partyId,addressId,0);
                 }
             }
         }
@@ -180,29 +180,7 @@ public class PreDanmuLogicService {
         return preDanmuService.countByDanmuLibraryId(libraryId);
     }
 
-    /**
-     * 将预制弹幕加载到缓存中
-     * @param libraryId
-     * @param partyId
-     */
-    private void addAllLibraryUnderPartyIntoCache(String libraryId,String partyId,String addressId){
-        long count = findDanmuLibraryCount(libraryId);
-        long index = 0;
-        int pageSize = 100;
-        if (count % pageSize > 0) {
-            index = count / pageSize + 1;
-        } else {
-            index = count / pageSize;
-        }
-        List<PreDanmuModel> preDanmuModelList = new ArrayList<PreDanmuModel>();
-        for(int i=0; i<index; i++){
-            Page<PreDanmu> preDanmuModelPage = preDanmuService.findPageByDLId(i,pageSize,libraryId);
-            if(preDanmuModelPage.getContent()!=null){
-                setPreDanmuIntoCache(partyId,libraryId,preDanmuModelPage.getContent(), addressId);
-            }
 
-        }
-    }
 
     /**
      * 将预置弹幕存入缓存
@@ -247,6 +225,8 @@ public class PreDanmuLogicService {
         }
         //预制弹幕缓存时间
         preDanmuCacheService.setPreDanmuIntoCacheUnderPartyTime(partyId,addressId,libraryId, 60 * 60 * 24*7);
+
+        preDanmuCacheService.removePreDanmuIndexCacheLock(partyId,addressId,libraryId);
     }
 
 
@@ -272,19 +252,85 @@ public class PreDanmuLogicService {
                 log.info("当前活动的所有预置弹幕库:{}",JSON.toJSONString(stringSet));
                 stringSet.remove(libaryId);
                 if(SetUtils.checkSetIsNotNull(stringSet)){
-                    for(String str:stringSet){
-                        object = preDanmuCacheService.findPreDanmu(partyId,addressId,str);
+                    for(String libraryId:stringSet){
+                        object = preDanmuCacheService.findPreDanmu(partyId,addressId,libraryId);
+                        supplyPreDanmu(partyId,addressId,libaryId);
                         if(object!=null){
-                            log.info("从弹幕库:{}中没有获取到弹幕,将从:{}中获取弹幕:{}",libaryId,str,object);
+                            log.info("从弹幕库:{}中没有获取到弹幕,将从:{}中获取弹幕:{}",libaryId,libraryId,object);
                             return ((Map<String,Object>)JSON.parseObject(String.valueOf(object)));
                         }
                     }
                 }
             }else{
+                supplyPreDanmu(partyId,addressId,libaryId);
                 return ((Map<String,Object>)JSON.parseObject(String.valueOf(object)));
             }
         }
-
         return null;
+    }
+
+    public void supplyPreDanmu(String partyId,String addressId,String library){
+        boolean isLock = preDanmuCacheService.checkPreDanmuIndexCacheLockIsLock(partyId,addressId,library);
+        long cacheCount = preDanmuCacheService.getPreDanmuListSize(partyId,addressId,library);
+        log.info("当前队列中的弹幕数量：{}",cacheCount);
+        if(cacheCount< 100) {
+            log.info("当前队列中的弹幕数量小于100,开始补充弹幕");
+            if(!isLock){
+                preDanmuCacheService.setPreDanmuIndexCacheLock(partyId,addressId,library);
+                new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //缓存队列中预置弹幕的数量
+                            long sum = findDanmuLibraryCount(library);
+                            long index = preDanmuCacheService.getPreDanmuIndexCache(partyId,addressId,library);
+                            log.info("弹幕库总弹幕数是:{}，缓存中存的弹幕数:{}",sum,index);
+                            if(index<sum){
+                                addAllLibraryUnderPartyIntoCache(library,partyId,addressId,index);
+                            }
+                        preDanmuCacheService.removePreDanmuIndexCacheLock(partyId,addressId,library);
+                    }
+                }).start();
+            }
+        }
+    }
+
+    /**
+     * 将预制弹幕加载到缓存中
+     * @param libraryId
+     * @param partyId
+     */
+    private void addAllLibraryUnderPartyIntoCache(String libraryId,String partyId,String addressId,long count){
+        /*long count = findDanmuLibraryCount(libraryId);
+        if(count>3000){
+            count=3000;
+        }
+        long index = 0;
+        int pageSize = 100;
+        if (count % pageSize > 0) {
+            index = count / pageSize + 1;
+        } else {
+            index = count / pageSize;
+        }
+
+        List<PreDanmuModel> preDanmuModelList = new ArrayList<PreDanmuModel>();
+        for(int i=0; i<index; i++){
+            Page<PreDanmu> preDanmuModelPage = preDanmuService.findPageByDLId(i,pageSize,libraryId);
+            if(preDanmuModelPage.getContent()!=null){
+                setPreDanmuIntoCache(partyId,libraryId,preDanmuModelPage.getContent(), addressId);
+            }
+
+        }
+        */
+        int pageSize = 200;
+        log.info("当前缓存中的索引位置:{}",count);
+        int i = Integer.parseInt((count/pageSize)+"");
+        log.info("当前页码:{}",i);
+        Page<PreDanmu> preDanmuModelPage = preDanmuService.findPageByDLId(i,pageSize,libraryId);
+        if(preDanmuModelPage.getContent()!=null){
+            List<PreDanmu> preDanmuModelList = preDanmuModelPage.getContent();
+            long time = 60*60*2;
+            preDanmuCacheService.setPreDanmuIndexCache(partyId,addressId,libraryId,preDanmuModelList.size()+count,time);
+            setPreDanmuIntoCache(partyId,libraryId,preDanmuModelPage.getContent(), addressId);
+        }
     }
 }

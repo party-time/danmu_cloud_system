@@ -1,11 +1,16 @@
 package cn.partytime.rpc;
 
+import cn.partytime.cache.projector.ProjectorAlarmCacheService;
+import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
+import cn.partytime.model.DanmuClientModel;
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.ProjectorActionModel;
 import cn.partytime.model.ProjectorModel;
+import cn.partytime.model.client.DanmuClient;
 import cn.partytime.model.projector.Projector;
 import cn.partytime.model.projector.ProjectorAction;
+import cn.partytime.service.DanmuClientService;
 import cn.partytime.service.projector.ProjectorActionService;
 import cn.partytime.service.projector.ProjectorService;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +36,13 @@ public class RpcProjectorService {
 
     @Autowired
     private ProjectorActionService projectorActionService;
+
+    @Autowired
+    private DanmuClientService danmuClientService;
+
+
+    @Autowired
+    private ProjectorAlarmCacheService projectorAlarmCacheService;
 
 
     @RequestMapping(value = "/findByRegisterCode" ,method = RequestMethod.GET)

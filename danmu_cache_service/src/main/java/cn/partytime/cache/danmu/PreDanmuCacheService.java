@@ -58,7 +58,7 @@ public class PreDanmuCacheService {
      */
     public void addPreDanmuIntoCacheUnderParty(String partyId,String addressId, String libraryId, String danmu){
         String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
-        redisService.setValueToList(key, danmu);
+        redisService.setValueToListFromRight(key, danmu);
     }
 
     public long getPreDanmuListSize(String partyId,String addressId, String libraryId){
@@ -76,4 +76,45 @@ public class PreDanmuCacheService {
         String key = PreDanmuCacheKey.PARTY_PREDANMU_CACHE_LIST + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
         redisService.expire(key,time);
     }
+
+    public void setPreDanmuIndexCache(String partyId,String addressId,String libraryId,long count,long time){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_INDEX_CACHE + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
+        redisService.set(key,count);
+        redisService.expire(key,time);
+    }
+
+    public long getPreDanmuIndexCache(String partyId,String addressId,String libraryId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_INDEX_CACHE + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
+        return LongUtils.objectConvertToLong(redisService.get(key));
+    }
+
+    public void removePreDanmuIndexCache(String partyId,String addressId,String libraryId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_INDEX_CACHE + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
+        redisService.expire(key,0);
+    }
+
+
+    public boolean checkPreDanmuIndexCacheLockIsLock(String partyId,String addressId,String libraryId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_INDEX_CACHE_LOCK + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
+        Object object =redisService.get(key);
+        if(object==null){
+            return false;
+        }
+        return true;
+    }
+
+
+    public void setPreDanmuIndexCacheLock(String partyId,String addressId,String libraryId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_INDEX_CACHE_LOCK + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
+        redisService.set(key,1);
+        redisService.expire(key,60*60*1);
+    }
+
+    public void removePreDanmuIndexCacheLock(String partyId,String addressId,String libraryId){
+        String key = PreDanmuCacheKey.PARTY_PREDANMU_INDEX_CACHE_LOCK + partyId+ CommonConst.COLON+addressId+CommonConst.COLON+libraryId;
+        redisService.expire(key,0);
+    }
+
+
+
 }

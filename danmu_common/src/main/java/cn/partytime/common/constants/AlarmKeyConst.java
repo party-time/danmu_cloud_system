@@ -19,6 +19,8 @@ public class AlarmKeyConst {
     public final static String ALARM_KEY_PAYEXCESS="payExcess";//付费超额报警
     public final static String ALARM_KEY_NETWORKERROR="networkError";//客户端网络异常
     public final static String RESOURCENOTPLAY="resourceNotPlay";//资源无法播放报警
-
     public final static String ALARM_MOVIESTARTERROR = "movieStartError";
+    public final static String JAVACLIENTSHELLERROR="javaclientShellError";
+
+
 }
