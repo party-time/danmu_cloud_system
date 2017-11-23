@@ -107,4 +107,13 @@ public class RpcMovieScheduleService {
         return movieSchedulePage.getContent().get(0);
     }
 
+    @RequestMapping(value = "/findLastMovieByAddressId" ,method = RequestMethod.GET)
+    public MovieSchedule findLastMovieByAddressId(String addressId){
+        Page<MovieSchedule> movieSchedulePage = movieScheduleService.findAllByAddressId(addressId,1,0);
+        if(movieSchedulePage.getTotalElements()==0){
+            return null;
+        }
+        return movieSchedulePage.getContent().get(0);
+    }
+
 }

@@ -3,6 +3,9 @@ package cn.partytime.scheduler;
 import cn.partytime.cache.admin.CheckAdminCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
 import cn.partytime.cache.projector.ProjectorAlarmCacheService;
+import cn.partytime.cache.projector.ProjectorCacheService;
+import cn.partytime.common.cachekey.client.ClientCommandCacheKey;
+import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.*;
@@ -14,6 +17,7 @@ import cn.partytime.rpc.RpcAdminAlarmService;
 import cn.partytime.rpc.RpcClientAlarmService;
 import cn.partytime.rpc.RpcMovieAlarmService;
 import cn.partytime.rpc.RpcProjectorAlarmService;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,6 +80,9 @@ public class AlarmScheduler {
     @Autowired
     private ProjectorAlarmCacheService projectorAlarmCacheService;
 
+    @Autowired
+    private ProjectorCacheService projectorCacheService;
+
     @Value("${alarm.admin.offlineTime}")
     private int clientOfflineTime;
 
@@ -96,14 +103,57 @@ public class AlarmScheduler {
                 if(ListUtils.checkListIsNotNull(danmuClientList)){
                     for(DanmuClientModel danmuClient:danmuClientList){
                         String regsitrorCode = danmuClient.getRegistCode();
-                        DanmuClientModel danmuClientModel =  rpcDanmuClientService.findByRegistCode(regsitrorCode);
-                        projectorAlarmCacheService.removeAlarmAllCache(danmuClientModel.getAddressId(),regsitrorCode);
+                        //DanmuClientModel danmuClientModel =  rpcDanmuClientService.findByRegistCode(regsitrorCode);
+                        projectorAlarmCacheService.removeAlarmAllCache(addressId,regsitrorCode);
+                        projectorCacheService.clearProjectCloseCount(addressId);
                     }
                 }
             }
         }
     }
 
+    @Scheduled(cron = "0 0/10 * * * ?")
+    private void projectorCloseScheduled(){
+        log.info("执行投影关闭定时任务---------------start");
+        int hour = DateUtils.getCurrentHour();
+
+        if(hour > 7){
+            log.info("当前时间大于7点逻辑终止");
+            return;
+        }
+        List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
+        if(ListUtils.checkListIsNotNull(danmuAddressList)) {
+            for (DanmuAddressModel danmuAddress : danmuAddressList) {
+                String addressId = danmuAddress.getId();
+                PartyLogicModel partyLogicModel = rpcPartyService.findPartyByAddressId(addressId);
+                if(partyLogicModel!=null){
+                    //获取类型 0:活动场：1：弹幕场
+                    String partyId = partyLogicModel.getPartyId();
+                    if(partyLogicModel.getType()==0){
+                        continue;
+                    }
+                }else{
+
+                    Object object = projectorCacheService.getProjectCloseCount(addressId);
+                    if(object!=null){
+                         continue;
+                    }
+                    MovieScheduleModel  movieScheduleModel =  rpcMovieScheduleService.findLastMovieByAddressId(addressId);
+                    if(movieScheduleModel!=null){
+                        Date endTime = movieScheduleModel.getEndTime();
+                        if(endTime !=null){
+                            Date currentDate = DateUtils.getCurrentDate();
+                            long subMinute = DateUtils.subMinute(endTime,currentDate);
+                            if(subMinute>30){
+                                sendCommand("projectClose",addressId,"");
+                                projectorCacheService.setProjectCloseCount(addressId);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     /**
      * 投影关闭监听逻辑
      */
@@ -244,6 +294,29 @@ public class AlarmScheduler {
                 }
             }
         }
+    }
+
+
+    private void sendCommand(String command,String addressId,String callback){
+        String key = ClientCommandCacheKey.PUB_ClIENT_COMMAND_CACHE + addressId;
+
+
+        Map<String,Object> commandMap = new HashMap<String,Object>();
+
+        commandMap.put("type", ProtocolConst.PROTOCOL_CLIENT_COMMAND);
+
+        Map<String,Object> dataMap = new HashMap<String,Object>();
+
+        dataMap.put("bcallBack",callback);
+        dataMap.put("name",command);
+        commandMap.put("data",dataMap);
+
+        String message = JSON.toJSONString(commandMap);
+        log.info("发送给地址:{}客户端的指令{}",addressId,message);
+        redisService.set(key, message);
+        redisService.expire(key, 60);
+
+        redisService.subPub("client:command",addressId);
     }
 
 
