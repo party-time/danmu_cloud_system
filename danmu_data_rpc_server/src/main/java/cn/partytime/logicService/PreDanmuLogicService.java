@@ -215,6 +215,7 @@ public class PreDanmuLogicService {
                             }
                         }
                     }
+                    preDanmuMap.put("isSendH5",0);
                     preDanmuMap.put("data",contentMap);
                 }
                 preDanmuMap.put("type",cmdTempAllData.getKey());
