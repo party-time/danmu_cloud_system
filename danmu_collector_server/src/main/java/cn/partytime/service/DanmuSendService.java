@@ -162,8 +162,9 @@ public class DanmuSendService {
         if(ListUtils.checkListIsNotNull(channelMobileList)){
             logger.info("当前在线的手机客户端数量是:{}",channelMobileList.size());
             for(Channel channel:channelMobileList){
-                logger.info("向手机客户端:{},推送弹幕",channel.id());
-                channel.writeAndFlush(new TextWebSocketFrame(String.valueOf(map)));
+                String message = JSON.toJSONString(map);
+                logger.info("向手机客户端:{},推送弹幕:{}",channel.id(),message);
+                channel.writeAndFlush(new TextWebSocketFrame(message));
             }
         }
     }
