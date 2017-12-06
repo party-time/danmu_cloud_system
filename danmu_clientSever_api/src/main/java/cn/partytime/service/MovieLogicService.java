@@ -58,7 +58,6 @@ public class MovieLogicService {
     @Autowired
     private RpcPartyService partyService;
 
-
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -81,8 +80,63 @@ public class MovieLogicService {
     @Autowired
     private PartyCacheService partyCacheService;
 
-
     public RestResultModel partyStart(String registCode,String command,long clientTime) {
+        PartyModel party = partyService.findByMovieAliasOnLine(command);
+        logger.info("弹幕开始请求：指令编号：{},registCode:{}", command, registCode);
+        RestResultModel restResultModel = new RestResultModel();
+        DanmuClientModel danmuClient = rpcDanmuClientService.findByRegistCode(registCode);
+
+        restResultModel = checkClientExist(danmuClient,registCode);
+        if(restResultModel!=null){
+            return restResultModel;
+        }
+        restResultModel = checkPartyIsOk(party);
+        if(restResultModel!=null){
+            return restResultModel;
+        }
+        String addressId = danmuClient.getAddressId();
+        String partyId = party.getId();
+        Date currentDate = DateUtils.getCurrentDate();
+        List<MovieScheduleModel> movieScheduleList = rpcMovieScheduleService.findByPartyIdAndAddressId(partyId, addressId);
+        MovieScheduleModel movieSchedule = null;
+        if (ListUtils.checkListIsNotNull(movieScheduleList)) {
+            movieSchedule = movieScheduleList.get(0);
+            Date startDate = movieSchedule.getStartTime();
+            Date movieStartDate  = movieSchedule.getMoviceStartTime();
+            //当电影开始时间存在的时候
+            if(movieStartDate!=null){
+                long minute = DateUtils.subMinute(movieStartDate,currentDate);
+				if(minute<10){
+					logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
+					restResultModel = new RestResultModel();
+					restResultModel.setResult(201);
+					return restResultModel;
+				}else{
+                    //当前时间减去电影开始时间大于10分钟
+					logger.info("当前时间减去电影开始时间大于10分钟");
+                }
+            }else if(startDate!=null){
+                //当弹幕开始时间存在的时候
+				//当前时间减去弹幕开始时间大于10分钟
+                long minute = DateUtils.subMinute(startDate,currentDate);
+				if(minute>10){
+					logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
+					restResultModel = new RestResultModel();
+					restResultModel.setResult(201);
+					return restResultModel;
+				}else{
+                    logger.info("当前时间减去弹幕开始时间大于10分钟");
+                }
+            }
+        }
+		insertmovieSchedule(partyId, addressId,clientTime);
+		firstDanmuStartCommandHandler(registCode);
+		sendPartyStatusToClient(partyId,"1",addressId,clientTime);
+		restResultModel = new RestResultModel();
+		restResultModel.setResult(200);
+        return restResultModel;
+    }
+    /*public RestResultModel partyStart(String registCode,String command,long clientTime) {
         PartyModel party = partyService.findByMovieAliasOnLine(command);
         logger.info("弹幕开始请求：指令编号：{},registCode:{}", command, registCode);
         RestResultModel restResultModel = new RestResultModel();
@@ -141,10 +195,74 @@ public class MovieLogicService {
             restResultModel.setResult(200);
             return restResultModel;
         }
-    }
-
+    }*/
 
     public RestResultModel moviceStart(String partyId,String registCode,long clientTime) {
+		logger.info("电影开始请求：活动编号：{},registCode:{}", partyId, registCode);
+        RestResultModel restResultModel = new RestResultModel();
+        DanmuClientModel danmuClient = rpcDanmuClientService.findByRegistCode(registCode);
+        restResultModel = checkClientExist(danmuClient,registCode);
+        if(restResultModel!=null){
+            return restResultModel;
+        }
+        PartyModel party = partyService.getPartyByPartyId(partyId);
+        restResultModel = checkPartyIsOk(party);
+        if(restResultModel!=null){
+            return restResultModel;
+        }
+		
+		String addressId = danmuClient.getAddressId();
+        List<MovieScheduleModel> movieScheduleList = rpcMovieScheduleService.findByPartyIdAndAddressId(partyId, addressId);
+        MovieScheduleModel movieSchedule = null;
+		Date currentDate = DateUtils.getCurrentDate();
+        if (ListUtils.checkListIsNotNull(movieScheduleList)) {
+			movieSchedule = movieScheduleList.get(0);
+            Date startDate = movieSchedule.getStartTime();
+            Date movieStartDate = movieSchedule.getMoviceStartTime();
+			if(movieStartDate!=null){
+                long minute = DateUtils.subMinute(movieStartDate,currentDate);
+				if(minute<10){
+					logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
+					restResultModel = new RestResultModel();
+					restResultModel.setResult(201);
+					return restResultModel;
+				}else{
+                    //当前时间减去电影开始时间大于10分钟
+					logger.info("当前时间减去电影开始时间大于10分钟");
+                }
+            }else if(startDate!=null){
+                logger.info("电影开始的请求距离活动开始的时间是30分钟以内");
+                restResultModel = new RestResultModel();
+                movieSchedule.setMoviceStartTime(DateUtils.getCurrentDate());
+                movieSchedule.setClientMoviceStartTime(clientTime);
+                movieSchedule.setUpdateTime(DateUtils.getCurrentDate());
+                rpcMovieScheduleService.updateMovieSchedule(movieSchedule);
+                sendPartyStatusToClient(partyId,"2",addressId,clientTime);
+                restResultModel = new RestResultModel();
+                restResultModel.setResult(200);
+                return restResultModel;
+            }/*else if(startDate!=null){
+                //当弹幕开始时间存在的时候
+				//当前时间减去弹幕开始时间大于10分钟
+                long minute = DateUtils.subMinute(startDate,currentDate);
+				if(minute<10 + x){
+					logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
+					restResultModel = new RestResultModel();
+					restResultModel.setResult(201);
+					return restResultModel;
+				}else{
+                    logger.info("当前时间减去弹幕开始时间大于10分钟");
+                }
+            }*/
+			
+		}
+        insertmovieScheduleByMoviceStart(partyId, addressId,clientTime);
+        sendPartyStatusToClient(partyId,"3",addressId,clientTime);
+        restResultModel = new RestResultModel();
+        restResultModel.setResult(200);
+        return restResultModel;
+    }
+    /*public RestResultModel moviceStart(String partyId,String registCode,long clientTime) {
         logger.info("电影开始请求：活动编号：{},registCode:{}", partyId, registCode);
         RestResultModel restResultModel = new RestResultModel();
         DanmuClientModel danmuClient = rpcDanmuClientService.findByRegistCode(registCode);
@@ -219,14 +337,35 @@ public class MovieLogicService {
             restResultModel.setResult(200);
             return restResultModel;
         }
-    }
+    }*/
 
     /**
      * 电影结束
      * @param registCode
      * @return
      */
+
     public RestResultModel moviceStop(String partyId, String registCode,long clientTime) {
+        logger.info("电影结束请求：活动编号：{},registCode:{}", partyId, registCode);
+        RestResultModel restResultModel = new RestResultModel();
+        DanmuClientModel danmuClient = rpcDanmuClientService.findByRegistCode(registCode);
+
+        restResultModel = checkClientExist(danmuClient,registCode);
+        if(restResultModel!=null){
+            return restResultModel;
+        }
+        PartyModel party = partyService.getPartyByPartyId(partyId);
+        restResultModel = checkPartyIsOk(party);
+        if(restResultModel!=null){
+            return restResultModel;
+        }
+        String addressId = danmuClient.getAddressId();
+        sendPartyStatusToClient(partyId,"3",addressId,clientTime);
+        restResultModel = new RestResultModel();
+        restResultModel.setResult(200);
+        return restResultModel;
+    }
+    /*public RestResultModel moviceStop(String partyId, String registCode,long clientTime) {
         logger.info("电影结束请求：活动编号：{},registCode:{}", partyId, registCode);
         RestResultModel restResultModel = new RestResultModel();
 
@@ -305,7 +444,7 @@ public class MovieLogicService {
             restResultModel.setResult_msg("活动已经结束");
             return restResultModel;
         }
-    }
+    }*/
 
 
 
