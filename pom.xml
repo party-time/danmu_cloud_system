@@ -38,6 +38,7 @@
 
         <module>danmu_data_rpc_server</module>
         <module>danmu_cache_service</module>
+        <module>danmu_business_service</module>
 
     </modules>
 

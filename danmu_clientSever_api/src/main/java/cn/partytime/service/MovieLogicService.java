@@ -2,6 +2,7 @@ package cn.partytime.service;
 
 import cn.partytime.alarmRpc.RpcMovieAlarmService;
 import cn.partytime.alarmRpc.RpcProjectorAlarmService;
+import cn.partytime.business.command.ControlCommandService;
 import cn.partytime.cache.danmu.DanmuAlarmCacheService;
 import cn.partytime.cache.party.PartyAlarmCacheService;
 import cn.partytime.cache.party.PartyCacheService;
@@ -80,6 +81,9 @@ public class MovieLogicService {
     @Autowired
     private PartyCacheService partyCacheService;
 
+    @Autowired
+    private ControlCommandService controlCommandService;
+
     public RestResultModel partyStart(String registCode,String command,long clientTime) {
         PartyModel party = partyService.findByMovieAliasOnLine(command);
         logger.info("弹幕开始请求：指令编号：{},registCode:{}", command, registCode);
@@ -102,7 +106,8 @@ public class MovieLogicService {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    logger.info("0======================");
+                    //logger.info("0======================");
+                    controlCommandService.sendCommandToJavaClient("projectorStart",danmuClient.getAddressId(),"");
                 }
             }).start();
         }

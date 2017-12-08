@@ -145,7 +145,7 @@ public class AlarmScheduler {
                             Date currentDate = DateUtils.getCurrentDate();
                             long subMinute = DateUtils.subMinute(endTime,currentDate);
                             if(subMinute>30){
-                                sendCommand("projectClose",addressId,"");
+                                sendCommand("projectorClose",addressId,"");
                                 projectorCacheService.setProjectCloseCount(addressId);
                             }
                         }

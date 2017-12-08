@@ -132,7 +132,7 @@ public class RpcMovieAlarmService {
                 int hour = DateUtils.getCurrentHour();
                 log.info("当前时间是:{}",hour);
                 if(hour>=0 && hour<=3 ){
-                    sendCommand("projectClose",addressId,"");
+                    sendCommand("projectorClose",addressId,"");
                     /*List<DanmuClientModel> danmuClientList = rpcDanmuClientService.findByAddressId(addressId);
                     if(ListUtils.checkListIsNotNull(danmuClientList)){
                         danmuClientList.forEach(danmuClientModel -> rpcProjectorService.closeProjector(danmuClientModel.getRegistCode()));

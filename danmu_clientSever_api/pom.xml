@@ -69,6 +69,12 @@
             <groupId>cn.party-time</groupId>
         </dependency>
 
+        <dependency>
+            <artifactId>danmu_business_service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <groupId>cn.party-time</groupId>
+        </dependency>
+
 
     </dependencies>
     <dependencyManagement>
