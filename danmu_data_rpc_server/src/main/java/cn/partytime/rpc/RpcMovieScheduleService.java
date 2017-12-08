@@ -8,6 +8,7 @@ import cn.partytime.model.PageResultModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.manager.MovieSchedule;
 import cn.partytime.service.MovieScheduleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rpcMovieSchedule")
+@Slf4j
 public class RpcMovieScheduleService {
 
     @Autowired
@@ -116,4 +118,10 @@ public class RpcMovieScheduleService {
         return movieSchedulePage.getContent().get(0);
     }
 
+    @RequestMapping(value = "/countByCreateTimeGreaterThanSeven" ,method = RequestMethod.GET)
+    public long countByCreateTimeGreaterThanSeven(){
+        Date sevenTime = DateUtils.getSpecifiedTime(7);
+        log.info("createTime:"+sevenTime);
+        return movieScheduleService.countByCreateTimeGreaterThan(sevenTime);
+    }
 }

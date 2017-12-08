@@ -13,6 +13,7 @@ import cn.partytime.model.projector.ProjectorAction;
 import cn.partytime.service.DanmuClientService;
 import cn.partytime.service.projector.ProjectorActionService;
 import cn.partytime.service.projector.ProjectorService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rpcProjector")
+@Slf4j
 public class RpcProjectorService {
 
     @Autowired
@@ -47,6 +49,7 @@ public class RpcProjectorService {
 
     @RequestMapping(value = "/findByRegisterCode" ,method = RequestMethod.GET)
     public ProjectorModel findByRegisterCode(@RequestParam String registorCode) {
+        log.info("通过注册码获取投影仪信息");
         Projector projector =  projectorService.findByRegisterCode(registorCode);
         ProjectorModel projectorModel = new ProjectorModel();
         if(projector!=null){
