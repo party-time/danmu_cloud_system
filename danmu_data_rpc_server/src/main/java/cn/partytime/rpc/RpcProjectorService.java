@@ -52,7 +52,7 @@ public class RpcProjectorService {
     public ProjectorModel findByRegisterCode(@RequestParam String registorCode) {
         log.info("通过注册码获取投影仪信息");
         Projector projector =  projectorService.findByRegisterCode(registorCode);
-        log.info("projector:"+ JSON.toJSONString(projector));
+        log.info("registorCode:{},projector:"+ JSON.toJSONString(projector),registorCode);
         ProjectorModel projectorModel = new ProjectorModel();
         if(projector!=null){
             BeanUtils.copyProperties(projector,projectorModel);
