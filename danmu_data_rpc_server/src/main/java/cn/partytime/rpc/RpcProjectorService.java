@@ -13,6 +13,7 @@ import cn.partytime.model.projector.ProjectorAction;
 import cn.partytime.service.DanmuClientService;
 import cn.partytime.service.projector.ProjectorActionService;
 import cn.partytime.service.projector.ProjectorService;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class RpcProjectorService {
     public ProjectorModel findByRegisterCode(@RequestParam String registorCode) {
         log.info("通过注册码获取投影仪信息");
         Projector projector =  projectorService.findByRegisterCode(registorCode);
+        log.info("projector:"+ JSON.toJSONString(projector));
         ProjectorModel projectorModel = new ProjectorModel();
         if(projector!=null){
             BeanUtils.copyProperties(projector,projectorModel);
