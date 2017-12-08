@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.List;
 
 @FeignClient(value = "${dataRpcServer}",fallback = RpcMovieScheduleServiceHystrix.class)
@@ -39,4 +40,7 @@ public interface RpcMovieScheduleService {
 
     @RequestMapping(value = "/rpcMovieSchedule/findLastMovieByAddressId" ,method = RequestMethod.GET)
     public MovieScheduleModel findLastMovieByAddressId(@RequestParam(value = "addressId") String addressId);
+
+    @RequestMapping(value = "/rpcMovieSchedule/countByCreateTimeGreaterThanSeven" ,method = RequestMethod.GET)
+    public long countByCreateTimeGreaterThanSeven();
 }

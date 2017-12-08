@@ -4,6 +4,7 @@ import cn.partytime.dataRpc.RpcMovieScheduleService;
 import cn.partytime.model.MovieScheduleModel;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -43,5 +44,10 @@ public class RpcMovieScheduleServiceHystrix implements RpcMovieScheduleService {
     @Override
     public MovieScheduleModel findLastMovieByAddressId(String addressId) {
         return null;
+    }
+
+    @Override
+    public long countByCreateTimeGreaterThanSeven() {
+      return 0;
     }
 }
