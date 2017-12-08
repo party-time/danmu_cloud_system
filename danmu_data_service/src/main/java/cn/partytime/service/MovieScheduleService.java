@@ -79,4 +79,8 @@ public class MovieScheduleService {
     public void del(String id){
         movieScheduleRepository.delete(id);
     }
+
+    public long countByCreateTimeGreaterThan(Date createTime){
+        return movieScheduleRepository.countByCreateTimeGreaterThan(createTime);
+    }
 }

@@ -91,11 +91,14 @@ public class DateUtils {
         return currentDate.after(date);
     }
 
+    public static Date getSpecifiedTime(int hour){
+        String dateStr = dateToString(DateUtils.getCurrentDate(),"yyyy-MM-dd");
+        return strToDate(dateStr+" "+hour+":00:00","yyyy-MM-dd HH:mm:ss");
+    }
 
-
-
-
-
+    /*public static void main(String[] args) {
+        System.out.println(getSpecifiedTime(7));
+    }*/
     /*public static void main(String[] args) {
         System.out.println(transferLongToDate("MM/ dd/yyyy HH:mm:ss",Long.parseLong("1496210882091")));
     }*/
@@ -113,7 +116,6 @@ public class DateUtils {
         String ctime = formatter.format(time);
         return ctime;
     }
-
 
 
     public static Date strToDate(String str,String formatStr) {

@@ -94,6 +94,19 @@ public class MovieLogicService {
         if(restResultModel!=null){
             return restResultModel;
         }
+
+        //开启投影指令
+
+        long count = rpcMovieScheduleService.countByCreateTimeGreaterThanSeven();
+        if(count==0){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    logger.info("0======================");
+                }
+            }).start();
+        }
+
         String addressId = danmuClient.getAddressId();
         String partyId = party.getId();
         Date currentDate = DateUtils.getCurrentDate();
@@ -119,7 +132,7 @@ public class MovieLogicService {
                 //当弹幕开始时间存在的时候
 				//当前时间减去弹幕开始时间大于10分钟
                 long minute = DateUtils.subMinute(startDate,currentDate);
-				if(minute>10){
+				if(minute<10){
 					logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
 					restResultModel = new RestResultModel();
 					restResultModel.setResult(201);
@@ -129,6 +142,9 @@ public class MovieLogicService {
                 }
             }
         }
+        //清除活动缓存
+        clearPartyCacheInfo(addressId,partyId);
+
 		insertmovieSchedule(partyId, addressId,clientTime);
 		firstDanmuStartCommandHandler(registCode);
 		sendPartyStatusToClient(partyId,"1",addressId,clientTime);
@@ -256,6 +272,8 @@ public class MovieLogicService {
             }*/
 			
 		}
+        //清除活动缓存
+        clearPartyCacheInfo(addressId,partyId);
         insertmovieScheduleByMoviceStart(partyId, addressId,clientTime);
         sendPartyStatusToClient(partyId,"3",addressId,clientTime);
         restResultModel = new RestResultModel();
@@ -344,7 +362,6 @@ public class MovieLogicService {
      * @param registCode
      * @return
      */
-
     public RestResultModel moviceStop(String partyId, String registCode,long clientTime) {
         logger.info("电影结束请求：活动编号：{},registCode:{}", partyId, registCode);
         RestResultModel restResultModel = new RestResultModel();
@@ -360,10 +377,52 @@ public class MovieLogicService {
             return restResultModel;
         }
         String addressId = danmuClient.getAddressId();
-        sendPartyStatusToClient(partyId,"3",addressId,clientTime);
+
+        List<MovieScheduleModel> movieScheduleList = rpcMovieScheduleService.findByPartyIdAndAddressId(partyId, addressId);
+        if (ListUtils.checkListIsNotNull(movieScheduleList)) {
+            MovieScheduleModel movieSchedule = movieScheduleList.get(0);
+            Date movieStartDate = movieSchedule.getMoviceStartTime();
+            Date endDate = movieSchedule.getEndTime();
+            if (endDate != null) {
+                logger.info("最后一条数据的结束时间不为空，此次请求忽略");
+                restResultModel = new RestResultModel();
+                restResultModel.setResult(406);
+                restResultModel.setResult_msg("活动已经结束");
+                return restResultModel;
+            }else if (movieStartDate != null) {
+                long minutemoviestart = DateUtils.subMinute(movieStartDate, DateUtils.getCurrentDate());
+                logger.info("当前时间距离最一条数据的电影开始时间是150分钟以内可以触发结束");
+                movieSchedule.setEndTime(DateUtils.getCurrentDate());
+                movieSchedule.setUpdateTime(DateUtils.getCurrentDate());
+                movieSchedule.setClientEndTime(clientTime);
+                rpcMovieScheduleService.updateMovieSchedule(movieSchedule);
+                //清除活动缓存
+                clearPartyCacheInfo(addressId,partyId);
+            }
+        }
+
+        Map<String,Object> commandObject = new HashMap<String,Object>();
+        commandObject.put("type", ProtocolConst.PROTOCOL_CLIENT_COMMAND);
+
+        Map<String,Object> dataObject = new HashMap<String,Object>();
+        dataObject.put("bcallBack","");
+        dataObject.put("name","appClose");
+        commandObject.put("data",dataObject);
+
+        logger.info("下发消息给客户端:" + JSON.toJSONString(commandObject));
+
+        String key = CommandCacheKey.PUB_COMMAND_PARTYSTATUS_CACHE+addressId;
+        String message = JSON.toJSONString(commandObject);
+        logger.info("发送给服务器的客户端{}", message);
+        redisService.set(key, message);
+        redisService.expire(key, 60 );
+        //通知客户端
+        redisTemplate.convertAndSend("party:command", addressId);
+
+        //结束指令
         restResultModel = new RestResultModel();
         restResultModel.setResult(200);
-        return restResultModel;
+        return null;
     }
     /*public RestResultModel moviceStop(String partyId, String registCode,long clientTime) {
         logger.info("电影结束请求：活动编号：{},registCode:{}", partyId, registCode);

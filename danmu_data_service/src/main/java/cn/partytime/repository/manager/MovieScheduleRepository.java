@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,9 +19,10 @@ public interface MovieScheduleRepository extends MongoRepository<MovieSchedule,S
 
     Page<MovieSchedule> findByPartyId(String partyId, Pageable pageable);
 
-
     Page<MovieSchedule> findByAddressId(String addressId, Pageable pageable);
 
     Page<MovieSchedule> findByPartyIdAndAddressId(String partyId,String addressId, Pageable pageable);
+
+    long countByCreateTimeGreaterThan(Date createTime);
 
 }
