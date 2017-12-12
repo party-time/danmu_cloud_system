@@ -161,13 +161,13 @@ public class PartyLogicService {
             Date moviceStartDate = movieSchedule.getMoviceStartTime();
             if(startDate!=null){
                 long minute = DateUtils.subMinute(startDate, DateUtils.getCurrentDate());
-                if(minute>190){
+                if(minute>180){
                     logger.info("最后一条数据: 当前时间当前时间-弹幕开始时间>180分钟");
                     return null;
                 }
             }else{
                 long minute = DateUtils.subMinute(moviceStartDate, DateUtils.getCurrentDate());
-                if(minute>180){
+                if(minute>150){
                     logger.info("最后一条数据: 当前时间当前时间-电影开始时间>150分钟");
                     return null;
                 }
