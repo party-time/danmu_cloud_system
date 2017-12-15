@@ -249,7 +249,7 @@ public class AlarmScheduler {
         }
     }
 
-    @Scheduled(cron = "0/30 * * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void projectorCloaseScheduler() {
 
         log.info("执行投影关闭定时任务---------------start");
@@ -287,7 +287,7 @@ public class AlarmScheduler {
                                 int beginTime = timerDanmuModelList.get(0).getBeginTime();
                                 Date endTime = DateUtils.addSecondsToDate(tempDate,beginTime);
                                 Date currentDate = DateUtils.getCurrentDate();
-                                if(endTime.after(currentDate)){
+                                if(DateUtils.addMinuteToDate(endTime,30).before(currentDate)){
                                     log.info("电影开始时间不为空，当场的结束时间在0点和7点之间，发出投影关闭指令");
                                     sendCommand("projectorClose",addressId,"");
                                     projectorCacheService.setProjectCloseCount(addressId);
@@ -308,7 +308,7 @@ public class AlarmScheduler {
                                 int beginTime = timerDanmuModelList.get(0).getBeginTime();
                                 Date endTime = DateUtils.addSecondsToDate(tempDate,beginTime);
                                 Date currentDate = DateUtils.getCurrentDate();
-                                if(endTime.after(currentDate)){
+                                if(DateUtils.addMinuteToDate(endTime,30).before(currentDate)){
                                     log.info("电影开始时间不为空，当场的结束时间在0点和7点之间，发出投影关闭指令");
                                     sendCommand("projectorClose",addressId,"");
                                     projectorCacheService.setProjectCloseCount(addressId);
