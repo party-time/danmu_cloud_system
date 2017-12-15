@@ -286,13 +286,19 @@ public class AlarmScheduler {
                             if(ListUtils.checkListIsNotNull(timerDanmuModelList)){
                                 int beginTime = timerDanmuModelList.get(0).getBeginTime();
                                 Date endTime = DateUtils.addSecondsToDate(tempDate,beginTime);
-                                hour = DateUtils.getTimeHour(endTime);
+                                Date currentDate = DateUtils.getCurrentDate();
+                                if(endTime.after(currentDate)){
+                                    log.info("电影开始时间不为空，当场的结束时间在0点和7点之间，发出投影关闭指令");
+                                    sendCommand("projectorClose",addressId,"");
+                                    projectorCacheService.setProjectCloseCount(addressId);
+                                }
+                                /*hour = DateUtils.getTimeHour(endTime);
                                 if(hour>0 && hour<7){
                                     //关闭投影指令
                                     log.info("电影开始时间不为空，当场的结束时间在0点和7点之间，发出投影关闭指令");
                                     sendCommand("projectorClose",addressId,"");
                                     projectorCacheService.setProjectCloseCount(addressId);
-                                }
+                                }*/
                             }
                         }else if(movieSchedule.getStartTime()!=null){
                             Date tempDate = movieSchedule.getStartTime();
@@ -301,14 +307,19 @@ public class AlarmScheduler {
                             if(ListUtils.checkListIsNotNull(timerDanmuModelList)){
                                 int beginTime = timerDanmuModelList.get(0).getBeginTime();
                                 Date endTime = DateUtils.addSecondsToDate(tempDate,beginTime);
-                                hour = DateUtils.getTimeHour(endTime);
-                                //关闭投影指令
-                                if(hour>0 && hour<7){
-                                    log.info("弹幕开始时间不为空，当场的结束时间在0点和7点之间，发出投影关闭指令");
-                                    //关闭投影指令
+                                Date currentDate = DateUtils.getCurrentDate();
+                                if(endTime.after(currentDate)){
+                                    log.info("电影开始时间不为空，当场的结束时间在0点和7点之间，发出投影关闭指令");
                                     sendCommand("projectorClose",addressId,"");
                                     projectorCacheService.setProjectCloseCount(addressId);
                                 }
+                                /*hour = DateUtils.getTimeHour(endTime);
+                                if(hour>0 && hour<7){
+                                    //关闭投影指令
+                                    log.info("电影开始时间不为空，当场的结束时间在0点和7点之间，发出投影关闭指令");
+                                    sendCommand("projectorClose",addressId,"");
+                                    projectorCacheService.setProjectCloseCount(addressId);
+                                }*/
                             }
                         }
 
