@@ -8,10 +8,7 @@ import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.dataRpc.RpcDanmuClientService;
-import cn.partytime.dataRpc.RpcPartyService;
-import cn.partytime.dataRpc.RpcProjectorService;
-import cn.partytime.dataRpc.RpcPromoService;
+import cn.partytime.dataRpc.*;
 import cn.partytime.logicService.CommonDataService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.proxy.MessageHandlerService;
@@ -57,10 +54,7 @@ public class RpcMovieAlarmService {
     private RedisService redisService;
 
     @Autowired
-    private RpcDanmuClientService rpcDanmuClientService;
-
-    @Autowired
-    private RpcProjectorService rpcProjectorService;
+    private RpcMovieScheduleService rpcMovieScheduleService;
 
 
     @RequestMapping(value = "/movieStartError" ,method = RequestMethod.GET)
@@ -75,7 +69,67 @@ public class RpcMovieAlarmService {
         }
     }
 
-    @RequestMapping(value = "/movieTime" ,method = RequestMethod.GET)
+    /**
+     * 电影超时报警
+     * @param partyId
+     * @param addressId
+     * @param startTime 弹幕开始时间
+     * @param movieStartTime  电影开始时间
+     */
+    @RequestMapping(value = "/overTime" ,method = RequestMethod.GET)
+    public void overTime(@RequestParam String partyId,@RequestParam String addressId, @RequestParam long startTime,long movieStartTime) {
+        Date currentDate = DateUtils.getCurrentDate();
+        long subTime = 0;
+        if(startTime!=0){
+            subTime = currentDate.getTime() - startTime;
+            if(subTime/60/1000<180){
+                return;
+            }
+        }else if(movieStartTime!=0){
+            subTime = currentDate.getTime() - movieStartTime;
+            if(subTime/60/1000<150){
+                return;
+            }
+        }else{
+            return;
+        }
+        //触发时间过
+        Map<String,String> map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME, addressId, partyId);
+        sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_LONG,map,AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME);
+    }
+
+    /**
+     * 时间太短报警
+     * @param partyId
+     * @param addressId
+     */
+    @RequestMapping(value = "/shortTime" ,method = RequestMethod.GET)
+    public void shortTime(@RequestParam String partyId,@RequestParam String addressId) {
+        List<MovieScheduleModel> movieScheduleModelList = rpcMovieScheduleService.findLastMovieListByAddressId(addressId,1,0);
+        if(ListUtils.checkListIsNotNull(movieScheduleModelList)){
+            MovieScheduleModel movieScheduleModel = movieScheduleModelList.get(0);
+            Date startTime = movieScheduleModel.getStartTime();
+            Date movieStartTime = movieScheduleModel.getMoviceStartTime();
+            Date currentTime = DateUtils.getCurrentDate();
+            long subTime = 0;
+            if(startTime!=null){
+                subTime = currentTime.getTime() - startTime.getTime();
+                if(subTime/60/1000>60){
+                    return;
+                }
+            }else if(movieStartTime!=null){
+                subTime = currentTime.getTime() - movieStartTime.getTime();
+                if(subTime/60/1000>60){
+                    return;
+                }
+            }else{
+                return;
+            }
+            Map<String,String>  map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT, addressId, partyId);
+            sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map,AlarmKeyConst.ALARM_KEY_MOVIESHORT);
+        }
+    }
+    /*@RequestMapping(value = "/movieTime" ,method = RequestMethod.GET)
     public void movieTime(@RequestParam String partyId,@RequestParam String addressId, @RequestParam long time) {
 
         PartyModel party = rpcPartyService.getPartyByPartyId(partyId);
@@ -115,7 +169,7 @@ public class RpcMovieAlarmService {
 
             }
         }
-    }
+    }*/
 
     private void sendMessage(String type,Map<String,String> map,String typeName){
         if(map!=null){

@@ -14,6 +14,11 @@ public interface RpcMovieAlarmService {
     public void movieStartError(@RequestParam(value = "partyId") String partyId,@RequestParam(value = "addressId") String addressId, @RequestParam(value = "time") long time);
 
 
-    @RequestMapping(value = "/rpcMovie/movieTime" ,method = RequestMethod.GET)
-    public void movieTime(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId, @RequestParam(value = "time") long time);
+    @RequestMapping(value = "/rpcMovie/overTime" ,method = RequestMethod.GET)
+    public void movieTime(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId, @RequestParam(value = "startTime") long startTime,@RequestParam(value = "movieStartTime") long movieStartTime);
+
+
+    @RequestMapping(value = "/rpcMovie/shortTime" ,method = RequestMethod.GET)
+    public void shortTime(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId);
+
 }

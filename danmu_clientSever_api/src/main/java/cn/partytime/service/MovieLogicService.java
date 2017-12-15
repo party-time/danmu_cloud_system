@@ -121,6 +121,8 @@ public class MovieLogicService {
             movieSchedule = movieScheduleList.get(0);
             Date startDate = movieSchedule.getStartTime();
             Date movieStartDate  = movieSchedule.getMoviceStartTime();
+
+            rpcMovieAlarmService.shortTime(partyId,addressId);
             //当电影开始时间存在的时候
             if(movieStartDate!=null){
                 long minute = DateUtils.subMinute(movieStartDate,currentDate);
@@ -386,6 +388,7 @@ public class MovieLogicService {
         List<MovieScheduleModel> movieScheduleList = rpcMovieScheduleService.findByPartyIdAndAddressId(partyId, addressId);
         if (ListUtils.checkListIsNotNull(movieScheduleList)) {
             MovieScheduleModel movieSchedule = movieScheduleList.get(0);
+            Date startDate = movieSchedule.getStartTime();
             Date movieStartDate = movieSchedule.getMoviceStartTime();
             Date endDate = movieSchedule.getEndTime();
             if (endDate != null) {
@@ -396,6 +399,14 @@ public class MovieLogicService {
                 return restResultModel;
             }else if (movieStartDate != null) {
                 long minutemoviestart = DateUtils.subMinute(movieStartDate, DateUtils.getCurrentDate());
+                logger.info("当前时间距离最一条数据的电影开始时间是150分钟以内可以触发结束");
+                movieSchedule.setEndTime(DateUtils.getCurrentDate());
+                movieSchedule.setUpdateTime(DateUtils.getCurrentDate());
+                movieSchedule.setClientEndTime(clientTime);
+                rpcMovieScheduleService.updateMovieSchedule(movieSchedule);
+                //清除活动缓存
+                clearPartyCacheInfo(addressId,partyId);
+            }else if (startDate != null) {
                 logger.info("当前时间距离最一条数据的电影开始时间是150分钟以内可以触发结束");
                 movieSchedule.setEndTime(DateUtils.getCurrentDate());
                 movieSchedule.setUpdateTime(DateUtils.getCurrentDate());
@@ -704,7 +715,7 @@ public class MovieLogicService {
         }else{
             log.info("电影告警请求");
             time = movieSchedule.getEndTime().getTime()-movieSchedule.getMoviceStartTime().getTime();
-            rpcMovieAlarmService.movieTime(partyId,addressId,time);
+            //rpcMovieAlarmService.movieTime(partyId,addressId,time);
         }
     }
 

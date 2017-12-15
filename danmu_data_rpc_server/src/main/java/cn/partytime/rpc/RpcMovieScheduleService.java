@@ -124,4 +124,13 @@ public class RpcMovieScheduleService {
         log.info("createTime:"+sevenTime);
         return movieScheduleService.countByCreateTimeGreaterThan(sevenTime);
     }
+
+    @RequestMapping(value = "/findLastMovieListByAddressId" ,method = RequestMethod.GET)
+    public List<MovieSchedule> findLastMovieListByAddressId(String addressId,int pageSize,int pageNo){
+        Page<MovieSchedule> movieSchedulePage = movieScheduleService.findAllByAddressId(addressId,pageSize,pageNo);
+        if(movieSchedulePage.getTotalElements()==0){
+            return null;
+        }
+        return movieSchedulePage.getContent();
+    }
 }

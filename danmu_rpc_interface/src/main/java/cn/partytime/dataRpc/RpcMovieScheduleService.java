@@ -43,4 +43,8 @@ public interface RpcMovieScheduleService {
 
     @RequestMapping(value = "/rpcMovieSchedule/countByCreateTimeGreaterThanSeven" ,method = RequestMethod.GET)
     public long countByCreateTimeGreaterThanSeven();
+
+
+    @RequestMapping(value = "/rpcMovieSchedule/findLastMovieListByAddressId" ,method = RequestMethod.GET)
+    public List<MovieScheduleModel> findLastMovieListByAddressId(@RequestParam(value = "addressId") String addressId,@RequestParam(value = "pageSize") long pageSize,@RequestParam(value = "pageNo") long pageNo);
 }

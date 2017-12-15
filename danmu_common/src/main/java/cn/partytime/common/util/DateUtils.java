@@ -40,6 +40,14 @@ public class DateUtils {
         return ca.getTime();
     }
 
+    public static Date addSecondsToDate(Date date,int seconds){
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.setTime(date);
+        calendar.add(Calendar.SECOND,seconds);
+        return calendar.getTime();
+    }
+
 
     public static long subMinute(Date minDate,Date maxDate){
         long between=(maxDate.getTime()-minDate.getTime())/1000;
@@ -133,6 +141,13 @@ public class DateUtils {
         Calendar calendar = Calendar.getInstance();
         // 或者用 Date 来初始化 Calendar 对象
         calendar.setTime(new Date());
+        return calendar.get(Calendar.HOUR_OF_DAY);
+    }
+
+    public static int  getTimeHour(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.setTime(date);
         return calendar.get(Calendar.HOUR_OF_DAY);
     }
 }

@@ -87,4 +87,11 @@ public class TimerDanmuService {
     public long countByPartyIdAndBeginTimeGreaterThan(String parytId,long time){
         return timerDanmuRepository.countByPartyIdAndBeginTimeGreaterThan(parytId,time);
     }
+
+
+    public Page<TimerDanmu> findByPartyIdOrderBytimeDesc(int page, int size, String partyId) {
+        Sort sort = new Sort(Sort.Direction.ASC, "beginTime");
+        PageRequest pageRequest = new PageRequest(page, size, sort);
+        return timerDanmuRepository.findByPartyId(partyId, pageRequest);
+    }
 }
