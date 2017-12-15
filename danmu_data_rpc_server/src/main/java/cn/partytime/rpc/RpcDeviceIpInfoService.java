@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/pcDeviceIpInfo")
+@RequestMapping("/rpcDeviceIpInfo")
 public class RpcDeviceIpInfoService {
 
 
