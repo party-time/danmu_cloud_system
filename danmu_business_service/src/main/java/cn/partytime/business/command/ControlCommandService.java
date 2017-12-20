@@ -19,6 +19,20 @@ public class ControlCommandService {
     @Autowired
     private RedisService redisService;
 
+    public void sendClientCommand(String addressId,Map<String,Object> dataMap,String cacheKeyFix){
+        Map<String,Object> commandObject = new HashMap<String,Object>();
+        String key = cacheKeyFix+addressId;
+        commandObject.put("type", ProtocolConst.PROTOCOL_CLIENT_COMMAND);
+        commandObject.put("data",dataMap);
+        String message = JSON.toJSONString(commandObject);
+        log.info("发送给服务器的客户端{}", message);
+        redisService.set(key, message);
+        redisService.expire(key, 60 );
+        //通知客户端
+        redisService.subPub("client:command", addressId);
+
+    }
+
     public void sendCommandToJavaClient(String command,String addressId,String callback){
         String key = ClientCommandCacheKey.PUB_ClIENT_COMMAND_CACHE + addressId;
         Map<String,Object> commandMap = new HashMap<String,Object>();

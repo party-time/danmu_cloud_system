@@ -1,5 +1,6 @@
 package cn.partytime.rpc;
 
+import cn.partytime.business.command.ControlCommandService;
 import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
 import cn.partytime.common.cachekey.client.ClientCommandCacheKey;
@@ -39,8 +40,6 @@ import java.util.Map;
 @Slf4j
 public class RpcClientAlarmService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RpcClientAlarmService.class);
-
     @Autowired
     private AlarmCacheService alarmCacheService;
 
@@ -63,6 +62,10 @@ public class RpcClientAlarmService {
     @Autowired
     private RedisService redisService;
 
+
+    @Autowired
+    private ControlCommandService controlCommandService;
+
     @RequestMapping(value = "/clientNetError" ,method = RequestMethod.GET)
     public void clientNetError(@RequestParam String addressId) {
 
@@ -75,7 +78,12 @@ public class RpcClientAlarmService {
 
         //发送重启指令
 
-        Map<String,Object> commandMap = new HashMap<>();
+        log.info("-------------客户端网络异常，发重启指令---------------------");
+        Map<String,Object> dataMap = new HashMap<>();
+        dataMap.put("bcallBack",null);
+        dataMap.put("name","appRestart");
+        controlCommandService.sendClientCommand(addressId,dataMap,ClientCommandCacheKey.PUB_ClIENT_COMMAND_CACHE);
+        /*Map<String,Object> commandMap = new HashMap<>();
         commandMap.put("type", ProtocolConst.PROTOCOL_CLIENT_COMMAND);
         Map<String,Object> dataMap = new HashMap<>();
         dataMap.put("bcallBack",null);
@@ -86,7 +94,7 @@ public class RpcClientAlarmService {
         String message = JSON.toJSONString(commandMap);
         redisService.set(key, message);
         redisService.expire(key, 60);
-        redisService.subPub("client:command",addressId);
+        redisService.subPub("client:command",addressId);*/
 
 
         alarmCacheService.addAlarmCount(0,CollectorCacheKey.BASE_ALARM_KEY,AlarmKeyConst.ALARM_KEY_NETWORKERROR,addressId);

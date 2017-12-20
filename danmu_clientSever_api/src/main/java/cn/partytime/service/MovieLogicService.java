@@ -118,7 +118,6 @@ public class MovieLogicService {
             Date startDate = movieSchedule.getStartTime();
             Date movieStartDate  = movieSchedule.getMoviceStartTime();
 
-            rpcMovieAlarmService.shortTime(partyId,addressId);
             //当电影开始时间存在的时候
             if(movieStartDate!=null){
                 long minute = DateUtils.subMinute(movieStartDate,currentDate);
@@ -146,11 +145,18 @@ public class MovieLogicService {
             }
         }
         //清除活动缓存
+        log.info("--------------清理活动缓存--------------");
         clearPartyCacheInfo(addressId,partyId);
 
-		insertmovieSchedule(partyId, addressId,clientTime);
-		//firstDanmuStartCommandHandler(registCode);
-		sendPartyStatusToClient(partyId,"1",addressId,clientTime);
+        log.info("--------------插入电影数据--------------");
+        insertmovieSchedule(partyId, addressId,clientTime);
+
+        log.info("--------------向客户端发送电影弹幕开始--------------");
+        sendPartyStatusToClient(partyId,"1",addressId,clientTime);
+
+        log.info("--------------开始执行活动时间是否果过短的逻辑-----------------");
+        rpcMovieAlarmService.shortTime(partyId,addressId);
+
 		restResultModel = new RestResultModel();
 		restResultModel.setResult(200);
         return restResultModel;
@@ -276,9 +282,18 @@ public class MovieLogicService {
 			
 		}
         //清除活动缓存
+        log.info("--------------清理活动缓存--------------");
         clearPartyCacheInfo(addressId,partyId);
+
+        log.info("--------------插入电影数据--------------");
         insertmovieScheduleByMoviceStart(partyId, addressId,clientTime);
+
+        log.info("--------------向客户端发送电影弹幕开始--------------");
         sendPartyStatusToClient(partyId,"3",addressId,clientTime);
+
+        log.info("--------------开始执行活动时间是否果过短的逻辑-----------------");
+        rpcMovieAlarmService.shortTime(partyId,addressId);
+
         restResultModel = new RestResultModel();
         restResultModel.setResult(200);
         return restResultModel;
