@@ -105,6 +105,7 @@ public class RpcMovieAlarmService {
      */
     @RequestMapping(value = "/shortTime" ,method = RequestMethod.GET)
     public void shortTime(@RequestParam String partyId,@RequestParam String addressId) {
+        log.info("--------------电影时长过短逻辑判断------------------------");
         List<MovieScheduleModel> movieScheduleModelList = rpcMovieScheduleService.findLastMovieListByAddressId(addressId,1,0);
         if(ListUtils.checkListIsNotNull(movieScheduleModelList)){
             MovieScheduleModel movieScheduleModel = movieScheduleModelList.get(0);
