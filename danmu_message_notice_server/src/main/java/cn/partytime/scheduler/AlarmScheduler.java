@@ -225,16 +225,19 @@ public class AlarmScheduler {
                     String partyId = partyLogicModel.getPartyId();
                     String addressId = partyLogicModel.getAddressId();
                     int count  = collectorCacheService.getClientCount(0,addressId);
+                    log.info("当前场地flash数量:{}",count);
                     if(count<clientOnlineCount){
                         long time = collectorCacheService.findFlashOfflineTime(addressId);
+                        log.info("flash离线的具体时间:{}",time);
                         Date date =  DateUtils.getCurrentDate();
                         long subTime = date.getTime() - time;
                         long minute = subTime/1000/60;
                         log.info("flash 离线时间:{}",minute);
                         if(time==0){
-                            //从来未启动过
+                            log.info("flash从来未启动过");
                             rpcClientAlarmService.clientNetError(addressId);
                         }else if(minute>=clientOfflineTime){
+                            log.info("flash离线超过制定的时间{},{}",minute,clientOfflineTime);
                             rpcClientAlarmService.clientNetError(addressId);
                         }
                     }
