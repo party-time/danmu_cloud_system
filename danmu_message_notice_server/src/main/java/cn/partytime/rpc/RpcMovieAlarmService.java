@@ -53,9 +53,6 @@ public class RpcMovieAlarmService {
     @Autowired
     private RedisService redisService;
 
-    @Autowired
-    private RpcMovieScheduleService rpcMovieScheduleService;
-
 
     @RequestMapping(value = "/movieStartError" ,method = RequestMethod.GET)
     public void movieStartError(@RequestParam String partyId,@RequestParam String addressId, @RequestParam long time) {
@@ -104,9 +101,18 @@ public class RpcMovieAlarmService {
      * @param addressId
      */
     @RequestMapping(value = "/shortTime" ,method = RequestMethod.GET)
-    public void shortTime(@RequestParam String partyId,@RequestParam String addressId) {
+    public void shortTime(@RequestParam String partyId,@RequestParam String addressId,long time) {
         log.info("--------------电影时长过短逻辑判断------------------------");
-        List<MovieScheduleModel> movieScheduleModelList = rpcMovieScheduleService.findLastMovieListByAddressId(addressId,1,0);
+
+        Date currentTime = DateUtils.getCurrentDate();
+        long subTime = currentTime.getTime() - time;
+        if(subTime/1000/60>60){
+            return;
+        }
+
+        Map<String,String>  map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT, addressId, partyId);
+        sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map,AlarmKeyConst.ALARM_KEY_MOVIESHORT);
+        /*List<MovieScheduleModel> movieScheduleModelList = rpcMovieScheduleService.findLastMovieListByAddressId(addressId,1,0);
         if(ListUtils.checkListIsNotNull(movieScheduleModelList)){
             MovieScheduleModel movieScheduleModel = movieScheduleModelList.get(0);
             Date startTime = movieScheduleModel.getStartTime();
@@ -114,17 +120,12 @@ public class RpcMovieAlarmService {
             Date currentTime = DateUtils.getCurrentDate();
             long subTime = 0;
             if(startTime!=null){
-                subTime = currentTime.getTime() - startTime.getTime();
-
-                log.info("startTime.getTime():{}",startTime.getTime());
-                log.info("subTime{}:{}",subTime,subTime/60/1000);
-                if(subTime/60/1000>60){
+                subTime = DateUtils.subMinute(startTime,currentTime);
+                if(subTime>60){
                     return;
                 }
             }else if(movieStartTime!=null){
-                subTime = currentTime.getTime() - movieStartTime.getTime();
-                log.info("movieStartTime.getTime():{}",movieStartTime.getTime());
-                log.info("subTime{}:{}",subTime,subTime/60/1000);
+                subTime = DateUtils.subMinute(startTime,currentTime);
                 if(subTime/60/1000>60){
                     return;
                 }
@@ -133,7 +134,7 @@ public class RpcMovieAlarmService {
             }
             Map<String,String>  map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIESHORT, addressId, partyId);
             sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_SHORT,map,AlarmKeyConst.ALARM_KEY_MOVIESHORT);
-        }
+        }*/
     }
     /*@RequestMapping(value = "/movieTime" ,method = RequestMethod.GET)
     public void movieTime(@RequestParam String partyId,@RequestParam String addressId, @RequestParam long time) {

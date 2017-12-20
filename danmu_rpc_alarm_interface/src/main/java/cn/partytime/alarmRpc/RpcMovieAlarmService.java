@@ -19,6 +19,6 @@ public interface RpcMovieAlarmService {
 
 
     @RequestMapping(value = "/rpcMovie/shortTime" ,method = RequestMethod.GET)
-    public void shortTime(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId);
+    public void shortTime(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId, @RequestParam(value = "time") long time);
 
 }

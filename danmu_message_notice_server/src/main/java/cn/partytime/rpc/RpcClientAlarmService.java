@@ -68,16 +68,12 @@ public class RpcClientAlarmService {
 
     @RequestMapping(value = "/clientNetError" ,method = RequestMethod.GET)
     public void clientNetError(@RequestParam String addressId) {
-
-
+        log.info("------------------客户端网络异常告警触发----------------------------");
         int cacheCount = alarmCacheService.findAlarmCount(CollectorCacheKey.BASE_ALARM_KEY,AlarmKeyConst.ALARM_KEY_NETWORKERROR,addressId);
         if(cacheCount>0){
             log.info("客户端不在线的告警超过上限");
             return;
         }
-
-        //发送重启指令
-
         log.info("-------------客户端网络异常，发重启指令---------------------");
         Map<String,Object> dataMap = new HashMap<>();
         dataMap.put("bcallBack",null);

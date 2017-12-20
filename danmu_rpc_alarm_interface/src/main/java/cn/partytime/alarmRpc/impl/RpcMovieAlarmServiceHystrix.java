@@ -17,8 +17,9 @@ public class RpcMovieAlarmServiceHystrix implements RpcMovieAlarmService {
     }
 
     @Override
-    public void shortTime(String partyId, String addressId) {
+    public void shortTime(String partyId, String addressId, long time) {
 
     }
+
 
 }

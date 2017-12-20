@@ -129,6 +129,9 @@ public class MovieLogicService {
 				}else{
                     //当前时间减去电影开始时间大于10分钟
 					logger.info("当前时间减去电影开始时间大于10分钟");
+
+                    log.info("--------------开始执行活动时间是否果过短的逻辑-----------------");
+                    rpcMovieAlarmService.shortTime(partyId,addressId,movieStartDate.getTime());
                 }
             }else if(startDate!=null){
                 //当弹幕开始时间存在的时候
@@ -141,12 +144,20 @@ public class MovieLogicService {
 					return restResultModel;
 				}else{
                     logger.info("当前时间减去弹幕开始时间大于10分钟");
+
+                    log.info("--------------开始执行活动时间是否果过短的逻辑-----------------");
+                    rpcMovieAlarmService.shortTime(partyId,addressId,startDate.getTime());
                 }
             }
+
+
+
         }
         //清除活动缓存
         log.info("--------------清理活动缓存--------------");
         clearPartyCacheInfo(addressId,partyId);
+
+
 
         log.info("--------------插入电影数据--------------");
         insertmovieSchedule(partyId, addressId,clientTime);
@@ -154,8 +165,7 @@ public class MovieLogicService {
         log.info("--------------向客户端发送电影弹幕开始--------------");
         sendPartyStatusToClient(partyId,"1",addressId,clientTime);
 
-        log.info("--------------开始执行活动时间是否果过短的逻辑-----------------");
-        rpcMovieAlarmService.shortTime(partyId,addressId);
+
 
 		restResultModel = new RestResultModel();
 		restResultModel.setResult(200);
@@ -201,6 +211,9 @@ public class MovieLogicService {
 				}else{
                     //当前时间减去电影开始时间大于10分钟
 					logger.info("当前时间减去电影开始时间大于10分钟");
+
+                    log.info("--------------开始执行活动时间是否果过短的逻辑-----------------");
+                    rpcMovieAlarmService.shortTime(partyId,addressId,movieStartDate.getTime());
                 }
             }else if(startDate!=null){
                 logger.info("电影开始的请求距离活动开始的时间是30分钟以内");
@@ -220,14 +233,15 @@ public class MovieLogicService {
         log.info("--------------清理活动缓存--------------");
         clearPartyCacheInfo(addressId,partyId);
 
+
+
         log.info("--------------插入电影数据--------------");
         insertmovieScheduleByMoviceStart(partyId, addressId,clientTime);
 
         log.info("--------------向客户端发送电影弹幕开始--------------");
         sendPartyStatusToClient(partyId,"3",addressId,clientTime);
 
-        log.info("--------------开始执行活动时间是否果过短的逻辑-----------------");
-        rpcMovieAlarmService.shortTime(partyId,addressId);
+
 
         restResultModel = new RestResultModel();
         restResultModel.setResult(200);
