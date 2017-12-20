@@ -1,21 +1,25 @@
 package cn.partytime.service;
 
 import cn.partytime.alarmRpc.RpcMovieAlarmService;
-import cn.partytime.alarmRpc.RpcProjectorAlarmService;
 import cn.partytime.business.command.ControlCommandService;
 import cn.partytime.cache.danmu.DanmuAlarmCacheService;
 import cn.partytime.cache.party.PartyAlarmCacheService;
 import cn.partytime.cache.party.PartyCacheService;
-import cn.partytime.common.cachekey.*;
+import cn.partytime.common.cachekey.CommandCacheKey;
+import cn.partytime.common.cachekey.ScreenClientCacheKey;
 import cn.partytime.common.cachekey.client.ClientCommandCacheKey;
-import cn.partytime.common.cachekey.danmu.PreDanmuCacheKey;
-import cn.partytime.common.cachekey.party.PartyCacheKey;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
-import cn.partytime.dataRpc.*;
-import cn.partytime.model.*;
+import cn.partytime.dataRpc.RpcDanmuClientService;
+import cn.partytime.dataRpc.RpcMovieScheduleService;
+import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.RpcPreDanmuService;
+import cn.partytime.model.DanmuClientModel;
+import cn.partytime.model.MovieScheduleModel;
+import cn.partytime.model.PartyModel;
+import cn.partytime.model.RestResultModel;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -42,13 +46,8 @@ public class MovieLogicService {
     private static final Logger logger = LoggerFactory.getLogger(MovieLogicService.class);
 
     @Autowired
-    private RpcProjectorService rpcProjectorService;
-
-    @Autowired
     private RpcDanmuClientService rpcDanmuClientService;
 
-    @Autowired
-    private RpcProjectorAlarmService rpcProjectorAlarmService;
 
     @Autowired
     private RpcMovieScheduleService rpcMovieScheduleService;
@@ -61,9 +60,6 @@ public class MovieLogicService {
 
     @Autowired
     private RedisTemplate redisTemplate;
-
-    @Autowired
-    private DanmuAlarmCacheService danmuAlarmCacheService;
 
     @Autowired
     private RpcMovieAlarmService rpcMovieAlarmService;
@@ -153,7 +149,7 @@ public class MovieLogicService {
         clearPartyCacheInfo(addressId,partyId);
 
 		insertmovieSchedule(partyId, addressId,clientTime);
-		firstDanmuStartCommandHandler(registCode);
+		//firstDanmuStartCommandHandler(registCode);
 		sendPartyStatusToClient(partyId,"1",addressId,clientTime);
 		restResultModel = new RestResultModel();
 		restResultModel.setResult(200);
@@ -524,7 +520,7 @@ public class MovieLogicService {
 
 
 
-    public void firstDanmuStartCommandHandler(String registCode){
+    /*public void firstDanmuStartCommandHandler(String registCode){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -553,7 +549,7 @@ public class MovieLogicService {
                 }
             }
         }).start();
-    }
+    }*/
 
 
 

@@ -83,8 +83,9 @@ public class AlarmScheduler {
     /**
      * 投影未开启告警计数清0
      */
-    @Scheduled(cron = "0 0 6 * * ?")
+    /*@Scheduled(cron = "0 0 6 * * ?")
     private void projectorClearProjectorAlarmCountCache(){
+        log.info("-----------6点执行清除投影仪告警计数缓存----------------------");
         List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)) {
             for (DanmuAddressModel danmuAddress : danmuAddressList) {
@@ -99,27 +100,20 @@ public class AlarmScheduler {
                 }
             }
         }
-    }
+    }*/
 
 
     /**
-     * 清楚投影关闭计说报警
+     * 清除投影仪关闭计数缓存
      */
     @Scheduled(cron = "0 0 0 * * ?")
     private void projectorA(){
+        log.info("-----------0点清除投影仪关闭计数缓存----------------------");
         List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)) {
             for (DanmuAddressModel danmuAddress : danmuAddressList) {
                 String addressId = danmuAddress.getId();
-                List<DanmuClientModel>  danmuClientList = rpcDanmuClientService.findByAddressId(addressId);
-                if(ListUtils.checkListIsNotNull(danmuClientList)){
-                    if(ListUtils.checkListIsNotNull(danmuClientList)){
-                        for(DanmuClientModel danmuClient:danmuClientList){
-                            String regsitrorCode = danmuClient.getRegistCode();
-                            projectorCacheService.clearProjectCloseCount(addressId);
-                        }
-                    }
-                }
+                projectorCacheService.clearProjectCloseCount(addressId);
             }
         }
     }
@@ -249,7 +243,7 @@ public class AlarmScheduler {
         }
     }
 
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     public void projectorCloaseScheduler() {
 
         log.info("执行投影关闭定时任务---------------start");
