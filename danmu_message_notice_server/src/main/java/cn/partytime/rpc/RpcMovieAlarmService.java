@@ -105,8 +105,10 @@ public class RpcMovieAlarmService {
         log.info("--------------电影时长过短逻辑判断------------------------");
 
         Date currentTime = DateUtils.getCurrentDate();
-        long subTime = currentTime.getTime() - time;
-        if(subTime/1000/60>60){
+        long subTime = (currentTime.getTime() - time)/1000/60;
+
+        log.info("subTime:{}",subTime);
+        if(subTime>60){
             return;
         }
 
