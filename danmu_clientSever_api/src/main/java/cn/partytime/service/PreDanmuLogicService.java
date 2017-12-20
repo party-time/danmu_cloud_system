@@ -30,6 +30,8 @@ public class PreDanmuLogicService {
     private RpcPreDanmuService rpcPreDanmuService;
 
     public void danmuListenHandler(String partyId,String addressId) {
-        rpcPreDanmuService.checkIsReInitPreDanmuIntoCache(partyId,addressId);
+        //rpcPreDanmuService.checkIsReInitPreDanmuIntoCache(partyId,addressId);
+        log.info("------------------重新加载预制弹幕-------------------------");
+        rpcPreDanmuService.reInitPreDanmuIntoCache(partyId,addressId);
     }
 }
