@@ -115,12 +115,15 @@ public class RpcMovieAlarmService {
             long subTime = 0;
             if(startTime!=null){
                 subTime = currentTime.getTime() - startTime.getTime();
+
+                log.info("startTime.getTime():{}",startTime.getTime());
                 log.info("subTime{}:{}",subTime,subTime/60/1000);
                 if(subTime/60/1000>60){
                     return;
                 }
             }else if(movieStartTime!=null){
                 subTime = currentTime.getTime() - movieStartTime.getTime();
+                log.info("movieStartTime.getTime():{}",movieStartTime.getTime());
                 log.info("subTime{}:{}",subTime,subTime/60/1000);
                 if(subTime/60/1000>60){
                     return;
