@@ -252,7 +252,7 @@ public class BmsWechatUserService {
 
         StringBuffer sb = new StringBuffer();
         Random random = new Random();
-        for(int i = 0; i < 7; i++) {
+        for(int i = 0; i < 6; i++) {
             sb.append( numberLowerLetterChar.charAt( random.nextInt( numberLowerLetterChar.length() ) ) );
         }
         return sb.toString();
