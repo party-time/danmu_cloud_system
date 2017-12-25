@@ -65,7 +65,7 @@ public class BmsWechatUserService {
     @Autowired
     private WechatUserLogService wechatUserLogService;
 
-    public static final String numberLowerLetterChar = "0123456789abcdefghijklmnopqrstuvwxyz";
+    public static final String numberLowerLetterChar = "0123456789";
 
     @Autowired
     private WechatUserInfoService wechatUserInfoService;
@@ -252,7 +252,7 @@ public class BmsWechatUserService {
 
         StringBuffer sb = new StringBuffer();
         Random random = new Random();
-        for(int i = 0; i < 8; i++) {
+        for(int i = 0; i < 7; i++) {
             sb.append( numberLowerLetterChar.charAt( random.nextInt( numberLowerLetterChar.length() ) ) );
         }
         return sb.toString();
