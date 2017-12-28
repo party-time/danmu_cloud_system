@@ -1,7 +1,7 @@
 package cn.partytime.service.spider;
 
 import cn.partytime.model.spider.Spider;
-import cn.partytime.repository.spider.SpiderRepository;
+import cn.partytime.repository.manager.spider.SpiderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

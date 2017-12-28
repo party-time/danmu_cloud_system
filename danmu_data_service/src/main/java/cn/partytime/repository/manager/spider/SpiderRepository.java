@@ -1,4 +1,4 @@
-package cn.partytime.repository.spider;
+package cn.partytime.repository.manager.spider;
 
 import cn.partytime.model.spider.Spider;
 import org.springframework.data.mongodb.repository.MongoRepository;
