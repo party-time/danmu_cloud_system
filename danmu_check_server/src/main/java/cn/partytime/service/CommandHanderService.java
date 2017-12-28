@@ -370,6 +370,7 @@ public class CommandHanderService {
         Map<String,Object> map = convertObjectToMap(datObject);
         String id = String.valueOf(map.get("id"));
         int status = IntegerUtils.objectConvertToInt(map.get("status"));
+        String videoRect = String.valueOf(map.get("videoRect"));
 
         //清除动画特效缓存
         String key = FunctionControlCacheKey.FUNCITON_CONTROL_SPECIALMOV + partyId;
@@ -391,6 +392,7 @@ public class CommandHanderService {
             //消息推送给管理端
             dataMap.put("idd", id);
             dataMap.put("status", status);
+            dataMap.put("videoRect",videoRect);
 
 
             Map<String,Object>commandObject = new HashMap<String,Object>();

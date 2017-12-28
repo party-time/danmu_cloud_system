@@ -94,6 +94,8 @@ public class BmsTimerDanmuService {
 
         String vediodanmuId = request.getParameter("vediodanmuId");
 
+        String videoRect = request.getParameter("videoRect");
+
 
         TimerDanmu timerDanmu =timerDanmuService.findTimerDanmu(vediodanmuId);
         if(timerDanmu==null){
@@ -129,6 +131,7 @@ public class BmsTimerDanmuService {
             Map<String,Object> data = new HashMap<String,Object>();
             data.put("idd",videoId);
             data.put("status",0);
+            data.put("videoRect",videoRect);
             int lastTimeInt = IntegerUtils.objectConvertToInt(lastTime);
 
 

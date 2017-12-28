@@ -35,7 +35,7 @@ public class ClientAlarmController {
 
     @RequestMapping(value = "/alarm/{type}/{addressId}",method = {RequestMethod.GET,RequestMethod.POST})
     public void projectAlaramNotice(@PathVariable("addressId") String addressId, @PathVariable("type") String type){
-        log.info("投影仪开启关闭异常告警 场地：{}，类型:{}",type,type);
+        log.info("投影仪开启关闭异常告警 场地：{}，类型:{}",addressId,type);
     }
     @RequestMapping(value = "/alarm",method = {RequestMethod.GET,RequestMethod.POST})
     public void danmuNotice( String addressId,Integer number,String type){
