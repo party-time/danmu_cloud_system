@@ -62,9 +62,6 @@ public class DanmuAddress extends BaseModel {
     //该场地下哪些功能可以使用, 功能key:打赏pay  表白love 0或null可以  1不可以
     private Map<String,Integer> controlerStatus;
 
-    //场地的形状 x横着的长方形  y竖着的长方形 z正方形
-    private String shape="x";
-
     public String getId() {
         return id;
     }
@@ -201,14 +198,4 @@ public class DanmuAddress extends BaseModel {
         this.controlerStatus = controlerStatus;
     }
 
-    public String getShape() {
-        if( null == this.shape){
-            return "x";
-        }
-        return shape;
-    }
-
-    public void setShape(String shape) {
-        this.shape = shape;
-    }
 }
