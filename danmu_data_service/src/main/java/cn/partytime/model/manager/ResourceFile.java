@@ -71,11 +71,6 @@ public class ResourceFile extends BaseModel{
      */
     private Integer useTimes=0;
 
-    /**
-     * 不同形状的视频
-     */
-    private Map<Integer,String> viodeFileUrl;
-
 
     public String getName(){
         if (!StringUtils.isEmpty(this.fileUrl)) {
@@ -173,13 +168,6 @@ public class ResourceFile extends BaseModel{
         this.useTimes = useTimes;
     }
 
-    public Map<Integer, String> getViodeFileUrl() {
-        return viodeFileUrl;
-    }
-
-    public void setViodeFileUrl(Map<Integer, String> viodeFileUrl) {
-        this.viodeFileUrl = viodeFileUrl;
-    }
 }
 
 
