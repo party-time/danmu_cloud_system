@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 资源文件
  */
@@ -67,6 +70,11 @@ public class ResourceFile extends BaseModel{
      * 被使用的次数，初始值是0
      */
     private Integer useTimes=0;
+
+    /**
+     * 不同形状的视频
+     */
+    private Map<Integer,String> viodeFileUrl;
 
 
     public String getName(){
@@ -163,6 +171,14 @@ public class ResourceFile extends BaseModel{
 
     public void setUseTimes(Integer useTimes) {
         this.useTimes = useTimes;
+    }
+
+    public Map<Integer, String> getViodeFileUrl() {
+        return viodeFileUrl;
+    }
+
+    public void setViodeFileUrl(Map<Integer, String> viodeFileUrl) {
+        this.viodeFileUrl = viodeFileUrl;
     }
 }
 
