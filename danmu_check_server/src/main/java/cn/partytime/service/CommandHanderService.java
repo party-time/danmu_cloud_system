@@ -67,6 +67,10 @@ public class CommandHanderService {
     @Autowired
     private PreDanmuHandler preDanmuHandler;
 
+
+    @Autowired
+    private RpcRealTimeDmAddressService rpcRealTimeDmAddressService;
+
     //@Autowired
     //private RpcDanmuLibraryPartyService rpcDanmuLibraryPartyService;
 
@@ -223,76 +227,7 @@ public class CommandHanderService {
             sendMessageToBMS(channelPartyTemp, JSON.toJSONString(setObjectToBms(type, result)));
         }
 
-
-
-
-
-
-
-
-
-
-
-        /*if(partyType.equals(partyId)){
-            oldChannel = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(1,key);
-        }else{
-            oldChannel = danmuChannelRepository.getChannelByPartyTypeAndAuthKey(0,key);
-        }*/
-
-
-
-
     }
-
-
-    /**
-     * 设置弹幕密度
-     *
-     * @param channel
-     */
-    /*public void setDanmuDensity(String type, String addressId, String partyId, Object object, Channel channel,int partyType) {
-
-
-
-        Map<String,Object> map = convertObjectToMap(object);
-        int danmuDensity = Integer.parseInt(String.valueOf(map.get("danmuDensity")));
-
-        //将弹幕密度存入缓存
-        String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + partyId;
-        redisService.set(key, danmuDensity);
-        redisService.expire(key,60*60*24*7);
-
-        //如果弹幕密度这是为0 不处理
-        if (danmuDensity == 0) {
-            return;
-        }
-        String msg = JSON.toJSONString(setObjectToBms(type, danmuDensity));
-        logger.info("反馈给管理员的消息,{}", msg);
-        pushCommandToPartyAdmin(partyType,partyId, type, msg);
-    }*/
-
-
-    /**
-     * 获取客户端列表
-     *
-     * @param channel
-     */
-    /*public void findClientList(String type, String addressId, Channel channel,int partyType) {
-        logger.info("获取在线客户端");
-        try {
-            logger.info("获取地址{}客户端信息", addressId);
-            List<DanmuClientModel> danmuClientModelList = cacheDataService.findDanmuClientList(addressId);
-            logger.info("获取的客户端列表信息：{}", danmuClientModelList);
-            if (ListUtils.checkListIsNotNull(danmuClientModelList)) {
-                String msg = JSON.toJSONString(setObjectToBms(type, danmuClientModelList));
-                logger.info("反馈给管理员的消息,{}", msg);
-                sendMessageToBMS(channel, msg);
-            }
-        } catch (Exception e) {
-            logger.error("获取在线客户端异常,{}", e.getMessage());
-        }
-    }*/
-
     /**
      * 测试模式的开启
      */
@@ -470,7 +405,6 @@ public class CommandHanderService {
      * @param newFlg
      */
     private void restartTestThread(String partyId, String addressId, Channel channel, boolean newFlg) {
-        //int count = managerCachService.testDanmuCount(addressId, partyId);
         if (newFlg) {
             managerCachService.resetTestDanmuCount(addressId, partyId);
             testDanmuHandler.danmuListenHandler(addressId, partyId);
@@ -526,7 +460,6 @@ public class CommandHanderService {
                 commandObject.put("data",danmuLog.getContent());
                 commandObject.put("isSendH5",cmdTempAllData.getIsSendH5());
 
-                //ProtocolModel protocolModel = ProtocolUtil.setDanmuProtocolModel(cmdTemp.getKey(),danmuLog.getContent());
                 pubDanmuToUserCachList(partyId, addressId, commandObject);
             }else{
 
@@ -549,34 +482,15 @@ public class CommandHanderService {
     public void pubDanmuToUserCachList(String partyId, String addressId, Map<String,Object> commandMap) {
         try {
             logger.info("向活动场地广播弹幕");
+            //List<String> addressIdList = rpcPartyService.findAddressIdListByPartyId(partyId);
 
-            List<String> addressIdList = rpcPartyService.findAddressIdListByPartyId(partyId);
+            List<String> addressIdList =  rpcRealTimeDmAddressService.findAllByAddressId(addressId);
             logger.info("场地信息:{}",JSON.toJSONString(addressIdList));
             if(ListUtils.checkListIsNotNull(addressIdList)){
                 for(String address:addressIdList){
                     sendMessageToMq(address, commandMap);
                 }
             }
-            /*List<PartyAddressRelation> partyAddressRelationList = partyAddressRelationService.findByPartyId(partyId);
-            logger.info("获取当前活动下所有的地址关系:{}", JSON.toJSONString(partyAddressRelationList));
-
-            if (ListUtils.checkListIsNotNull(partyAddressRelationList)) {
-                //查询地址缓存
-                for (PartyAddressRelation partyAddressRelation : partyAddressRelationList) {
-                    sendMessageToMq(partyAddressRelation.getAddressId(), commandMap);
-                }
-            }*/
-            //向屏幕队列广播弹幕
-            /*if (ClientConst.CLIENT_TYPE_MOBILE.equals(protocolModel.getClientType())) {
-                if (ListUtils.checkListIsNotNull(partyAddressRelationList)) {
-                    //查询地址缓存
-                    for (PartyAddressRelation partyAddressRelation : partyAddressRelationList) {
-                        sendMessageToMq(partyAddressRelation.getAddressId(), protocolModel);
-                    }
-                }
-            } else {
-                sendMessageToMq(addressId, protocolModel);
-            }*/
         } catch (Exception e) {
             logger.info("向活动下所有的屏幕广播弹幕异常:{}", e.getMessage());
         }
