@@ -4,6 +4,9 @@ import cn.partytime.model.manager.RealTimeDmAddress;
 import cn.partytime.repository.manager.RealTimeDmAddressRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -81,6 +84,20 @@ public class RealTimeDmAddressService {
             realTimeDmAddresses.add(addressId);
         }
         return realTimeDmAddresses;
+    }
+
+    public void deleteById(String id){
+        RealTimeDmAddress realTimeDmAddress = this.findById(id);
+        if( null != realTimeDmAddress ){
+            realTimeDmAddressRepository.delete(this.findByParentId(id));
+            realTimeDmAddressRepository.delete(id);
+        }
+    }
+
+    public Page<RealTimeDmAddress> findAll(int page, int pageSize){
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        PageRequest pageRequest = new PageRequest(page, pageSize, sort);
+        return realTimeDmAddressRepository.findByNameIsNotNull(pageRequest);
     }
 
 }

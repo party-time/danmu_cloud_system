@@ -35,7 +35,7 @@ public class Spider {
     private Date date;
 
     //评分
-    private Integer score;
+    private String score;
 
     //标签
     private List<String> typeList;
@@ -105,11 +105,11 @@ public class Spider {
         this.date = date;
     }
 
-    public Integer getScore() {
+    public String getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(String score) {
         this.score = score;
     }
 

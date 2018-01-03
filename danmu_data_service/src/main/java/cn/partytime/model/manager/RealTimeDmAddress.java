@@ -2,6 +2,7 @@ package cn.partytime.model.manager;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +18,8 @@ public class RealTimeDmAddress {
     private String parentId;
 
     private String addressId;
+
+    private Date createDate = new Date();
 
     public String getId() {
         return id;
@@ -48,5 +51,13 @@ public class RealTimeDmAddress {
 
     public void setAddressId(String addressId) {
         this.addressId = addressId;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }
