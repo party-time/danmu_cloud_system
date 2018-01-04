@@ -21,6 +21,8 @@ public interface RealTimeDmAddressRepository extends MongoRepository<RealTimeDmA
 
     Page<RealTimeDmAddress> findByNameIsNotNull(Pageable pageable);
 
+    List<RealTimeDmAddress> findByAddressIdIsNotNull();
+
 
 
 }

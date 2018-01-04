@@ -27,6 +27,26 @@ public class RealTimeDmAddressService {
         return realTimeDmAddressRepository.insert(realTimeDmAddress);
     }
 
+    public void saveRealTimeDmAddress(String name , String addressIds){
+        if(!StringUtils.isEmpty(name)){
+            RealTimeDmAddress rtda = new RealTimeDmAddress();
+            rtda.setName(name);
+            rtda = this.save(rtda);
+            if( null != rtda && !StringUtils.isEmpty(addressIds)){
+                if(addressIds.indexOf(",")!=-1) {
+                    String[] addressIdStrs = addressIds.split(",");
+                    for( String addressId : addressIdStrs){
+                        RealTimeDmAddress rtda1 = new RealTimeDmAddress();
+                        rtda1.setParentId(rtda.getId());
+                        rtda1.setAddressId(addressId);
+                        this.save(rtda1);
+                    }
+                }
+            }
+        }
+    }
+
+
     public void saveList(List<RealTimeDmAddress> realTimeDmAddressList){
         if( null != realTimeDmAddressList && realTimeDmAddressList.size() > 0){
             RealTimeDmAddress rtda = null;
@@ -38,7 +58,11 @@ public class RealTimeDmAddressService {
             for(RealTimeDmAddress realTimeDmAddress : realTimeDmAddressList){
                 if(StringUtils.isEmpty(realTimeDmAddress.getName())){
                     realTimeDmAddress.setParentId(rtda.getId());
-                    this.save(realTimeDmAddress);
+
+                    RealTimeDmAddress rtda1 = this.findByAddressId(realTimeDmAddress.getAddressId());
+                    if( null == rtda1){
+                        this.save(realTimeDmAddress);
+                    }
                 }
             }
         }
@@ -98,6 +122,17 @@ public class RealTimeDmAddressService {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, pageSize, sort);
         return realTimeDmAddressRepository.findByNameIsNotNull(pageRequest);
+    }
+
+    public List<String> findAllAddressId(){
+        List<String> addressIdList = new ArrayList<>();
+        List<RealTimeDmAddress> realTimeDmAddressList = realTimeDmAddressRepository.findByAddressIdIsNotNull();
+        if( null != realTimeDmAddressList && realTimeDmAddressList.size() > 0){
+            for( RealTimeDmAddress realTimeDmAddress :  realTimeDmAddressList){
+                addressIdList.add(realTimeDmAddress.getAddressId());
+            }
+        }
+        return addressIdList;
     }
 
 }
