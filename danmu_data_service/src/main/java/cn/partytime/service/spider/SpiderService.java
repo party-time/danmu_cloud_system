@@ -4,6 +4,9 @@ import cn.partytime.model.spider.Spider;
 import cn.partytime.repository.manager.spider.SpiderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -77,5 +80,20 @@ public class SpiderService {
                 }
             }
         }
+    }
+
+
+    public Page<Spider> findAll(Integer page , Integer size){
+        Sort sort = new Sort(Sort.Direction.DESC, "date");
+        PageRequest pageRequest = new PageRequest(page, size, sort);
+        return spiderRepository.findAll(pageRequest);
+    }
+
+    public Spider findById(String id){
+        return spiderRepository.findOne(id);
+    }
+
+    public void update(Spider spider){
+        spiderRepository.save(spider);
     }
 }

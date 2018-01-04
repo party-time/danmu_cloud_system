@@ -1,12 +1,14 @@
 package cn.partytime.model.spider;
 
+import cn.partytime.baseModel.BaseModel;
+
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by administrator on 2017/12/25.
  */
-public class Spider {
+public class Spider extends BaseModel{
 
     private String id;
 
