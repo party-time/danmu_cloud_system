@@ -94,6 +94,25 @@ public class SpiderService {
     }
 
     public void update(Spider spider){
-        spiderRepository.save(spider);
+        if( null != spider){
+            Spider spider1 = spiderRepository.findOne(spider.getId());
+            if( null != spider1){
+                spider1.setName(spider.getName());
+                spider1.setDateStr(spider.getDateStr());
+                spider1.setScore(spider.getScore());
+                spider1.setTime(spider.getTime());
+                if(!StringUtils.isEmpty(spider.getDateStr())){
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    try {
+                        Date date =formatter.parse(spider.getDateStr());
+                        spider1.setDate(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                spiderRepository.save(spider1);
+            }
+
+        }
     }
 }
