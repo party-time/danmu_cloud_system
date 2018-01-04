@@ -5,7 +5,9 @@ import cn.partytime.repository.manager.DeviceIpInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +30,19 @@ public class DeviceIpInfoService {
     }
 
     public List<DeviceIpInfo> findByAddressId(String addressId){
-        return deviceIpInfoRepository.findByAddressIdAndPortIsNotNull(addressId);
+        List<DeviceIpInfo> deviceIpInfoList = deviceIpInfoRepository.findByAddressId(addressId);
+        if( null != deviceIpInfoList){
+            List<DeviceIpInfo> dipList = new ArrayList<>();
+            for(DeviceIpInfo deviceIpInfo : deviceIpInfoList){
+                if(!StringUtils.isEmpty(deviceIpInfo.getIp())){
+                    dipList.add(deviceIpInfo);
+                }
+            }
+            return dipList;
+        }else{
+            return deviceIpInfoList;
+        }
+
     }
 
     public void save(List<DeviceIpInfo> deviceIpInfos){
