@@ -28,7 +28,7 @@ public class DeviceIpInfoService {
     }
 
     public List<DeviceIpInfo> findByAddressId(String addressId){
-        return deviceIpInfoRepository.findByAddressIdAndIpIsNotNull(addressId);
+        return deviceIpInfoRepository.findByAddressIdAndPortIsNotNull(addressId);
     }
 
     public void save(List<DeviceIpInfo> deviceIpInfos){

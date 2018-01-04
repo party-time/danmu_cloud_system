@@ -12,7 +12,7 @@ import java.util.List;
 @EnableMongoRepositories(mongoTemplateRef = "managerMongoTemplate")
 public interface DeviceIpInfoRepository extends MongoRepository<DeviceIpInfo,String> {
 
-    List<DeviceIpInfo> findByAddressIdAndIpIsNotNull(String addressId);
+    List<DeviceIpInfo> findByAddressIdAndPortIsNotNull(String addressId);
 
     List<DeviceIpInfo> findByAddressIdAndType(String addressId,Integer type);
 
