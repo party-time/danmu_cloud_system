@@ -28,7 +28,7 @@ public class SpiderService {
             return;
         }
         for(Spider spider : spiderList){
-            if( StringUtils.isEmpty(spider.getOldId())){
+            if( !StringUtils.isEmpty(spider.getOldId())){
                 Spider spider1 = spiderRepository.findByOldId(spider.getOldId());
                 if( null == spider1){
                     if(!StringUtils.isEmpty(spider.getDateStr())){
