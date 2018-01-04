@@ -34,7 +34,7 @@ public class DeviceIpInfoService {
         if( null != deviceIpInfoList){
             List<DeviceIpInfo> dipList = new ArrayList<>();
             for(DeviceIpInfo deviceIpInfo : deviceIpInfoList){
-                if(!StringUtils.isEmpty(deviceIpInfo.getIp())){
+                if(!StringUtils.isEmpty(deviceIpInfo.getIp()) || !StringUtils.isEmpty(deviceIpInfo.getUrl())){
                     dipList.add(deviceIpInfo);
                 }
             }
