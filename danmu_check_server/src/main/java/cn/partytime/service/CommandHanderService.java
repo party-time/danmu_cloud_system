@@ -359,6 +359,7 @@ public class CommandHanderService {
                 //消息推送给管理端
                 dataMap.put("idd", id);
                 dataMap.put("status", status);
+                dataMap.put("videoRect",videoRect);
 
 
                 Map<String,Object>commandObject = new HashMap<String,Object>();
@@ -387,6 +388,7 @@ public class CommandHanderService {
                 //消息推送给管理端
                 dataMap.put("idd", id);
                 dataMap.put("status", status);
+                dataMap.put("videoRect",videoRect);
 
                 Map<String,Object>commandObject = new HashMap<String,Object>();
                 commandObject.put("type","vedio");
