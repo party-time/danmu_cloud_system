@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -36,20 +37,19 @@ public class DanmuScheduler {
     @Autowired
     private SpiderService spiderService;
 
-    @Value("${file.backgroundPath}")
+    @Value("${file.doubanbackgroundPath}")
     private String backgroundPath;
 
-    //@Scheduled(cron = "0 0 3 * * ?")
-    @PostConstruct
+    @Scheduled(cron = "0 0 3 * * ?")
     private void daobanData() throws IOException {
         String s=HttpUtils.sendGet("https://movie.douban.com/cinema/nowplaying/beijing/", null);
 
         Document doc = Jsoup.parse(s);
-        //log.info("正在进行的电影");
         filmData(doc,"nowplaying");
 
         log.info("将要进行的电影");
         filmData(doc,"upcoming");
+
     }
 
     public void filmData(Document doc,String type){
@@ -62,7 +62,6 @@ public class DanmuScheduler {
         }
         List<Spider> spiderList = new ArrayList<>();
         for (Element link : links) {
-            //System.out.println(link);
             String id = link.attr("id");
             String filmName = link.attr("data-title");
             try {
