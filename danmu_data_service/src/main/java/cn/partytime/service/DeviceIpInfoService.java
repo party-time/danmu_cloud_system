@@ -42,7 +42,10 @@ public class DeviceIpInfoService {
         }else{
             return deviceIpInfoList;
         }
+    }
 
+    public List<DeviceIpInfo> findAllByAddressId(String addressId){
+        return deviceIpInfoRepository.findByAddressId(addressId);
     }
 
     public void save(List<DeviceIpInfo> deviceIpInfos){

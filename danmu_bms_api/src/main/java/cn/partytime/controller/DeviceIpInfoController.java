@@ -27,7 +27,7 @@ public class DeviceIpInfoController {
     @RequestMapping(value = "/find", method = RequestMethod.GET)
     public RestResultModel findByaddressId( String addressId){
         RestResultModel restResultModel = new RestResultModel();
-        List<DeviceIpInfo> deviceIpInfoList = deviceIpInfoService.findByAddressId(addressId);
+        List<DeviceIpInfo> deviceIpInfoList = deviceIpInfoService.findAllByAddressId(addressId);
         restResultModel.setResult(200);
         restResultModel.setData(deviceIpInfoList);
         return restResultModel;
