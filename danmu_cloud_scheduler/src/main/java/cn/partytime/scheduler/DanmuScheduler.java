@@ -93,6 +93,7 @@ public class DanmuScheduler {
 
         try {
             String suffix = imageUrl.substring(imageUrl.lastIndexOf("."));
+            log.info("Physical path:"+(backgroundPath+id+suffix));
             FileUtils.saveImage(imageUrl,backgroundPath+id+suffix);
         } catch (Exception e) {
             e.printStackTrace();
