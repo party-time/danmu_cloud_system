@@ -74,12 +74,14 @@ public class DanmuScheduler {
             String url = "https://movie.douban.com/subject/"+id+"/?from=playing_poster";
             String filmContent= HttpUtils.sendGet(url, null);
             Spider spider=parseFilmContent(filmContent,id,filmName,status);
+
             spiderList.add(spider);
         }
         spiderService.saveOrUpDate(spiderList);
     }
 
     public Spider parseFilmContent(String content,String id,String name,int status){
+        Spider filmInfo = new Spider();
         Document doc = Jsoup.parse(content);
 
         Element elementInfoInterestsectl = doc.getElementById("interest_sectl");
@@ -93,15 +95,16 @@ public class DanmuScheduler {
 
         try {
             String suffix = imageUrl.substring(imageUrl.lastIndexOf("."));
-            log.info("Physical path:"+(backgroundPath+id+suffix));
-            FileUtils.saveImage(imageUrl,backgroundPath+id+suffix);
+            log.info("Physical path:"+(backgroundPath+"/spider/douban/"+id+suffix));
+            filmInfo.setImageUrl("/spider/douban/"+id+suffix);
+            FileUtils.saveImage(imageUrl,backgroundPath+"/spider/douban/"+id+suffix);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         Element elementInfo = doc.getElementById("info");
         Elements infos = elementInfo.getElementsByTag("span");
-        Spider filmInfo = new Spider();
+
         filmInfo.setOldId(id);
         filmInfo.setName(name);
         filmInfo.setScore(score);
