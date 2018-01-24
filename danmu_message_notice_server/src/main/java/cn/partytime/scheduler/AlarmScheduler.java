@@ -214,6 +214,22 @@ public class AlarmScheduler {
         }
     }
 
+    @Scheduled(cron = "0 30 9 * * ?")
+    public void flashOnlineLinstener() {
+        List<DanmuAddressModel> danmuAddressModels = rpcDanmuAddressService.findByType(0);
+        if(ListUtils.checkListIsNotNull(danmuAddressModels)) {
+            for (DanmuAddressModel danmuAddressModel : danmuAddressModels) {
+                String addressId = danmuAddressModel.getId();
+                int count  = collectorCacheService.getClientCount(0,addressId);
+                log.info("-----------------------当前场地flash数量:{}",count);
+                if(count<clientOnlineCount){
+                    log.info("----------------------flash从来未启动过");
+                    rpcClientAlarmService.clientNetError(addressId);
+                }
+            }
+        }
+    }
+
    @Scheduled(cron = "0 0/1 * * * ?")
     public void clientOffLineScheduler() {
         log.info("客户端在线数量监听");
