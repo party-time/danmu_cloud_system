@@ -66,6 +66,9 @@ public class RpcClientAlarmService {
     @Autowired
     private ControlCommandService controlCommandService;
 
+    @Autowired
+    private RpcDanmuClientService rpcDanmuClientService;
+
     @RequestMapping(value = "/clientNetError" ,method = RequestMethod.GET)
     public void clientNetError(@RequestParam String addressId) {
         log.info("------------------客户端网络异常告警触发----------------------------");
@@ -102,6 +105,17 @@ public class RpcClientAlarmService {
         map.put("key", AlarmKeyConst.ALARM_KEY_NETWORKERROR);
         map.put("addressId", addressId);
         map.put("addressName", danmuAddressModel.getName());
+
+
+
+        List<DanmuClientModel> danmuClientModelList = rpcDanmuClientService.findByAddressId(addressId);
+        if(ListUtils.checkListIsNotNull(danmuClientModelList)){
+            for(DanmuClientModel danmuClientModel:danmuClientModelList){
+                map.put("screen",danmuClientModel.getName());
+                sendMessage(LogCodeConst.CLientLogCode.FLASH_NETWORK_EXCEPTION,map);
+            }
+        }
+        /*
         List<String> registerCodeList =  collectorCacheService.findFlahOfflineCLientList(addressId);
         if(ListUtils.checkListIsNotNull(registerCodeList)){
             for(int i=0; i<registerCodeList.size(); i++){
@@ -109,7 +123,8 @@ public class RpcClientAlarmService {
                 map.put("screen",danmuClient.getName());
                 sendMessage(LogCodeConst.CLientLogCode.FLASH_NETWORK_EXCEPTION,map);
             }
-        }
+        }*/
+
     }
 
     private void sendMessage(String type,Map<String,String> map){
