@@ -205,6 +205,7 @@ public class MovieLogicService {
 			movieSchedule = movieScheduleList.get(0);
             Date startDate = movieSchedule.getStartTime();
             Date movieStartDate = movieSchedule.getMoviceStartTime();
+            Date endDate = movieSchedule.getEndTime();
             log.info("movieStartDate:{}",movieStartDate);
             log.info("currentDate:{}",movieStartDate);
             log.info("startDate:{}",startDate);
@@ -223,8 +224,8 @@ public class MovieLogicService {
                     log.info("--------------开始执行活动时间是否果过短的逻辑-----------------");
                     rpcMovieAlarmService.shortTime(partyId,addressId,movieStartDate.getTime());
                 }
-            }else if(startDate!=null){
-                logger.info("电影开始的请求距离活动开始的时间是30分钟以内");
+            }else if(startDate!=null && endDate==null){
+                logger.info("电影开始的请求距离活动开始的时间是30分钟以内 || 开始时间不为空，结束时间为空");
                 restResultModel = new RestResultModel();
                 movieSchedule.setMoviceStartTime(DateUtils.getCurrentDate());
                 movieSchedule.setClientMoviceStartTime(clientTime);
