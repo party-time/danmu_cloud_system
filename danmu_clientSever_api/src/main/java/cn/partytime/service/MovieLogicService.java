@@ -248,7 +248,7 @@ public class MovieLogicService {
         insertmovieScheduleByMoviceStart(partyId, addressId,clientTime);
 
         log.info("--------------向客户端发送电影弹幕开始--------------");
-        sendPartyStatusToClient(partyId,"3",addressId,clientTime);
+        sendPartyStatusToClient(partyId,"1",addressId,clientTime);
 
 
 
