@@ -96,7 +96,7 @@ public class RpcClientAlarmService {
         redisService.subPub("client:command",addressId);*/
 
 
-        alarmCacheService.addAlarmCount(0,CollectorCacheKey.BASE_ALARM_KEY,AlarmKeyConst.ALARM_KEY_NETWORKERROR,addressId);
+        alarmCacheService.addAlarmCount(60*60*12,CollectorCacheKey.BASE_ALARM_KEY,AlarmKeyConst.ALARM_KEY_NETWORKERROR,addressId);
         log.info("地址:{} 客户端告警",addressId);
 
         DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findById(addressId);
