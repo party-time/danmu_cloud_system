@@ -120,6 +120,8 @@ public class MovieLogicService {
 
             //当电影开始时间存在的时候
             if(movieStartDate!=null){
+                log.info("movieStartDate:{}",movieStartDate);
+                log.info("currentDate:{}",movieStartDate);
                 long minute = DateUtils.subMinute(movieStartDate,currentDate);
 				if(minute<10){
 					logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
@@ -136,6 +138,8 @@ public class MovieLogicService {
             }else if(startDate!=null){
                 //当弹幕开始时间存在的时候
 				//当前时间减去弹幕开始时间大于10分钟
+                log.info("startDate:{}",startDate);
+                log.info("currentDate:{}",movieStartDate);
                 long minute = DateUtils.subMinute(startDate,currentDate);
 				if(minute<10){
 					logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
