@@ -115,13 +115,14 @@ public class MovieLogicService {
         MovieScheduleModel movieSchedule = null;
         if (ListUtils.checkListIsNotNull(movieScheduleList)) {
             movieSchedule = movieScheduleList.get(0);
+            log.info("movieSchedule:{}",JSON.toJSONString(movieSchedule));
             Date startDate = movieSchedule.getStartTime();
             Date movieStartDate  = movieSchedule.getMoviceStartTime();
-
+            log.info("startDate:{}",startDate);
+            log.info("movieStartDate:{}",movieStartDate);
+            log.info("currentDate:{}",movieStartDate);
             //当电影开始时间存在的时候
             if(movieStartDate!=null){
-                log.info("movieStartDate:{}",movieStartDate);
-                log.info("currentDate:{}",movieStartDate);
                 long minute = DateUtils.subMinute(movieStartDate,currentDate);
 				if(minute<10){
 					logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
@@ -138,8 +139,7 @@ public class MovieLogicService {
             }else if(startDate!=null){
                 //当弹幕开始时间存在的时候
 				//当前时间减去弹幕开始时间大于10分钟
-                log.info("startDate:{}",startDate);
-                log.info("currentDate:{}",movieStartDate);
+
                 long minute = DateUtils.subMinute(startDate,currentDate);
 				if(minute<10){
 					logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
@@ -205,6 +205,10 @@ public class MovieLogicService {
 			movieSchedule = movieScheduleList.get(0);
             Date startDate = movieSchedule.getStartTime();
             Date movieStartDate = movieSchedule.getMoviceStartTime();
+            log.info("movieStartDate:{}",movieStartDate);
+            log.info("currentDate:{}",movieStartDate);
+            log.info("startDate:{}",startDate);
+            log.info("movieSchedule:{}",JSON.toJSONString(movieSchedule));
 			if(movieStartDate!=null){
                 long minute = DateUtils.subMinute(movieStartDate,currentDate);
 				if(minute<10){
