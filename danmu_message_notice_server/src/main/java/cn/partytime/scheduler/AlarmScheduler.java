@@ -80,6 +80,11 @@ public class AlarmScheduler {
     @Value("${client.online.count}")
     private int clientOnlineCount;
 
+
+    @Value("${server.env:1}")
+    private int env;
+
+
     /**
      * 投影未开启告警计数清0
      */
@@ -216,6 +221,9 @@ public class AlarmScheduler {
 
     @Scheduled(cron = "0 30 9 * * ?")
     public void flashOnlineLinstener() {
+        if(env==0){
+            return;
+        }
         List<DanmuAddressModel> danmuAddressModels = rpcDanmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressModels)) {
             for (DanmuAddressModel danmuAddressModel : danmuAddressModels) {
