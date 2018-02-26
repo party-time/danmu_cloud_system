@@ -330,7 +330,6 @@ public class WechatRestController {
         WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
         DanmuAddressModel danmuAddress = danmuAddressLogicService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
         if( null != danmuAddress){
-            log.info("danmuAddress:controler"+danmuAddress.getControlerStatus().get("pay"));
             if( null == danmuAddress.getControlerStatus() || null == danmuAddress.getControlerStatus().get("pay")){
                 if(!StringUtils.isEmpty(h5TempId)){
                     H5Template h5Template = h5TemplateService.findById(h5TempId);
