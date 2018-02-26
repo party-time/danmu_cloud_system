@@ -33,6 +33,7 @@ public class DanmuAddressLogicService {
     public DanmuAddress findAddressByLonLat(Double longitude, Double latitude) {
 
         List<String> addressList = danmuAddressService.findAddressIdList(longitude, latitude, DistanceConst.WEChAT_CLIENT_DISTANCE);
+        logger.info("通过经纬度：{}，{}距离:{}的地址信息：{}",longitude,latitude,DistanceConst.WEChAT_CLIENT_DISTANCE,JSON.toJSONString(addressList));
         List<DanmuAddress> resultList = new ArrayList<DanmuAddress>();
         if (ListUtils.checkListIsNotNull(addressList)) {
             List<DanmuAddress> danmuAddressList = danmuAddressService.findDanmuAddressByIdList(addressList);
