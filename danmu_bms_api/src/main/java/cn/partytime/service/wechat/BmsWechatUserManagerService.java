@@ -9,6 +9,8 @@ import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.model.wechat.WechatUserListModel;
 import cn.partytime.service.DanmuAddressService;
+import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,8 @@ import java.util.List;
 /**
  * Created by administrator on 2017/4/14.
  */
+
+@Slf4j
 @Service
 public class BmsWechatUserManagerService {
 
@@ -52,6 +56,7 @@ public class BmsWechatUserManagerService {
                         wechatUserListModel.setWechatUserInfo(wechatUserInfo);
                         if( null != wechatUserInfo.getRegistLongitude() && null != wechatUserInfo.getRegistLatitude()){
                             DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getRegistLongitude(),wechatUserInfo.getRegistLatitude());
+                            log.info("通过经纬度:{},{}，获取的地址信息,{}",wechatUserInfo.getRegistLongitude(),wechatUserInfo.getRegistLatitude(), JSON.toJSONString(danmuAddressModel));
                             DanmuAddress danmuAddress = new DanmuAddress();
                             if(danmuAddressModel!=null){
                                 BeanUtils.copyProperties(danmuAddressModel,danmuAddress);
@@ -60,6 +65,7 @@ public class BmsWechatUserManagerService {
                         }
                         if( null != wechatUserInfo.getLastLongitude() && null != wechatUserInfo.getLastLatitude() ){
                             DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(),wechatUserInfo.getLastLatitude());
+                            log.info("通过经纬度:{},{}，获取的地址信息,{}",wechatUserInfo.getRegistLongitude(),wechatUserInfo.getRegistLatitude(), JSON.toJSONString(danmuAddressModel));
                             DanmuAddress danmuAddress = new DanmuAddress();
                             if(danmuAddressModel!=null){
                                 BeanUtils.copyProperties(danmuAddressModel,danmuAddress);
