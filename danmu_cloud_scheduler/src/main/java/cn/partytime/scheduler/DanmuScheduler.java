@@ -40,9 +40,7 @@ public class DanmuScheduler {
     @Value("${file.doubanbackgroundPath}")
     private String backgroundPath;
 
-    //@Scheduled(cron = "0 0 3 * * ?")
-
-    @PostConstruct
+    @Scheduled(cron = "0 0 16 * * ?")
     private void daobanData() throws IOException {
         String s=HttpUtils.sendGet("https://movie.douban.com/cinema/nowplaying/beijing/", null);
 
@@ -77,6 +75,7 @@ public class DanmuScheduler {
 
             spiderList.add(spider);
         }
+        //log.info(JSON.toJSONString(spiderList));
         spiderService.saveOrUpDate(spiderList);
     }
 
