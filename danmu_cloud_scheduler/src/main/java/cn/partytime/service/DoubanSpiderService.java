@@ -64,8 +64,10 @@ public class DoubanSpiderService {
         Document doc = Jsoup.parse(content);
 
         Element elementInfoInterestsectl = doc.getElementById("interest_sectl");
-        String score = elementInfoInterestsectl.getElementsByAttributeValue("property","v:average").text();
-
+        String score ="";
+        if(elementInfoInterestsectl!=null && elementInfoInterestsectl.getElementsByAttributeValue("property","v:average")!=null) {
+            score = elementInfoInterestsectl.getElementsByAttributeValue("property", "v:average").text();
+        }
         log.info("score:"+score);
 
         Elements imageElements =  doc.getElementById("mainpic").getElementsByTag("img");
