@@ -40,7 +40,8 @@ public class DanmuScheduler {
     @Autowired
     private DoubanSpiderService doubanSpiderService;
 
-    @Scheduled(cron = "0 0 16 * * ?")
+    //@Scheduled(cron = "0 0 16 * * ?")
+    @PostConstruct
     private void daobanData() throws IOException {
         String s=HttpUtils.sendGet("https://movie.douban.com/cinema/nowplaying/beijing/", null);
 
