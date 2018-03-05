@@ -127,4 +127,8 @@ public class SpiderService {
             spiderRepository.save(spider);
         }
     }
+
+    public Spider findByPartyId(String partyId){
+        return spiderRepository.findByPartyId(partyId);
+    }
 }

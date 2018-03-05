@@ -17,4 +17,5 @@ public interface SpiderRepository extends MongoRepository<Spider,String> {
 
     List<Spider> findByDateGreaterThanAndPartyIdIsNull(Date date);
 
+    Spider findByPartyId(String partyId);
 }

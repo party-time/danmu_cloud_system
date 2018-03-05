@@ -254,6 +254,10 @@ public class PartyController extends BaseAdminController {
         RestResultModel restResultModel = new RestResultModel();
         //partyService.deleteById(id);
         rpcPartyService.deleteParty(id);
+        Spider spider = spiderService.findByPartyId(id);
+        if( null != spider){
+            spiderService.updatePartyId(spider.getId(),null);
+        }
         restResultModel.setResult(200);
         restResultModel.setResult_msg("success");
         return restResultModel;
