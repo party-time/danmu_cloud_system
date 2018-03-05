@@ -76,13 +76,14 @@ public class PartyService {
     }
 
 
-    public Party update(String id ,String name, Integer type , String movieAlias, String danmuLibraryId,Integer dmDensity){
+    public Party update(String id ,String name, Integer type , String movieAlias, String danmuLibraryId,Integer dmDensity,Long movieTime){
         Party party = this.findById(id);
         if( null != party){
             party.setName(name);
             party.setType(type);
             party.setMovieAlias(movieAlias);
             party.setDmDensity(dmDensity);
+            party.setMovieTime(movieTime);
             //danmuLibraryPartyService.save(danmuLibraryId,party.getId());
             partyRepository.save(party);
 

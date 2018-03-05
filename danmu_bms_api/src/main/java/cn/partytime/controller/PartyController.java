@@ -113,7 +113,7 @@ public class PartyController extends BaseAdminController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public RestResultModel saveParty(String id,String name, Integer type, String movieAlias,@RequestParam(value = "ids",required = false)String[] ids,@RequestParam(value = "densitrys",required = false)Integer[] densitrys,
-                                     String shortName,String danmuLibraryId,String addressIds,Integer dmDensity,String spiderId) {
+                                     String shortName,String danmuLibraryId,String addressIds,Integer dmDensity,String spiderId,Long movieTime) {
         RestResultModel restResultModel = new RestResultModel();
 
         if( null == type ){
@@ -124,7 +124,6 @@ public class PartyController extends BaseAdminController {
 
         Date startTime = null;
         Date endTime = null;
-        Long movieTime = null;
         Spider spider = null;
         //判断活动参数
         if( 0 == type){
@@ -204,7 +203,7 @@ public class PartyController extends BaseAdminController {
                     spiderService.updatePartyId(spiderId, party.getId());
                 }
             }else{
-                party = partyService.update(id,name,type,movieAlias,danmuLibraryId,dmDensity);
+                party = partyService.update(id,name,type,movieAlias,danmuLibraryId,dmDensity,movieTime);
             }
 
             if(!StringUtils.isEmpty(addressIds)){
