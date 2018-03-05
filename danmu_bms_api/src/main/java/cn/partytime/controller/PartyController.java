@@ -187,9 +187,6 @@ public class PartyController extends BaseAdminController {
                     return restResultModel;
                 }
                 name = spider.getName();
-                if( null != spider.getTime()){
-                    movieTime = new Long(spider.getTime());
-                }
             }
 
         }

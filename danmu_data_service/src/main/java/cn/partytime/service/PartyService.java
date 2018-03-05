@@ -64,7 +64,9 @@ public class PartyService {
         partyModel.setType(type);
         partyModel.setMovieAlias(movieAlias);
         partyModel.setDmDensity(dmDensity);
-        partyModel.setMovieTime(movieTime);
+        if( null != movieTime) {
+            partyModel.setMovieTime(movieTime);
+        }
         Party party = partyRepository.insert(partyModel);
 
         //String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();
