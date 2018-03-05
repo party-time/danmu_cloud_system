@@ -353,6 +353,28 @@ public class WechatRestController {
                 map.put("result","200");
                 return map;
             }
+        }else{
+            if(!StringUtils.isEmpty(h5TempId)){
+                H5Template h5Template = h5TemplateService.findById(h5TempId);
+                if( null != h5Template){
+                    if(!StringUtils.isEmpty(h5Template.getPayTitle())){
+                        body = h5Template.getPayTitle();
+                    }
+                    if( null != h5Template.getPayMoney()){
+                        total_fee = h5Template.getPayMoney();
+                    }
+                }
+            }
+            String clientIp = request.getHeader("x-forwarded-for");
+            if(StringUtils.isEmpty(clientIp)){
+                clientIp = request.getRemoteAddr();
+            }
+            if(!StringUtils.isEmpty(clientIp) && clientIp.indexOf(",")!=-1){
+                clientIp = clientIp.substring(0,clientIp.indexOf(","));
+            }
+            map = wechatPayService.createUnifiedorder(nonceStr,timestamp,openId,body,detail,attach,total_fee,clientIp);
+            map.put("result","200");
+            return map;
         }
         map.put("result","404");
         return map;

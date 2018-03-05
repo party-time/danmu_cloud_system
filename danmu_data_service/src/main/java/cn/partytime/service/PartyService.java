@@ -45,7 +45,7 @@ public class PartyService {
     private RedisService redisService;
 
     public Party save(String name, Integer type , String movieAlias, Date startTime, Date endTime,
-                      String shortName,String danmuLibraryId,Integer dmDensity) {
+                      String shortName,String danmuLibraryId,Integer dmDensity,Long movieTime) {
         /**
         if (!StringUtils.isEmpty(shortName)) {
             Party party = findByShortName(shortName);
@@ -64,6 +64,7 @@ public class PartyService {
         partyModel.setType(type);
         partyModel.setMovieAlias(movieAlias);
         partyModel.setDmDensity(dmDensity);
+        partyModel.setMovieTime(movieTime);
         Party party = partyRepository.insert(partyModel);
 
         //String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();

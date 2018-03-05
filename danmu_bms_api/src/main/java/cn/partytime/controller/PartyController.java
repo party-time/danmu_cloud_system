@@ -8,7 +8,9 @@ import cn.partytime.model.*;
 import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.MovieAlias;
 import cn.partytime.model.manager.Party;
+import cn.partytime.model.spider.Spider;
 import cn.partytime.service.*;
+import cn.partytime.service.spider.SpiderService;
 import com.thoughtworks.xstream.mapper.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
@@ -53,6 +55,9 @@ public class PartyController extends BaseAdminController {
 
     @Autowired
     private DanmuAddressService danmuAddressService;
+
+    @Autowired
+    private SpiderService spiderService;
 
 
     /**
@@ -108,7 +113,7 @@ public class PartyController extends BaseAdminController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public RestResultModel saveParty(String id,String name, Integer type, String movieAlias,@RequestParam(value = "ids",required = false)String[] ids,@RequestParam(value = "densitrys",required = false)Integer[] densitrys,
-                                     String shortName,String danmuLibraryId,String addressIds,Integer dmDensity) {
+                                     String shortName,String danmuLibraryId,String addressIds,Integer dmDensity,String spiderId) {
         RestResultModel restResultModel = new RestResultModel();
 
         if( null == type ){
@@ -119,6 +124,8 @@ public class PartyController extends BaseAdminController {
 
         Date startTime = null;
         Date endTime = null;
+        Long movieTime = null;
+        Spider spider = null;
         //判断活动参数
         if( 0 == type){
             /**
@@ -173,12 +180,28 @@ public class PartyController extends BaseAdminController {
                 }
             }
 
+            if(!StringUtils.isEmpty(spiderId)){
+                spider = spiderService.findById(spiderId);
+                if( null ==spider || !StringUtils.isEmpty(spider.getPartyId())){
+                    restResultModel.setResult(501);
+                    restResultModel.setResult_msg("选择的电影不存在或者已经被选用过，请重新选择电影");
+                    return restResultModel;
+                }
+                name = spider.getName();
+                if( null != spider.getTime()){
+                    movieTime = new Long(spider.getTime());
+                }
+            }
+
         }
 
         Party party = null;
         try {
             if( StringUtils.isEmpty(id)){
-                party = partyService.save(name, type, movieAlias ,startTime, endTime, shortName,danmuLibraryId,dmDensity);
+                party = partyService.save(name, type, movieAlias ,startTime, endTime, shortName,danmuLibraryId,dmDensity,movieTime);
+                if(null != spider) {
+                    spiderService.updatePartyId(spiderId, party.getId());
+                }
             }else{
                 party = partyService.update(id,name,type,movieAlias,danmuLibraryId,dmDensity);
             }

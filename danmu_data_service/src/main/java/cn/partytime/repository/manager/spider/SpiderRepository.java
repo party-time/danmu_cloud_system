@@ -4,6 +4,9 @@ import cn.partytime.model.spider.Spider;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by administrator on 2017/12/25.
  */
@@ -11,5 +14,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 public interface SpiderRepository extends MongoRepository<Spider,String> {
 
     public Spider findByOldId(String oldId);
+
+    List<Spider> findByDateGreaterThanAndPartyIdIsNull(Date date);
 
 }

@@ -42,6 +42,9 @@ public class Spider extends BaseModel{
     //标签
     private List<String> typeList;
 
+    //关联的活动id
+    private String partyId;
+
 
     public String getId() {
         return id;
@@ -129,5 +132,13 @@ public class Spider extends BaseModel{
 
     public void setDateStr(String dateStr) {
         this.dateStr = dateStr;
+    }
+
+    public String getPartyId() {
+        return partyId;
+    }
+
+    public void setPartyId(String partyId) {
+        this.partyId = partyId;
     }
 }

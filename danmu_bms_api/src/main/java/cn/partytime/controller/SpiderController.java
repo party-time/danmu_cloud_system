@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 /**
  * Created by administrator on 2018/1/4.
  */
@@ -44,6 +46,14 @@ public class SpiderController {
     public RestResultModel updateSpider(@ModelAttribute Spider spider) {
         RestResultModel restResultModel = new RestResultModel();
         spiderService.update(spider);
+        restResultModel.setResult(200);
+        return restResultModel;
+    }
+
+    @RequestMapping(value = "/findMovie", method = RequestMethod.GET)
+    public RestResultModel findMovie() {
+        RestResultModel restResultModel = new RestResultModel();
+        restResultModel.setData(spiderService.findByDateGreaterThan(new Date()));
         restResultModel.setResult(200);
         return restResultModel;
     }

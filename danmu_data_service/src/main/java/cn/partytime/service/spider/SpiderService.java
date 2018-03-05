@@ -115,4 +115,16 @@ public class SpiderService {
 
         }
     }
+
+    public List<Spider> findByDateGreaterThan(Date date){
+        return spiderRepository.findByDateGreaterThanAndPartyIdIsNull(date);
+    }
+
+    public void updatePartyId(String id,String partyId){
+        Spider spider = spiderRepository.findOne(id);
+        if( null != spider){
+            spider.setPartyId(partyId);
+            spiderRepository.save(spider);
+        }
+    }
 }
