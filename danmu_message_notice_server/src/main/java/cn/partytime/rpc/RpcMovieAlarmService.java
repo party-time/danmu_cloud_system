@@ -66,6 +66,26 @@ public class RpcMovieAlarmService {
         }
     }
 
+    @RequestMapping(value = "/overTime" ,method = RequestMethod.GET)
+    public void  overTime (@RequestParam String partyId,@RequestParam String addressId, @RequestParam long movieStartTime,long movieTime) {
+        Date currentDate = DateUtils.getCurrentDate();
+        long realMovieTime = 0;
+        if(movieStartTime!=0){
+            realMovieTime = currentDate.getTime() - movieStartTime;
+            realMovieTime = Math.abs(realMovieTime/60/1000);
+            long subTime = realMovieTime - movieTime;
+            //电影真正的时长，与爬虫得到时长有5分钟的容错
+            if(subTime<=5){
+                return;
+            }
+        }else{
+            return;
+        }
+        //触发时间过
+        Map<String,String> map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME, addressId, partyId);
+        sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_LONG,map,AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME);
+
+    }
     /**
      * 电影超时报警
      * @param partyId
@@ -73,8 +93,8 @@ public class RpcMovieAlarmService {
      * @param startTime 弹幕开始时间
      * @param movieStartTime  电影开始时间
      */
-    @RequestMapping(value = "/overTime" ,method = RequestMethod.GET)
-    public void overTime(@RequestParam String partyId,@RequestParam String addressId, @RequestParam long startTime,long movieStartTime) {
+    /*@RequestMapping(value = "/overTime" ,method = RequestMethod.GET)
+    public void  overTime(@RequestParam String partyId,@RequestParam String addressId, @RequestParam long startTime,long movieStartTime) {
         Date currentDate = DateUtils.getCurrentDate();
         long subTime = 0;
         if(startTime!=0){
@@ -93,7 +113,7 @@ public class RpcMovieAlarmService {
         //触发时间过
         Map<String,String> map = commonDataService.setMapByAddressId(AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME, addressId, partyId);
         sendMessage(LogCodeConst.PartyLogCode.MOVIE_TIME_TOO_LONG,map,AlarmKeyConst.ALARM_KEY_MOVIEOVERTIME);
-    }
+    }*/
 
     /**
      * 时间太短报警

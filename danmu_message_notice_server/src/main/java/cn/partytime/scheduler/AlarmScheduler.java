@@ -380,7 +380,7 @@ public class AlarmScheduler {
                             }
                         }else{
                             log.info("发送电影是否超时告警");
-                            rpcMovieAlarmService.overTime(partyId,addressId,startTime==null?0:startTime.getTime(),movieStartTime==null?0:movieStartTime.getTime());
+                            //rpcMovieAlarmService.overTime(partyId,addressId,startTime==null?0:startTime.getTime(),movieStartTime==null?0:movieStartTime.getTime());
                         }
                     }
                 }

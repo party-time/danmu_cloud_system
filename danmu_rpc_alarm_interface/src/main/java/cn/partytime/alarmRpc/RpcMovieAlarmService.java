@@ -15,7 +15,7 @@ public interface RpcMovieAlarmService {
 
 
     @RequestMapping(value = "/rpcMovie/overTime" ,method = RequestMethod.GET)
-    public void movieTime(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId, @RequestParam(value = "startTime") long startTime,@RequestParam(value = "movieStartTime") long movieStartTime);
+    public void overTime(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId,@RequestParam(value = "movieStartTime") long movieStartTime,@RequestParam(value = "movieTime") long movieTime);
 
 
     @RequestMapping(value = "/rpcMovie/shortTime" ,method = RequestMethod.GET)
