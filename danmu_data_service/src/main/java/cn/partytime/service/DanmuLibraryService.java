@@ -1,8 +1,12 @@
 package cn.partytime.service;
 
 import cn.partytime.model.danmu.DanmuLibrary;
+import cn.partytime.model.manager.Party;
 import cn.partytime.repository.danmu.DanmuLibraryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -17,6 +21,14 @@ public class DanmuLibraryService {
     @Autowired
     private DanmuLibraryRepository danmuLibraryRepository;
 
+    public Page<DanmuLibrary> findByName(String name,int page, int pageSize) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        PageRequest pageRequest = new PageRequest(page, pageSize, sort);
+        if(StringUtils.isEmpty(name)){
+            return danmuLibraryRepository.findAll(pageRequest);
+        }
+        return danmuLibraryRepository.findByNameLike(name,pageRequest);
+    }
 
     public DanmuLibrary findById(String id){
         return danmuLibraryRepository.findOne(id);
