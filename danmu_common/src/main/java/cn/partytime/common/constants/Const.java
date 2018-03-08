@@ -30,6 +30,11 @@ public class Const {
     public static Integer RESOURCE_SHOP_IMG = 5;
 
     /**
+     * 常驻表情
+     */
+    public static Integer RESOURCE_EXPRESSIONS_CONSTANT = 6;
+
+    /**
      * H5图片后缀名
      */
     public static String H5_HEAD_NAME = "hb_";
@@ -38,6 +43,11 @@ public class Const {
      * 大表情文件后缀名
      */
     public static String EXPRESSIONS_HEAD_NAME = "ex_";
+
+    /**
+     * 常驻表情后缀名
+     */
+    public static String EXPRESSIONS_CONSTANT_HEAD_NAME = "co_";
 
     /**
      * 特效图片后缀名

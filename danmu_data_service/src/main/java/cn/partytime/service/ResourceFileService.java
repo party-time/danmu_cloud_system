@@ -86,6 +86,9 @@ public class ResourceFileService {
         if( fileName.indexOf(Const.SPECIAL_VIDEOS_HEAD_NAME) != -1){
             return Const.RESOURCE_SPECIAL_VIDEOS;
         }
+        if ( fileName.indexOf(Const.EXPRESSIONS_CONSTANT_HEAD_NAME) != -1){
+            return Const.RESOURCE_EXPRESSIONS_CONSTANT;
+        }
         return null;
     }
 

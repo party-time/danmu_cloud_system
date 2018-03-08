@@ -98,6 +98,12 @@ public class FileUploadUtil {
             path = this.dstPath+ File.separator+ this.expressionsPath+File.separator+id+ext;
         }
 
+        if( fileName.indexOf(Const.EXPRESSIONS_CONSTANT_HEAD_NAME) != -1 && (null== smallOrBig || 0==smallOrBig)){
+            file = new File(this.dstPath+ File.separator+this.expressionsPath);
+            ext = ".big"+ext;
+            path = this.dstPath+ File.separator+ this.expressionsPath+File.separator+id+ext;
+        }
+
         if( fileName.indexOf(Const.SPECIAL_IMAGES_HEAD_NAME) != -1){
             file = new File(this.dstPath+ File.separator+this.specialImagesPath);
             path = this.dstPath+ File.separator+ this.specialImagesPath+File.separator+id+ext;
@@ -133,7 +139,10 @@ public class FileUploadUtil {
         if( fileName.indexOf(Const.SPECIAL_VIDEOS_HEAD_NAME) != -1){
             url = "/"+ this.specialVideosPath+"/"+id+ext;
         }
-
+        if( fileName.indexOf(Const.EXPRESSIONS_CONSTANT_HEAD_NAME) != -1 && ( null== smallOrBig || 0==smallOrBig)){
+            ext = ".big"+ext;
+            url = "/"+ this.expressionsPath+"/"+id+ext;
+        }
         return url;
     }
 
