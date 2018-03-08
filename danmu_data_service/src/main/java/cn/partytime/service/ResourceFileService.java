@@ -289,6 +289,27 @@ public class ResourceFileService {
                 partyResourceService.save(partyId,resourceFile.getId(),Const.RESOURCE_EXPRESSIONS_CONSTANT);
             }
         }
+    }
 
+    public void delResourceFileByPartyId(String partyId){
+        List<ResourceFile> resourceFileList = this.findByPartyId(partyId);
+        if( null != resourceFileList){
+            for(ResourceFile resourceFile : resourceFileList){
+                if( Const.RESOURCE_EXPRESSIONS == resourceFile.getFileType() ||
+                       Const.RESOURCE_SPECIAL_IMAGES ==  resourceFile.getFileType()){
+                    File file = new File(resourceFile.getFilePath());
+                    if(file.exists()){
+                        file.delete();
+                    }
+                    //如果是表情需要删除掉小表情
+                    if(resourceFile.getFileType() == 1 ){
+                        File smallfile = new File(resourceFile.getFilePath().replace(".big.",".small."));
+                        if(smallfile.exists()){
+                            smallfile.delete();
+                        }
+                    }
+                }
+            }
+        }
     }
 }

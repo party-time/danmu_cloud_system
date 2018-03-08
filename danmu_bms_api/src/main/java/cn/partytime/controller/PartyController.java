@@ -11,7 +11,6 @@ import cn.partytime.model.manager.Party;
 import cn.partytime.model.spider.Spider;
 import cn.partytime.service.*;
 import cn.partytime.service.spider.SpiderService;
-import com.thoughtworks.xstream.mapper.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -342,6 +341,8 @@ public class PartyController extends BaseAdminController {
 
         //删除定时弹幕文件
         bmsTimerDanmuService.deleteTimerFileData(partyId);
+
+        resourceFileService.delResourceFileByPartyId(partyId);
 
         restResultModel.setResult(200);
         return restResultModel;
