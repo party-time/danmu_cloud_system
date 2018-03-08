@@ -17,6 +17,8 @@ public class PartyResourceFileResult {
 
     private List<ResourceFile> specialVideos;
 
+    private List<ResourceFile> expressionsConstant;
+
     public ResourceFile getH5BackgroundFile() {
         return h5BackgroundFile;
     }
@@ -48,5 +50,13 @@ public class PartyResourceFileResult {
 
     public void setSpecialVideos(List<ResourceFile> specialVideos) {
         this.specialVideos = specialVideos;
+    }
+
+    public List<ResourceFile> getExpressionsConstant() {
+        return expressionsConstant;
+    }
+
+    public void setExpressionsConstant(List<ResourceFile> expressionsConstant) {
+        this.expressionsConstant = expressionsConstant;
     }
 }

@@ -41,6 +41,7 @@ public class BmsPartyResourceService {
                 List<ResourceFile> expressionList = new ArrayList<>();
                 List<ResourceFile> specialImageList = new ArrayList<>();
                 List<ResourceFile> specialVideoList = new ArrayList<>();
+                List<ResourceFile> expressionsConstantList = new ArrayList<>();
                 for(ResourceFile resourceFile : resourceFileList){
                     if(resourceFile.getFileType() == Const.RESOURCE_H5_BACKGROUND){
                         partyResourceFileResult.setH5BackgroundFile(resourceFile);
@@ -54,8 +55,13 @@ public class BmsPartyResourceService {
                     if(resourceFile.getFileType() == Const.RESOURCE_SPECIAL_VIDEOS){
                         specialVideoList.add(resourceFile);
                     }
+                    if(resourceFile.getFileType() == Const.RESOURCE_EXPRESSIONS_CONSTANT){
+                        expressionsConstantList.add(resourceFile);
+                    }
                 }
                 partyResourceFileResult.setExpressions(expressionList);
+
+                partyResourceFileResult.setExpressionsConstant(expressionsConstantList);
 
                 partyResourceFileResult.setSpecialImages(specialImageList);
 
