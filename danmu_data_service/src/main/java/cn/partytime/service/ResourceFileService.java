@@ -177,6 +177,8 @@ public class ResourceFileService {
             return (List<ResourceFile>)map.get("specialImages");
         }else if(fileType == Const.RESOURCE_SPECIAL_VIDEOS){
             return (List<ResourceFile>)map.get("specialVideos");
+        }else if(fileType == Const.RESOURCE_EXPRESSIONS_CONSTANT){
+            return (List<ResourceFile>)map.get("expressionconstant");
         }
         return null;
     }
@@ -194,6 +196,7 @@ public class ResourceFileService {
             List<ResourceFile> specialImages = new ArrayList<ResourceFile>();
             List<ResourceFile> specialVideos = new ArrayList<ResourceFile>();
             List<ResourceFile> h5Background = new ArrayList<ResourceFile>();
+            List<ResourceFile> bigExpressionsConstant = new ArrayList<>();
             for(ResourceFile resourceFileModel : resourceFileModelList){
                 if(Const.RESOURCE_EXPRESSIONS == resourceFileModel.getFileType()) {
                     bigExpressions.add(resourceFileModel);
@@ -203,12 +206,15 @@ public class ResourceFileService {
                     specialVideos.add(resourceFileModel);
                 }else if (Const.RESOURCE_H5_BACKGROUND == resourceFileModel.getFileType()){
                     h5Background.add(resourceFileModel);
+                }else if(Const.RESOURCE_EXPRESSIONS_CONSTANT == resourceFileModel.getFileType()){
+                    bigExpressionsConstant.add(resourceFileModel);
                 }
             }
             resourceMap.put("expressions",bigExpressions);
             resourceMap.put("specialImages",specialImages);
             resourceMap.put("specialVideos",specialVideos);
             resourceMap.put("h5Background",h5Background);
+            resourceMap.put("expressionconstant",bigExpressionsConstant);
         }
         return resourceMap;
     }
