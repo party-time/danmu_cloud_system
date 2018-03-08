@@ -198,7 +198,7 @@ public class PartyController extends BaseAdminController {
         try {
             if( StringUtils.isEmpty(id)){
                 party = partyService.save(name, type, movieAlias ,startTime, endTime, shortName,danmuLibraryId,dmDensity,movieTime);
-                resourceFileService.save(party.getId());
+                resourceFileService.saveExpressionConstant(party.getId());
                 if(null != spider) {
                     spiderService.updatePartyId(spiderId, party.getId());
                 }
