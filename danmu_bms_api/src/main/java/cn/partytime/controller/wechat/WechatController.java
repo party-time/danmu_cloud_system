@@ -10,6 +10,7 @@ import cn.partytime.model.cms.PageColumn;
 import cn.partytime.model.manager.H5Template;
 import cn.partytime.model.manager.LovePay;
 import cn.partytime.model.manager.Party;
+import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.service.*;
@@ -152,8 +153,19 @@ public class WechatController {
 
         Map<String, Object> resourceFileModels = resourceFileService.findResourceMapByPartyId(party.getPartyId());
 
-        Object object = resourceFileModels.get("expressions");
-        model.addAttribute("expressions",object );
+        List<ResourceFile> all = new ArrayList<>();
+        List<ResourceFile> expressionconstant = (List<ResourceFile>)resourceFileModels.get("expressionconstant");
+        List<ResourceFile> expressions = (List<ResourceFile>)resourceFileModels.get("expressions");
+
+        if( null != expressionconstant){
+            all.addAll(expressionconstant);
+        }
+
+        if( null != expressions){
+            all.addAll(expressions);
+        }
+
+        model.addAttribute("expressions",all );
 
         if (null != resourceFileModels.get("h5Background")) {
             List reList = (ArrayList) resourceFileModels.get("h5Background");
