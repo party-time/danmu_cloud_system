@@ -60,6 +60,8 @@ public class PartyController extends BaseAdminController {
     @Autowired
     private SpiderService spiderService;
 
+    @Autowired
+    private ResourceFileService resourceFileService;
 
     /**
      *
@@ -197,6 +199,7 @@ public class PartyController extends BaseAdminController {
         try {
             if( StringUtils.isEmpty(id)){
                 party = partyService.save(name, type, movieAlias ,startTime, endTime, shortName,danmuLibraryId,dmDensity,movieTime);
+                resourceFileService.save(party.getId());
                 if(null != spider) {
                     spiderService.updatePartyId(spiderId, party.getId());
                 }

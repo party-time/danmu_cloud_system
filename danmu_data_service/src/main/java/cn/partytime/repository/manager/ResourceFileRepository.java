@@ -24,6 +24,8 @@ public interface ResourceFileRepository extends MongoRepository<ResourceFile, St
 
     List<ResourceFile> findByIdIn(List<String> idList );
 
+    List<ResourceFile> findByFileType(Integer fileType);
+
 
 
 

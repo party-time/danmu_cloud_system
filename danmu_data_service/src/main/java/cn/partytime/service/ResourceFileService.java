@@ -281,4 +281,14 @@ public class ResourceFileService {
         Update update = new Update().inc("useTimes", -1);
         danmuMongoTemplate.updateFirst(query,update,"useTimes");
     }
+
+    public void saveExpressionConstant(String partyId){
+        List<ResourceFile> resourceFiles = resourceFileRepository.findByFileType(Const.RESOURCE_EXPRESSIONS_CONSTANT);
+        if( null != resourceFiles){
+            for( ResourceFile resourceFile : resourceFiles){
+                partyResourceService.save(partyId,resourceFile.getId(),Const.RESOURCE_EXPRESSIONS_CONSTANT);
+            }
+        }
+
+    }
 }
