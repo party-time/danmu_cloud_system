@@ -123,6 +123,11 @@ public class PartyService {
         return partyRepository.findByTypeAndStatus(type,status,pageRequest);
     }
 
+    public List<Party> findByTypeAndStatus(Integer type, Integer status){
+
+        return partyRepository.findByTypeAndStatus(type,status);
+    }
+
     public Page<Party> findPageByType(int page, int pageSize , Integer type ) {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, pageSize, sort);
@@ -243,7 +248,7 @@ public class PartyService {
      * @param type
      * @return
      */
-    public List<Party> findByTypeAndStatus(Integer type,Integer status){
+    public List<Party> findByTypeAndStatusLess(Integer type,Integer status){
         return partyRepository.findByTypeAndStatusLessThan(type,status);
     }
 

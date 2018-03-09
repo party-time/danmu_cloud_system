@@ -45,6 +45,8 @@ public interface PartyRepository extends MongoRepository<Party,String> {
 
     Page<Party> findByTypeAndStatus(Integer type, Integer status ,Pageable pageable);
 
+    List<Party> findByTypeAndStatus(Integer type, Integer status );
+
     Page<Party> findByStatusGreaterThan(Integer status,Pageable pageable);
 
     List<Party> findByTypeAndStatusGreaterThan(Integer type ,Integer status);

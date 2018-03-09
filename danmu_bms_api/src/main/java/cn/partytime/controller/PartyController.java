@@ -398,7 +398,23 @@ public class PartyController extends BaseAdminController {
         return restResultModel;
     }
 
-
+    /**
+     * 电影下线
+     * @return
+     */
+    @RequestMapping(value = "/delOfflineImg", method = RequestMethod.GET)
+    public RestResultModel delOfflineImg() {
+        RestResultModel restResultModel = new RestResultModel();
+        if( !"admin".equals(getAdminUser().getUserName()) ){
+            restResultModel.setResult(401);
+            restResultModel.setResult_msg("只有管理员才可以使用");
+            return restResultModel;
+        }
+        resourceFileService.delOffLineResourceFile();
+        restResultModel.setResult(200);
+        restResultModel.setResult_msg("success");
+        return restResultModel;
+    }
 
 
 
