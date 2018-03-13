@@ -8,6 +8,8 @@ public class PartyResourceService {
     @Autowired
     private RpcResourceFileService rpcResourceFileService;
 
-
+    public void delEndPartyResourceFile(){
+        rpcResourceFileService.delEndPartyResourceFile();
+    }
 
 }
