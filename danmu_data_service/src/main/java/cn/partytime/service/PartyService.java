@@ -85,7 +85,9 @@ public class PartyService {
             party.setType(type);
             party.setMovieAlias(movieAlias);
             party.setDmDensity(dmDensity);
-            party.setMovieTime(movieTime);
+            if( null != movieTime){
+                party.setMovieTime(movieTime);
+            }
             //danmuLibraryPartyService.save(danmuLibraryId,party.getId());
             partyRepository.save(party);
 
