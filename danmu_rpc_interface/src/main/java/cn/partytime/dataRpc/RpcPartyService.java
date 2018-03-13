@@ -138,6 +138,4 @@ public interface RpcPartyService {
     public boolean findCurrentParyIsInProgress(PartyModel party);
 
 
-    public List<PartyModel> findByTypeAndStatus();
-
 }
