@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -312,5 +313,20 @@ public class PartyService {
         partyRepository.save(party);
     }
 
+    public List<Party> findByTypeAndStatusAndEndTimeLessThan(Integer type , Integer status , Date endTime){
+        return partyRepository.findByTypeAndStatusAndEndTimeLessThan(type,status,endTime);
+    }
+
+    /**
+     * 查找一个月之前的活动
+     * @return
+     */
+    public List<Party> findMonthEndParty(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.MINUTE,-10);
+        List<Party> partyList = this.findByTypeAndStatusAndEndTimeLessThan(0,3, cal.getTime());
+        return partyList;
+    }
 
 }

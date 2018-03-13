@@ -137,4 +137,7 @@ public interface RpcPartyService {
     @RequestMapping(value = "/rpcParty/findCurrentParyIsInProgress" ,method = RequestMethod.POST)
     public boolean findCurrentParyIsInProgress(PartyModel party);
 
+
+    public List<PartyModel> findByTypeAndStatus();
+
 }

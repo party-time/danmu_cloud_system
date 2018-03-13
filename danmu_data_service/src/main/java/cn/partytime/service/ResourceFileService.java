@@ -328,7 +328,18 @@ public class ResourceFileService {
             }
 
         }
+    }
 
+    /**
+     * 删除已经结束的一个月的活动
+     */
+    public void delEndPartyResourceFile(){
+        List<Party> partyList = partyService.findMonthEndParty();
+        if( null != partyList){
+            for(Party party : partyList){
+                delResourceFileByPartyId(party.getId());
+            }
+        }
     }
 
 
