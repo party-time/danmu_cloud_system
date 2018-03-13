@@ -89,6 +89,7 @@ public class PartyService {
                 party.setMovieTime(movieTime);
             }
             //danmuLibraryPartyService.save(danmuLibraryId,party.getId());
+
             partyRepository.save(party);
 
             //String key = FunctionControlCacheKey.FUNCITON_CONTROL_DANMU_DENSITY + party.getId();
