@@ -67,6 +67,9 @@ public class ClientLoginService {
     @Autowired
     private CollectorAlarmCacheService collectorAlarmCacheService;
 
+    @Autowired
+    private PotocolService potocolService;
+
 
     @Value("${netty.host}")
     private String host;
@@ -116,7 +119,8 @@ public class ClientLoginService {
             Channel isLoginChannel = getIsLoginChannel(code,Integer.parseInt(clientType));
             if(isLoginChannel!=null){
                 logger.info("判断当前客户端已经登录过，踢下线");
-                isLoginChannel.close();
+                //isLoginChannel.close();
+                potocolService.forceLogout(channel);
             }
             DanmuClientModel danmuClientModel = new DanmuClientModel();
             BeanUtils.copyProperties(danmuClient, danmuClientModel);
