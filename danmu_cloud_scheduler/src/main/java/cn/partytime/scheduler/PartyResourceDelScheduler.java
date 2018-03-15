@@ -1,5 +1,6 @@
 package cn.partytime.scheduler;
 
+import cn.partytime.annotation.CommandAnnotation;
 import cn.partytime.service.PartyResourceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class PartyResourceDelScheduler {
     @Autowired
     private PartyResourceService partyResourceService;
 
-
+    @CommandAnnotation(command = "delEndPartyResourceFile")
     @Scheduled(cron = "* 0/10 * * * ?")
     private void delPartyResourceFile() {
 
