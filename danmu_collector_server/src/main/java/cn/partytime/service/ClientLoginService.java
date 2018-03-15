@@ -107,11 +107,16 @@ public class ClientLoginService {
         logger.info("将要连接到服务器客户端的信息:{}", JSON.toJSONString(danmuClient));
         if (danmuClient != null) {
             //判断用户是否登陆过
-            boolean isLogin = checkClientIsLogin(code,Integer.parseInt(clientType));
+            /*boolean isLogin = checkClientIsLogin(code,Integer.parseInt(clientType));
             if (isLogin) {
                 logger.info("当前客户端已经登录过，下线");
                 channel.close();
                 return;
+            }*/
+            Channel isLoginChannel = getIsLoginChannel(code,Integer.parseInt(clientType));
+            if(isLoginChannel!=null){
+                logger.info("判断当前客户端已经登录过，踢下线");
+                isLoginChannel.close();
             }
             DanmuClientModel danmuClientModel = new DanmuClientModel();
             BeanUtils.copyProperties(danmuClient, danmuClientModel);
@@ -307,6 +312,13 @@ public class ClientLoginService {
             return danmuClient;
         }
         return null;
+    }
+
+
+    public Channel getIsLoginChannel(String code,int clientType){
+        logger.info("----------------{},{}",code,clientType);
+        Channel channel = clientChannelService.findChannelByCode(code,clientType);
+        return channel;
     }
 
     public boolean checkClientIsLogin(String code,int clientType) {
