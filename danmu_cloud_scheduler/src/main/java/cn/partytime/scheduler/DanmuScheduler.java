@@ -62,7 +62,7 @@ public class DanmuScheduler {
     private RpcMovieScheduleService rpcMovieScheduleService;
 
     @Scheduled(cron = "0 0 16 * * ?")
-    private void daobanData() throws IOException {
+    public void daobanData() throws IOException {
         String s=HttpUtils.sendGet("https://movie.douban.com/cinema/nowplaying/beijing/", null);
 
         Document doc = Jsoup.parse(s);
@@ -77,7 +77,7 @@ public class DanmuScheduler {
      * 电影超时告警
      */
     @Scheduled(cron = "0/30 * * * * ?")
-    private void moviePlayTimeListener() {
+    public void moviePlayTimeListener() {
         log.info("电影播放时长告警");
         List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
         if (ListUtils.checkListIsNotNull(danmuAddressList)) {
