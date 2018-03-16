@@ -125,6 +125,9 @@ public class JavaClientController {
         restResultModel.setData(partyResourceResultList);
         restResultModel.setResult(200);
 
+
+        log.info("returnValue:{}",JSON.toJSONString(restResultModel));
+
         return restResultModel;
     }
 
