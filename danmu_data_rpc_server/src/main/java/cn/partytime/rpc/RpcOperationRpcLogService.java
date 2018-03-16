@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -22,7 +23,7 @@ public class RpcOperationRpcLogService {
     private OperationRpcLogService operationRpcLogService;
 
     @RequestMapping(value = "/insertOperationLog" ,method = RequestMethod.GET)
-    public void insertOperationLog(String key, Map<String,String> content, String adminUserId){
+    public void insertOperationLog(@RequestParam String key, @RequestParam Map<String,String> content, @RequestParam String adminUserId){
         operationRpcLogService.insertOperationLog(key,content,adminUserId);
     }
 }

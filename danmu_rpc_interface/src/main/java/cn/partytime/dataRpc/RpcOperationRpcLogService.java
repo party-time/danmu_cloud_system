@@ -19,6 +19,6 @@ import java.util.Map;
 public interface RpcOperationRpcLogService {
 
     @RequestMapping(value = "/rpcOperationRpcLog/insertOperationLog" ,method = RequestMethod.GET)
-    public List<ParamValueJsonModel> insertOperationLog(@RequestParam(value = "key")String key, Map<String,String> content, @RequestParam(value = "adminUserId") String adminUserId);
+    public List<ParamValueJsonModel> insertOperationLog(@RequestParam(value = "key")String key, @RequestParam(value = "content") Map<String,String> content, @RequestParam(value = "adminUserId") String adminUserId);
 
 }

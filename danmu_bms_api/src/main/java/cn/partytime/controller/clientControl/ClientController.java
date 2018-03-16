@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by administrator on 2017/3/22.
@@ -66,7 +67,9 @@ public class ClientController extends BaseAdminController {
         }
         log.info("控制台请求指令{}", cmd);
         if ("projectorStart".equals(cmd)) {
-            rpcOperationRpcLogService.insertOperationLog("key1",new HashMap<>(),getAdminUser().getId());
+            Map<String,String> commandMap = new HashMap<>();
+            commandMap.put("name","2312312312");
+            rpcOperationRpcLogService.insertOperationLog("key1",commandMap,getAdminUser().getId());
         } else if ("projectorClose".equals(cmd)) {
         } else if ("projectorChange".equals(cmd)) {
         } else if ("appRestart".equals(cmd)) {
