@@ -35,17 +35,18 @@ public class ResourceLogicService {
         List<String> partyIdList = new ArrayList<String>();
         if (ListUtils.checkListIsNotNull(partyList)) {
             partyList.stream().forEach(party -> partyIdList.add(party.getId()));
-        }
-        log.info("partyIdList：{}",JSON.toJSONString(partyIdList));
-        Map<String,List<ResourceFileModel>> resourceFileMap =  rpcPartyResourceResultService.findResourceUnderFilm(partyIdList);
-        for(PartyModel party : partyList){
-            PartyResourceResult partyResourceResult = new PartyResourceResult();
-            partyResourceResult.setParty(party);
-            if( null != resourceFileMap) {
-                partyResourceResult.setResourceFileList(resourceFileMap.get(party.getId()));
+            log.info("partyIdList：{}",JSON.toJSONString(partyIdList));
+            Map<String,List<ResourceFileModel>> resourceFileMap =  rpcPartyResourceResultService.findResourceUnderFilm(partyIdList);
+            for(PartyModel party : partyList){
+                PartyResourceResult partyResourceResult = new PartyResourceResult();
+                partyResourceResult.setParty(party);
+                if( null != resourceFileMap) {
+                    partyResourceResult.setResourceFileList(resourceFileMap.get(party.getId()));
+                }
+                partyResourceResultList.add(partyResourceResult);
             }
-            partyResourceResultList.add(partyResourceResult);
         }
+
         return partyResourceResultList;
     }
 
@@ -60,15 +61,15 @@ public class ResourceLogicService {
         List<String> partyIdlList = new ArrayList<String>();
         if (ListUtils.checkListIsNotNull(partyList)) {
             partyList.stream().forEach(party -> partyIdlList.add(party.getId()));
-        }
-        Map<String,List<ResourceFileModel>> resourceFileMap =  rpcPartyResourceResultService.findResourceUnderFilm(partyIdlList);
-        for(PartyModel party : partyList){
-            PartyResourceResult partyResourceResult = new PartyResourceResult();
-            partyResourceResult.setParty(party);
-            if( null != resourceFileMap) {
-                partyResourceResult.setResourceFileList(resourceFileMap.get(party.getId()));
+            Map<String,List<ResourceFileModel>> resourceFileMap =  rpcPartyResourceResultService.findResourceUnderFilm(partyIdlList);
+            for(PartyModel party : partyList){
+                PartyResourceResult partyResourceResult = new PartyResourceResult();
+                partyResourceResult.setParty(party);
+                if( null != resourceFileMap) {
+                    partyResourceResult.setResourceFileList(resourceFileMap.get(party.getId()));
+                }
+                partyResourceResultList.add(partyResourceResult);
             }
-            partyResourceResultList.add(partyResourceResult);
         }
         return partyResourceResultList;
     }
