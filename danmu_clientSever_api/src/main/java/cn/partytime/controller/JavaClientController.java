@@ -97,6 +97,7 @@ public class JavaClientController {
      */
     @RequestMapping(value = "/latelyParty", method = RequestMethod.GET)
     public RestResultModel latelyParty(String addressId){
+        log.info("------------获取最近的活动---------start");
         RestResultModel restResultModel = new RestResultModel();
         DanmuAddressModel danmuAddress = rpcDanmuAddressService.findById(addressId);
         if( null == danmuAddress){
