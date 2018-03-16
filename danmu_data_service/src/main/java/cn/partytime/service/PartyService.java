@@ -129,6 +129,10 @@ public class PartyService {
 
     public List<Party> findByTypeAndStatus(Integer type, Integer status){
 
+        return partyRepository.findByTypeAndStatusLessThan(type,status);
+    }
+
+    public List<Party> findByTypeAndStatusEqual(Integer type, Integer status){
         return partyRepository.findByTypeAndStatus(type,status);
     }
 
