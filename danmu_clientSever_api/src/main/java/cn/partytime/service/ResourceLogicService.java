@@ -32,12 +32,12 @@ public class ResourceLogicService {
         //查询所有的电影
         List<PartyModel> partyList = rpcPartyService.findByTypeAndStatus(1, 2);
         //查询电影下所有的资源
-        List<String> partyIdlList = new ArrayList<String>();
+        List<String> partyIdList = new ArrayList<String>();
         if (ListUtils.checkListIsNotNull(partyList)) {
-            partyList.stream().forEach(party -> partyIdlList.add(party.getId()));
+            partyList.stream().forEach(party -> partyIdList.add(party.getId()));
         }
         log.info("partyId");
-        Map<String,List<ResourceFileModel>> resourceFileMap =  rpcPartyResourceResultService.findResourceUnderFilm(partyIdlList);
+        Map<String,List<ResourceFileModel>> resourceFileMap =  rpcPartyResourceResultService.findResourceUnderFilm(partyIdList);
         for(PartyModel party : partyList){
             PartyResourceResult partyResourceResult = new PartyResourceResult();
             partyResourceResult.setParty(party);
