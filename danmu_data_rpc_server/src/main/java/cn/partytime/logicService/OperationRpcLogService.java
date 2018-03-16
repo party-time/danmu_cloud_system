@@ -4,14 +4,18 @@ import cn.partytime.model.operationlog.OperationLog;
 import cn.partytime.model.operationlog.OperationLogTemp;
 import cn.partytime.service.OperationLogService;
 import cn.partytime.service.OperationLogTempService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
+@Slf4j
 public class OperationRpcLogService {
 
     @Autowired
