@@ -36,7 +36,7 @@ public class ResourceLogicService {
         if (ListUtils.checkListIsNotNull(partyList)) {
             partyList.stream().forEach(party -> partyIdList.add(party.getId()));
         }
-        log.info("partyId");
+        log.info("partyIdList：{}",JSON.toJSONString(partyIdList));
         Map<String,List<ResourceFileModel>> resourceFileMap =  rpcPartyResourceResultService.findResourceUnderFilm(partyIdList);
         for(PartyModel party : partyList){
             PartyResourceResult partyResourceResult = new PartyResourceResult();
