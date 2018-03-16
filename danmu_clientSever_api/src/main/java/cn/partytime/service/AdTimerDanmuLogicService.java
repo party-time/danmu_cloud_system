@@ -28,8 +28,9 @@ public class AdTimerDanmuLogicService {
         List<String> partyIdlList = new ArrayList<String>();
         if (ListUtils.checkListIsNotNull(partyList)) {
             partyList.stream().forEach(party -> partyIdlList.add(party.getId()));
+            return rpcAdTimerService.findTimerDanmuFileList(addressId,partyIdlList);
         }
 
-        return rpcAdTimerService.findTimerDanmuFileList(addressId,partyIdlList);
+        return null;
     }
 }
