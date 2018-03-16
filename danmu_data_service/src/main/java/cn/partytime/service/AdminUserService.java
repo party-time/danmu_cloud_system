@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 
 /**
  * Created by liuwei on 16/6/15.
@@ -199,5 +201,8 @@ public class AdminUserService {
         return adminUserRepository.findByWechatId(wechatId);
     }
 
+    public List<AdminUser> findByIds(List<String> ids){
+        return adminUserRepository.findByIdIn(ids);
+    }
 
 }

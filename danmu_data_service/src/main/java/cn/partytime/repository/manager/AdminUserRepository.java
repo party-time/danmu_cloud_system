@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import java.util.List;
+
 /**
  * Created by liuwei on 16/6/15.
  */
@@ -21,5 +23,7 @@ public interface AdminUserRepository extends MongoRepository<AdminUser,String> {
     Page<AdminUser> findAll(Pageable pageable);
 
     AdminUser findByWechatId(String wechatId);
+
+    List<AdminUser> findByIdIn(List<String> ids);
 
 }

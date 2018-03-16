@@ -2,7 +2,10 @@ package cn.partytime.controller;
 
 import cn.partytime.model.PageResultModel;
 import cn.partytime.model.RestResultModel;
+import cn.partytime.model.operationlog.OperationLog;
 import cn.partytime.model.operationlog.OperationLogTemp;
+import cn.partytime.service.BmsOperationLogService;
+import cn.partytime.service.OperationLogService;
 import cn.partytime.service.OperationLogTempService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,9 @@ public class OperationLogController {
     @Autowired
     private OperationLogTempService operationLogTempService;
 
+    @Autowired
+    private BmsOperationLogService bmsOperationLogService;
+
     @RequestMapping(value = "/page", method = RequestMethod.GET)
     public PageResultModel findAll(Integer pageNumber, Integer pageSize){
         if( null == pageNumber){
@@ -27,12 +33,22 @@ public class OperationLogController {
         }else{
             pageNumber = pageNumber-1;
         }
-        Page<OperationLogTemp> monitorPage = operationLogTempService.findAll(pageNumber,pageSize);
+        Page<OperationLogTemp> operationLogTempPage = operationLogTempService.findAll(pageNumber,pageSize);
         PageResultModel pageResultModel = new PageResultModel();
-        pageResultModel.setTotal(monitorPage.getTotalElements());
-        pageResultModel.setRows(monitorPage.getContent());
+        pageResultModel.setTotal(operationLogTempPage.getTotalElements());
+        pageResultModel.setRows(operationLogTempPage.getContent());
 
         return pageResultModel;
+    }
+
+    @RequestMapping(value = "/pageLog", method = RequestMethod.GET)
+    public PageResultModel findAllLog(Integer pageNumber, Integer pageSize){
+        if( null == pageNumber){
+            pageNumber = 0;
+        }else{
+            pageNumber = pageNumber-1;
+        }
+        return bmsOperationLogService.findAllLog(pageNumber,pageSize);
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
