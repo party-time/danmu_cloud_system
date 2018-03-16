@@ -1,6 +1,7 @@
 package cn.partytime.controller.clientControl;
 
 import cn.partytime.controller.base.BaseAdminController;
+import cn.partytime.dataRpc.RpcOperationRpcLogService;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.service.BmsClientWechatSendService;
 import cn.partytime.service.client.ClientService;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 /**
  * Created by administrator on 2017/3/22.
  */
@@ -19,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/v1/api/admin/clientControl")
 @Slf4j
-public class ClientController extends BaseAdminController{
+public class ClientController extends BaseAdminController {
 
     @Autowired
     private BmsClientWechatSendService bmsClientWechatSendService;
@@ -34,6 +37,9 @@ public class ClientController extends BaseAdminController{
     @Autowired
     private MovieService movieService;
 
+    @Autowired
+    private RpcOperationRpcLogService rpcOperationRpcLogService;
+
 
     /**
      * projectStart 开启投影  projectClose 关闭投影  projectChange 投影切白
@@ -42,26 +48,44 @@ public class ClientController extends BaseAdminController{
      * videoDown 视频下载   expressionDown 表情下载  specialImgDown 特效图片下载  timerDmDown 定时弹幕下载 adDmDown 广告弹幕下载
      * configCreate 生成配置表
      * teamViewStart1,teamViewStart2 开启teamView  teamViewClose1,teamViewClose2 关闭teamView screenPic1,screenPic2 截屏
-     *
+     * <p>
      * danmu-start-1 movie-start movie-close
+     *
      * @param cmd
      * @return
      */
     @RequestMapping(value = "/control", method = RequestMethod.GET)
-    public RestResultModel controls(String danmuStart , String cmd, String addressId){
+    public RestResultModel controls(String danmuStart, String cmd, String addressId) {
         log.info("控制台请求指令");
         RestResultModel restResultModel = new RestResultModel();
         String callback = "";
-        if(cmd.equals("screenPic1")){
-            callback = partyTimeConfig.getUrl()+"/v1/api/printScreen/sendScreenPic?adminId="+getAdminUser().getId()+"&addressId="+addressId+"&num=1";
-        }else if( cmd.equals("screenPic2")){
-            callback = partyTimeConfig.getUrl()+"/v1/api/printScreen/sendScreenPic?adminId="+getAdminUser().getId()+"&addressId="+addressId+"&num=2";
+        if (cmd.equals("screenPic1")) {
+            callback = partyTimeConfig.getUrl() + "/v1/api/printScreen/sendScreenPic?adminId=" + getAdminUser().getId() + "&addressId=" + addressId + "&num=1";
+        } else if (cmd.equals("screenPic2")) {
+            callback = partyTimeConfig.getUrl() + "/v1/api/printScreen/sendScreenPic?adminId=" + getAdminUser().getId() + "&addressId=" + addressId + "&num=2";
         }
-        log.info("控制台请求指令{}",cmd);
-        if(cmd.startsWith("danmu-")){
-            clientService.sendCommand(danmuStart,addressId,callback);
-        }else{
-            clientService.sendCommand(cmd,addressId,callback);
+        log.info("控制台请求指令{}", cmd);
+        if ("projectorStart".equals(cmd)) {
+            rpcOperationRpcLogService.insertOperationLog("key1",new HashMap<>(),getAdminUser().getId());
+        } else if ("projectorClose".equals(cmd)) {
+        } else if ("projectorChange".equals(cmd)) {
+        } else if ("appRestart".equals(cmd)) {
+        } else if ("appClose".equals(cmd)) {
+        } else if ("videoDown".equals(cmd)) {
+        } else if ("expressionDown".equals(cmd)) {
+        } else if ("specialImgDown".equals(cmd)) {
+        } else if ("timerDmDown".equals(cmd)) {
+        } else if ("adDmDown".equals(cmd)) {
+        } else if ("resourceAllDown".equals(cmd)) {
+        } else if ("configCreate".equals(cmd)) {
+
+        }
+
+
+        if (cmd.startsWith("danmu-")) {
+            clientService.sendCommand(danmuStart, addressId, callback);
+        } else {
+            clientService.sendCommand(cmd, addressId, callback);
         }
 
 
@@ -73,12 +97,9 @@ public class ClientController extends BaseAdminController{
         }*/
 
 
-
-
         restResultModel.setResult(200);
         return restResultModel;
     }
-
 
 
 }
