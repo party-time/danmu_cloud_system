@@ -131,6 +131,7 @@ public class PartyService {
         return partyRepository.findByTypeAndStatusLessThan(type,status);
     }
 
+
     public List<Party> findByTypeAndStatusEqual(Integer type, Integer status){
         return partyRepository.findByTypeAndStatus(type,status);
     }
