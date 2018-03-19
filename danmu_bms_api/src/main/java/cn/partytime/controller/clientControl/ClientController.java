@@ -66,7 +66,9 @@ public class ClientController extends BaseAdminController {
             callback = partyTimeConfig.getUrl() + "/v1/api/printScreen/sendScreenPic?adminId=" + getAdminUser().getId() + "&addressId=" + addressId + "&num=2";
         }
         log.info("控制台请求指令{}", cmd);
-        if ("projectorStart".equals(cmd)) {
+    //public void insertOperationLog(String cmd, String partyId, String addressId, String adminUserId) {
+        rpcOperationRpcLogService.insertOperationLog(cmd,"",addressId,getAdminUser().getId());
+        /*if ("projectorStart".equals(cmd)) {
             Map<String,String> commandMap = new HashMap<>();
             commandMap.put("name","2312312312");
             rpcOperationRpcLogService.insertOperationLog("key1",commandMap,getAdminUser().getId());
@@ -82,7 +84,7 @@ public class ClientController extends BaseAdminController {
         } else if ("resourceAllDown".equals(cmd)) {
         } else if ("configCreate".equals(cmd)) {
 
-        }
+        }*/
 
 
         if (cmd.startsWith("danmu-")) {

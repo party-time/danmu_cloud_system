@@ -1,6 +1,7 @@
 package cn.partytime.dataRpc.impl;
 
 import cn.partytime.dataRpc.RpcPreDanmuService;
+import cn.partytime.model.DanmuLibraryModel;
 import cn.partytime.model.PreDanmuModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -72,4 +73,10 @@ public class RpcPreDanmuServiceHystrix implements RpcPreDanmuService {
     public long findPreDanmuCountByLibraryId(String libraryId) {
         return 0;
     }
+
+    @Override
+    public List<DanmuLibraryModel> findPreDanmuLibraryListBylibraryIdList(List<String> libraryIdList) {
+        return null;
+    }
+
 }

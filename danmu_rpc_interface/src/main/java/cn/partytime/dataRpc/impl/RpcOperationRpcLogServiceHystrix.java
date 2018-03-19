@@ -14,7 +14,12 @@ import java.util.Map;
 public class RpcOperationRpcLogServiceHystrix implements RpcOperationRpcLogService {
 
     @Override
-    public List<ParamValueJsonModel> insertOperationLog(String code, Map<String, String> content, String adminUserId) {
-        return null;
+    public void insertOperationLog(String cmd, String partyId, String addressId, String adminUserId) {
+
+    }
+
+    @Override
+    public void insertOperationLogOfParty(String cmd, String partyId, String addressId, String adminUserId, Map<String, Object> content) {
+
     }
 }

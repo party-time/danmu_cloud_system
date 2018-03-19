@@ -4,6 +4,7 @@ import cn.partytime.cache.danmu.PreDanmuCacheService;
 import cn.partytime.cache.danmu.PreDanmuLibraryCacheService;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.logicService.PreDanmuLogicService;
+import cn.partytime.model.danmu.DanmuLibrary;
 import cn.partytime.model.danmu.DanmuLibraryParty;
 import cn.partytime.model.danmu.PreDanmu;
 import cn.partytime.repository.danmu.DanmuLibraryPartyRepository;
@@ -48,6 +49,8 @@ public class RpcPreDanmuService {
 
     @Autowired
     private PreDanmuLibraryCacheService preDanmuLibraryCacheService;
+
+
 
 
 
@@ -133,6 +136,12 @@ public class RpcPreDanmuService {
     @RequestMapping(value = "/findPreDanmuCountByLibraryId" ,method = RequestMethod.GET)
     public long findPreDanmuCountByLibraryId(@RequestParam String libraryId) {
         return  preDanmuService.countByDanmuLibraryId(libraryId);
+    }
+
+
+    @RequestMapping(value = "/findPreDanmuLibraryListBylibraryIdList" ,method = RequestMethod.GET)
+    public List<DanmuLibrary> findPreDanmuLibraryListBylibraryIdList(List<String> libraryIdList){
+        return  preDanmuService.findByIdIn(libraryIdList);
     }
 
     /**

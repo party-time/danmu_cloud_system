@@ -14,6 +14,10 @@ public class DanmuLibraryPartyDto {
 
     private int densitry;
 
+    private int densitryHis;
+
+    private String  libraryName;
+
     private String name;
 
 }

@@ -1,6 +1,7 @@
 package cn.partytime.dataRpc;
 
 import cn.partytime.dataRpc.impl.RpcPreDanmuServiceHystrix;
+import cn.partytime.model.DanmuLibraryModel;
 import cn.partytime.model.PreDanmuModel;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,6 +62,10 @@ public interface RpcPreDanmuService {
 
     @RequestMapping(value = "/rpcRepDanmu/findPreDanmuCountByLibraryId" ,method = RequestMethod.GET)
     public long findPreDanmuCountByLibraryId(@RequestParam(name = "libraryId") String libraryId);
+
+
+    @RequestMapping(value = "/rpcRepDanmu/findPreDanmuLibraryListBylibraryIdList" ,method = RequestMethod.GET)
+    public List<DanmuLibraryModel> findPreDanmuLibraryListBylibraryIdList(@RequestParam(name = "libraryIdList") List<String> libraryIdList);
 
 
 
