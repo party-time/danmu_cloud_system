@@ -321,12 +321,11 @@ public class ResourceFileService {
      * 删除所有已经下线的电影的表情和特效图片
      */
     public void delOffLineResourceFile(){
-        List<Party> partyList = partyService.findByTypeAndStatus(1,4);
+        List<Party> partyList = partyService.findByTypeAndStatusEqual(1,4);
         if( null != partyList){
             for( Party party : partyList){
                 delResourceFileByPartyId(party.getId());
             }
-
         }
     }
 
