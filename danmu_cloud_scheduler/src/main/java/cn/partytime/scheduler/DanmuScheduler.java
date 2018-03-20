@@ -68,6 +68,7 @@ public class DanmuScheduler {
 
     @Scheduled(cron = "0 0/1 * * * ?")
     public void setData() throws IOException {
+
         redisService.set("22222222222222222222222222222222","22222");
     }
     @Scheduled(cron = "0 0 16 * * ?")
