@@ -1,13 +1,19 @@
 package cn.partytime.listener;
 
 import cn.partytime.annotation.CommandAnnotation;
+import cn.partytime.scheduler.BaseScheduler;
 import cn.partytime.util.ClassUtils;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import javax.servlet.ServletContext;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,6 +24,8 @@ import java.util.Set;
 @Component("commandListener")
 public class CommandListener implements MessageListener {
 
+    @Autowired
+    private ServletContext servletContext;
     @Override
     public void onMessage(Message message, byte[] bytes) {
         if(message!=null){
@@ -25,7 +33,7 @@ public class CommandListener implements MessageListener {
             log.info("command:"+command);
             //BlockKeyQeueueModel blockKeyQeueueModel = JSON.parseObject(blockKeyQeueueModelStr, BlockKeyQeueueModel.class);
             //cacheDataRepository.updateCacheOne(blockKeyQeueueModel);
-            String packageName = "cn.partytime.scheduler";
+            /*String packageName = "cn.partytime.scheduler";
             Set<String> classNames = ClassUtils.getClassName(packageName, false);
             log.info("classNames:"+JSON.toJSONString(classNames));
             if (classNames != null) {
@@ -33,7 +41,16 @@ public class CommandListener implements MessageListener {
                     log.info("classNames",command);
                     show(className,command);
                 }
+            }*/
+
+            try {
+                ApplicationContext ac1 = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+                BaseScheduler baseScheduler = (BaseScheduler)ac1.getBean(command);
+                baseScheduler.execute();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
         }
     }
 

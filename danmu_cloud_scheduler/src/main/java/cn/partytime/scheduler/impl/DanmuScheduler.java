@@ -1,7 +1,7 @@
-package cn.partytime.scheduler;
+package cn.partytime.scheduler.impl;
 
+import cn.partytime.ScanClass.BaseClass;
 import cn.partytime.alarmRpc.RpcMovieAlarmService;
-import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
 import cn.partytime.dataRpc.RpcMovieScheduleService;
@@ -9,46 +9,39 @@ import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.MovieScheduleModel;
 import cn.partytime.model.PartyLogicModel;
-import cn.partytime.model.spider.Spider;
 import cn.partytime.redis.service.RedisService;
+import cn.partytime.scheduler.BaseScheduler;
 import cn.partytime.service.DoubanSpiderService;
-import cn.partytime.service.spider.SpiderService;
-import cn.partytime.util.FileUtils;
 import cn.partytime.util.HttpUtils;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by admin on 2018/1/2.
  */
 
-@Component
+@Service("danmuScheduler")
 @EnableScheduling
 @RefreshScope
 @Slf4j
-public class DanmuScheduler {
+public class DanmuScheduler implements BaseScheduler {
 
-    @Autowired
-    private DoubanSpiderService doubanSpiderService;
+
 
     @Autowired
     private RpcDanmuAddressService rpcDanmuAddressService;
@@ -64,30 +57,34 @@ public class DanmuScheduler {
     private RpcMovieScheduleService rpcMovieScheduleService;
 
     @Autowired
-    private RedisService redisService;
+    private ServletContext servletContext;
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    /*@PostConstruct
     public void setData() throws IOException {
+        //redisService.set("22222222222222222222222222222222","22222");
+        //ClassDemo classDemo = (ClassDemo)applicationContext.getBean("first");
+        //stem.out.println(classDemo);
+        ApplicationContext ac1 = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 
-        redisService.set("22222222222222222222222222222222","22222");
-    }
-    @Scheduled(cron = "0 0 16 * * ?")
-    public void daobanData() throws IOException {
-        String s=HttpUtils.sendGet("https://movie.douban.com/cinema/nowplaying/beijing/", null);
+        BaseClass bb = (BaseClass)ac1.getBean("firstClass");
+        bb.execute();
 
-        Document doc = Jsoup.parse(s);
-        doubanSpiderService.filmData(doc,"nowplaying");
+        bb = (BaseClass)ac1.getBean("secondClass");
+        bb.execute();
+        //'System.out.println(bb.getClass().getName());
+    }*/
 
-        log.info("将要进行的电影");
-        doubanSpiderService.filmData(doc,"upcoming");
 
-    }
+    /*@Bean(name="testDemo")
+    public void generateDemo() {
+        System.out.println("===========================");
+    }*/
 
     /**
      * 电影超时告警
      */
     @Scheduled(cron = "0/30 * * * * ?")
-    public void moviePlayTimeListener() {
+    public void execute() {
         log.info("电影播放时长告警");
         List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
         if (ListUtils.checkListIsNotNull(danmuAddressList)) {
