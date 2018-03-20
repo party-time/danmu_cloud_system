@@ -137,7 +137,7 @@ public class CommandHanderService {
             normalOrtestDanmuDanmuHandler(type, partyId, addressId, object,channel,partyType);
         } else if (CommandTypeConst.SPECIAL_MOV.equals(type)) {
             //动画特效
-            specialMovHandler(type, partyId, addressId, object, channel,partyType);
+            specialMovHandler(type,key, partyId, addressId, object, channel,partyType);
         }else if (CommandTypeConst.DELAY_SECOND.equals(type)) {
             //是否开启延迟时间
             delayTimeHandler(partyId,key,addressId,object, channel,partyType);
@@ -324,13 +324,14 @@ public class CommandHanderService {
     /**
      * 动画特效处理
      */
-    private void specialMovHandler(String type, String partyId, String addressId, Object datObject, Channel channel,int partyType) {
+    private void specialMovHandler(String type, String adminKey,String partyId, String addressId, Object datObject, Channel channel,int partyType) {
         Map<String, Object> result = new HashMap<String, Object>();
 
         Map<String,Object> map = convertObjectToMap(datObject);
         String id = String.valueOf(map.get("id"));
         int status = IntegerUtils.objectConvertToInt(map.get("status"));
         String videoRect = String.valueOf(map.get("videoRect"));
+        String name = String.valueOf(map.get("name"));
 
         //清除动画特效缓存
         String key = FunctionControlCacheKey.FUNCITON_CONTROL_SPECIALMOV + partyId;
@@ -347,7 +348,6 @@ public class CommandHanderService {
             pushCommandToPartyAdmin(partyType,partyId, type, JSON.toJSONString(setObjectToBms(type, result)));
 
 
-
             Map<String,Object> dataMap = new HashMap<String,Object>();
             //消息推送给管理端
             dataMap.put("idd", id);
@@ -361,6 +361,11 @@ public class CommandHanderService {
 
             logger.info("发动给客户端的信息:" + JSON.toJSONString(commandObject));
             sendMessageToMq(addressId, commandObject);
+
+            Map<String,Object> content = new HashMap<>();
+            content.put("danmuName",name);
+            content.put("status","打开");
+            saveLog(adminKey,"A_video",partyId,addressId, content);//延迟时间
 
 
         } else {
@@ -394,7 +399,10 @@ public class CommandHanderService {
                 logger.info("发动给客户端的信息:" + JSON.toJSONString(commandObject));
                 sendMessageToMq(addressId, commandObject);
 
-
+                Map<String,Object> content = new HashMap<>();
+                content.put("danmuName",name);
+                content.put("status","关闭");
+                saveLog(adminKey,"A_video",partyId,addressId, content);
             } else {
                 //开启新的动画特效
                 redisService.set(key, id);
@@ -421,6 +429,11 @@ public class CommandHanderService {
 
                 logger.info("发动给客户端的信息:" + JSON.toJSONString(commandObject));
                 sendMessageToMq(addressId, commandObject);
+
+                Map<String,Object> content = new HashMap<>();
+                content.put("danmuName",name);
+                content.put("status","打开");
+                saveLog(adminKey,"A_video",partyId,addressId, content);//延迟时间
             }
         }
     }

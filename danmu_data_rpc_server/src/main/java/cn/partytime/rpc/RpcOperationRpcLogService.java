@@ -76,9 +76,12 @@ public class RpcOperationRpcLogService {
         } else if ("A_end".equals(cmd)) {
             log.info("记录日志信息【结束】");
             operationRpcLogService.insertOperationLog("A_end", contentMap, adminUserId);//【结束】
-        } else if ("".equals(cmd)) {
+        } else if ("A_advanceDanmu".equals(cmd)) {
             log.info("记录日志信息高级弹幕");
             operationRpcLogService.insertOperationLog("A_advanceDanmu", contentMap, adminUserId);//高级弹幕
+        }else if ("A_video".equals(cmd)) {
+            log.info("记录日志信息视频");
+            operationRpcLogService.insertOperationLog("A_video", contentMap, adminUserId);//高级弹幕
         }
     }
 

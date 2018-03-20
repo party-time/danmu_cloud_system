@@ -67,7 +67,7 @@ public class AdminDanmuController  extends BaseAdminController {
     public RestResultModel findDanmuTemplateInfo(HttpServletRequest request){
 
         RestResultModel restResultModel = new RestResultModel();
-        restResultModel =bmsDanmuService.sendDanmuByAdmin(request,getAdminUser().getId(),0,0);
+        restResultModel =bmsDanmuService.sendDanmuByAdmin(request,getAdminUser().getId(),0,0,getAdminUser().getId());
         return restResultModel;
     }
 

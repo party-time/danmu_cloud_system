@@ -9,6 +9,7 @@ import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.CacheDataRepository;
 import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
+import cn.partytime.dataRpc.RpcOperationRpcLogService;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.*;
 import cn.partytime.model.danmu.Danmu;
@@ -98,6 +99,9 @@ public class BmsDanmuService {
 
     @Autowired
     private RpcPartyService rpcPartyService;
+
+    @Autowired
+    private RpcOperationRpcLogService rpcOperationRpcLogService;
 
     /**
      * ‘
@@ -669,7 +673,7 @@ public class BmsDanmuService {
      * @param danmuType
      * @return
      */
-    public RestResultModel sendDanmuByAdmin(HttpServletRequest request,String userId,int danmuSrc,int danmuType){
+    public RestResultModel sendDanmuByAdmin(HttpServletRequest request,String userId,int danmuSrc,int danmuType,String adminId){
 
         RestResultModel restResultModel = new RestResultModel();
         //模板编号
@@ -682,6 +686,12 @@ public class BmsDanmuService {
         //组件信息
         CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
         String name =cmdTempAllData.getName();
+
+        Map<String,Object> contentMap = new HashMap<String,Object>();
+        contentMap.put("danmuName",name);
+        contentMap.put("color","");
+        contentMap.put("content","");
+
         //是否入弹幕库 0入库  1不入库
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
         Date date = DateUtils.getCurrentDate();
@@ -706,27 +716,29 @@ public class BmsDanmuService {
         if(ListUtils.checkListIsNotNull(cmdTempComponentDataList)){
             for(CmdTempComponentData cmdTempComponentData:cmdTempComponentDataList){
                 String key = cmdTempComponentData.getKey();
-
                 //数据类型
+                //0数字 1布尔值 2字符串 3数组
                 int type = cmdTempComponentData.getType();
 
                 //组件的id 0无组件 1特效视频 2特效图片 3表情图片
                 String componentId = cmdTempComponentData.getComponentId();
+
                 int isCheck  = cmdTempComponentData.getIsCheck();
 
                 //组件的类型 0text 1textarea 2select  3radiobutton 4checkbox
                 Integer componentType = cmdTempComponentData.getComponentType();
-
                 Object content = null;
                 Object msgContent = null;
                 boolean specialCompontentBoolean =  danmuCommonService.checkSpecialComponent(componentId);
                 if(specialCompontentBoolean && "0".equals(componentId)){
                     map.put(key,cmdTempComponentData.getDefaultValue());
+                    contentMap.put("content",cmdTempComponentData.getDefaultValue());
                 }else{
                     if(type==3){
                         //显示的内容
                         content = danmuCommonService.setProtocolArrayContent(componentType,request.getParameter(key),cmdTempComponentData.getDefaultValue());
                         msgContent = danmuCommonService.setShowArrayContent(componentType,request.getParameter(key),componentId,cmdTempComponentData.getDefaultValue());
+                        contentMap.put("content",msgContent);
                         if(msgContent!=null && (!"1".equals(componentId) && !"2".equals(componentId))){
                             List<String> messageList = (List<String>)msgContent;
                             for(int i=0; i<messageList.size(); i++){
@@ -736,7 +748,6 @@ public class BmsDanmuService {
                                     isBlock = true;
                                 }
                             }
-
                         }
                     }else{
                         if("color".equals(key)){
@@ -746,9 +757,13 @@ public class BmsDanmuService {
                             }else{
                                 content = danmuCommonService.setShowNotArrayContent(request.getParameter(key),type);
                             }
+                            contentMap.put("color",request.getParameter(key+"name"));
                         }else{
                             content = danmuCommonService.setShowNotArrayContent(request.getParameter(key),type);
                             msgContent = danmuCommonService.setShowNotArrayContent(request.getParameter(key),componentId,type);
+                            if("message".equals(key)){
+                                contentMap.put("content",msgContent);
+                            }
                             if(!"1".equals(componentId) && !"2".equals(componentId)){
                                 restResultModel = checkDanmuIsOk(String.valueOf(msgContent));
                                 if(restResultModel!=null){
@@ -818,7 +833,7 @@ public class BmsDanmuService {
                 pubMessageCollectorServer(partyId,addressId,commandObject);
             }
         }
-
+        saveLog("A_advanceDanmu",partyId,addressId,contentMap,adminId);
         restResultModel = new RestResultModel();
         restResultModel.setResult(200);
         restResultModel.setResult_msg("OK");
@@ -951,6 +966,13 @@ public class BmsDanmuService {
         return wechatUser;
     }
 
-
+    private void saveLog(String cmd,String partyId,String addressId,Map<String,Object> content,String adminId){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                rpcOperationRpcLogService.insertOperationLogOfParty(cmd,partyId,addressId,adminId,content);
+            }
+        }).start();
+    }
 
 }
