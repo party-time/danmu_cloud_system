@@ -142,7 +142,7 @@ public class RpcOperationRpcLogService {
         } else if ("".equals(cmd)) {
             log.info("记录日志信息【重新加载预置弹幕】");
             operationRpcLogService.insertOperationLog("M_reLoadPreDanmu", contentMap, adminUserId);//【重新加载预置弹幕】
-        } else if ("danmu-start".equals(cmd)) {
+        } /*else if ("danmu-start".equals(cmd)) {
             log.info("记录日志信息模拟指令【确定】");
             operationRpcLogService.insertOperationLog("M_cmdConfirm", contentMap, adminUserId);//模拟指令【确定】
         } else if ("movie-start".equals(cmd)) {
@@ -205,7 +205,7 @@ public class RpcOperationRpcLogService {
         } else if ("projectorNewStart".equals(cmd)) {
             log.info("记录日志信息【投影开启（杭州厅）】");
             operationRpcLogService.insertOperationLog("M_projectorPlay(Hangzhou)", contentMap, adminUserId);//【投影开启（杭州厅）】
-        }
+        }*/
     }
 
 }
