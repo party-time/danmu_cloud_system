@@ -30,6 +30,7 @@ public class CommandListener implements MessageListener {
             if (classNames != null) {
                 for (String className : classNames) {
                     //System.out.println(className.replace(packageName+".",""));
+                    log.info("classNames",command);
                     show(className,command);
                 }
             }
@@ -44,11 +45,10 @@ public class CommandListener implements MessageListener {
             for (Method method : methods) {
                 if (method.isAnnotationPresent(CommandAnnotation.class)) {
                     try {
-
                         CommandAnnotation  commandAnnotation = method.getAnnotation(CommandAnnotation.class);
                         if(command.equals(commandAnnotation.command())){
-                            System.out.println(method.getName());
-                            Method method2 = clazz.getMethod(method.getName());
+                            log.info("methodName:"+method.getName());
+                            //Method method2 = clazz.getMethod(method.getName());
                             method.invoke(clazz.newInstance());
                         }
                     } catch (Exception ex) {
