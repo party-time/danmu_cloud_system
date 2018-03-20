@@ -25,7 +25,7 @@ public class TaskController {
     @RequestMapping(value = "/taskController", method = RequestMethod.GET)
     public RestResultModel del(String taskName) {
         RestResultModel restResultModel =new RestResultModel();
-        log.info("taskName--------------------:"+taskName);
+        log.info("taskName:"+taskName);
 
         redisTemplate.convertAndSend("secheduler:command:key", taskName);
 
