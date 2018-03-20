@@ -1,6 +1,5 @@
 package cn.partytime.scheduler.impl;
 
-import cn.partytime.ScanClass.BaseClass;
 import cn.partytime.alarmRpc.RpcMovieAlarmService;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
@@ -9,25 +8,15 @@ import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.MovieScheduleModel;
 import cn.partytime.model.PartyLogicModel;
-import cn.partytime.redis.service.RedisService;
 import cn.partytime.scheduler.BaseScheduler;
-import cn.partytime.service.DoubanSpiderService;
-import cn.partytime.util.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
