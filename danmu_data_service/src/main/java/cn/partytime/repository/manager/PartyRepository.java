@@ -47,7 +47,7 @@ public interface PartyRepository extends MongoRepository<Party,String> {
 
     List<Party> findByTypeAndStatus(Integer type, Integer status );
 
-    List<Party> findByTypeAndStatusAndEndTimeLessThan(Integer type, Integer status ,Date endTime);
+    List<Party> findByStatusGreaterThanAndEndTimeLessThan(Integer status ,Date endTime);
 
     Page<Party> findByStatusGreaterThan(Integer status,Pageable pageable);
 
