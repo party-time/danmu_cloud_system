@@ -10,6 +10,7 @@ import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.MovieScheduleModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.spider.Spider;
+import cn.partytime.redis.service.RedisService;
 import cn.partytime.service.DoubanSpiderService;
 import cn.partytime.service.spider.SpiderService;
 import cn.partytime.util.FileUtils;
@@ -23,6 +24,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -61,6 +63,13 @@ public class DanmuScheduler {
     @Autowired
     private RpcMovieScheduleService rpcMovieScheduleService;
 
+    @Autowired
+    private RedisService redisService;
+
+    @Scheduled(cron = "0 0/1 * * * ?")
+    public void setData() throws IOException {
+        redisService.set("22222222222222222222222222222222","22222");
+    }
     @Scheduled(cron = "0 0 16 * * ?")
     public void daobanData() throws IOException {
         String s=HttpUtils.sendGet("https://movie.douban.com/cinema/nowplaying/beijing/", null);
