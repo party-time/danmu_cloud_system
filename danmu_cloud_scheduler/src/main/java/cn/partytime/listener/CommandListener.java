@@ -20,17 +20,16 @@ public class CommandListener implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] bytes) {
-        log.info("getMEssage:============================================="+message);
         if(message!=null){
             String command = JSON.parseObject(String.valueOf(message),String.class).replace("'","");
-            System.out.println(command);
+            log.info("command:"+command);
             //BlockKeyQeueueModel blockKeyQeueueModel = JSON.parseObject(blockKeyQeueueModelStr, BlockKeyQeueueModel.class);
             //cacheDataRepository.updateCacheOne(blockKeyQeueueModel);
             String packageName = "cn.partytime.scheduler";
             Set<String> classNames = ClassUtils.getClassName(packageName, false);
             if (classNames != null) {
+                log.info("classNames:"+JSON.toJSONString(classNames));
                 for (String className : classNames) {
-                    //System.out.println(className.replace(packageName+".",""));
                     log.info("classNames",command);
                     show(className,command);
                 }
