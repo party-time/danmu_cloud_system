@@ -27,8 +27,8 @@ public class CommandListener implements MessageListener {
             //cacheDataRepository.updateCacheOne(blockKeyQeueueModel);
             String packageName = "cn.partytime.scheduler";
             Set<String> classNames = ClassUtils.getClassName(packageName, false);
+            log.info("classNames:"+JSON.toJSONString(classNames));
             if (classNames != null) {
-                log.info("classNames:"+JSON.toJSONString(classNames));
                 for (String className : classNames) {
                     log.info("classNames",command);
                     show(className,command);
