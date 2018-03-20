@@ -300,7 +300,8 @@ public class ResourceFileService {
         if( null != resourceFileList){
             for(ResourceFile resourceFile : resourceFileList){
                 if( Const.RESOURCE_EXPRESSIONS == resourceFile.getFileType() ||
-                       Const.RESOURCE_SPECIAL_IMAGES ==  resourceFile.getFileType()){
+                       Const.RESOURCE_SPECIAL_IMAGES ==  resourceFile.getFileType() ||
+                        Const.RESOURCE_H5_BACKGROUND == resourceFile.getFileType() ){
                     File file = new File(resourceFile.getFilePath());
                     if(file.exists()){
                         file.delete();
