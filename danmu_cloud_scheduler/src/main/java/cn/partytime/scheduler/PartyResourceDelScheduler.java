@@ -21,7 +21,7 @@ public class PartyResourceDelScheduler {
     @CommandAnnotation(command = "delEndPartyResourceFile")
     @Scheduled(cron = "* 0/10 * * * ?")
     private void delPartyResourceFile() {
-
+        log.info("exec: ***************delEndPartyResourceFile****************");
         partyResourceService.delEndPartyResourceFile();
 
     }
