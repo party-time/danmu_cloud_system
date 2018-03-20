@@ -317,8 +317,8 @@ public class PartyService {
         partyRepository.save(party);
     }
 
-    public List<Party> findByStatusGreaterThanAndEndTimeLessThan(Integer status , Date endTime){
-        return partyRepository.findByStatusGreaterThanAndEndTimeLessThan(status,endTime);
+    public List<Party> findByTypeAndStatusGreaterThanAndEndTimeLessThan(Integer type ,Integer status , Date endTime){
+        return partyRepository.findByTypeAndStatusGreaterThanAndEndTimeLessThan(type ,status,endTime);
     }
 
     /**
@@ -329,7 +329,7 @@ public class PartyService {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         cal.add(Calendar.MINUTE,-10);
-        List<Party> partyList = this.findByStatusGreaterThanAndEndTimeLessThan(2, cal.getTime());
+        List<Party> partyList = this.findByTypeAndStatusGreaterThanAndEndTimeLessThan(0,2, cal.getTime());
         return partyList;
     }
 
