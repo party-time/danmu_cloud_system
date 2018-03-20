@@ -48,8 +48,8 @@ public class CommandListener implements MessageListener {
                         CommandAnnotation  commandAnnotation = method.getAnnotation(CommandAnnotation.class);
                         if(command.equals(commandAnnotation.command())){
                             log.info("methodName:"+method.getName());
-                            //Method method2 = clazz.getMethod(method.getName());
-                            method.invoke(clazz.newInstance());
+                            Method method2 = clazz.getMethod(method.getName());
+                            method2.invoke(clazz.newInstance());
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
