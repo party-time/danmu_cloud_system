@@ -20,6 +20,7 @@ public class CommandListener implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] bytes) {
+        log.info("getMEssage:=============================================");
         if(message!=null){
             String command = JSON.parseObject(String.valueOf(message),String.class).replace("'","");
             System.out.println(command);
