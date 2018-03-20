@@ -139,7 +139,7 @@ public class ResourceFileService {
                 file.delete();
             }
             //如果是表情需要删除掉小表情
-            if(resourceFileModel.getFileType() == 1){
+            if(resourceFileModel.getFileType() == 1 || resourceFileModel.getFileType() == 6){
                 File smallfile = new File(resourceFileModel.getFilePath().replace(".big.",".small."));
                 if(smallfile.exists()){
                     smallfile.delete();
@@ -300,13 +300,14 @@ public class ResourceFileService {
         if( null != resourceFileList){
             for(ResourceFile resourceFile : resourceFileList){
                 if( Const.RESOURCE_EXPRESSIONS == resourceFile.getFileType() ||
-                       Const.RESOURCE_SPECIAL_IMAGES ==  resourceFile.getFileType()){
+                       Const.RESOURCE_SPECIAL_IMAGES ==  resourceFile.getFileType() ||
+                        Const.RESOURCE_H5_BACKGROUND == resourceFile.getFileType() ){
                     File file = new File(resourceFile.getFilePath());
                     if(file.exists()){
                         file.delete();
                     }
                     //如果是表情需要删除掉小表情
-                    if(resourceFile.getFileType() == 1 ){
+                    if(resourceFile.getFileType() == 1 || resourceFile.getFileType() == 6){
                         File smallfile = new File(resourceFile.getFilePath().replace(".big.",".small."));
                         if(smallfile.exists()){
                             smallfile.delete();

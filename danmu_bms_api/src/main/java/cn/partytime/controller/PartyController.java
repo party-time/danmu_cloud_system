@@ -416,9 +416,4 @@ public class PartyController extends BaseAdminController {
         return restResultModel;
     }
 
-
-
-
-
-
 }
