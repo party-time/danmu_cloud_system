@@ -139,7 +139,7 @@ public class ResourceFileService {
                 file.delete();
             }
             //如果是表情需要删除掉小表情
-            if(resourceFileModel.getFileType() == 1){
+            if(resourceFileModel.getFileType() == 1 || resourceFileModel.getFileType() == 6){
                 File smallfile = new File(resourceFileModel.getFilePath().replace(".big.",".small."));
                 if(smallfile.exists()){
                     smallfile.delete();
@@ -307,7 +307,7 @@ public class ResourceFileService {
                         file.delete();
                     }
                     //如果是表情需要删除掉小表情
-                    if(resourceFile.getFileType() == 1 ){
+                    if(resourceFile.getFileType() == 1 || resourceFile.getFileType() == 6){
                         File smallfile = new File(resourceFile.getFilePath().replace(".big.",".small."));
                         if(smallfile.exists()){
                             smallfile.delete();
