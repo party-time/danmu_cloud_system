@@ -738,7 +738,9 @@ public class BmsDanmuService {
                         //显示的内容
                         content = danmuCommonService.setProtocolArrayContent(componentType,request.getParameter(key),cmdTempComponentData.getDefaultValue());
                         msgContent = danmuCommonService.setShowArrayContent(componentType,request.getParameter(key),componentId,cmdTempComponentData.getDefaultValue());
-                        contentMap.put("content",msgContent);
+                        if("color".equals(key) ){
+                            contentMap.put("color",request.getParameter(key+"name"));
+                        }
                         if(msgContent!=null && (!"1".equals(componentId) && !"2".equals(componentId))){
                             List<String> messageList = (List<String>)msgContent;
                             for(int i=0; i<messageList.size(); i++){
