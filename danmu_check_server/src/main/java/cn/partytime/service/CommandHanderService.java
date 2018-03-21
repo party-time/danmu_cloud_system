@@ -179,6 +179,7 @@ public class CommandHanderService {
 
             for(DanmuLibraryPartyDto danmuLibraryPartyDto:danmuLibraryPartyDtoList){
                 Map<String,Object> content = new HashMap<>();
+                content.put("danmuLab",danmuLibraryPartyDto.getLibraryName());
                 content.put("x",danmuLibraryPartyDto.getDensitryHis());
                 content.put("y",danmuLibraryPartyDto.getDensitry());
                 saveLog(key,"A_density",partyId,addressId,content);//弹幕密度
