@@ -761,6 +761,7 @@ public class BmsDanmuService {
                         }else{
                             content = danmuCommonService.setShowNotArrayContent(request.getParameter(key),type);
                             msgContent = danmuCommonService.setShowNotArrayContent(request.getParameter(key),componentId,type);
+                            logger.info("------------------------------------------");
                             if("message".equals(key)){
                                 contentMap.put("content",msgContent);
                             }
