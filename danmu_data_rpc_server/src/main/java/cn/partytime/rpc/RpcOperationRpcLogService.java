@@ -124,7 +124,7 @@ public class RpcOperationRpcLogService {
         } else if ("expressionDown".equals(cmd)) {
             log.info("记录日志信息【表情下载】");
             operationRpcLogService.insertOperationLog("M_expressionDownload", contentMap, adminUserId);//【表情下载】
-        } else if ("expressionDown".equals(cmd)) {
+        } else if ("specialImgDown".equals(cmd)) {
             log.info("记录日志信息【特效图片下载】");
             operationRpcLogService.insertOperationLog("M_specialPicDownload", contentMap, adminUserId);//【特效图片下载】
         } else if ("timerDmDown".equals(cmd)) {
