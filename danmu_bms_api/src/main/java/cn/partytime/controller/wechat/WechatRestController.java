@@ -667,9 +667,6 @@ public class WechatRestController {
     }
 
 
-
-
-
     /**
     public static void main(String[] args){
         String attach = "dmId:592525d30cf26a8f85eeac21,h5Id:592689fd0cf24d415c21be6a,name:name";
