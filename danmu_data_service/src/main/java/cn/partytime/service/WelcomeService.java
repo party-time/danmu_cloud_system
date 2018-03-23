@@ -53,6 +53,7 @@ public class WelcomeService {
     }
 
     public Welcome findByRandom(){
+
         List<Welcome> welcomeList = welcomeRepository.findAll();
         Random r = new Random(new Date().getTime());
         int a = r.nextInt(welcomeList.size());
