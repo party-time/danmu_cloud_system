@@ -84,4 +84,5 @@ public class WelcomeController extends BaseAdminController {
         }
         return restResultModel;
     }
+
 }

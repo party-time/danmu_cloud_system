@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -53,8 +54,9 @@ public class WelcomeService {
 
     public Welcome findByRandom(){
         List<Welcome> welcomeList = welcomeRepository.findAll();
-        Random r = new Random();
-        int a = r.nextInt(welcomeList.size()-1);
+        Random r = new Random(new Date().getTime());
+        int a = r.nextInt(welcomeList.size());
         return welcomeList.get(a);
     }
+
 }
