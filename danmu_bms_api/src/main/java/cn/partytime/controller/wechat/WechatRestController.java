@@ -179,6 +179,17 @@ public class WechatRestController {
             if (MessageUtil.REQ_MESSAGE_TYPE_LOCATION.equals(xmlEntity.getEvent())) {
                 log.info("REQ_MESSAGE_TYPE_LOCATION" + xmlEntity.getContent());
                 bmsWechatUserService.saveUserLocation(wechatUser,xmlEntity);
+                TextMessage text = new TextMessage();
+                text.setToUserName(xmlEntity.getFromUserName());
+                text.setFromUserName(xmlEntity.getToUserName());
+                text.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
+                text.setCreateTime(new Date().getTime());
+                text.setFuncFlag(0);
+                Welcome welcome = welcomeService.findByRandom();
+                if( null != welcome){
+                    text.setContent(welcome.getMessage());
+                    result = FormatXmlProcess.textMessageToXml(text);
+                }
                 //关注微信
             } else if (MessageUtil.EVENT_TYPE_SUBSCRIBE.equals(xmlEntity.getEvent())) {
                 log.info("EVENT_TYPE_SUBSCRIBE" + xmlEntity.getContent());
