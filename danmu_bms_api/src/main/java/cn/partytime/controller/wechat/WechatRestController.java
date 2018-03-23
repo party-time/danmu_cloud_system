@@ -14,6 +14,7 @@ import cn.partytime.model.shop.Order;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.model.wechat.WeixinMessage;
+import cn.partytime.model.welcome.Welcome;
 import cn.partytime.service.*;
 import cn.partytime.service.shop.BmsOrderService;
 import cn.partytime.service.shop.ItemService;
@@ -109,6 +110,9 @@ public class WechatRestController {
     @Autowired
     private BmsReportService  bmsReportService;
 
+    @Autowired
+    private WelcomeService welcomeService;
+
     @Value("${env}")
     private Integer env;
     /**
@@ -185,7 +189,12 @@ public class WechatRestController {
                 text.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
                 text.setCreateTime(new Date().getTime());
                 text.setFuncFlag(0);
-                text.setContent(Words.WELCOME);
+                Welcome welcome = welcomeService.findByRandom();
+                if( null == welcome){
+                    text.setContent(Words.WELCOME);
+                }else{
+                    text.setContent(welcome.getMessage());
+                }
                 result = FormatXmlProcess.textMessageToXml(text);
                 //取消关注
             } else if (MessageUtil.EVENT_TYPE_UNSUBSCRIBE.equals(xmlEntity.getEvent())) {
