@@ -69,11 +69,17 @@ public class WelcomeController extends BaseAdminController {
             try {
                 Welcome welcome = new Welcome();
                 welcome.setMessage(word);
-                Welcome w1 = welcomeService.save(welcome);
-                if (w1 != null) {
-                    restResultModel.setResult(200);
-                    restResultModel.setResult_msg("ok");
-                } else {
+                Welcome welcome1 = welcomeService.findByWord(word);
+                if( null == welcome1 ){
+                    Welcome w1 = welcomeService.save(welcome);
+                    if (w1 != null) {
+                        restResultModel.setResult(200);
+                        restResultModel.setResult_msg("ok");
+                    } else {
+                        restResultModel.setResult(401);
+                        restResultModel.setResult_msg("fail");
+                    }
+                }else{
                     restResultModel.setResult(401);
                     restResultModel.setResult_msg("fail");
                 }
