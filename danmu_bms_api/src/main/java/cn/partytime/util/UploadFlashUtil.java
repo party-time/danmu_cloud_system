@@ -1,5 +1,6 @@
 package cn.partytime.util;
 
+import cn.partytime.dataRpc.RpcConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,41 +17,10 @@ import java.io.InputStreamReader;
 @Slf4j
 public class UploadFlashUtil {
 
-    @Value("${uploadClient.uploadPath}")
-    private String uploadPath;
-
-    @Value("${uploadClient.downloadPath}")
-    private String downloadPath;
-
-    @Value("${uploadClient.backupPath}")
-    private String backupPath;
-
-    public String getUploadPath() {
-        return uploadPath;
-    }
-
-    public void setUploadPath(String uploadPath) {
-        this.uploadPath = uploadPath;
-    }
-
-    public String getDownloadPath() {
-        return downloadPath;
-    }
-
-    public void setDownloadPath(String downloadPath) {
-        this.downloadPath = downloadPath;
-    }
-
-    public String getBackupPath() {
-        return backupPath;
-    }
-
-    public void setBackupPath(String backupPath) {
-        this.backupPath = backupPath;
-    }
+    private RpcConfigService rpcConfigService;
 
     public Integer countFlashFile(){
-        File base = new File(this.uploadPath);
+        File base = new File(rpcConfigService.getUploadPath());
         File[] files = base.listFiles();
         if( null != files){
             int num = 0;
@@ -70,7 +40,7 @@ public class UploadFlashUtil {
     }
 
     public Integer countJavaFile(){
-        File base = new File(this.uploadPath);
+        File base = new File(rpcConfigService.getUploadPath());
         File[] files = base.listFiles();
         if( null != files){
             int num = 0;
@@ -88,7 +58,7 @@ public class UploadFlashUtil {
 
 
     public String getJavaFileName(){
-        File base = new File(this.uploadPath);
+        File base = new File(rpcConfigService.getUploadPath());
         File[] files = base.listFiles();
         if( null != files){
             for(int i=0;i<files.length;i++){
@@ -103,7 +73,7 @@ public class UploadFlashUtil {
     }
 
     public String getFlashName(){
-        File base = new File(this.uploadPath);
+        File base = new File(rpcConfigService.getUploadPath());
         File[] files = base.listFiles();
         if( null != files){
             for(int i=0;i<files.length;i++){
@@ -151,11 +121,11 @@ public class UploadFlashUtil {
         if( type == 0){
             String javaName = getJavaFileName();
             String temp = javaName.substring(0,javaName.indexOf(".jar"));
-            File javaFile = new File(downloadPath+"/java/"+temp+"_version."+versionNum+".jar");
+            File javaFile = new File(rpcConfigService.getDownloadPath()+"/java/"+temp+"_version."+versionNum+".jar");
             if(javaFile.exists()){
                 javaFile.delete();
             }
-            File backupJavaFile = new File(backupPath+"/java/"+temp+"_version."+versionNum+".jar");
+            File backupJavaFile = new File(rpcConfigService.getBackupPath()+"/java/"+temp+"_version."+versionNum+".jar");
             if(backupJavaFile.exists()){
                 backupJavaFile.delete();
             }
@@ -164,20 +134,20 @@ public class UploadFlashUtil {
             //String rmOldVersion = "rm -rf  "+downloadPath+"/java/*.jar";
             //execShell(rmOldVersion);
 
-            String mvcmd = "cp "+uploadPath+"/*.jar "+downloadPath+"/java/"+temp+"_version."+versionNum+".jar";
+            String mvcmd = "cp "+rpcConfigService.getUploadPath()+"/*.jar "+rpcConfigService.getDownloadPath()+"/java/"+temp+"_version."+versionNum+".jar";
             execShell(mvcmd);
 
-            String mvBackupCmd = "mv "+uploadPath+"/*.jar "+backupPath+"/java/"+temp+"_version."+versionNum+".jar";
+            String mvBackupCmd = "mv "+rpcConfigService.getUploadPath()+"/*.jar "+rpcConfigService.getBackupPath()+"/java/"+temp+"_version."+versionNum+".jar";
             execShell(mvBackupCmd);
         }else if(type ==1){
             String flashName = getFlashName();
-            File tarFile = new File(downloadPath+"/flash/"+flashName+"_version."+versionNum+".tar");
+            File tarFile = new File(rpcConfigService.getDownloadPath()+"/flash/"+flashName+"_version."+versionNum+".tar");
             if(tarFile.exists()){
                 tarFile.delete();
             }
-            File backFlash = new File(backupPath+"/"+flashName+"_version."+versionNum);
+            File backFlash = new File(rpcConfigService.getBackupPath()+"/"+flashName+"_version."+versionNum);
             if(backFlash.exists()){
-                String rmCmd = "rm -rf "+backupPath+"/"+flashName+"_version."+versionNum;
+                String rmCmd = "rm -rf "+rpcConfigService.getBackupPath()+"/"+flashName+"_version."+versionNum;
                 execShell(rmCmd);
             }
 
@@ -186,13 +156,15 @@ public class UploadFlashUtil {
             //execShell(rmOldVersion);
 
 
-            String tarCmd = "tar zcf "+downloadPath+"/flash/"+flashName+"_version."+versionNum+".tar -C "+uploadPath+"/"+flashName+" .";
+            String tarCmd = "tar zcf "+rpcConfigService.getDownloadPath()+"/flash/"+flashName+"_version."+versionNum+".tar -C "+rpcConfigService.getUploadPath()+"/"+flashName+" .";
             execShell(tarCmd);
 
-            String mvFlashCmd = "mv "+uploadPath+"/"+flashName+"/ "+backupPath+"/flash/"+flashName+"_version."+versionNum;
+            String mvFlashCmd = "mv "+rpcConfigService.getUploadPath()+"/"+flashName+"/ "+rpcConfigService.getBackupPath()+"/flash/"+flashName+"_version."+versionNum;
             execShell(mvFlashCmd);
         }
 
 
     }
+
+
 }

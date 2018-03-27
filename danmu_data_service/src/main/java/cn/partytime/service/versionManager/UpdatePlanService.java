@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -141,5 +142,37 @@ public class UpdatePlanService {
 
     }
 
+    public List<UpdatePlan> findLastWeekUpdateTime(){
+        /**
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.WEEK_OF_MONTH,-1);
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(new Date());
+        cal1.add(Calendar.WEEK_OF_MONTH,-2);
+         **/
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DAY_OF_YEAR,-1);
+
+        return updatePlanRepository.findByUpdatePlanTimeLessThanAndUpdatePlanTimeGreaterThan(new Date(),cal.getTime());
+    }
+
+    /**
+     * 按照更新时间去掉最近的两个版本
+     * * @return
+     */
+    public List<UpdatePlan> findDelUpdatePlan(){
+        Sort sort = new Sort(Sort.Direction.DESC,"updatePlanTime");
+        List<UpdatePlan> updatePlanList = updatePlanRepository.findAll(sort);
+        if( null != updatePlanList && updatePlanList.size() > 2){
+            return updatePlanList.subList(2,updatePlanList.size()-1);
+        }else{
+            return updatePlanList;
+        }
+
+    }
 
 }
