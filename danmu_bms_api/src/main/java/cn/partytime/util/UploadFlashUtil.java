@@ -3,6 +3,7 @@ package cn.partytime.util;
 import cn.partytime.dataRpc.RpcConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import java.io.InputStreamReader;
 @Slf4j
 public class UploadFlashUtil {
 
+    @Autowired
     private RpcConfigService rpcConfigService;
 
     public Integer countFlashFile(){
