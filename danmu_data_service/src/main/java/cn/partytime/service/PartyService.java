@@ -328,7 +328,7 @@ public class PartyService {
     public List<Party> findMonthEndParty(){
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        cal.add(Calendar.MINUTE,-10);
+        cal.add(Calendar.MONTH,-1);
         List<Party> partyList = this.findByTypeAndStatusGreaterThanAndEndTimeLessThan(0,2, cal.getTime());
         return partyList;
     }

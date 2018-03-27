@@ -20,7 +20,7 @@ public class DelEndPartyResourceFileScheduler implements BaseScheduler {
     private PartyResourceService partyResourceService;
 
     //@CommandAnnotation(command = "delEndPartyResourceFile")
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0 5 * * ?")
     public void execute() {
         log.info("exec: ***************delEndPartyResourceFile***************");
         partyResourceService.delEndPartyResourceFile();
