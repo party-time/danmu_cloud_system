@@ -31,22 +31,12 @@ public class DelUpdatePlanFileService {
 
 
     public void delUpdatePlanFile(){
-        List<UpdatePlan> updatePlanList = updatePlanService.findDelUpdatePlan();
-        if( null != updatePlanList){
-            List<String> versionIdList = new ArrayList<>();
-            for(UpdatePlan updatePlan : updatePlanList){
-                versionIdList.add(updatePlan.getVersionId());
-            }
-            List<Version> versionList = versionService.findByIds(versionIdList);
-
+            List<Version> versionList = versionService.findOtherSmallVersion();
             if( null != versionList){
                 for(Version version : versionList){
                     deleteVersionFile(version.getType(),version.getVersion());
                 }
             }
-
-        }
-
     }
 
     public String getJavaFileName(){

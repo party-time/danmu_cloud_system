@@ -3,12 +3,13 @@ package cn.partytime.model.manager;
 import cn.partytime.baseModel.BaseModel;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.util.StringUtils;
 
 /**
  * Created by administrator on 2017/2/13.
  */
 @Document(collection = "client_version")
-public class Version extends BaseModel {
+public class Version extends BaseModel implements Comparable<Version> {
 
 
     private String id;
@@ -23,6 +24,8 @@ public class Version extends BaseModel {
 
     //类型 0 java  1 flash
     private Integer type;
+
+
 
     public String getId() {
         return id;
@@ -70,5 +73,28 @@ public class Version extends BaseModel {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    @Override
+    public int compareTo(Version version) {
+        String v1 = this.getVersion();
+        String v2 = version.getVersion();
+        if(!StringUtils.isEmpty(v1) && !StringUtils.isEmpty(v2)){
+            String[] vSplit1 = v1.split(".");
+            String[] vSplit2 = v2.split(".");
+            if( null != vSplit1 && null != vSplit2 && vSplit1.length ==3 && vSplit2.length ==3){
+                   for(int i=0;i<3;i++){
+                       int value1 = Integer.parseInt(vSplit1[i]);
+                       int value2 = Integer.parseInt(vSplit2[i]);
+                       if( value1 > value2){
+                           return 1;
+                       }else{
+                           return -1;
+                       }
+                   }
+                   return vSplit1.length - vSplit2.length;
+            }
+        }
+        return 0;
     }
 }

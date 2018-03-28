@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,5 +61,27 @@ public class VersionService {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return versionRepository.findByIdNotIn(idList,pageRequest);
+    }
+
+
+    public List<Version> findOtherSmallVersion(){
+        List<Version> versionList = new ArrayList<>();
+
+        List<Version> javaList = versionRepository.findByType(0);
+        if( null != javaList){
+            Collections.sort(javaList);
+            if(javaList.size() >2 ) {
+                versionList.addAll(javaList.subList(0, javaList.size()-2));
+            }
+        }
+
+        List<Version> flashList = versionRepository.findByType(1);
+        if( null != flashList){
+            Collections.sort(flashList);
+            if(flashList.size() >2 ) {
+                versionList.addAll(flashList.subList(0, flashList.size()-2));
+            }
+        }
+        return versionList;
     }
 }

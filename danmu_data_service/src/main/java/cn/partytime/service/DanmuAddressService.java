@@ -71,8 +71,10 @@ public class DanmuAddressService {
     }
 
     public PageResultModel<DanmuAddress> findAll(int page, int size) {
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        PageRequest pageRequest = new PageRequest(page, size, sort);
+        Sort timeSort = new Sort(Sort.Direction.DESC, "createTime");
+        Sort typeSort = new Sort(Sort.Direction.ASC,"type");
+        typeSort.and(timeSort);
+        PageRequest pageRequest = new PageRequest(page, size, typeSort);
         Page<DanmuAddress> danmuAddressPage = danmuAddressRepository.findAll(pageRequest);
         PageResultModel<DanmuAddress>  pageResultModel = new PageResultModel<>();
         pageResultModel.setTotal(danmuAddressPage.getTotalElements());

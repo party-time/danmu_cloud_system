@@ -34,16 +34,6 @@ public class VersionController {
     @Autowired
     private UploadFlashUtil uploadFlashUtil;
 
-    @Autowired
-    private RpcConfigService rpcConfigService;
-
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public RestResultModel test(){
-        RestResultModel restResultModel = new RestResultModel();
-        restResultModel.setData(rpcConfigService.getDownloadPath());
-        return restResultModel;
-    }
-
     @RequestMapping(value = "/page", method = RequestMethod.GET)
     public PageResultModel<Version> findAll(Integer pageSize, Integer pageNumber){
         pageNumber = pageNumber-1;
