@@ -44,7 +44,6 @@ public class DanmuAddressService {
     private PartyService partyService;
 
     public DanmuAddress save(DanmuAddress danmuAddress) {
-
         return danmuAddressRepository.insert(danmuAddress);
     }
 
@@ -262,5 +261,12 @@ public class DanmuAddressService {
         }
     }
 
+    public void updateAdTime(String addressId,Integer adTime){
+        DanmuAddress danmuAddress = danmuAddressRepository.findById(addressId);
+        if( null != danmuAddress){
+            danmuAddress.setAdTime(adTime);
+            danmuAddressRepository.save(danmuAddress);
+        }
+    }
 
 }

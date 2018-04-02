@@ -62,6 +62,9 @@ public class DanmuAddress extends BaseModel {
     //该场地下哪些功能可以使用, 功能key:打赏pay  表白love 0或null可以  1不可以
     private Map<String,Integer> controlerStatus;
 
+    //该场地的广告时间
+    private Integer adTime;
+
     public String getId() {
         return id;
     }
@@ -198,4 +201,11 @@ public class DanmuAddress extends BaseModel {
         this.controlerStatus = controlerStatus;
     }
 
+    public Integer getAdTime() {
+        return adTime;
+    }
+
+    public void setAdTime(Integer adTime) {
+        this.adTime = adTime;
+    }
 }
