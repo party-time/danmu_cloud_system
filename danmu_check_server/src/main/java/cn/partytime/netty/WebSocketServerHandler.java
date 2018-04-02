@@ -45,6 +45,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<FullHttp
 
     private void handleHttpRequest(ChannelHandlerContext ctx, FullHttpRequest req) {
 
+        logger.info("-------------------新的请求开始-----------------------------------");
         String url = req.uri();
         QueryStringDecoder queryStringDecoder = new QueryStringDecoder(url);
         Map<String, List<String>> parameters = queryStringDecoder.parameters();
