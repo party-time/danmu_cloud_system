@@ -47,7 +47,7 @@ public class AdminDanmuController  extends BaseAdminController {
 
         logger.info("pageNumber:{},pageSize:{}",pageNumber,pageSize);
         RestResultModel restResultModel = new RestResultModel();
-        Page<CmdTemp> cmdTempPage = cmdTempService.findAll(pageNumber-1,pageSize);
+        Page<CmdTemp> cmdTempPage = cmdTempService.findPageByType(0,pageNumber-1,pageSize);
         restResultModel.setResult(200);
         restResultModel.setData(cmdTempPage);
         return restResultModel;
