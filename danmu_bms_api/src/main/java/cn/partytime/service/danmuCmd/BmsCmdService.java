@@ -51,6 +51,7 @@ public class BmsCmdService {
     private RedisService redisService;
 
     public void save(CmdTempJson cmdTempJson){
+
         CmdTemp cmdTemp = null;
         if(StringUtils.isEmpty(cmdTempJson.getCmdTempId())){
             cmdTemp = cmdTempService.save(cmdTempJson.getTempName(),cmdTempJson.getKey(),cmdTempJson.getIsInDanmuLib(),cmdTempJson.getIsSendH5(),cmdTempJson.getSort(),cmdTempJson.getShow(),cmdTempJson.getType());
