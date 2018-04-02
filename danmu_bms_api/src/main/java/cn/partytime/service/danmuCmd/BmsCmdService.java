@@ -53,10 +53,10 @@ public class BmsCmdService {
     public void save(CmdTempJson cmdTempJson){
         CmdTemp cmdTemp = null;
         if(StringUtils.isEmpty(cmdTempJson.getCmdTempId())){
-            cmdTemp = cmdTempService.save(cmdTempJson.getTempName(),cmdTempJson.getKey(),cmdTempJson.getIsInDanmuLib(),cmdTempJson.getIsSendH5(),cmdTempJson.getSort(),cmdTempJson.getShow());
+            cmdTemp = cmdTempService.save(cmdTempJson.getTempName(),cmdTempJson.getKey(),cmdTempJson.getIsInDanmuLib(),cmdTempJson.getIsSendH5(),cmdTempJson.getSort(),cmdTempJson.getShow(),cmdTempJson.getType());
             cmdTempJson.setCmdTempId(cmdTemp.getId());
         }else{
-            cmdTemp = cmdTempService.update(cmdTempJson.getCmdTempId(),cmdTempJson.getTempName(),cmdTempJson.getIsInDanmuLib(),cmdTempJson.getIsSendH5(),cmdTempJson.getSort(),cmdTempJson.getShow());
+            cmdTemp = cmdTempService.update(cmdTempJson.getCmdTempId(),cmdTempJson.getTempName(),cmdTempJson.getIsInDanmuLib(),cmdTempJson.getIsSendH5(),cmdTempJson.getSort(),cmdTempJson.getShow(),cmdTempJson.getType());
         }
         if( null != cmdTempJson.getCmdJsonParamList()){
             for(CmdJsonParam cmdJsonParam : cmdTempJson.getCmdJsonParamList()){
@@ -97,6 +97,7 @@ public class BmsCmdService {
         cmdTempJson.setIsSendH5(cmdTemp.getIsSendH5());
         cmdTempJson.setSort(cmdTemp.getSort());
         cmdTempJson.setShow(cmdTemp.getShow());
+        cmdTempJson.setType(cmdTemp.getType());
         List<CmdJsonParam> cmdJsonParamList = cmdJsonParamService.findByCmdJsonTempId(id);
         cmdTempJson.setCmdJsonParamList(cmdJsonParamList);
         return cmdTempJson;

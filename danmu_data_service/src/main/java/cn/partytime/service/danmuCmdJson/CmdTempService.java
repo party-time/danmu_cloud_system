@@ -28,7 +28,7 @@ public class CmdTempService {
     @Autowired
     private RedisService redisService;
 
-    public CmdTemp save(String name, String key,Integer isInDanmuLib,Integer isSendH5,Integer sort,Integer show){
+    public CmdTemp save(String name, String key,Integer isInDanmuLib,Integer isSendH5,Integer sort,Integer show,Integer type){
         CmdTemp cmdTemp = new CmdTemp();
         cmdTemp.setName(name);
         cmdTemp.setKey(key);
@@ -36,10 +36,11 @@ public class CmdTempService {
         cmdTemp.setIsSendH5(isSendH5);
         cmdTemp.setSort(sort);
         cmdTemp.setShow(show);
+        cmdTemp.setType(type);
         return cmdJsonTempRepository.save(cmdTemp);
     }
 
-    public CmdTemp update(String id,String name,Integer isInDanmuLib,Integer isSendH5,Integer sort,Integer show){
+    public CmdTemp update(String id,String name,Integer isInDanmuLib,Integer isSendH5,Integer sort,Integer show,Integer type){
         CmdTemp cmdTemp = cmdJsonTempRepository.findOne(id);
         if( null != cmdTemp) {
             cmdTemp.setName(name);
@@ -47,6 +48,7 @@ public class CmdTempService {
             cmdTemp.setIsSendH5(isSendH5);
             cmdTemp.setSort(sort);
             cmdTemp.setShow(show);
+            cmdTemp.setType(type);
         }
         return cmdJsonTempRepository.save(cmdTemp);
     }
@@ -56,6 +58,12 @@ public class CmdTempService {
         Sort sort = new Sort(Sort.Direction.ASC, "sort");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return cmdJsonTempRepository.findAll(pageRequest);
+    }
+
+    public Page<CmdTemp> findPageByType(Integer type,Integer page, Integer size){
+        Sort sort = new Sort(Sort.Direction.ASC, "sort");
+        PageRequest pageRequest = new PageRequest(page, size, sort);
+        return cmdJsonTempRepository.findByType(type,pageRequest);
     }
 
     public CmdTemp findById(String id){

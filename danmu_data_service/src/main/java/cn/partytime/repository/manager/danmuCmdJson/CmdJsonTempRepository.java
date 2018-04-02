@@ -1,6 +1,8 @@
 package cn.partytime.repository.manager.danmuCmdJson;
 
 import cn.partytime.model.manager.danmuCmdJson.CmdTemp;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
@@ -13,11 +15,13 @@ import java.util.List;
 @EnableMongoRepositories(mongoTemplateRef = "managerMongoTemplate")
 public interface CmdJsonTempRepository extends MongoRepository<CmdTemp,String> {
 
-    public List<CmdTemp> findByIdIn(List<String> idList);
+    List<CmdTemp> findByIdIn(List<String> idList);
 
-    public CmdTemp findByKey(String key);
+    CmdTemp findByKey(String key);
 
-    public Integer countByKey(String key);
+    Integer countByKey(String key);
+
+    Page<CmdTemp> findByType(Integer type,Pageable pageable);
 
 
 }

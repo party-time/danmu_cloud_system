@@ -38,9 +38,17 @@ public class CmdJsonTempController {
     private CmdJsonComponentService cmdJsonComponentService;
 
     @RequestMapping(value = "/page", method = RequestMethod.GET)
-    public PageResultModel paramTemplatePage(Integer pageNumber , Integer pageSize ){
+    public PageResultModel paramTemplatePage(Integer type,Integer pageNumber , Integer pageSize ){
+        if( null == type){
+            type = -1;
+        }
         pageNumber = pageNumber-1;
-        Page<CmdTemp> cmdJsonTempPage = cmdTempService.findAll(pageNumber,pageSize);
+        Page<CmdTemp> cmdJsonTempPage = null;
+        if( type == -1 ){
+            cmdJsonTempPage = cmdTempService.findAll(pageNumber,pageSize);
+        }else{
+            cmdJsonTempPage = cmdTempService.findPageByType(type,pageNumber,pageSize);
+        }
         PageResultModel pageResultModel = new PageResultModel();
         pageResultModel.setTotal(cmdJsonTempPage.getTotalElements());
         pageResultModel.setRows(cmdJsonTempPage.getContent());

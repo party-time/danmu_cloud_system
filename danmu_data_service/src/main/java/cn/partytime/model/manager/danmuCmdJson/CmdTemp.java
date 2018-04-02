@@ -31,6 +31,9 @@ public class CmdTemp extends BaseModel {
     //是否展示 0是  1否s
     private Integer show;
 
+    //指令模版类型 0 flash和h5   1 小程序
+    private Integer type;
+
     public String getId() {
         return id;
     }
@@ -85,5 +88,13 @@ public class CmdTemp extends BaseModel {
 
     public void setShow(Integer show) {
         this.show = show;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

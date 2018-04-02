@@ -27,6 +27,8 @@ public class CmdTempJson {
     //是否显示
     private Integer show;
 
+    private Integer type;
+
     private List<CmdJsonParam> cmdJsonParamList;
 
     public String getTempName() {
@@ -91,5 +93,13 @@ public class CmdTempJson {
 
     public void setShow(Integer show) {
         this.show = show;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }
