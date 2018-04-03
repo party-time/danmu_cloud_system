@@ -24,7 +24,7 @@ public class ReportService {
     }
 
     public Page<Report> findAll(Integer pageNum , Integer pageSize){
-        Sort sort = new Sort(Sort.Direction.ASC, "createTime");
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(pageNum, pageSize, sort);
         return reportRepository.findAll(pageRequest);
     }
