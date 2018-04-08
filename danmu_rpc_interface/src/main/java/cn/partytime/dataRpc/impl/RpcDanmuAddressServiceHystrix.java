@@ -23,4 +23,11 @@ public class RpcDanmuAddressServiceHystrix implements RpcDanmuAddressService {
     public List<DanmuAddressModel> findByType(Integer type) {
         return null;
     }
+
+    @Override
+    public void updateAdTime(String id, Integer adTime) {
+
+    }
+
+
 }

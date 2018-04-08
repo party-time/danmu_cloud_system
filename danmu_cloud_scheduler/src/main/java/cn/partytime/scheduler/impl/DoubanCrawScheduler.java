@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 /**
@@ -30,13 +31,18 @@ public class DoubanCrawScheduler implements BaseScheduler {
 
     @Scheduled(cron = "0 0 16 * * ?")
     public void execute() throws IOException {
-        String s= HttpUtils.sendGet("https://movie.douban.com/cinema/nowplaying/beijing/", null);
+        try{
+            String s= HttpUtils.sendGet("https://movie.douban.com/cinema/nowplaying/beijing/", null);
 
-        Document doc = Jsoup.parse(s);
-        doubanSpiderService.filmData(doc,"nowplaying");
+            Document doc = Jsoup.parse(s);
+            doubanSpiderService.filmData(doc,"nowplaying");
 
-        log.info("将要进行的电影");
-        doubanSpiderService.filmData(doc,"upcoming");
+            log.info("将要进行的电影");
+            doubanSpiderService.filmData(doc,"upcoming");
+        }catch (Exception e){
+            log.info("爬取数据异常！");
+            e.printStackTrace();
+        }
 
     }
 

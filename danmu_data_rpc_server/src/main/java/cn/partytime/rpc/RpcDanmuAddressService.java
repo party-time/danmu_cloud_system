@@ -46,4 +46,10 @@ public class RpcDanmuAddressService {
         return danmuAddressService.findByType(type);
     }
 
+
+    @RequestMapping(value = "/updateAdTime" ,method = RequestMethod.GET)
+    public void  updateAdTime(@RequestParam String id,@RequestParam Integer adTime) {
+        danmuAddressService.updateAdTime(id,adTime);
+    }
+
 }

@@ -90,6 +90,7 @@ public class JavaClientController {
     private ProjectorAlarmCacheService projectorAlarmCacheService;
 
 
+
     /**
      * 查找最近的所有的活动
      *
@@ -394,6 +395,28 @@ public class JavaClientController {
         restResultModel.setResult(200);
         restResultModel.setData(rpcDeviceIpInfoService.findByAddressId(addressId));
         return restResultModel;
+    }
+
+    @RequestMapping(value = "/findAddressInfo/{addressId}", method = RequestMethod.GET)
+    public RestResultModel findAddressInfo(@PathVariable("addressId") String addressId){
+        RestResultModel restResultModel = new RestResultModel();
+        //验证客户端是否合法
+        restResultModel.setResult(200);
+        restResultModel.setData(rpcDanmuAddressService.findById(addressId));
+        return restResultModel;
+    }
+
+    @RequestMapping(value = "/setAdTime/{addressId}/{time}", method = RequestMethod.GET)
+    public RestResultModel updateAdTime(@PathVariable("addressId") String addressId,@PathVariable("time") Integer time){
+        RestResultModel restResultModel = new RestResultModel();
+        rpcDanmuAddressService.updateAdTime(addressId,time);
+        restResultModel.setResult(200);
+        return restResultModel;
+    }
+
+    @RequestMapping(value = "/findCurrentMovie/{addressId}", method = RequestMethod.GET)
+    public RestResultModel findCurrentMovie(@PathVariable("addressId") String addressId,@PathVariable("addressId") Integer time){
+        return null;
     }
 
 }

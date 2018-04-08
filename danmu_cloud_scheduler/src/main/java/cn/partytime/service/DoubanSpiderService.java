@@ -52,7 +52,6 @@ public class DoubanSpiderService {
             String url = "https://movie.douban.com/subject/"+id+"/?from=playing_poster";
             String filmContent= HttpUtils.sendGet(url, null);
             Spider spider=parseFilmContent(filmContent,id,filmName,status);
-
             spiderList.add(spider);
         }
         //log.info(JSON.toJSONString(spiderList));
@@ -142,7 +141,7 @@ public class DoubanSpiderService {
                     Matcher mat = pat.matcher(timeStr);
                     String repickStr = mat.replaceAll("");
                     log.info("时长:{}",repickStr);
-                    filmInfo.setTime(Integer.parseInt(repickStr==null?"0":repickStr));
+                    filmInfo.setTime(Integer.parseInt(repickStr==null?"0":repickStr.replace(" ","")));
                 }
             }
         }

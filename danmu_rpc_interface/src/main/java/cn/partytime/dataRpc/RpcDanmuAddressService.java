@@ -25,4 +25,8 @@ public interface RpcDanmuAddressService {
     @RequestMapping(value = "/rpcDanmuAddress/findAddressListByType" ,method = RequestMethod.GET)
     public List<DanmuAddressModel> findByType(@RequestParam(value = "type") Integer type);
 
+
+    @RequestMapping(value = "/rpcDanmuAddress/updateAdTime" ,method = RequestMethod.GET)
+    public void updateAdTime(@RequestParam(value = "id") String id,@RequestParam(value = "adTime") Integer adTime);
+
 }
