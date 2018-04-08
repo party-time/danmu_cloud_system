@@ -1,6 +1,8 @@
 package cn.partytime.service;
 
+import cn.partytime.common.cachekey.WelcomeCacheKey;
 import cn.partytime.model.welcome.Welcome;
+import cn.partytime.redis.service.RedisService;
 import cn.partytime.repository.manager.WelcomeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class WelcomeService {
 
     @Autowired
     private WelcomeRepository welcomeRepository;
+
+    @Autowired
+    private RedisService redisService;
 
     public void delete(String id) {
         welcomeRepository.delete(id);
@@ -52,12 +57,17 @@ public class WelcomeService {
         return welcomeRepository.findByMessageLike(word,pageRequest);
     }
 
-    public Welcome findByRandom(){
-
-        List<Welcome> welcomeList = welcomeRepository.findAll();
-        Random r = new Random(new Date().getTime());
-        int a = r.nextInt(welcomeList.size());
-        return welcomeList.get(a);
+    public Welcome findByRandom(String openId){
+        Object obj = redisService.get(WelcomeCacheKey.WELCOME_KEY+openId);
+        if( null == obj){
+            List<Welcome> welcomeList = welcomeRepository.findAll();
+            Random r = new Random(new Date().getTime());
+            int a = r.nextInt(welcomeList.size());
+            redisService.set(WelcomeCacheKey.WELCOME_KEY+openId,"",60*10);
+            return welcomeList.get(a);
+        }else{
+            return null;
+        }
     }
 
 }
