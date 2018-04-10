@@ -21,7 +21,7 @@ public class DelUpdatePlanFileScheduler implements BaseScheduler {
     private RpcDelUpdatePlanFileService rpcDelUpdatePlanFileService;
 
     @Override
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 15 5 * * ?")
     public void execute() throws IOException {
         rpcDelUpdatePlanFileService.delUpdatePlanFile();
     }
