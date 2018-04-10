@@ -185,7 +185,7 @@ public class WechatRestController {
                 text.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
                 text.setCreateTime(new Date().getTime());
                 text.setFuncFlag(0);
-                Welcome welcome = welcomeService.findByRandom();
+                Welcome welcome = welcomeService.findByRandom(wechatUser.getOpenId());
                 if( null != welcome){
                     text.setContent(welcome.getMessage());
                     result = FormatXmlProcess.textMessageToXml(text);
@@ -200,7 +200,7 @@ public class WechatRestController {
                 text.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
                 text.setCreateTime(new Date().getTime());
                 text.setFuncFlag(0);
-                Welcome welcome = welcomeService.findByRandom();
+                Welcome welcome = welcomeService.findByRandom(wechatUser.getOpenId());
                 if( null == welcome){
                     text.setContent(Words.WELCOME);
                 }else{
