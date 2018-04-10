@@ -89,6 +89,9 @@ public class JavaClientController {
     @Autowired
     private ProjectorAlarmCacheService projectorAlarmCacheService;
 
+    @Autowired
+    private RpcMovieScheduleService rpcMovieScheduleService;
+
 
 
     /**
@@ -415,8 +418,12 @@ public class JavaClientController {
     }
 
     @RequestMapping(value = "/findCurrentMovie/{addressId}", method = RequestMethod.GET)
-    public RestResultModel findCurrentMovie(@PathVariable("addressId") String addressId,@PathVariable("addressId") Integer time){
-        return null;
+    public RestResultModel findCurrentMovie(@PathVariable("addressId") String addressId){
+        RestResultModel restResultModel = new RestResultModel();
+        MovieScheduleModel movieScheduleModel = rpcMovieScheduleService.findLastMovieByAddressId(addressId);
+        restResultModel.setResult(200);
+        restResultModel.setData(movieScheduleModel);
+        return restResultModel;
     }
 
 }
