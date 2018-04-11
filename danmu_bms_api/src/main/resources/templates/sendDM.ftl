@@ -22,6 +22,14 @@
               <div id='danmuku' class='container'></div>
           </div>
           <div class="content" style="top:45%">
+              <#if fastdmList??>
+                  <select id="fastDmSelect">
+                        <option>请选择需要发送的弹幕</option>
+                       <#list fastdmList as fastdm >
+                        <option>${fastdm.word}</option>
+                       </#list>
+                  </select>
+              </#if>
               <form id="danmuForm">
               <textarea name="message" id="danmuText" placeholder="请输入您要发送的弹幕内容。。"></textarea>
               <span class="textNum" id="textNum">40</span>

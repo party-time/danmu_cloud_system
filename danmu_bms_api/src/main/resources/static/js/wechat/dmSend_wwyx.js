@@ -48,6 +48,49 @@ $(function () {
 
     damuT.bind('focus', filter_time);
 
+
+    $('#fastDmSelect').change(function(){
+
+        var obj = {
+            templateId:"591d1f3a0cf29b664a4fe1ac",
+            partyId:$('#partyId').val(),
+            addressId:$('#addressId').val(),
+            message:$("#fastDmSelect").val()
+        }
+        $('#templateId').val('591d1f3a0cf29b664a4fe1ac');
+        $.ajax({
+            url: "/v1/api/danmu",
+            type: "post",
+            dataType: "json",
+            data:obj
+        }).done(function (data) {
+            if (data.result == 200 || data.result == 403) {
+                clearTimeout(timer);
+                $('.success,.mask1').show();
+                timer = setTimeout(function () {
+                    $('.success,.mask1').hide();
+                    $('#danmuBtn').removeAttr('disabled');
+                }, 2000);
+                damuT.val('');
+                $('.textNum').html('40');
+            } else if (data.result == 400) {
+                clearTimeout(timer);
+                $('.networkWarning,.mask1').show();
+                damuT.val('');
+                $('.textNum').html('40');
+            } else {
+                $('.networkWarning,.mask1').show();
+                damuT.val('');
+                $('.textNum').html('40');
+            }
+        }).fail(function () {
+            //alert("发送弹幕失败");
+            $('.networkWarning,.mask1').show();
+            damuT.val('');
+            $('.textNum').html('40');
+        });
+    })
+
     $('#danmuBtn').on('click', function () {
         if (damuT.val().length != 0) {
             $('.remind').hide();
