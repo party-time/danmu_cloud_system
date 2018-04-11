@@ -10,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class FastDanmuService {
@@ -53,5 +55,9 @@ public class FastDanmuService {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return fastDanmuRepository.findByWordLike(word,pageRequest);
+    }
+
+    public List<FastDanmu> findByPartyId(String partyId){
+        return fastDanmuRepository.findByPartyId(partyId);
     }
 }

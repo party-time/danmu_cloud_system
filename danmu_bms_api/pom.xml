@@ -208,12 +208,6 @@
             <groupId>cn.party-time</groupId>
         </dependency>
 
-        <dependency>
-            <groupId>com.cwbase</groupId>
-            <artifactId>logback-redis-appender</artifactId>
-            <version>1.1.5</version>
-        </dependency>
-
 
     </dependencies>
 

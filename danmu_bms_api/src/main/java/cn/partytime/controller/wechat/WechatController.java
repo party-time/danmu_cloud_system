@@ -7,10 +7,7 @@ import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.WechatSession;
 import cn.partytime.model.cms.ItemResult;
 import cn.partytime.model.cms.PageColumn;
-import cn.partytime.model.manager.H5Template;
-import cn.partytime.model.manager.LovePay;
-import cn.partytime.model.manager.Party;
-import cn.partytime.model.manager.ResourceFile;
+import cn.partytime.model.manager.*;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.service.*;
@@ -99,6 +96,9 @@ public class WechatController {
     @Autowired
     private PartyService partyService;
 
+    @Autowired
+    private FastDanmuService fastDanmuService;
+
     @RequestMapping(value = "/sendDM", method = RequestMethod.GET)
     public String redirectUrl(String code,Model model, HttpServletResponse response,HttpServletRequest request){
 
@@ -178,6 +178,10 @@ public class WechatController {
         model.addAttribute("partyId",party.getPartyId());
         model.addAttribute("addressId",party.getAddressId());
 
+        List<FastDanmu> fastDanmuList = fastDanmuService.findByPartyId(party.getPartyId());
+        if( null != fastDanmuList && fastDanmuList.size() > 0){
+            model.addAttribute("fastdmList",fastDanmuList);
+        }
 
         String fileUploadUrl = fileUploadUtil.getUrl();
         model.addAttribute("baseUrl",fileUploadUrl);
