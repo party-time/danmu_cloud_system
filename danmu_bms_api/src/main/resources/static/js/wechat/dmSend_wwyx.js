@@ -50,7 +50,9 @@ $(function () {
 
 
     $('#fastDmSelect').change(function(){
-
+        if($("#fastDmSelect").val() == '请选择需要发送的弹幕'){
+            return;
+        }
         var obj = {
             templateId:"591d1f3a0cf29b664a4fe1ac",
             partyId:$('#partyId').val(),
@@ -59,7 +61,7 @@ $(function () {
             color:'',
             idd:''
         }
-        $('#templateId').val('591d1f3a0cf29b664a4fe1ac');
+
         $.ajax({
             url: "/v1/api/danmu",
             type: "post",
