@@ -55,7 +55,9 @@ $(function () {
             templateId:"591d1f3a0cf29b664a4fe1ac",
             partyId:$('#partyId').val(),
             addressId:$('#addressId').val(),
-            message:$("#fastDmSelect").val()
+            message:$("#fastDmSelect").val(),
+            color:'',
+            idd:''
         }
         $('#templateId').val('591d1f3a0cf29b664a4fe1ac');
         $.ajax({
