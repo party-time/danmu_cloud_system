@@ -24,7 +24,7 @@
           <div class="content" style="top:45%">
               <#if fastdmList??>
                   <select id="fastDmSelect">
-                        <option>请选择需要发送的弹幕</option>
+                        <option >请选择需要发送的弹幕</option>
                        <#list fastdmList as fastdm >
                         <option>${fastdm.word}</option>
                        </#list>

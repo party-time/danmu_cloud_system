@@ -87,6 +87,8 @@ $(function () {
                 damuT.val('');
                 $('.textNum').html('40');
             }
+            $("#fastDmSelect").val("请选择需要发送的弹幕");
+
         }).fail(function () {
             //alert("发送弹幕失败");
             $('.networkWarning,.mask1').show();
