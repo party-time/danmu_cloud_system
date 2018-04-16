@@ -29,7 +29,26 @@ public class DanmuController{
 
 
 
+    @RequestMapping(value = "/wechartSend", method = RequestMethod.POST)
+    public RestResultModel wechartSend(HttpServletRequest request) {
+        logger.info("小程序端，弹幕发送");
+        String openId = request.getParameter("openId");
+        RestResultModel restResultModel = new RestResultModel();
+        if (bmsDanmuService.checkFrequency(request)) {
+            restResultModel.setResult(403);
+            restResultModel.setResult_msg("Limited Frequency");
+            logger.info("用户{}，发送弹幕,太频繁",openId);
+            return restResultModel;
+        }else if(bmsDanmuService.checkDanmuIsRepeat(openId,request.getParameter("message"))){
+            restResultModel.setResult(403);
+            restResultModel.setResult_msg("相同弹幕发送太多");
+            logger.info("用户{}，相同弹幕发送太多",openId);
+            return restResultModel;
+        }else {
+            return bmsDanmuService.sendDanmu(request,openId,0);
+        }
 
+    }
 
 
     @RequestMapping(value = "/danmu", method = RequestMethod.POST)
