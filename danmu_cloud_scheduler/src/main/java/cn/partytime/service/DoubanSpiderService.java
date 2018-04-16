@@ -139,7 +139,7 @@ public class DoubanSpiderService {
                     String regex ="[\u4e00-\u9fa5]";
                     Pattern pat = Pattern.compile(regex);
                     Matcher mat = pat.matcher(timeStr);
-                    String repickStr = mat.replaceAll("");
+                    String repickStr = mat.replaceAll("").replace("(","").replace(")","");
                     log.info("时长:{}",repickStr);
                     filmInfo.setTime(Integer.parseInt(repickStr==null?"0":repickStr.replace(" ","")));
                 }
