@@ -111,51 +111,57 @@ public class MovieLogicService {
         String addressId = danmuClient.getAddressId();
         String partyId = party.getId();
         Date currentDate = DateUtils.getCurrentDate();
-        List<MovieScheduleModel> movieScheduleList = rpcMovieScheduleService.findByPartyIdAndAddressId(partyId, addressId);
-        MovieScheduleModel movieSchedule = null;
-        if (ListUtils.checkListIsNotNull(movieScheduleList)) {
-            movieSchedule = movieScheduleList.get(0);
+
+
+        MovieScheduleModel movieSchedule= rpcMovieScheduleService.findLastMovieByAddressId(addressId);
+        if (movieSchedule!=null) {
             log.info("movieSchedule:{}",JSON.toJSONString(movieSchedule));
             Date startDate = movieSchedule.getStartTime();
             Date movieStartDate  = movieSchedule.getMoviceStartTime();
-            log.info("startDate:{}",startDate);
-            log.info("movieStartDate:{}",movieStartDate);
-            log.info("currentDate:{}",movieStartDate);
-            //当电影开始时间存在的时候
-            if(movieStartDate!=null){
-                long minute = DateUtils.subMinute(movieStartDate,currentDate);
-				if(minute<10){
-					logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
-					restResultModel = new RestResultModel();
-					restResultModel.setResult(201);
-					return restResultModel;
-				}else{
-                    //当前时间减去电影开始时间大于10分钟
-					logger.info("当前时间减去电影开始时间大于10分钟");
 
-                    log.info("--------------开始执行活动时间是否果过短的逻辑-----------------");
-                    rpcMovieAlarmService.shortTime(partyId,addressId,movieStartDate.getTime());
-                }
-            }else if(startDate!=null){
-                //当弹幕开始时间存在的时候
-				//当前时间减去弹幕开始时间大于10分钟
+            String tempPartyId = movieSchedule.getPartyId();
+            if(!tempPartyId.equals(partyId)){
+                log.info("当前请求的电影与最后一条数据的电影不一致,结束最后一条数据的电影");
+                movieSchedule.setEndTime(DateUtils.getCurrentDate());
+                movieSchedule.setUpdateTime(DateUtils.getCurrentDate());
+                movieSchedule.setClientEndTime(clientTime);
+                rpcMovieScheduleService.updateMovieSchedule(movieSchedule);
+            }else{
+                log.info("startDate:{}",startDate);
+                log.info("movieStartDate:{}",movieStartDate);
+                log.info("currentDate:{}",movieStartDate);
+                //当电影开始时间存在的时候
+                if(movieStartDate!=null){
+                    long minute = DateUtils.subMinute(movieStartDate,currentDate);
+                    if(minute<10){
+                        logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
+                        restResultModel = new RestResultModel();
+                        restResultModel.setResult(201);
+                        return restResultModel;
+                    }else{
+                        //当前时间减去电影开始时间大于10分钟
+                        logger.info("当前时间减去电影开始时间大于10分钟");
 
-                long minute = DateUtils.subMinute(startDate,currentDate);
-				if(minute<10){
-					logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
-					restResultModel = new RestResultModel();
-					restResultModel.setResult(201);
-					return restResultModel;
-				}else{
-                    logger.info("当前时间减去弹幕开始时间大于10分钟");
+                        log.info("--------------开始执行活动时间是否果过短的逻辑-----------------");
+                        rpcMovieAlarmService.shortTime(partyId,addressId,movieStartDate.getTime());
+                    }
+                }else if(startDate!=null){
+                    //当弹幕开始时间存在的时候
+                    //当前时间减去弹幕开始时间大于10分钟
+                    long minute = DateUtils.subMinute(startDate,currentDate);
+                    if(minute<10){
+                        logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
+                        restResultModel = new RestResultModel();
+                        restResultModel.setResult(201);
+                        return restResultModel;
+                    }else{
+                        logger.info("当前时间减去弹幕开始时间大于10分钟");
 
-                    log.info("--------------开始执行活动时间是否果过短的逻辑-----------------");
-                    rpcMovieAlarmService.shortTime(partyId,addressId,startDate.getTime());
+                        log.info("--------------开始执行活动时间是否果过短的逻辑-----------------");
+                        rpcMovieAlarmService.shortTime(partyId,addressId,startDate.getTime());
+                    }
                 }
             }
-
-
-
         }
         //清除活动缓存
         log.info("--------------清理活动缓存--------------");
