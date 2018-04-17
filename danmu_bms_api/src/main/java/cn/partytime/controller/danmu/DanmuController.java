@@ -50,6 +50,22 @@ public class DanmuController{
 
     }
 
+    @RequestMapping(value = "/sendExpression", method = RequestMethod.POST)
+    public RestResultModel sendExpression(HttpServletRequest request) {
+        logger.info("小程序端，发送表情");
+        RestResultModel restResultModel = new RestResultModel();
+        String openId = request.getParameter("openId");
+        if (bmsDanmuService.checkFrequency(request)) {
+            restResultModel.setResult(403);
+            restResultModel.setResult_msg("Limited Frequency");
+            logger.info("用户{}，发送弹幕,太频繁",openId);
+            return restResultModel;
+        }else {
+            return  bmsDanmuService.sendDanmu(request,openId,0);
+        }
+
+    }
+
 
     @RequestMapping(value = "/danmu", method = RequestMethod.POST)
     public RestResultModel sendDanmu(HttpServletRequest request,@CookieValue(value = "openId") String openId) {
