@@ -7,6 +7,7 @@ import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.model.manager.TimerDanmuFile;
 import cn.partytime.repository.manager.TimerDanmuFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -44,7 +45,9 @@ public class TimerDanmuFileService {
                 Criteria.where("partyId").in(partyIdList)
         );
         Query query = new Query();
+        Sort sort = new Sort(Sort.Direction.ASC, "updateTime");
         query.addCriteria(criteria);
+        query.with(sort);
         return managerMongoTemplate.find(query, TimerDanmuFile.class);
     }
 
