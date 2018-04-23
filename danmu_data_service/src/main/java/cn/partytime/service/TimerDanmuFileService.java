@@ -45,9 +45,9 @@ public class TimerDanmuFileService {
                 Criteria.where("partyId").in(partyIdList)
         );
         Query query = new Query();
-        Sort sort = new Sort(Sort.Direction.ASC, "updateTime");
+        //Sort sort = new Sort(Sort.Direction.ASC, "updateTime");
         query.addCriteria(criteria);
-        query.with(sort);
+        //query.with(sort);
         return managerMongoTemplate.find(query, TimerDanmuFile.class);
     }
 

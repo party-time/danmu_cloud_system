@@ -4,6 +4,7 @@ import cn.partytime.model.danmu.TimerDanmu;
 import cn.partytime.model.manager.TimerDanmuFile;
 import cn.partytime.service.TimerDanmuFileService;
 import cn.partytime.service.TimerDanmuService;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,7 @@ public class RpcTimerDanmuService {
     @RequestMapping(value = "/findTimerDanmuFileList" ,method = RequestMethod.GET)
     public List<TimerDanmuFile> findTimerDanmuFileList(@RequestParam List<String> partyIdList) {
         List<TimerDanmuFile> timerDanmuFileList = timerDanmuFileService.findByPartyId(partyIdList);
+        log.info("timerDanmuFileList============>"+JSON.toJSONString(timerDanmuFileList));
         return timerDanmuFileList;
     }
 
