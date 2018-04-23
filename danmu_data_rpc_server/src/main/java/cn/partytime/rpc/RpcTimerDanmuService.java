@@ -34,7 +34,7 @@ public class RpcTimerDanmuService {
     @RequestMapping(value = "/findTimerDanmuFileList" ,method = RequestMethod.GET)
     public List<TimerDanmuFile> findTimerDanmuFileList(@RequestParam List<String> partyIdList) {
         List<TimerDanmuFile> timerDanmuFileList = timerDanmuFileService.findByPartyId(partyIdList);
-        log.info("timerDanmuFileList============>"+JSON.toJSONString(timerDanmuFileList));
+        //log.info("timerDanmuFileList============>"+JSON.toJSONString(timerDanmuFileList));
         return timerDanmuFileList;
     }
 
