@@ -44,6 +44,7 @@ public class TimerDanmuFileService {
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("partyId").in(partyIdList)
         );
+
         Query query = new Query();
         Sort sort = new Sort(Sort.Direction.ASC, "updateTime");
         query.addCriteria(criteria);

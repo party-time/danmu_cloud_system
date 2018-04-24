@@ -48,7 +48,7 @@ public class DanmuClientService {
      * @param name
      * @return
      */
-    public DanmuClient save(String addressId,Date overdue,String name,String paramTemplateId) {
+    public DanmuClient save(String addressId,Date overdue,String name,String paramTemplateId,Integer screenId) {
 
         DanmuClient danmuClient = new DanmuClient();
         danmuClient.setAddressId(addressId);
@@ -56,6 +56,7 @@ public class DanmuClientService {
         danmuClient.setParamTemplateId(paramTemplateId);
         RegistCode registCode = registCodeService.save(overdue);
         danmuClient.setRegistCode(registCode.getRegistCode());
+        danmuClient.setScreenId(screenId);
         return danmuClientRepository.insert(danmuClient);
     }
 

@@ -40,7 +40,7 @@ public class DanmuClientController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public RestResultModel danmuClientSave(String addressId,String overdueStr,String name,String paramTemplateId) throws ParseException {
+    public RestResultModel danmuClientSave(String addressId,String overdueStr,String name,String paramTemplateId,Integer screenId) throws ParseException {
         RestResultModel restResultModel = new RestResultModel();
         Date overdue = null;
         Date nowDate = DateUtils.getCurrentDate();
@@ -57,7 +57,7 @@ public class DanmuClientController {
         //判断屏幕名称是否重复
         DanmuClient danmuClient = danmuClientService.findDanmuClientByAddressIdAndName(addressId,name);
         if(danmuClient==null){
-            danmuClient =danmuClientService.save(addressId,overdue,name,paramTemplateId);
+            danmuClient =danmuClientService.save(addressId,overdue,name,paramTemplateId,screenId);
             restResultModel.setResult(200);
             restResultModel.setData(danmuClient);
             return restResultModel;

@@ -29,7 +29,7 @@ public class DanmuClient extends BaseModel{
     private String addressId;
 
     /**屏幕编号*/
-    private int screenId;
+    private Integer screenId;
 
     /**
      * 由客户端生成的唯一标识
@@ -40,7 +40,6 @@ public class DanmuClient extends BaseModel{
      * 客户端关联的参数模版
      */
     private String paramTemplateId;
-
 
     public String getId() {
         return id;
@@ -82,11 +81,11 @@ public class DanmuClient extends BaseModel{
         this.addressId = addressId;
     }
 
-    public int getScreenId() {
+    public Integer getScreenId() {
         return screenId;
     }
 
-    public void setScreenId(int screenId) {
+    public void setScreenId(Integer screenId) {
         this.screenId = screenId;
     }
 

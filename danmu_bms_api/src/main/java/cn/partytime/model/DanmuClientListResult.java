@@ -19,6 +19,8 @@ public class DanmuClientListResult {
 
     private String paramTemplateId;
 
+    private Integer screenId;
+
     public String getId() {
         return id;
     }
@@ -65,5 +67,13 @@ public class DanmuClientListResult {
 
     public void setParamTemplateId(String paramTemplateId) {
         this.paramTemplateId = paramTemplateId;
+    }
+
+    public Integer getScreenId() {
+        return screenId;
+    }
+
+    public void setScreenId(Integer screenId) {
+        this.screenId = screenId;
     }
 }

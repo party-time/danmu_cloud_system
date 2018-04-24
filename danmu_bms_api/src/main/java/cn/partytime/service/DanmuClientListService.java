@@ -43,6 +43,7 @@ public class DanmuClientListService {
                 danmuClientListResult.setId(danmuClient.getId());
                 danmuClientListResult.setName(danmuClient.getName());
                 danmuClientListResult.setRegistCode(danmuClient.getRegistCode());
+                danmuClientListResult.setScreenId(danmuClient.getScreenId());
                 if( null != registCode && null != registCode.getOverdue()){
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     String overdueStr = simpleDateFormat.format(registCode.getOverdue());
