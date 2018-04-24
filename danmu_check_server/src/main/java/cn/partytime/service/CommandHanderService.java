@@ -523,9 +523,9 @@ public class CommandHanderService {
     public void pubDanmuToUserCachList(String partyId, String addressId, Map<String,Object> commandMap) {
         try {
             logger.info("向活动场地广播弹幕");
-            //List<String> addressIdList = rpcPartyService.findAddressIdListByPartyId(partyId);
+            List<String> addressIdList = rpcPartyService.findAddressIdListByPartyId(partyId);
 
-            List<String> addressIdList =  rpcRealTimeDmAddressService.findAllByAddressId(addressId);
+            //List<String> addressIdList =  rpcRealTimeDmAddressService.findAllByAddressId(addressId);
             logger.info("场地信息:{}",JSON.toJSONString(addressIdList));
             if(ListUtils.checkListIsNotNull(addressIdList)){
                 for(String address:addressIdList){
