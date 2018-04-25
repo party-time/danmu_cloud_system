@@ -62,6 +62,7 @@ public class WechatMiniRestController {
     @RequestMapping(value = "/findPartyInfo", method = RequestMethod.POST)
     public RestResultModel partyInfo(HttpServletRequest request) {
         String code  = request.getParameter("code");
+        log.info("小程序请求的code:{}",code);
         String openId = WeixinUtil.getUserOpenId(code);
         RestResultModel restResultModel = new RestResultModel();
         WechatUser wechatUser = bmsWechatUserService.findByOpenId(openId);
