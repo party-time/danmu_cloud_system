@@ -6,6 +6,7 @@ import cn.partytime.model.WechatSession;
 import cn.partytime.model.manager.FastDanmu;
 import cn.partytime.model.manager.H5Template;
 import cn.partytime.model.manager.ResourceFile;
+import cn.partytime.model.wechat.UseSecretInfo;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.service.*;
@@ -62,42 +63,42 @@ public class WechatMiniRestController {
     @Autowired
     private FileUploadUtil fileUploadUtil;
 
+
+
     @RequestMapping(value = "/findPartyInfo", method = RequestMethod.POST)
     public RestResultModel partyInfo(HttpServletRequest request) {
-        String code  = request.getParameter("code");
+        /*String code  = request.getParameter("code");
         log.info("小程序请求的code:{}",code);
-        String openId = WeixinUtil.getUserOpenId(code);
-        RestResultModel restResultModel = new RestResultModel();
-        WechatUser wechatUser = bmsWechatUserService.findByOpenId(openId);
-        log.info("wechatUser:", JSON.toJSONString(wechatUser));
-        UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
-        /*WechatUserInfo wechatUserInfo = null;
-        if( null != wechatUser){
-            wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
-            if( null != wechatUserInfo && null != wechatUserInfo.getLastGetLocationDate()){
-                long a = (new Date().getTime() - wechatUserInfo.getLastGetLocationDate().getTime())/(1000*60*60);
-                if(a > 24){
-                    restResultModel.setResult(405);
-                    restResultModel.setResult_msg("位置授权");
-                    return restResultModel;
-                }
-            }else{
-                restResultModel.setResult(405);
-                restResultModel.setResult_msg("位置授权");
-                return restResultModel;
-            }
-        }*/
-        if( null != userInfo){
-            wechatUserService.updateUserInfo(userInfo.toWechatUser());
+
+
+        UseSecretInfo useSecretInfo = WeixinUtil.getUserOpenIdAndSessionKey(code);
+        if(useSecretInfo==null){
+            //TODO:获取不到用户信息
         }
 
+        RestResultModel restResultModel = new RestResultModel();
+        String openId = useSecretInfo.getOpenId();
+
+        //从数据库中获取用户微信信息
+        WechatUser wechatUser = bmsWechatUserService.findByOpenId(openId);
+        log.info("wechatUser:", JSON.toJSONString(wechatUser));
+
+        //从微信服务器获取用户信息
+        UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
+        String unionId = userInfo.getUnionid();
+
+        if( null != userInfo){
+            wechatUserService.updateUserInfo(userInfo.toWechatUser());
+        }*/
+
+        RestResultModel restResultModel = new RestResultModel();
+        String openId = "oze02wVALzhbkpW9f7r3g036O6vw";
         PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
         if( null == party){
             restResultModel.setResult(404);
             restResultModel.setResult_msg("位置授权");
             return restResultModel;
         }
-
 
         Map<String, Object> resourceFileModels = resourceFileService.findResourceMapByPartyId(party.getPartyId());
 
@@ -134,7 +135,6 @@ public class WechatMiniRestController {
         String fileUploadUrl = fileUploadUtil.getUrl();
         map.put("baseUrl",fileUploadUrl);
         map.put("openId",openId);
-
 
 
         restResultModel.setResult(200);

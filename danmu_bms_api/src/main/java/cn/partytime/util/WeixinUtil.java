@@ -3,6 +3,7 @@ package cn.partytime.util;
 import cn.partytime.model.wechat.MaterialListJson;
 import cn.partytime.model.wechat.MaterlListPageResultJson;
 import cn.partytime.model.wechat.MaterlResultJson;
+import cn.partytime.model.wechat.UseSecretInfo;
 import cn.partytime.wechat.entity.ReceiveUnifiedOrderXmlEntity;
 import cn.partytime.wechat.pojo.*;
 import cn.partytime.wechat.process.FormatXmlProcess;
@@ -182,6 +183,33 @@ public class WeixinUtil {
         }
         log.info("code=>openid:"+openId);
         return openId;
+    }
+
+
+    public static UseSecretInfo getUserOpenIdAndSessionKey( String code) {
+        if(StringUtils.isEmpty(code)){
+            return null;
+        }
+        String requestUrl = openid_code_url.replace("APPID",weixinUtil.partyTimeConfig.getAppId() ).replace("APPSECRET", weixinUtil.partyTimeConfig.getAppSecret()).replace("CODE", code);
+        log.info("code=>openid url:"+requestUrl);
+
+        JSONObject jsonObject = httpRequest(requestUrl, "GET", null);
+        String openId="";
+        UseSecretInfo useSecretInfo = null;
+        // 如果请求成功
+        if (null != jsonObject) {
+            try {
+                //openId = jsonObject.getString("openid");
+                //session_key = jsonObject.getString("session_key");
+                //session_key = jsonObject.getString("");
+                 useSecretInfo = new UseSecretInfo(jsonObject.getString("openid"),jsonObject.getString("session_key"));
+            } catch (JSONException e) {
+                // 获取token失败
+                log.error("获取openId失败 errcode:{"+ jsonObject.getInt("errcode")+"} errmsg:{"+ jsonObject.getString("errmsg")+"}");
+            }
+        }
+        log.info("code=>openid:"+openId);
+        return useSecretInfo;
     }
 
     /**
