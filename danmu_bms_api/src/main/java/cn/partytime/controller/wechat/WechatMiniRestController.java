@@ -71,15 +71,10 @@ public class WechatMiniRestController {
         WechatUser wechatUser = bmsWechatUserService.findByOpenId(openId);
         log.info("wechatUser:", JSON.toJSONString(wechatUser));
         UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
-        WechatUserInfo wechatUserInfo = null;
+        /*WechatUserInfo wechatUserInfo = null;
         if( null != wechatUser){
             wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
             if( null != wechatUserInfo && null != wechatUserInfo.getLastGetLocationDate()){
-                /*if( null == wechatUserInfo.getLastLongitude() || null == wechatUserInfo.getLastLatitude()){
-                    restResultModel.setResult(405);
-                    restResultModel.setResult_msg("位置授权");
-                    return restResultModel;
-                }*/
                 long a = (new Date().getTime() - wechatUserInfo.getLastGetLocationDate().getTime())/(1000*60*60);
                 if(a > 24){
                     restResultModel.setResult(405);
@@ -91,7 +86,7 @@ public class WechatMiniRestController {
                 restResultModel.setResult_msg("位置授权");
                 return restResultModel;
             }
-        }
+        }*/
         if( null != userInfo){
             wechatUserService.updateUserInfo(userInfo.toWechatUser());
         }
