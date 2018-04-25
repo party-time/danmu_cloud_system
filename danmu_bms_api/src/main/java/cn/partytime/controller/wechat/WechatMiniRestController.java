@@ -14,6 +14,7 @@ import cn.partytime.service.wechat.WechatUserService;
 import cn.partytime.util.FileUploadUtil;
 import cn.partytime.util.WeixinUtil;
 import cn.partytime.wechat.pojo.UserInfo;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -68,6 +69,7 @@ public class WechatMiniRestController {
         String openId = WeixinUtil.getUserOpenId(code);
         RestResultModel restResultModel = new RestResultModel();
         WechatUser wechatUser = bmsWechatUserService.findByOpenId(openId);
+        log.info("wechatUser:", JSON.toJSONString(wechatUser));
         UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
         WechatUserInfo wechatUserInfo = null;
         if( null != wechatUser){
