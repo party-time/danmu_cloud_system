@@ -16,7 +16,9 @@ import cn.partytime.service.wechat.WechatUserInfoService;
 import cn.partytime.service.wechat.WechatUserService;
 import cn.partytime.util.FileUploadUtil;
 import cn.partytime.util.WeixinUtil;
+import cn.partytime.wechat.payService.WechatPayService;
 import cn.partytime.wechat.pojo.UserInfo;
+import cn.partytime.wechat.pojo.WxJsConfig;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,41 @@ public class WechatMiniRestController {
 
     @Autowired
     private RpcCmdService rpcCmdService;
+
+    @Autowired
+    private WechatPayService wechatPayService;
+
+
+    @RequestMapping(value = "/wxBingPay", method = RequestMethod.POST)
+    public RestResultModel wxBingPay(HttpServletRequest request) {
+        RestResultModel restResultModel = new RestResultModel();
+        StringBuffer url = request.getRequestURL();
+        String openId = request.getParameter("openId");
+        String trueUrl = url.toString() + "?&openId="+openId;
+        WxJsConfig wxJsConfig = wechatPayService.createWxjsConfig(trueUrl);
+        log.info("wxJsConfig:{}",JSON.toJSONString(wxJsConfig));
+
+        String nonceStr = wxJsConfig.getNonceStr();
+        String timestamp = wxJsConfig.getTimestamp();
+        String body = "弹幕电影-打赏1分";
+        String detail="";
+        String attach = "";
+        Integer total_fee = 1;
+        String clientIp = request.getHeader("x-forwarded-for");
+        if(StringUtils.isEmpty(clientIp)){
+            clientIp = request.getRemoteAddr();
+        }
+        if(!StringUtils.isEmpty(clientIp) && clientIp.indexOf(",")!=-1){
+            clientIp = clientIp.substring(0,clientIp.indexOf(","));
+        }
+        Map<String,String> map = new HashMap<>();
+        map = wechatPayService.createUnifiedorder(nonceStr,timestamp,openId,body,detail,attach,total_fee,clientIp);
+        log.info("map:{}",JSON.toJSONString(map));
+
+        restResultModel.setResult(200);
+        restResultModel.setData(map);
+        return restResultModel;
+    }
 
 
     @RequestMapping(value = "/findAdvanceTmplate", method = RequestMethod.POST)
