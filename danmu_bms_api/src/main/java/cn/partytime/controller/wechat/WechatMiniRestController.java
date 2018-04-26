@@ -172,6 +172,7 @@ public class WechatMiniRestController {
             log.info("用户{}，相同弹幕发送太多",openId);
             return restResultModel;
         }else {
+            log.info("===========================================================");
             return bmsDanmuService.sendDanmu(request,openId,0);
         }
 
