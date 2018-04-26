@@ -580,6 +580,7 @@ public class BmsDanmuService {
                             content = danmuCommonService.setShowNotArrayContent(request.getParameter(key),type);
                             msgContent = danmuCommonService.setShowNotArrayContent(request.getParameter(key),componentId,type);
                             if(!"1".equals(componentId) && !"2".equals(componentId)){
+                                logger.info("msgContent===========:"+String.valueOf(msgContent));
                                 restResultModel = checkDanmuIsOk(String.valueOf(msgContent));
                                 if(restResultModel!=null){
 
