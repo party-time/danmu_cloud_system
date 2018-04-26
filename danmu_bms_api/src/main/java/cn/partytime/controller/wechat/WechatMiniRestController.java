@@ -1,5 +1,7 @@
 package cn.partytime.controller.wechat;
 
+import cn.partytime.dataRpc.RpcCmdService;
+import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.WechatSession;
@@ -63,7 +65,19 @@ public class WechatMiniRestController {
     @Autowired
     private FileUploadUtil fileUploadUtil;
 
+    @Autowired
+    private RpcCmdService rpcCmdService;
 
+
+    @RequestMapping(value = "/findAdvanceTmplate", method = RequestMethod.POST)
+    public RestResultModel findAdvanceTmplate(HttpServletRequest request) {
+        String key = request.getParameter("wx_bling");
+        CmdTempAllData cmdTempAllData =  rpcCmdService.findCmdTempAllDataByKeyFromCache(key);
+        RestResultModel restResultModel = new RestResultModel();
+        restResultModel.setResult(200);
+        restResultModel.setData(cmdTempAllData);
+        return restResultModel;
+    }
 
     @RequestMapping(value = "/findPartyInfo", method = RequestMethod.POST)
     public RestResultModel partyInfo(HttpServletRequest request) {
@@ -141,79 +155,6 @@ public class WechatMiniRestController {
         restResultModel.setData(map);
         return restResultModel;
     }
-    //@RequestMapping(value = "/partyInfo/{code}", method = RequestMethod.POST)
-   // public RestResultModel partyInfo(HttpServletRequest request) {
-
-      //  return null;
-       /* String openId  = request.getParameter("openId");
-        WechatUser wechatUser = bmsWechatUserService.findByOpenId(openId);
-        if( null == wechatUser){
-            return "redirect:/htm/noparty.html";
-        }
-        UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
-        WechatUserInfo wechatUserInfo = null;
-        if( null != wechatUser){
-            wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
-            if( null != wechatUserInfo && null != wechatUserInfo.getLastGetLocationDate()){
-                if( null == wechatUserInfo.getLastLongitude() || null == wechatUserInfo.getLastLatitude()){
-                    return "redirect:/wechat/getLocation?openId="+openId;
-                }
-                long a = (new Date().getTime() - wechatUserInfo.getLastGetLocationDate().getTime())/(1000*60*60);
-                if(a > 24){
-                    return "redirect:/wechat/getLocation?openId="+openId;
-                }
-            }else{
-                return "redirect:/wechat/getLocation?openId="+openId;
-            }
-        }
-        if( null != userInfo){
-            wechatUserService.updateUserInfo(userInfo.toWechatUser());
-        }
-
-        PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
-        if( null == party){
-            return "redirect:/htm/noparty.html";
-        }
-
-
-        Map<String, Object> resourceFileModels = resourceFileService.findResourceMapByPartyId(party.getPartyId());
-
-        List<ResourceFile> all = new ArrayList<>();
-        List<ResourceFile> expressionconstant = (List<ResourceFile>)resourceFileModels.get("expressionconstant");
-        List<ResourceFile> expressions = (List<ResourceFile>)resourceFileModels.get("expressions");
-
-        if( null != expressionconstant){
-            all.addAll(expressionconstant);
-        }
-
-        if( null != expressions){
-            all.addAll(expressions);
-        }
-
-        model.addAttribute("expressions",all );
-
-        if (null != resourceFileModels.get("h5Background")) {
-            List reList = (ArrayList) resourceFileModels.get("h5Background");
-            if (reList.size() > 0) {
-                model.addAttribute("background", reList.get(0));
-            }
-        }
-        model.addAttribute("colors", bmsColorService.findDanmuColor(0));
-        model.addAttribute("openId", openId);
-        model.addAttribute("partyId",party.getPartyId());
-        model.addAttribute("addressId",party.getAddressId());
-
-        List<FastDanmu> fastDanmuList = fastDanmuService.findByPartyId(party.getPartyId());
-        if( null != fastDanmuList && fastDanmuList.size() > 0){
-            model.addAttribute("fastdmList",fastDanmuList);
-        }
-
-        String fileUploadUrl = fileUploadUtil.getUrl();
-        model.addAttribute("baseUrl",fileUploadUrl);
-
-        return ftlName;*/
-
-    //}
 
     @RequestMapping(value = "/wechartSend", method = RequestMethod.POST)
     public RestResultModel wechartSend(HttpServletRequest request) {
