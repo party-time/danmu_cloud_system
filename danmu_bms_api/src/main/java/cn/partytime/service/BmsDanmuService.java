@@ -577,6 +577,7 @@ public class BmsDanmuService {
                                 content = danmuCommonService.setShowNotArrayContent(request.getParameter(key),type);
                             }
                         }else{
+                            logger.info("key===========:"+key);
                             content = danmuCommonService.setShowNotArrayContent(request.getParameter(key),type);
                             msgContent = danmuCommonService.setShowNotArrayContent(request.getParameter(key),componentId,type);
                             if(!"1".equals(componentId) && !"2".equals(componentId)){
