@@ -71,7 +71,7 @@ public class WechatMiniRestController {
 
     @RequestMapping(value = "/findAdvanceTmplate", method = RequestMethod.GET)
     public RestResultModel findAdvanceTmplate(HttpServletRequest request) {
-        String key = request.getParameter("wx_bling");
+        String key = request.getParameter("key");
         CmdTempAllData cmdTempAllData =  rpcCmdService.findCmdTempAllDataByKeyFromCache(key);
         RestResultModel restResultModel = new RestResultModel();
         restResultModel.setResult(200);
