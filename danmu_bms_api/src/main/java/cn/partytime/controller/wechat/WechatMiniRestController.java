@@ -1,10 +1,7 @@
 package cn.partytime.controller.wechat;
 
 import cn.partytime.dataRpc.RpcCmdService;
-import cn.partytime.model.CmdTempAllData;
-import cn.partytime.model.PartyLogicModel;
-import cn.partytime.model.RestResultModel;
-import cn.partytime.model.WechatSession;
+import cn.partytime.model.*;
 import cn.partytime.model.manager.FastDanmu;
 import cn.partytime.model.manager.H5Template;
 import cn.partytime.model.manager.ResourceFile;
@@ -26,10 +23,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -237,5 +231,12 @@ public class WechatMiniRestController {
         }else {
             return  bmsDanmuService.sendDanmu(request,openId,0);
         }
+    }
+
+    @RequestMapping(value = "/historyDanmu", method = RequestMethod.GET)
+    public PageResultModel historyDanmu(@PathVariable("openId")String openId , @PathVariable("pageNo") Integer pageNo, @PathVariable("size")Integer pageSize) {
+        PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
+        PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(pageNo,pageSize,party.getAddressId(),party.getPartyId(),1);
+        return pageResultModel;
     }
 }
