@@ -17,4 +17,7 @@ public class PotocolTypeConst {
     /**pong*/
     public static final String POTOCOL_PONG="pong";
 
+    /**pong*/
+    public static final String POTOCOL_CLOSE="close";
+
 }

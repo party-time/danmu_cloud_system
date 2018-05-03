@@ -146,6 +146,10 @@ public class PotocolService {
             String msg = JSON.toJSONString(resultMap);
             logger.info("返回给客户端信息{}：" + msg);
             channel.writeAndFlush(new TextWebSocketFrame(msg));
+        }else if (PotocolTypeConst.POTOCOL_CLOSE.equals(type)) {
+            DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
+            logger.info("关闭客户端：{}",JSON.toJSONString(clientInfoModel));
+            forceLogout(channel);
         }
     }
     private void screenClientHandler(Map<String,Object> map, Channel channel) {
