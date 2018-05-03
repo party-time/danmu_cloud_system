@@ -234,7 +234,7 @@ public class WechatMiniRestController {
     }
 
     @RequestMapping(value = "/historyDanmu", method = RequestMethod.GET)
-    public PageResultModel historyDanmu(@PathVariable("openId")String openId , @PathVariable("pageNo") Integer pageNo, @PathVariable("size")Integer pageSize) {
+    public PageResultModel historyDanmu(@PathVariable("openId")String openId , @PathVariable("pageNo") Integer pageNo, @PathVariable("pageSize")Integer pageSize) {
         PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
         PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(pageNo,pageSize,party.getAddressId(),party.getPartyId(),1);
         return pageResultModel;
