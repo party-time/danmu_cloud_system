@@ -500,7 +500,7 @@ public class CommandHanderService {
 
                 commandObject.put("data",danmuLog.getContent());
                 commandObject.put("isSendH5",cmdTempAllData.getIsSendH5());
-
+                logger.info("推送弹幕到客户端：{}",JSON.toJSONString(commandObject));
                 pubDanmuToUserCachList(partyId, addressId, commandObject);
             }else{
 
@@ -513,6 +513,7 @@ public class CommandHanderService {
                 commandObject.put("data",danmuLog.getContent());
 
                 commandObject.put("isSendH5",cmdTempAllData.getIsSendH5());
+                logger.info("推送弹幕到客户端：{}",JSON.toJSONString(commandObject));
                 pubDanmuToUserCachList(partyId, addressId, commandObject);
             }
         } catch (Exception e) {

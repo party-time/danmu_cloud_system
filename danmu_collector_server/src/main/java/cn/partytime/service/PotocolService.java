@@ -137,6 +137,15 @@ public class PotocolService {
             } else {
                 forceLogout(channel);
             }
+        }else if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
+            DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
+            logger.info("当前客户端信息:{}接受ping",clientInfoModel.getScreenId());
+
+            Map<String,Object> resultMap = new HashMap<String,Object>();
+            resultMap.put("type", PotocolTypeConst.POTOCOL_PONG);
+            String msg = JSON.toJSONString(resultMap);
+            logger.info("返回给客户端信息{}：" + msg);
+            channel.writeAndFlush(new TextWebSocketFrame(msg));
         }
     }
     private void screenClientHandler(Map<String,Object> map, Channel channel) {
