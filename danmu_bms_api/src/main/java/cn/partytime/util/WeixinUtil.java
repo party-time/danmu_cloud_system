@@ -70,6 +70,10 @@ public class WeixinUtil {
 
     public final static String get_material_url ="https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=ACCESS_TOKEN";
 
+
+    //小程序获取openId 和 sessionkey
+    public final static  String wexin_program_openId_sessionKey_Url="https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code";
+
     @PostConstruct
     public void init() {
         weixinUtil = this;
@@ -183,6 +187,37 @@ public class WeixinUtil {
         }
         log.info("code=>openid:"+openId);
         return openId;
+    }
+
+    /**
+     * 微信小程序通过code获取用户的openid and session_key
+     * @param code
+     * @return
+     */
+    public static UseSecretInfo getMiniProgramUserOpenIdAndSessionKey( String code) {
+        if(StringUtils.isEmpty(code)){
+            return null;
+        }
+        String requestUrl = wexin_program_openId_sessionKey_Url.replace("APPID",weixinUtil.partyTimeConfig.getAppId() ).replace("APPSECRET", weixinUtil.partyTimeConfig.getAppSecret()).replace("CODE", code);
+        log.info("code=>openid url:"+requestUrl);
+
+        JSONObject jsonObject = httpRequest(requestUrl, "GET", null);
+        String openId="";
+        UseSecretInfo useSecretInfo = null;
+        // 如果请求成功
+        if (null != jsonObject) {
+            try {
+                //openId = jsonObject.getString("openid");
+                //session_key = jsonObject.getString("session_key");
+                //session_key = jsonObject.getString("");
+                useSecretInfo = new UseSecretInfo(jsonObject.getString("openid"),jsonObject.getString("session_key"));
+            } catch (JSONException e) {
+                // 获取token失败
+                log.error("获取openId失败 errcode:{"+ jsonObject.getInt("errcode")+"} errmsg:{"+ jsonObject.getString("errmsg")+"}");
+            }
+        }
+        log.info("code=>openid:"+openId);
+        return useSecretInfo;
     }
 
 

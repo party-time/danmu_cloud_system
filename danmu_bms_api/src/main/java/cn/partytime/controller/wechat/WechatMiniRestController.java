@@ -21,6 +21,8 @@ import cn.partytime.wechat.pojo.UserInfo;
 import cn.partytime.wechat.pojo.WxJsConfig;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -144,7 +146,7 @@ public class WechatMiniRestController {
 
         String code  = request.getParameter("code");
         log.info("小程序请求的code:{}",code);
-        UseSecretInfo useSecretInfo = WeixinUtil.getUserOpenIdAndSessionKey(code);
+        UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
         log.info("useSecretInfo:{}",JSON.toJSONString(useSecretInfo));
 
         RestResultModel restResultModel = new RestResultModel();
@@ -197,6 +199,8 @@ public class WechatMiniRestController {
         restResultModel.setData(map);
         return restResultModel;
     }
+
+
 
     @RequestMapping(value = "/wechartSend", method = RequestMethod.POST)
     public RestResultModel wechartSend(HttpServletRequest request) {
