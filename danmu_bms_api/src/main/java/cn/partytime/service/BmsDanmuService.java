@@ -238,9 +238,9 @@ public class BmsDanmuService {
             pageResultModel.setRows(danmuLogicModelList);
             return pageResultModel;
         }
-        List<Danmu> timerDanmuList = danmuListByPage.getContent();
-
-        pageResultModel.setRows(findDanmuLogicModelList(timerDanmuList));
+        List<Danmu> danmuList = danmuListByPage.getContent();
+        logger.info("danmuList:{}",JSON.toJSONString(danmuList));
+        pageResultModel.setRows(findDanmuLogicModelList(danmuList));
         return pageResultModel;
     }
 
