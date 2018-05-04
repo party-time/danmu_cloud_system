@@ -240,7 +240,9 @@ public class BmsDanmuService {
         }
         List<Danmu> danmuList = danmuListByPage.getContent();
         logger.info("danmuList:{}",JSON.toJSONString(danmuList));
-        pageResultModel.setRows(findDanmuLogicModelList(danmuList));
+        if(ListUtils.checkListIsNotNull(danmuList)){
+            pageResultModel.setRows(findDanmuLogicModelList(danmuList));
+        }
         return pageResultModel;
     }
 
