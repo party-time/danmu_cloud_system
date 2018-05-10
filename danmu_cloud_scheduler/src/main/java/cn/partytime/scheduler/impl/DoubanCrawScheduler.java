@@ -29,8 +29,7 @@ public class DoubanCrawScheduler implements BaseScheduler {
     @Autowired
     private DoubanSpiderService doubanSpiderService;
 
-    //@Scheduled(cron = "0 0 16 * * ?")
-    @PostConstruct
+    @Scheduled(cron = "0 0 16 * * ?")
     public void execute() throws IOException {
         try{
             String s= HttpUtils.sendGet("https://movie.douban.com/cinema/nowplaying/beijing/", null);
