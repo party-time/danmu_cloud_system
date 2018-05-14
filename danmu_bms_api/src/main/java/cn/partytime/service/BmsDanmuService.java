@@ -411,7 +411,7 @@ public class BmsDanmuService {
                         logger.info("current key:{}",key);
                         content = danmuCommonService.setProtocolArrayContent(componentType,danmuMap.get(key),cmdTempComponentData.getDefaultValue());
                         msgContent = danmuCommonService.setShowArrayContent(componentType,danmuMap.get(key),componentId,cmdTempComponentData.getDefaultValue());
-                        if(msgContent!=null){
+                        /*if(msgContent!=null){
                             List<String> messageList = (List<String>)msgContent;
                             for(int i=0; i<messageList.size(); i++){
                                 RestResultModel restResultModel = checkDanmuIsOk(messageList.get(i));
@@ -419,8 +419,7 @@ public class BmsDanmuService {
                                     return;
                                 }
                             }
-
-                        }
+                        }*/
                     }else{
                         msgContent = danmuCommonService.setShowNotArrayContent(danmuMap.get(key),componentId,type);
                         content = danmuCommonService.setShowNotArrayContent(danmuMap.get(key),type);
@@ -429,6 +428,7 @@ public class BmsDanmuService {
                             return;
                         }
                     }
+                    map.put(key,content);
                 }
 
                 if(isCheck==0){
@@ -437,7 +437,6 @@ public class BmsDanmuService {
                     //显示内容
                     msgObject = msgContent;
                 }
-                map.put(key,content);
             }
             //是否保存弹幕
 
@@ -560,7 +559,10 @@ public class BmsDanmuService {
                         //显示的内容
                         content = danmuCommonService.setProtocolArrayContent(componentType,request.getParameter(key),cmdTempComponentData.getDefaultValue());
                         msgContent = danmuCommonService.setShowArrayContent(componentType,request.getParameter(key),componentId,cmdTempComponentData.getDefaultValue());
-                        if(msgContent!=null && (!"1".equals(componentId) && !"2".equals(componentId))){
+                        if("color".equals(key) ){
+                            map.put("color",request.getParameter(key+"name"));
+                        }
+                        /*if(msgContent!=null && (!"1".equals(componentId) && !"2".equals(componentId))){
                             List<String> messageList = (List<String>)msgContent;
                             for(int i=0; i<messageList.size(); i++){
                                 restResultModel = checkDanmuIsOk(messageList.get(i));
@@ -568,8 +570,7 @@ public class BmsDanmuService {
                                     isBlock=true;
                                 }
                             }
-
-                        }
+                        }*/
                     }else{
                         if("color".equals(key)){
                             String color = request.getParameter(key);
@@ -595,12 +596,12 @@ public class BmsDanmuService {
 
                         }
                     }
+                    map.put(key,content);
                 }
                 if(isCheck==0){
                     checkCmdTempComponentData = cmdTempComponentData;
                     bCheck = true;
                 }
-                map.put(key,content);
             }
 
             //是否保存弹幕
@@ -738,22 +739,13 @@ public class BmsDanmuService {
                     map.put(key,cmdTempComponentData.getDefaultValue());
                     contentMap.put("content",cmdTempComponentData.getDefaultValue());
                 }else{
+                    //数组
                     if(type==3){
                         //显示的内容
                         content = danmuCommonService.setProtocolArrayContent(componentType,request.getParameter(key),cmdTempComponentData.getDefaultValue());
                         msgContent = danmuCommonService.setShowArrayContent(componentType,request.getParameter(key),componentId,cmdTempComponentData.getDefaultValue());
                         if("color".equals(key) ){
                             contentMap.put("color",request.getParameter(key+"name"));
-                        }
-                        if(msgContent!=null && (!"1".equals(componentId) && !"2".equals(componentId))){
-                            List<String> messageList = (List<String>)msgContent;
-                            for(int i=0; i<messageList.size(); i++){
-                                restResultModel = checkDanmuIsOk(messageList.get(i));
-                                if(restResultModel!=null){
-                                    //return restResultModel;
-                                    isBlock = true;
-                                }
-                            }
                         }
                     }else{
                         if("color".equals(key)){
@@ -771,6 +763,7 @@ public class BmsDanmuService {
                                 contentMap.put("content",msgContent);
                             }
                             if(!"1".equals(componentId) && !"2".equals(componentId)){
+                                logger.info("msgContent:"+JSON.toJSONString(msgContent));
                                 restResultModel = checkDanmuIsOk(String.valueOf(msgContent));
                                 if(restResultModel!=null){
                                     logger.info("屏蔽的消息内容:{}",msgContent);
@@ -780,12 +773,12 @@ public class BmsDanmuService {
                             }
                         }
                     }
+                    map.put(key,content);
                 }
                 if(isCheck==0){
                     checkCmdTempComponentData = cmdTempComponentData;
                     bCheck = true;
                 }
-                map.put(key,content);
             }
 
             //是否保存弹幕
