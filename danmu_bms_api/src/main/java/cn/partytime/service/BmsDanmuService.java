@@ -262,14 +262,18 @@ public class BmsDanmuService {
             for(CmdTempComponentData cmdTempComponentData:cmdTempAllData.getCmdTempComponentDataList()){
 
                 Object objectMsg = null;
-                String value = danmuModel.getContent().get(cmdTempComponentData.getKey())+"";
-                if(cmdTempComponentData.getType()==3){
-                    //显示的内容
-                    objectMsg = danmuCommonService.setShowArrayContent(cmdTempComponentData.getComponentType(),value,cmdTempComponentData.getComponentId(),cmdTempComponentData.getDefaultValue());
-                }else{
-                    objectMsg = danmuCommonService.setShowNotArrayContent(value,cmdTempComponentData.getComponentId(),cmdTempComponentData.getType());
+                String key = cmdTempComponentData.getKey();
+                String value = danmuModel.getContent().get(key)+"";
+                logger.info("value:"+value);
+                if(!"color".equals(key) && cmdTempComponentData.getType()!=1 && cmdTempComponentData.getType()!=0 ){
+                    if(cmdTempComponentData.getType()==3){
+                        //显示的内容
+                        objectMsg = danmuCommonService.setShowArrayContent(cmdTempComponentData.getComponentType(),value,cmdTempComponentData.getComponentId(),cmdTempComponentData.getDefaultValue());
+                    }else {
+                        objectMsg = danmuCommonService.setShowNotArrayContent(value,cmdTempComponentData.getComponentId(),cmdTempComponentData.getType());
+                    }
+                    danmuLogicModel.setMsg(objectMsg);
                 }
-                danmuLogicModel.setMsg(objectMsg);
             }
 
             IdList.add(danmuModel.getId());
