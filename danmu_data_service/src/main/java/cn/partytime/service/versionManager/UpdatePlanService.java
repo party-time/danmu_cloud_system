@@ -3,6 +3,7 @@ package cn.partytime.service.versionManager;
 import cn.partytime.model.manager.UpdatePlan;
 import cn.partytime.model.manager.UpdatePlanMachine;
 import cn.partytime.repository.manager.versionManager.UpdatePlanRepository;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -111,6 +112,8 @@ public class UpdatePlanService {
 
     public void update(String id,Integer status,String machineNum){
         UpdatePlan updatePlan = updatePlanRepository.findOne(id);
+
+        log.info("updatePlan:{}", JSON.toJSONString(updatePlan));
         if( null != updatePlan){
             List<UpdatePlanMachine> updatePlanMachineList = updatePlan.getUpdatePlanMachineList();
             if( null == updatePlanMachineList){
