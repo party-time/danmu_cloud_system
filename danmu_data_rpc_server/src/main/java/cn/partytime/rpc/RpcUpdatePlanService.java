@@ -59,6 +59,7 @@ public class RpcUpdatePlanService {
 
     @RequestMapping(value = "/update" ,method = RequestMethod.GET)
     public void update(@RequestParam String id,@RequestParam Integer status,@RequestParam String machineNum){
+        log.info("执行更新------------------------------------");
         updatePlanService.update(id,status,machineNum);
     }
 }
