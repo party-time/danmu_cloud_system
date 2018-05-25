@@ -21,6 +21,18 @@ public class DanmuCacheKey {
     public static final String PUB_DANMU_CACHE_LIST="pub:danmu:cache:list:";
 
 
-    public static final String TIMERDANMU_NOT_PLARY_RESOUR_LIST = "timerdanm:notplay:resoure:list:";
+    /**
+     * 未发送队列
+     */
+    public static final String PUB_DANMU_CACHE_NOTE_SEND_LIST="pub:danmu:cache:notsend:list:";
+
+    /**
+     * 弹幕确认队列
+     */
+    public static final String PUB_DANMU_PAY_SORTSET="pub:danmu:pay:sortset:";
+
+
+
+    public static final String TIMERDANMU_NOT_PLARY_RESOUR_LIST = "timerdanmu:notplay:resoure:list:";
 
 }

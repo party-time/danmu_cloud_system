@@ -16,6 +16,10 @@ import java.util.Map;
 @FeignClient(value = "${dataRpcServer}",fallback = RpcDanmuServiceHystrix.class)
 public interface RpcDanmuService {
 
+
+    @RequestMapping(value = "/rpcDanmu/updateDanmuStatus" ,method = RequestMethod.GET)
+    public void updateDanmuStatus(@RequestParam(value = "id") String id,@RequestParam(value = "sendStatus") int sendStatus);
+
     @RequestMapping(value = "/rpcDanmu/danmuLogSave" ,method = RequestMethod.POST)
     public DanmuLogModel save(DanmuLogModel danmuLogModel);
 

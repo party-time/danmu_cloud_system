@@ -12,6 +12,10 @@ import java.util.Map;
 public class RpcDanmuServiceHystrix implements RpcDanmuService {
 
     @Override
+    public void updateDanmuStatus(String id, int sendStatus) {
+    }
+
+    @Override
     public DanmuLogModel save(DanmuLogModel danmuLogModel) {
         return null;
     }

@@ -25,6 +25,11 @@ public class DanmuLog extends BaseModel {
     private String templateId;
 
     /**
+     * 模板Key
+     */
+    private String templateIdKey;
+
+    /**
      * 弹幕内容
      */
     private Map<String,Object> content;
@@ -51,6 +56,14 @@ public class DanmuLog extends BaseModel {
     private Boolean isBlocked = false;
     /**是否查看状态*/
     private boolean viewFlg=false;
+
+
+    /**
+     * 发送状态 0：未发送 1：已发送  2：发送成功
+     */
+    private int sendStatus = 0;
+
+
 
     public String getId() {
         return id;
@@ -140,4 +153,19 @@ public class DanmuLog extends BaseModel {
         this.viewFlg = viewFlg;
     }
 
+    public String getTemplateIdKey() {
+        return templateIdKey;
+    }
+
+    public void setTemplateIdKey(String templateIdKey) {
+        this.templateIdKey = templateIdKey;
+    }
+
+    public int getSendStatus() {
+        return sendStatus;
+    }
+
+    public void setSendStatus(int sendStatus) {
+        this.sendStatus = sendStatus;
+    }
 }

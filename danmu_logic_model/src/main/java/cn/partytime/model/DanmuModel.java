@@ -51,5 +51,17 @@ public class DanmuModel {
     private String updateUserId;
 
     private Date updateTime = new Date();
+
+
+    /**
+     * 模板Key
+     */
+    private String templateIdKey;
+
+
+    /**
+     * 发送状态 0：未发送 1：已发送  2：发送成功
+     */
+    private int sendStatus = 0;
 }
 

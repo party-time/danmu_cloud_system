@@ -381,8 +381,19 @@ public class MovieLogicService {
         rpcMovieScheduleService.insertMovieSchedule(movieSchedule);
 
         //开启预制弹幕
-        logger.info("电影开始，开启预制弹幕");
-        preDanmuLogicService.danmuListenHandler(partyId,addressId);
+        logger.info("电影开始，启动一个线程开启预置弹幕");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    preDanmuLogicService.danmuListenHandler(partyId,addressId);
+                }catch (Exception e){
+                    logger.info("开启预置弹幕异常");
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
     }
 
     private void insertmovieSchedule(String partyId, String addressId,long clientTime) {

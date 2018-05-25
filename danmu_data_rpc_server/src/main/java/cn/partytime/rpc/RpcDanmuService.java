@@ -56,6 +56,21 @@ public class RpcDanmuService {
     private CmdLogicService cmdLogicService;
 
 
+    /**
+     * 更新弹幕的发送状态
+     * @param id
+     * @param sendStatus
+     * @return
+     */
+    @RequestMapping(value = "/updateDanmuStatus" ,method = RequestMethod.GET)
+    public void updateDanmuStatus(@RequestParam String id,@RequestParam int sendStatus){
+        Danmu danmu =  danmuService.findById(id);
+        if(danmu!=null) {
+            danmu.setSendStatus(sendStatus);
+            danmuService.save(danmu);
+        }
+    }
+
     @RequestMapping(value = "/danmuLogSave" ,method = RequestMethod.POST)
     public DanmuLog danmuLogSave(@RequestBody DanmuLog danmuLog){
         return  danmuLogService.save(danmuLog);

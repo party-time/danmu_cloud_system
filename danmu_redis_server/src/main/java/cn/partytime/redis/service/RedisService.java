@@ -188,6 +188,19 @@ public class RedisService {
     }
 
     /**
+     * 从缓存中提取一个元素
+     *
+     * @param key
+     * @return
+     */
+    public Object popFromListFromRight(String key) {
+        if (key == null || key.equals("")) {
+            return null;
+        }
+        return redisTemplate.opsForList().rightPop(key);
+    }
+
+    /**
      * 获取redis中list数量
      *
      * @param key

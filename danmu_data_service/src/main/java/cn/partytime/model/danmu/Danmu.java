@@ -39,6 +39,18 @@ public class Danmu extends BaseModel{
      */
     private String templateId;
 
+    /**
+     * 模板Key
+     */
+    private String templateIdKey;
+
+
+    /**
+     * 发送状态 0：未发送 1：已发送  2：发送成功
+     */
+    private int sendStatus = 0;
+
+
 
     /**
      * 开始时刻（当前时间-电影开始时间）
@@ -127,5 +139,21 @@ public class Danmu extends BaseModel{
 
     public void setTemplateId(String templateId) {
         this.templateId = templateId;
+    }
+
+    public String getTemplateIdKey() {
+        return templateIdKey;
+    }
+
+    public void setTemplateIdKey(String templateIdKey) {
+        this.templateIdKey = templateIdKey;
+    }
+
+    public int getSendStatus() {
+        return sendStatus;
+    }
+
+    public void setSendStatus(int sendStatus) {
+        this.sendStatus = sendStatus;
     }
 }
