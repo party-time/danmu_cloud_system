@@ -1,6 +1,8 @@
 package cn.partytime.listener;
 
+import cn.partytime.business.danmu.DanmuCommandBussinessService;
 import cn.partytime.clientHandler.RealTimeDanmuHandler;
+import cn.partytime.clientHandler.RealTimeDanmuTempCacheHandler;
 import cn.partytime.service.ClientChannelService;
 import cn.partytime.common.constants.ClientConst;
 import com.alibaba.fastjson.JSON;
@@ -22,6 +24,9 @@ public class RealTimeDanmuListener implements MessageListener {
     @Autowired
     private ClientChannelService clientChannelService;
 
+    @Autowired
+    private RealTimeDanmuTempCacheHandler realTimeDanmuTempCacheHandler;
+
     @Override
     public void onMessage(Message message, byte[] bytes) {
         if(message!=null){
@@ -29,11 +34,12 @@ public class RealTimeDanmuListener implements MessageListener {
             int countMobile = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,Integer.parseInt(ClientConst.CLIENT_TYPE_MOBILE));
             int countScreen = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN));
             if((countMobile+countScreen)==0){
-                logger.info("本服务器不处理{}此地址的弹幕",addressId);
-                return;
+                logger.info("地址:{}客户端都不在线,此时将弹幕缓存到临时队列中",addressId);
+                //return;
+                realTimeDanmuTempCacheHandler.danmuListenHandler(addressId);
+            }else{
+                realTimeDanmuHandler.danmuListenHandler(addressId);
             }
-            realTimeDanmuHandler.danmuListenHandler(addressId);
-
         }
 
     }

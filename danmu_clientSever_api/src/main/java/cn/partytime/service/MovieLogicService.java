@@ -167,8 +167,6 @@ public class MovieLogicService {
         log.info("--------------清理活动缓存--------------");
         clearPartyCacheInfo(addressId,partyId);
 
-
-
         log.info("--------------插入电影数据--------------");
         insertmovieSchedule(partyId, addressId,clientTime);
 
@@ -248,15 +246,11 @@ public class MovieLogicService {
         log.info("--------------清理活动缓存--------------");
         clearPartyCacheInfo(addressId,partyId);
 
-
-
         log.info("--------------插入电影数据--------------");
         insertmovieScheduleByMoviceStart(partyId, addressId,clientTime);
 
         log.info("--------------向客户端发送电影弹幕开始--------------");
         sendPartyStatusToClient(partyId,"1",addressId,clientTime);
-
-
 
         restResultModel = new RestResultModel();
         restResultModel.setResult(200);
@@ -409,8 +403,19 @@ public class MovieLogicService {
         rpcMovieScheduleService.insertMovieSchedule(movieSchedule);
 
         //开启预制弹幕
-        logger.info("弹幕开始，开启预制弹幕");
-        preDanmuLogicService.danmuListenHandler(partyId,addressId);
+        logger.info("弹幕开始，启动一个线程开启预置弹幕");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    preDanmuLogicService.danmuListenHandler(partyId,addressId);
+                }catch (Exception e){
+                    logger.info("开启预置弹幕异常");
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
 
     }
 

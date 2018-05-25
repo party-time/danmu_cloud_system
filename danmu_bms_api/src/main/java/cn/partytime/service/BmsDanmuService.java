@@ -25,8 +25,7 @@ import cn.partytime.service.wechat.WechatUserService;
 import cn.partytime.util.CommonUtils;
 import cn.partytime.util.DanmuCheckUtil;
 import com.alibaba.fastjson.JSON;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,10 +42,10 @@ import java.util.regex.Pattern;
  * Created by lENOVO on 2016/8/24.
  */
 
+@Slf4j
 @Service
 public class BmsDanmuService {
 
-    private static final Logger logger = LoggerFactory.getLogger(BmsDanmuService.class);
     @Autowired
     private CacheDataRepository cacheDataRepository;
 
@@ -165,17 +164,17 @@ public class BmsDanmuService {
         if (check(msg)) {
             restResultModel.setResult(403);
             restResultModel.setResult_msg("msg is blocked");
-            logger.info("消息含有屏蔽词");
+            log.info("消息含有屏蔽词");
             return restResultModel;
         } else if (aliyunGreenService.blockTextKeyword(msg)) {
             restResultModel.setResult(403);
             restResultModel.setResult_msg("msg is green blocked");
-            logger.info("消息被阿里云屏蔽");
+            log.info("消息被阿里云屏蔽");
             return restResultModel;
         } else if (DanmuCheckUtil.checkDanmuIsAllBlack(msg)) {
             restResultModel.setResult(403);
             restResultModel.setResult_msg("msg format is wrong");
-            logger.info("消息格式错误");
+            log.info("消息格式错误");
             return restResultModel;
         }
         return null;
@@ -218,13 +217,13 @@ public class BmsDanmuService {
             danmuPoolList = danmuPoolService.findByPartyId(partyId);
         }
         List<DanmuLogicModel> danmuLogicModelList = new ArrayList<DanmuLogicModel>();
-        logger.info("当前活动下绑定的弹幕池信息:{}",JSON.toJSONString(danmuPoolList));
+        log.info("当前活动下绑定的弹幕池信息:{}",JSON.toJSONString(danmuPoolList));
         List<String> danmuPoolIdLIST = new ArrayList<String>();
         if(ListUtils.checkListIsNotNull(danmuPoolList)){
             for(DanmuPool danmuPool:danmuPoolList){
                 danmuPoolIdLIST.add(danmuPool.getId());
             }
-            logger.info("当前活动下绑定的弹幕池数量:{}",danmuPoolIdLIST.size());
+            log.info("当前活动下绑定的弹幕池数量:{}",danmuPoolIdLIST.size());
         }else{
             pageResultModel.setRows(danmuLogicModelList);
             return pageResultModel;
@@ -239,7 +238,7 @@ public class BmsDanmuService {
             return pageResultModel;
         }
         List<Danmu> danmuList = danmuListByPage.getContent();
-        logger.info("danmuList:{}",JSON.toJSONString(danmuList));
+        log.info("danmuList:{}",JSON.toJSONString(danmuList));
         if(ListUtils.checkListIsNotNull(danmuList)){
             pageResultModel.setRows(findDanmuLogicModelList(danmuList));
         }
@@ -256,15 +255,13 @@ public class BmsDanmuService {
 
         for (Danmu danmuModel : danmuIdList) {
             userIdList.add(danmuModel.getCreateUserId());
-            //DanmuLogicModel danmuLogicModel = new DanmuLogicModel();
-            //BeanUtils.copyProperties(danmuModel, danmuLogicModel);
             DanmuLogicModel danmuLogicModel = new DanmuLogicModel();
             for(CmdTempComponentData cmdTempComponentData:cmdTempAllData.getCmdTempComponentDataList()){
 
                 Object objectMsg = null;
                 String key = cmdTempComponentData.getKey();
                 String value = danmuModel.getContent().get(key)+"";
-                logger.info("value:"+value);
+                log.info("value:"+value);
                 if(!"color".equals(key) && cmdTempComponentData.getType()!=1 && cmdTempComponentData.getType()!=0 ){
                     if(cmdTempComponentData.getType()==3){
                         //显示的内容
@@ -278,7 +275,7 @@ public class BmsDanmuService {
 
             IdList.add(danmuModel.getId());
             BeanUtils.copyProperties(danmuModel, danmuLogicModel);
-            logger.info("danmuLogicModel对象:{}",JSON.toJSONString(danmuLogicModel));
+            log.info("danmuLogicModel对象:{}",JSON.toJSONString(danmuLogicModel));
             danmuLogicModelList.add(danmuLogicModel);
         }
 
@@ -292,7 +289,7 @@ public class BmsDanmuService {
         }
 
         //查询微信用户列表
-        logger.info("userIdList对象:{}",JSON.toJSONString(userIdList));
+        log.info("userIdList对象:{}",JSON.toJSONString(userIdList));
         List<WechatUser> wechatUserList = wechatUserService.findWechatUserByUserIdList(userIdList);
         Map<String, WechatUser> wechatUserMap = new HashMap<String, WechatUser>();
         for (WechatUser wechatUser : wechatUserList) {
@@ -301,7 +298,7 @@ public class BmsDanmuService {
 
         for (DanmuLogicModel danmuLogicModel : danmuLogicModelList) {
             WechatUser wechatUser = wechatUserMap.get(danmuLogicModel.getCreateUserId());
-            logger.info("wechatUser对象:{}",JSON.toJSONString(wechatUser));
+            log.info("wechatUser对象:{}",JSON.toJSONString(wechatUser));
             if(wechatUser!=null){
                 danmuLogicModel.setUrl(wechatUser.getImgUrl());
                 danmuLogicModel.setOpenId(wechatUser.getOpenId());
@@ -314,18 +311,6 @@ public class BmsDanmuService {
     }
 
 
-
-
-
-    /**
-     * 语音弹幕发送
-     * @param templateId
-     * @param openId
-     * @param partyId
-     * @param addressId
-     * @param danmuSrc   弹幕来源 管理员:0,微信用户:1
-     * @param danmuType 0:非语音 1：语音弹幕
-     */
     /**
      * 语音弹幕发送
      * @param cmdKey
@@ -337,7 +322,7 @@ public class BmsDanmuService {
      */
     public void sendDanmuByWechat(String cmdKey,Map<String,String> danmuMap,String openId,String partyId,String addressId,int danmuSrc,int danmuType){
 
-        logger.info("指令key:{},消息内容:{},openId:{},活动编号:{},地址编号:{},弹幕来源:{},弹幕类型:{}",cmdKey,JSON.toJSONString(danmuMap),openId,partyId,addressId,danmuSrc,danmuType);
+        log.info("指令key:{},消息内容:{},openId:{},活动编号:{},地址编号:{},弹幕来源:{},弹幕类型:{}",cmdKey,JSON.toJSONString(danmuMap),openId,partyId,addressId,danmuSrc,danmuType);
         CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByKeyFromCache(cmdKey);
         String cmdName = cmdTempAllData.getName();
         String templateId = cmdTempAllData.getId();
@@ -345,13 +330,13 @@ public class BmsDanmuService {
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
 
         if(StringUtils.isEmpty(addressId)){
-            logger.info("活动编号或者场地编号是空！");
+            log.info("活动编号或者场地编号是空！");
             return;
         }
 
         DanmuAddressModel danmuAddress = rpcDanmuAddressService.findById(addressId);
         if(danmuAddress==null){
-            logger.info("没有场地!");
+            log.info("没有场地!");
             return;
         }
 
@@ -362,13 +347,13 @@ public class BmsDanmuService {
         //临时
         if(danmuAddress.getType()==1){
             if(party!=null){
-                logger.info("当前场地有活动正在进行");
+                log.info("当前场地有活动正在进行");
                 //return;
                 time =calculateDanmuTime(party,date);
             }
         }else{
             if(party==null){
-                logger.info("当前场地有活动正在进行");
+                log.info("当前场地有活动正在进行");
                 return;
             }
         }
@@ -376,7 +361,7 @@ public class BmsDanmuService {
 
         WechatUser wechatUser = getWechatUserInfo(openId);
         if(wechatUser==null){
-            logger.info("微信用户不存在");
+            log.info("微信用户不存在");
             return;
         }
 
@@ -412,7 +397,7 @@ public class BmsDanmuService {
                 }else{
                     if(type==3){
                         //显示的内容
-                        logger.info("current key:{}",key);
+                        log.info("current key:{}",key);
                         content = danmuCommonService.setProtocolArrayContent(componentType,danmuMap.get(key),cmdTempComponentData.getDefaultValue());
                         msgContent = danmuCommonService.setShowArrayContent(componentType,danmuMap.get(key),componentId,cmdTempComponentData.getDefaultValue());
                         /*if(msgContent!=null){
@@ -479,7 +464,7 @@ public class BmsDanmuService {
 
             if(bCheck){
                 //发送弹幕到
-                logger.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuLog));
+                log.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuLog));
                 sendDanmuToMq(partyId, addressId,danmuLog,wechatUser,party.getType(),cmdName,checkCmdTempComponentData);
 
             }else{
@@ -507,7 +492,7 @@ public class BmsDanmuService {
         String templateId = request.getParameter("templateId");//模板编号
         String partyId = request.getParameter("partyId");//活动编号
         String addressId = request.getParameter("addressId");//地址编号
-        logger.info("指令编号:{},openId:{},活动编号:{},地址编号:{},弹幕来源:{},弹幕类型:{}",templateId,openId,partyId,addressId,danmuSrc,danmuType);
+        log.info("指令编号:{},openId:{},活动编号:{},地址编号:{},弹幕来源:{},弹幕类型:{}",templateId,openId,partyId,addressId,danmuSrc,danmuType);
 
         CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);//组件信息
         String cname = cmdTempAllData.getName();
@@ -516,7 +501,7 @@ public class BmsDanmuService {
 
         PartyLogicModel party = rpcPartyService.findPartyByAddressId(addressId);
         if(party==null){
-            logger.info("当前场地没有活动正在进行");
+            log.info("当前场地没有活动正在进行");
             restResultModel.setResult(404);
             restResultModel.setResult_msg("没有活动正在进行");
             return restResultModel;
@@ -525,7 +510,7 @@ public class BmsDanmuService {
 
         WechatUser wechatUser = getWechatUserInfo(openId);
         if(wechatUser==null){
-            logger.info("微信用户不存在");
+            log.info("微信用户不存在");
             restResultModel.setResult(404);
             restResultModel.setResult_msg("微信用户不存在");
             return restResultModel;
@@ -550,7 +535,7 @@ public class BmsDanmuService {
                 //组件的id 0无组件 1特效视频 2特效图片 3表情图片
                 String componentId = cmdTempComponentData.getComponentId();
 
-                logger.info("当前的组件类型:{}",componentId);
+                log.info("当前的组件类型:{}",componentId);
                 int isCheck  = cmdTempComponentData.getIsCheck();
                 Integer componentType = cmdTempComponentData.getComponentType();//组件的类型 0text 1textarea 2select  3radiobutton 4checkbox
                 Object content = null;
@@ -584,15 +569,15 @@ public class BmsDanmuService {
                                 content = danmuCommonService.setShowNotArrayContent(request.getParameter(key),type);
                             }
                         }else{
-                            logger.info("key===========:"+key);
+                            log.info("key===========:"+key);
                             content = danmuCommonService.setShowNotArrayContent(request.getParameter(key),type);
                             msgContent = danmuCommonService.setShowNotArrayContent(request.getParameter(key),componentId,type);
                             if(!"1".equals(componentId) && !"2".equals(componentId)){
-                                logger.info("msgContent===========:"+String.valueOf(msgContent));
+                                log.info("msgContent===========:"+String.valueOf(msgContent));
                                 restResultModel = checkDanmuIsOk(String.valueOf(msgContent));
                                 if(restResultModel!=null){
 
-                                    logger.info("屏蔽的消息内容:{}",msgContent);
+                                    log.info("屏蔽的消息内容:{}",msgContent);
                                     //return restResultModel;
                                     isBlock=true;
                                 }
@@ -647,7 +632,7 @@ public class BmsDanmuService {
             if(bCheck){
 
                 //发送弹幕到
-                logger.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuLog));
+                log.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuLog));
                 sendDanmuToMq(partyId, addressId,danmuLog,wechatUser,party.getType(),cname,checkCmdTempComponentData);
 
             }else{
@@ -691,7 +676,7 @@ public class BmsDanmuService {
         String partyId = request.getParameter("partyId");
         //地址编号
         String addressId = request.getParameter("addressId");
-        logger.info("指令编号:{},openId:{},活动编号:{},地址编号:{},弹幕来源:{},弹幕类型:{}",templateId,userId,partyId,addressId,danmuSrc,danmuType);
+        log.info("指令编号:{},openId:{},活动编号:{},地址编号:{},弹幕来源:{},弹幕类型:{}",templateId,userId,partyId,addressId,danmuSrc,danmuType);
         //组件信息
         CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
         String name =cmdTempAllData.getName();
@@ -703,10 +688,15 @@ public class BmsDanmuService {
 
         //是否入弹幕库 0入库  1不入库
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
+
+
+        String commmandKey = cmdTempAllData.getKey();
+        log.info("当前指令是:{}",commmandKey);
+
         Date date = DateUtils.getCurrentDate();
         PartyLogicModel party = rpcPartyService.findPartyByAddressId(addressId);
         if(party==null){
-            logger.info("当前场地没有活动正在进行");
+            log.info("当前场地没有活动正在进行");
             restResultModel.setResult(404);
             restResultModel.setResult_msg("没有活动正在进行");
             return restResultModel;
@@ -725,36 +715,41 @@ public class BmsDanmuService {
         if(ListUtils.checkListIsNotNull(cmdTempComponentDataList)){
             for(CmdTempComponentData cmdTempComponentData:cmdTempComponentDataList){
                 String key = cmdTempComponentData.getKey();
+                log.info("{}：中的组件：{}",commmandKey,key);
                 //数据类型
                 //0数字 1布尔值 2字符串 3数组
                 int type = cmdTempComponentData.getType();
-
                 //组件的id 0无组件 1特效视频 2特效图片 3表情图片
                 String componentId = cmdTempComponentData.getComponentId();
-
+                //是否审核
                 int isCheck  = cmdTempComponentData.getIsCheck();
-
                 //组件的类型 0text 1textarea 2select  3radiobutton 4checkbox
                 Integer componentType = cmdTempComponentData.getComponentType();
+
                 Object content = null;
                 Object msgContent = null;
+
                 boolean specialCompontentBoolean =  danmuCommonService.checkSpecialComponent(componentId);
-                if(specialCompontentBoolean && "0".equals(componentId)){
+                //如果组建是 0无组件 1表情特效 2图片,内容直接返回默认值
+                if(specialCompontentBoolean){
                     map.put(key,cmdTempComponentData.getDefaultValue());
                     contentMap.put("content",cmdTempComponentData.getDefaultValue());
                 }else{
-                    //数组
+                    //如果值是数组类型
                     if(type==3){
                         //显示的内容
                         content = danmuCommonService.setProtocolArrayContent(componentType,request.getParameter(key),cmdTempComponentData.getDefaultValue());
-                        msgContent = danmuCommonService.setShowArrayContent(componentType,request.getParameter(key),componentId,cmdTempComponentData.getDefaultValue());
+                        //msgContent = danmuCommonService.setShowArrayContent(componentType,request.getParameter(key),componentId,cmdTempComponentData.getDefaultValue());
                         if("color".equals(key) ){
                             contentMap.put("color",request.getParameter(key+"name"));
                         }
                     }else{
+                        //如果值不是数组类型
                         if("color".equals(key)){
                             String color = request.getParameter(key);
+                            //如果key是颜色的情况下
                             if(StringUtils.isEmpty(color)){
+                                //如果颜色没有，随机产生颜色
                                 content = bmsColorService.getRandomColor();
                             }else{
                                 content = danmuCommonService.setShowNotArrayContent(request.getParameter(key),type);
@@ -766,11 +761,13 @@ public class BmsDanmuService {
                             if("message".equals(key) || "idd".equals(key) || "expression".equals(key)  ){
                                 contentMap.put("content",msgContent);
                             }
-                            if(!"1".equals(componentId) && !"2".equals(componentId)){
-                                logger.info("msgContent:"+JSON.toJSONString(msgContent));
+
+                            //组件的id 0无组件 1特效视频 2特效图片 3表情图片
+                            if(!"1".equals(componentId) && !"2".equals(componentId) && !"3".equals(componentId) && !"4".equals(componentId)){
+                                log.info("msgContent:"+JSON.toJSONString(msgContent));
                                 restResultModel = checkDanmuIsOk(String.valueOf(msgContent));
                                 if(restResultModel!=null){
-                                    logger.info("屏蔽的消息内容:{}",msgContent);
+                                    log.info("屏蔽的消息内容:{}",msgContent);
                                     //return restResultModel;
                                     isBlock = true;
                                 }
@@ -784,7 +781,7 @@ public class BmsDanmuService {
                     bCheck = true;
                 }
             }
-
+            log.info("弹幕信息:{}",JSON.toJSONString(map));
             //是否保存弹幕
             DanmuPool danmuPool = danmuPoolService.findDanmuPoolbyPartyIdAndAddressId(addressId, partyId);
             //弹幕池编号
@@ -801,15 +798,16 @@ public class BmsDanmuService {
             danmuModel.setDanmuPoolId(poolId);
             danmuModel.setDanmuSrc(danmuSrc);
             danmuModel.setViewFlg(false);
-
+            danmuModel.setTemplateIdKey(commmandKey);
+            danmuModel.setSendStatus(0);
             danmuModel.setTime(time);
             //弹幕类型
             danmuModel.setType(danmuType);
 
             //是否保存弹幕
-            if(isInDanmuLib==0){
-                danmuModel = danmuService.save(danmuModel);
-            }
+            //if(isInDanmuLib==0){
+            danmuModel = danmuService.save(danmuModel);
+            //}
 
             //记录弹幕历史
             DanmuLog danmuLog = saveDanmuModel(danmuModel);
@@ -823,7 +821,7 @@ public class BmsDanmuService {
 
             if(bCheck){
                 //发送弹幕到
-                logger.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuLog));
+                log.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuLog));
 
                 sendDanmuToMq(partyId, addressId,danmuLog,null,party.getType(),name,checkCmdTempComponentData);
 
@@ -837,6 +835,7 @@ public class BmsDanmuService {
             }
         }
         saveLog("A_advanceDanmu",partyId,addressId,contentMap,adminId);
+
         restResultModel = new RestResultModel();
         restResultModel.setResult(200);
         restResultModel.setResult_msg("OK");
@@ -909,14 +908,14 @@ public class BmsDanmuService {
             String key = DanmuCacheKey.SEND_DANMU_CACHE_LIST + partyId;
             String message = JSON.toJSONString(messageObject);
             redisService.setValueToList(key, message);
-            logger.info("推送给活动审核界面弹幕信息:{},{}",partyId,message);
+            log.info("推送给活动审核界面弹幕信息:{},{}",partyId,message);
             redisService.expire(key, 60 * 60 * 1);
             redisTemplate.convertAndSend("partyId:danmu", partyId);
         }else{
             String key = DanmuCacheKey.SEND_FILM_DANMU_CACHE_LIST;
             String message = JSON.toJSONString(messageObject);
             redisService.setValueToList(key, message);
-            logger.info("推送给电影审核界面端弹幕信息:{},{}",partyId,message);
+            log.info("推送给电影审核界面端弹幕信息:{},{}",partyId,message);
             redisService.expire(key, 60 * 60 * 1);
             redisTemplate.convertAndSend("filmId:danmu", partyId);
         }
@@ -931,7 +930,7 @@ public class BmsDanmuService {
      */
     public void pubMessageCollectorServer(String partyId,String addressId,Map<String,Object> messageObject){
 
-        logger.info("弹幕审核状态:{},直接广播给客户端:{}",JSON.toJSONString(messageObject));
+        log.info("弹幕审核状态:{},直接广播给客户端:{}",JSON.toJSONString(messageObject));
 
         String key = DanmuCacheKey.PUB_DANMU_CACHE_LIST + addressId;
         redisService.setValueToList(key, JSON.toJSONString(messageObject));
@@ -953,7 +952,7 @@ public class BmsDanmuService {
         Date startTime = partyLogicModel.getActiveTime();
         if (startTime != null) {
             time = (int) (nowTime.getTime() - startTime.getTime()) / 1000;
-            logger.info("电影开始,当前发送弹幕时间与活动开始差:{}秒", time);
+            log.info("电影开始,当前发送弹幕时间与活动开始差:{}秒", time);
         }
         return time;
     }

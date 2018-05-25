@@ -100,7 +100,7 @@ public class DanmuCommonService {
 
 
     public Object setShowNotArrayContent(String message,String componentId,int type){
-
+        //0数字 1布尔值 2字符串 3数组
         if(type==1){
             return BooleanUtils.objectConvertToBoolean(message);
         }
@@ -110,6 +110,7 @@ public class DanmuCommonService {
     }
 
     public Object setShowNotArrayContent(String message,int type){
+        //0数字 1布尔值 2字符串 3数组
         if(type==1){
             return BooleanUtils.objectConvertToBoolean(message);
         }

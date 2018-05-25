@@ -2,6 +2,7 @@ package cn.partytime.service;
 
 import cn.partytime.cache.collector.CollectorAlarmCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
+import cn.partytime.clientHandler.NotSendDanmuHandler;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
@@ -69,6 +70,10 @@ public class ClientLoginService {
 
     @Autowired
     private PotocolService potocolService;
+
+
+    @Autowired
+    private NotSendDanmuHandler notSendDanmuHandler;
 
 
     @Value("${netty.host}")
@@ -292,6 +297,11 @@ public class ClientLoginService {
 
                     logger.info("下发消息给客户端:{}",message);
                     channel.writeAndFlush(new TextWebSocketFrame(message));
+
+                    //启动积压弹幕的推送
+                    notSendDanmuHandler.danmuListenHandler(party.getAddressId());
+
+
                 }catch (Exception e){
                     logger.info("{}",e);
                 }

@@ -1,6 +1,7 @@
 package cn.partytime.service;
 
 import cn.partytime.alarmRpc.RpcDanmuAlarmService;
+import cn.partytime.business.danmu.DanmuCommandBussinessService;
 import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.cache.danmu.PreDanmuCacheService;
 import cn.partytime.dataRpc.RpcDanmuClientService;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -36,9 +38,6 @@ public class DanmuSendService {
 
     @Autowired
     private ClientCacheService clientCacheService;
-
-    @Autowired
-    private ClientPreDanmuService clientPreDanmuService;
 
     @Autowired
     private ClientChannelService clientChannelService;
@@ -62,6 +61,11 @@ public class DanmuSendService {
 
     @Autowired
     private PreDanmuCacheService preDanmuCacheService;
+
+
+    @Autowired
+    private DanmuCommandBussinessService danmuCommandBussinessService;
+
     /**
      * 发送预制弹幕
      *
@@ -186,6 +190,22 @@ public class DanmuSendService {
 
 
         Object objectMessage =map.get("isSendH5");
+
+
+        Object danmuIdObject = map.get("danmuId");
+
+        Object dataObject = map.get("data");
+        Map<String,Object> dataMap = (Map<String,Object>)JSON.parse(String.valueOf(dataObject));
+        Object isPayObject = dataMap.get("isPay");
+
+        if(isPayObject!=null){
+            boolean isPayFlg = BooleanUtils.objectConvertToBoolean(isPayObject);
+            if(isPayFlg){
+                String danmuId = String.valueOf(danmuIdObject);
+                danmuCommandBussinessService.putIntoPayDanmuQueue(addressId,danmuId);
+            }
+        }
+
         if(objectMessage!=null){
             int isSendH5 = Integer.parseInt(String.valueOf(objectMessage));
             //是否发送到H5界面 0 发送 1不发送
@@ -193,6 +213,8 @@ public class DanmuSendService {
                 return;
             }
         }
+
+
 
         clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_MOBILE);
         List<Channel> channelMobileList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);

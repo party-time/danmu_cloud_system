@@ -28,7 +28,7 @@ import java.util.List;
 @EnableScheduling
 @RefreshScope
 @Slf4j
-public class DanmuScheduler implements BaseScheduler {
+public class MoviceScheduler implements BaseScheduler {
 
 
 
