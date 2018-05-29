@@ -71,6 +71,11 @@ public class PotocolService {
     @Autowired
     private DanmuCommandBussinessService danmuCommandBussinessService;
 
+
+    @Autowired
+    private DanmuSendService danmuSendService;
+
+
     @Value("${netty.host}")
     private String host;
 
@@ -96,15 +101,19 @@ public class PotocolService {
 
     private void javaClientHandler(Map<String,Object> map, Channel channel) {
         String type = String.valueOf(map.get("type"));
+        DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
         if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
-            DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
             if(clientInfoModel==null){
                 forceLogout(channel);
             }else{
                 log.info("当前客户JAVACLIENT端信息:{}接受ping",JSON.toJSONString(clientInfoModel));
             }
 
-        } else {
+        }else if(PotocolComTypeConst.COMMANDTYPE_STARTSTAGEANDFULL.equals(type)){
+            log.info("转发给flash的协议:{}",JSON.toJSONString(map));
+            String addressId = clientInfoModel.getAddressId();
+            danmuSendService.pubDanmuToAllScreenClient(addressId,JSON.toJSONString(map));
+        }  else {
 
             log.info("客户端JAVACLIENT发送给服务器信息:{},不处理", JSON.toJSONString(map));
         }
@@ -176,10 +185,7 @@ public class PotocolService {
 
                 danmuCommandBussinessService.removePayDanmuQueueSize(addressId,danmuId);
             }
-        }else if(PotocolComTypeConst.COMMANDTYPE_STARTSTAGEANDFULL.equals(type)){
-            log.info("收到客户端返回的状态信息:{}",JSON.toJSONString(map));
-
-        } else if(PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS.equals(type)){
+        }else if(PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS.equals(type)){
             log.info("收到客户端返回的状态信息:{}",JSON.toJSONString(map));
             int status = Integer.parseInt(String.valueOf(map.get("status")));
             String partyId = String.valueOf(map.get("partyId"));

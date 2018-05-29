@@ -251,7 +251,7 @@ public class DanmuSendService {
     }
 
     public void pubDanmuToAllScreenClient(String addressId, String message) {
-        logger.info("向地址{}所有屏幕广播弹幕", addressId);
+        logger.info("向地址{}所有屏幕广播协议:{}", addressId,message);
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
         List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
         if (!ListUtils.checkListIsNotNull(screenChannelList)) {
