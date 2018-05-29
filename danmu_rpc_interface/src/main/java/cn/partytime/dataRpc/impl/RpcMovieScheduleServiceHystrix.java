@@ -47,9 +47,10 @@ public class RpcMovieScheduleServiceHystrix implements RpcMovieScheduleService {
     }
 
     @Override
-    public long countByCreateTimeGreaterThanSeven() {
-      return 0;
+    public long countByCreateTimeGreaterThanSeven(String addressId) {
+        return 0;
     }
+
 
     @Override
     public List<MovieScheduleModel> findLastMovieListByAddressId(String addressId, long pageSize, long pageNo) {

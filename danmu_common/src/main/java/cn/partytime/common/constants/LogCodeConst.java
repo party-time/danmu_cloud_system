@@ -37,6 +37,8 @@ public interface LogCodeConst {
     }
 
     public class CLientLogCode{
+
+        /**FLASH 网络异常*/
         public static final String FLASH_NETWORK_EXCEPTION="3000";
 
         public static final String BULB_LIFE_TIME="3001";
@@ -51,6 +53,12 @@ public interface LogCodeConst {
     }
 
     public class MoneyLogCode{
+
+        /***表白发送失败*/
+        public static final String Money_BIAOBAI_SEND_FAIL="5000";
+
+        /**打赏发送失败*/
+        public static final String Money_DASHANG_SEND_ERROR="5000";
 
     }
 }

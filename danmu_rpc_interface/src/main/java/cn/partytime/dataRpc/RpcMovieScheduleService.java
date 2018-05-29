@@ -42,7 +42,7 @@ public interface RpcMovieScheduleService {
     public MovieScheduleModel findLastMovieByAddressId(@RequestParam(value = "addressId") String addressId);
 
     @RequestMapping(value = "/rpcMovieSchedule/countByCreateTimeGreaterThanSeven" ,method = RequestMethod.GET)
-    public long countByCreateTimeGreaterThanSeven();
+    public long countByCreateTimeGreaterThanSeven(@RequestParam(value = "addressId") String addressId);
 
 
     @RequestMapping(value = "/rpcMovieSchedule/findLastMovieListByAddressId" ,method = RequestMethod.GET)

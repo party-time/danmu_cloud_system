@@ -1,6 +1,7 @@
 package cn.partytime.clientHandler;
 
 import cn.partytime.business.danmu.DanmuCommandBussinessService;
+import cn.partytime.common.util.BooleanUtils;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,19 @@ public class RealTimeDanmuTempCacheHandler {
                     Object object = danmuCommandBussinessService.getDanmuFromPubDanmuList(addressId);
                     if(object!=null){
                         Map<String,Object> map = (Map<String,Object>) JSON.parse(String.valueOf(object));
+
+                        Object dataObject = map.get("data");
+                        Object danmuIdObject = map.get("danmuId");
+                        Map<String,Object> dataMap = (Map<String,Object>)JSON.parse(String.valueOf(dataObject));
+                        Object isPayObject = dataMap.get("isPay");
+                        if(isPayObject!=null){
+                            boolean isPayFlg = BooleanUtils.objectConvertToBoolean(isPayObject);
+                            if(isPayFlg){
+                                String danmuId = String.valueOf(danmuIdObject);
+                                danmuCommandBussinessService.putIntoPayDanmuQueue(addressId,danmuId);
+                            }
+                        }
+
                         danmuCommandBussinessService.pubDanmuToNotSendQueue(addressId,map);
                     }
 

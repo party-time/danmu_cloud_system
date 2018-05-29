@@ -176,7 +176,10 @@ public class PotocolService {
 
                 danmuCommandBussinessService.removePayDanmuQueueSize(addressId,danmuId);
             }
-        }else if(PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS.equals(type)){
+        }else if(PotocolComTypeConst.COMMANDTYPE_STARTSTAGEANDFULL.equals(type)){
+            log.info("收到客户端返回的状态信息:{}",JSON.toJSONString(map));
+
+        } else if(PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS.equals(type)){
             log.info("收到客户端返回的状态信息:{}",JSON.toJSONString(map));
             int status = Integer.parseInt(String.valueOf(map.get("status")));
             String partyId = String.valueOf(map.get("partyId"));

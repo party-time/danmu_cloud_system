@@ -12,10 +12,10 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @EnableDiscoveryClient
 @EnableFeignClients
 @RefreshScope
-public class Application {
+public class MessageApplication {
 
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(MessageApplication.class, args);
 	}
 
 }

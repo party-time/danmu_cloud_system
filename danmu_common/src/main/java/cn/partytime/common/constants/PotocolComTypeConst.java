@@ -9,5 +9,10 @@ public class PotocolComTypeConst {
      */
     public static final String COMMANDTYPE_PARTY_STATUS="partyStatus";
 
+    /**
+     * FLASH全屏
+     */
+    public static final String COMMANDTYPE_STARTSTAGEANDFULL="startStageAndFull";
+
 
 }

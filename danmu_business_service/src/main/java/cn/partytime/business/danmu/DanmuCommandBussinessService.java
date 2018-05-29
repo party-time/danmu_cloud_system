@@ -115,4 +115,9 @@ public class DanmuCommandBussinessService {
         redisService.deleteSortData(key,id);
     }
 
+    public Set<String> getPayDanmuQueueBeforeScore(String addressId,Double minScore,Double maxScore){
+        String key = DanmuCacheKey.PUB_DANMU_PAY_SORTSET + addressId;
+        return  redisService.findSortSetWithInScore(key,minScore,maxScore);
+    }
+
 }

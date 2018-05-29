@@ -95,12 +95,16 @@ public class MovieLogicService {
             return restResultModel;
         }
 
+        String addressId = danmuClient.getAddressId();
+        String partyId = party.getId();
+        Date currentDate = DateUtils.getCurrentDate();
+
         //开启投影指令
         log.info("-----------------判断是否发出投影开始指令----------------");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                long count = rpcMovieScheduleService.countByCreateTimeGreaterThanSeven();
+                long count = rpcMovieScheduleService.countByCreateTimeGreaterThanSeven(addressId);
                 if(count==0){
                     controlCommandService.sendCommandToJavaClient("projectorStart",danmuClient.getAddressId(),"");
                 }
@@ -108,9 +112,7 @@ public class MovieLogicService {
         }).start();
 
 
-        String addressId = danmuClient.getAddressId();
-        String partyId = party.getId();
-        Date currentDate = DateUtils.getCurrentDate();
+
 
 
         MovieScheduleModel movieSchedule= rpcMovieScheduleService.findLastMovieByAddressId(addressId);

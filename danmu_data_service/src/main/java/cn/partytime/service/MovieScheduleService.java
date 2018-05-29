@@ -80,7 +80,7 @@ public class MovieScheduleService {
         movieScheduleRepository.delete(id);
     }
 
-    public long countByCreateTimeGreaterThan(Date createTime){
-        return movieScheduleRepository.countByCreateTimeGreaterThan(createTime);
+    public long countByCreateTimeGreaterThan(Date createTime,String addressId){
+        return movieScheduleRepository.countByCreateTimeGreaterThanAndAddressId(createTime,addressId);
     }
 }

@@ -119,10 +119,10 @@ public class RpcMovieScheduleService {
     }
 
     @RequestMapping(value = "/countByCreateTimeGreaterThanSeven" ,method = RequestMethod.GET)
-    public long countByCreateTimeGreaterThanSeven(){
+    public long countByCreateTimeGreaterThanSeven(String addressId){
         Date sevenTime = DateUtils.getSpecifiedTime(7);
         log.info("createTime:"+sevenTime);
-        return movieScheduleService.countByCreateTimeGreaterThan(sevenTime);
+        return movieScheduleService.countByCreateTimeGreaterThan(sevenTime,addressId);
     }
 
     @RequestMapping(value = "/findLastMovieListByAddressId" ,method = RequestMethod.GET)

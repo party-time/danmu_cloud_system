@@ -23,6 +23,6 @@ public interface MovieScheduleRepository extends MongoRepository<MovieSchedule,S
 
     Page<MovieSchedule> findByPartyIdAndAddressId(String partyId,String addressId, Pageable pageable);
 
-    long countByCreateTimeGreaterThan(Date createTime);
+    long countByCreateTimeGreaterThanAndAddressId(Date createTime,String addressId);
 
 }
