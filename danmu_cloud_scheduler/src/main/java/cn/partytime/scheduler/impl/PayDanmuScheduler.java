@@ -13,6 +13,7 @@ import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.scheduler.BaseScheduler;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -53,10 +54,12 @@ public class PayDanmuScheduler  implements BaseScheduler {
     @Override
     @Scheduled(cron = "0 0/1 * * * ?")
     public void execute() throws IOException {
-        log.info("监控未发送的定时弹幕");
+        log.info("监控未发送的支付弹幕");
         List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
             for(DanmuAddressModel danmuAddressModel:danmuAddressList){
+
+                log.info("场地信息:{}", JSON.toJSONString(danmuAddressModel));
                 Date date =   DateUtils.addSecondsToDate(DateUtils.getCurrentDate(),30);
                 long score = date.getTime();
                 String addressId = danmuAddressModel.getId();
@@ -65,8 +68,7 @@ public class PayDanmuScheduler  implements BaseScheduler {
                     Set<String> danmuSet = danmuCommandBussinessService.getPayDanmuQueueBeforeScore(addressId,Double.parseDouble(0+""),Double.parseDouble(score+""));
                     if(SetUtils.checkSetIsNotNull(danmuSet)){
                         for(String str:danmuSet){
-                            //log.info("弹幕编号======================》"+str);
-
+                            log.info("弹幕编号:{}",str);
                             //alarmCacheService.addAlarmCount(0, AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY,typeName);
                             long count = alarmCacheService.findAlarmCount(addressId, AlarmKeyConst.BIAOBAISENDERROR,str);
                             if(count==0){
