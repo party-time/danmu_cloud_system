@@ -29,6 +29,7 @@ public class PartyDanmuListener implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] bytes) {
+        logger.info("收到的消息:{}",message);
         if (message != null) {
             String partyId = JSON.parseObject(String.valueOf(message), String.class).replace("'", "");
             logger.info("处理活动{}弹幕",partyId);
