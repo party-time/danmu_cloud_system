@@ -55,12 +55,12 @@ public class RpcPayDanmuAlarmService {
         PartyModel party = rpcPartyService.getPartyByPartyId(partyId);
         Map<String,String> map = new HashMap<String,String>();
         DanmuModel danmuModel =  rpcDanmuService.findById(danmuId);
-        log.info("弹幕信息:{}", danmuModel.toString());
+        log.info("弹幕信息:{}", JSON.toJSONString(danmuModel));
         map = commonDataService.setMapByAddressId(AlarmKeyConst.BIAOBAISENDERROR,addressId,partyId);
-
+        log.info("告警map:{}",JSON.toJSONString(map));
         //TODO:
-        long alarmCount = alarmCacheService.findAlarmCount(addressId,partyId,danmuId);
-        alarmCacheService.addAlarmCount(0,addressId,partyId,danmuId);
+        //long alarmCount = alarmCacheService.findAlarmCount(addressId,partyId,danmuId);
+        ///alarmCacheService.addAlarmCount(0,addressId,partyId,danmuId);
 
         MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.MoneyLogCode.Money_BIAOBAI_SEND_FAIL,map);
         mapMessageObject.setValue(0);
