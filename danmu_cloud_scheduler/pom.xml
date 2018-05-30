@@ -69,6 +69,12 @@
         -->
 
         <dependency>
+            <artifactId>danmu_cache_service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <groupId>cn.party-time</groupId>
+        </dependency>
+        
+        <dependency>
             <groupId>cn.party-time</groupId>
             <artifactId>danmu_data_service</artifactId>
             <version>1.0-SNAPSHOT</version>
