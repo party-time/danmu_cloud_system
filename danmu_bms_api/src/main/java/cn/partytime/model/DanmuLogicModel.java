@@ -23,6 +23,11 @@ public class DanmuLogicModel {
     /***弹幕来源 管理员:0,微信用户:1*/
     private int danmuSrc;
 
+    /**
+     * 弹幕key
+     */
+    private String key;
+
     /**弹幕类型 0:普通弹幕.1:语音弹幕*/
     private int type;
 
@@ -150,5 +155,13 @@ public class DanmuLogicModel {
 
     public void setMsg(Object msg) {
         this.msg = msg;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

@@ -180,17 +180,16 @@ public class BmsHistoryDanmuService {
         if (count == 0) {
             return null;
         }
-        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(ComponentKeyConst.P_DANMU);
 
-        List<Danmu> timerDanmuList = danmuListByPage.getContent();
-        for (Danmu danmuModel : timerDanmuList) {
+        List<Danmu> danmuList = danmuListByPage.getContent();
+        for (Danmu danmuModel : danmuList) {
             userIdList.add(danmuModel.getCreateUserId());
-            //danmuIdList.add(danmuModel.getId());
-            //DanmuLogicModel danmuLogicModel = new DanmuLogicModel();
-            //BeanUtils.copyProperties(danmuModel, danmuLogicModel);
             DanmuLogicModel danmuLogicModel = new DanmuLogicModel();
-            for(CmdTempComponentData cmdTempComponentData:cmdTempAllData.getCmdTempComponentDataList()){
 
+            String templateKey = danmuModel.getTemplateIdKey();
+            CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateKey);
+            danmuLogicModel.setKey(templateKey);
+            for(CmdTempComponentData cmdTempComponentData:cmdTempAllData.getCmdTempComponentDataList()){
                 Object objectMsg = null;
                 String key = cmdTempComponentData.getKey();
                 String value = danmuModel.getContent().get(key)+"";
