@@ -20,4 +20,9 @@ public class RpcCmdServiceHystrix implements RpcCmdService {
     public CmdTempAllData findCmdTempAllDataById(String id) {
         return null;
     }
+
+    @Override
+    public CmdTempAllData findCmdTempAllDataByKey(String key) {
+        return null;
+    }
 }

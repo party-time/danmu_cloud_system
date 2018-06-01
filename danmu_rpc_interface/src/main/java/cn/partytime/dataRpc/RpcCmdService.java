@@ -25,4 +25,7 @@ public interface RpcCmdService {
 
     @RequestMapping(value = "/rpcCmd/findCmdTempAllDataById" ,method = RequestMethod.GET)
     public CmdTempAllData findCmdTempAllDataById(@RequestParam(value = "id") String id);
+
+    @RequestMapping(value = "/rpcCmd/findCmdTempAllDataByKey" ,method = RequestMethod.GET)
+    public CmdTempAllData findCmdTempAllDataByKey(@RequestParam(value = "key") String key);
 }

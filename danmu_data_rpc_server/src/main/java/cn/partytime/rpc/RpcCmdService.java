@@ -35,4 +35,9 @@ public class RpcCmdService {
     public CmdTempAllData findCmdTempAllDataById(@RequestParam String id){
        return cmdLogicService.findCmdTempAllDataById(id);
     }
+
+    @RequestMapping(value = "/findCmdTempAllDataByKey" ,method = RequestMethod.GET)
+    public CmdTempAllData findCmdTempAllDataByKey(@RequestParam String key){
+        return cmdLogicService.findCmdTempAllDataByKey(key);
+    }
 }
