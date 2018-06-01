@@ -455,9 +455,9 @@ public class BmsDanmuService {
             danmuModel.setType(danmuType);
 
             //是否保存弹幕
-            if(isInDanmuLib==0){
+            //if(isInDanmuLib==0){
                 danmuModel = danmuService.save(danmuModel);
-            }
+            //}
 
             //记录弹幕历史
             DanmuLog danmuLog = saveDanmuModel(danmuModel);
