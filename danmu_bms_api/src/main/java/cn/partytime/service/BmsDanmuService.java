@@ -13,7 +13,6 @@ import cn.partytime.dataRpc.RpcOperationRpcLogService;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.*;
 import cn.partytime.model.danmu.Danmu;
-import cn.partytime.model.danmu.DanmuLog;
 import cn.partytime.model.danmu.DanmuPool;
 import cn.partytime.model.manager.danmuCmdJson.CmdTemp;
 import cn.partytime.model.user.UserPrize;
@@ -460,19 +459,16 @@ public class BmsDanmuService {
                 danmuModel = danmuService.save(danmuModel);
             //}
 
-            //记录弹幕历史
-            DanmuLog danmuLog = saveDanmuModel(danmuModel);
-
             if(bCheck){
                 //发送弹幕到
-                log.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuLog));
-                sendDanmuToMq(partyId, addressId,danmuLog,wechatUser,party.getType(),cmdName,checkCmdTempComponentData);
+                log.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuModel));
+                sendDanmuToMq(partyId, addressId,danmuModel,wechatUser,party.getType(),cmdName,checkCmdTempComponentData);
 
             }else{
-                CmdTemp cmdTemp = cmdTempService.findById(danmuLog.getTemplateId());
+                CmdTemp cmdTemp = cmdTempService.findById(danmuModel.getTemplateId());
                 Map<String,Object> commandObject = new HashMap<String,Object>();
                 commandObject.put("type",cmdTemp.getKey());
-                commandObject.put("data",danmuLog.getContent());
+                commandObject.put("data",danmuModel.getContent());
                 pubMessageCollectorServer(partyId,addressId,commandObject);
             }
         }
@@ -616,11 +612,9 @@ public class BmsDanmuService {
             danmuModel.setType(danmuType);
 
             //是否保存弹幕
-            if(isInDanmuLib==0){
+            //if(isInDanmuLib==0){
                danmuModel = danmuService.save(danmuModel);
-            }
-
-            DanmuLog danmuLog = saveDanmuModel(danmuModel);
+            //}
 
 
             if(isBlock){
@@ -633,14 +627,14 @@ public class BmsDanmuService {
             if(bCheck){
 
                 //发送弹幕到
-                log.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuLog));
-                sendDanmuToMq(partyId, addressId,danmuLog,wechatUser,party.getType(),cname,checkCmdTempComponentData);
+                log.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuModel));
+                sendDanmuToMq(partyId, addressId,danmuModel,wechatUser,party.getType(),cname,checkCmdTempComponentData);
 
             }else{
-                CmdTemp cmdTemp = cmdTempService.findById(danmuLog.getTemplateId());
+                CmdTemp cmdTemp = cmdTempService.findById(danmuModel.getTemplateId());
                 Map<String,Object> commandObject = new HashMap<String,Object>();
                 commandObject.put("type",cmdTemp.getKey());
-                commandObject.put("data",danmuLog.getContent());
+                commandObject.put("data",danmuModel.getContent());
                 pubMessageCollectorServer(partyId,addressId,commandObject);
             }
         }
@@ -810,8 +804,6 @@ public class BmsDanmuService {
             danmuModel = danmuService.save(danmuModel);
             //}
 
-            //记录弹幕历史
-            DanmuLog danmuLog = saveDanmuModel(danmuModel);
 
             if(isBlock){
                 restResultModel = new RestResultModel();
@@ -822,16 +814,16 @@ public class BmsDanmuService {
 
             if(bCheck){
                 //发送弹幕到
-                log.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuLog));
+                log.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuModel));
 
-                sendDanmuToMq(partyId, addressId,danmuLog,null,party.getType(),name,checkCmdTempComponentData);
+                sendDanmuToMq(partyId, addressId,danmuModel,null,party.getType(),name,checkCmdTempComponentData);
 
             }else{
 
-                CmdTemp cmdTemp = cmdTempService.findById(danmuLog.getTemplateId());
+                CmdTemp cmdTemp = cmdTempService.findById(danmuModel.getTemplateId());
                 Map<String,Object> commandObject = new HashMap<String,Object>();
                 commandObject.put("type",cmdTemp.getKey());
-                commandObject.put("data",danmuLog.getContent());
+                commandObject.put("data",danmuModel.getContent());
                 pubMessageCollectorServer(partyId,addressId,commandObject);
             }
         }
@@ -842,19 +834,6 @@ public class BmsDanmuService {
         restResultModel.setResult_msg("OK");
         return restResultModel;
     }
-
-
-    private DanmuLog saveDanmuModel(Danmu danmuModel){
-        DanmuLog danmuLog = new DanmuLog();
-        BeanUtils.copyProperties(danmuModel,danmuLog);
-        danmuLog.setId(null);
-        if(danmuModel.getId()!=null){
-            danmuLog.setDanmuId(danmuModel.getId());
-        }
-        return  danmuLogService.save(danmuLog);
-
-    }
-
     /**
      * 发送弹幕到消息队列
      *
@@ -863,7 +842,7 @@ public class BmsDanmuService {
      * @param danmuModel
      * @param wechatUser
      */
-    public void sendDanmuToMq(String partyId, String addressId, DanmuLog danmuModel, WechatUser wechatUser,int partyType,String cmdName,CmdTempComponentData checkCmdTempComponentData) {
+    public void sendDanmuToMq(String partyId, String addressId, Danmu danmuModel, WechatUser wechatUser,int partyType,String cmdName,CmdTempComponentData checkCmdTempComponentData) {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("id",danmuModel.getId());
         map.put("partyId",partyId);

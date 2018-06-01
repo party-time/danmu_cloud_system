@@ -460,20 +460,14 @@ public class CommandHanderService {
 
             if(CommandTypeConst.NORMAL_DANMU.equals(type)){
                 log.info("*******************普通弹幕处理********************");
-                DanmuLogModel danmuLog = rpcDanmuService.findDanmuLogById(id);
-                CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(danmuLog.getTemplateId());
+                DanmuModel danmuModel = rpcDanmuService.findById(id);
+                CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(danmuModel.getTemplateId());
                 //更新弹幕状态
                 AdminUserDto adminUser =  rpcAdminService.getAdminUser(adminTaskModel.getAuthKey());
-                //更新日志信息
-                danmuLog.setCheckUserId(adminUser.getId());
-                danmuLog.setViewFlg(true);
-                danmuLog.setUpdateTime(DateUtils.getCurrentDate());
-                rpcDanmuService.save(danmuLog);
-
                 log.info("管理员:{},状态更新",adminUser.getId());
-                String danmuId = danmuLog.getDanmuId();
+                String danmuId = danmuModel.getId();
                 if(!StringUtils.isEmpty(danmuId)){
-                    DanmuModel danmuModel = rpcDanmuService.findById(danmuId);
+                    danmuModel = rpcDanmuService.findById(danmuId);
                     danmuModel.setCheckUserId(adminUser.getId());
                     danmuModel.setViewFlg(true);
                     danmuModel.setUpdateTime(DateUtils.getCurrentDate());
@@ -484,7 +478,7 @@ public class CommandHanderService {
                     if(isCallBack(cmdTempAllData)){
                         commandObject.put("isCallBack",true);
                         commandObject.put("clientType",0);
-                        Map<String,Object> dataMap = danmuLog.getContent();
+                        Map<String,Object> dataMap = danmuModel.getContent();
                         if(danmuModel.getDanmuSrc()==0){
                             dataMap.put("isPay",false);
                         }
