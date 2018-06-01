@@ -106,6 +106,7 @@ public class WechatUserManagerController {
         Map<String,String> danmuMap = new HashMap<>();
         danmuMap.put("nameA","张三");
         danmuMap.put("nameB","李四");
+        danmuMap.put("idd","5");
         danmuMap.put("content","今天喝酒，明天吃饭，后台逛大街");
 
         String openId = wechatUser.getOpenId();
