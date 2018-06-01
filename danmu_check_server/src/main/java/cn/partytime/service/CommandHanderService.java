@@ -478,19 +478,23 @@ public class CommandHanderService {
                     danmuModel.setViewFlg(true);
                     danmuModel.setUpdateTime(DateUtils.getCurrentDate());
                     rpcDanmuService.save(danmuModel);
-                }
 
-                Map<String,Object> commandObject = new HashMap<String,Object>();
-                commandObject.put("type",cmdTempAllData.getKey());
-                if(isCallBack(cmdTempAllData)){
-                    commandObject.put("isCallBack",true);
-                    commandObject.put("clientType",0);
+                    Map<String,Object> commandObject = new HashMap<String,Object>();
+                    commandObject.put("type",cmdTempAllData.getKey());
+                    if(isCallBack(cmdTempAllData)){
+                        commandObject.put("isCallBack",true);
+                        commandObject.put("clientType",0);
+                        Map<String,Object> dataMap = danmuLog.getContent();
+                        if(danmuModel.getDanmuSrc()==0){
+                            dataMap.put("isPay",false);
+                        }
+                        commandObject.put("data",dataMap);
+                    }
+                    commandObject.put("danmuId",danmuId);
+                    commandObject.put("isSendH5",cmdTempAllData.getIsSendH5());
+                    log.info("推送弹幕到客户端：{}",JSON.toJSONString(commandObject));
+                    pubDanmuToUserCachList(partyId, addressId, commandObject);
                 }
-                commandObject.put("danmuId",danmuId);
-                commandObject.put("data",danmuLog.getContent());
-                commandObject.put("isSendH5",cmdTempAllData.getIsSendH5());
-                log.info("推送弹幕到客户端：{}",JSON.toJSONString(commandObject));
-                pubDanmuToUserCachList(partyId, addressId, commandObject);
             }else{
 
                 DanmuModel danmuLog = rpcDanmuService.findById(id);
@@ -509,6 +513,7 @@ public class CommandHanderService {
                 pubDanmuToUserCachList(partyId, addressId, commandObject);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("向客户端广播弹幕异常:" + e.getMessage());
         }
     }

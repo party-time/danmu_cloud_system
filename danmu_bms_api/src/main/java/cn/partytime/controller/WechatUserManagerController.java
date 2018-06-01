@@ -1,8 +1,15 @@
 package cn.partytime.controller;
 
+import cn.partytime.common.util.CmdConst;
+import cn.partytime.dataRpc.RpcDanmuAddressService;
+import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.PageResultModel;
+import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.RestResultModel;
 import cn.partytime.model.wechat.WechatUser;
+import cn.partytime.model.wechat.WechatUserInfo;
+import cn.partytime.service.BmsDanmuService;
+import cn.partytime.service.BmsPartyService;
 import cn.partytime.service.wechat.BmsWechatUserManagerService;
 import cn.partytime.service.wechat.WechatUserInfoService;
 import cn.partytime.service.wechat.WechatUserService;
@@ -13,6 +20,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by administrator on 2016/11/28.
@@ -31,6 +41,15 @@ public class WechatUserManagerController {
 
     @Autowired
     private BmsWechatUserManagerService bmsWechatUserManagerService;
+
+    @Autowired
+    private BmsDanmuService bmsDanmuService;
+
+    @Autowired
+    private RpcDanmuAddressService rpcDanmuAddressService;
+
+    @Autowired
+    private BmsPartyService bmsPartyService;
 
 
     @RequestMapping(value = "/page", method = RequestMethod.GET)
@@ -70,6 +89,32 @@ public class WechatUserManagerController {
     public RestResultModel assignAddress(String addressId,String wechatId){
         RestResultModel restResultModel = new RestResultModel();
         bmsWechatUserManagerService.assignAddress(addressId,wechatId);
+        restResultModel.setResult(200);
+        return restResultModel;
+    }
+
+    /**
+     * 分配用户的场地
+     * @param wechatId
+     * @return
+     */
+    @RequestMapping(value = "/sendBiaobai", method = RequestMethod.GET)
+    public RestResultModel sendBiaobai(String addressId,String wechatId){
+        RestResultModel restResultModel = new RestResultModel();
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
+        WechatUser wechatUser = wechatUserService.findById(wechatId);
+        Map<String,String> danmuMap = new HashMap<>();
+        danmuMap.put("nameA","张三");
+        danmuMap.put("nameB","李四");
+        danmuMap.put("content","今天喝酒，明天吃饭，后台逛大街");
+
+        String openId = wechatUser.getOpenId();
+
+        DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(),wechatUserInfo.getLastLatitude());
+
+        PartyLogicModel partyLogicModel = bmsPartyService.findCurrentParty(openId);
+
+        bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_BIAOBAI, danmuMap, openId, partyLogicModel.getPartyId(), danmuAddressModel.getId(), 1,0);
         restResultModel.setResult(200);
         return restResultModel;
     }

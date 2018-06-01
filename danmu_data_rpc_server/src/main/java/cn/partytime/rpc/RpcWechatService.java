@@ -34,4 +34,10 @@ public class RpcWechatService {
         return wechatUserService.findByOpenId(openId);
     }
 
+
+    @RequestMapping(value = "/findByUserId" ,method = RequestMethod.GET)
+    public WechatUser findByUserId(@RequestParam String userId) {
+        return wechatUserService.findByUserId(userId);
+    }
+
 }

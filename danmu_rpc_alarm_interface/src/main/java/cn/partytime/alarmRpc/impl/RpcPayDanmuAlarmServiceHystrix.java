@@ -10,8 +10,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class RpcPayDanmuAlarmServiceHystrix implements RpcPayDanmuAlarmService {
 
+
     @Override
-    public void biaobaiAlarm(String partyId, String addressId, String danmuId) {
+    public void paySendErrorAlarm(String addressId, String danmuId) {
+
+    }
+
+    @Override
+    public void payNotSendAlarm(String addressId, String danmuId) {
 
     }
 }

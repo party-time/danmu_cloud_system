@@ -21,7 +21,8 @@ public class AlarmKeyConst {
     public final static String RESOURCENOTPLAY="resourceNotPlay";//资源无法播放报警
     public final static String ALARM_MOVIESTARTERROR = "movieStartError";
     public final static String JAVACLIENTSHELLERROR="javaclientShellError";
-    public final static String BIAOBAISENDERROR="biaobaiSendError";//表白未失败报警
+    public final static String PAYSENDERROR="paySendError";//表白未失败报警
+    public final static String PARYNOTSENDERROR="paryNotSendError";//表白未发送报警
 
 
 }

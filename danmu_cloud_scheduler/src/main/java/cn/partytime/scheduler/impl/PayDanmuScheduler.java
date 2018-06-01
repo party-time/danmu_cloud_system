@@ -9,6 +9,7 @@ import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.common.util.SetUtils;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
+import cn.partytime.dataRpc.RpcMovieScheduleService;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.PartyLogicModel;
@@ -51,10 +52,11 @@ public class PayDanmuScheduler  implements BaseScheduler {
     @Autowired
     private AlarmCacheService alarmCacheService;
 
+
     @Override
     @Scheduled(cron = "0 0/1 * * * ?")
     public void execute() throws IOException {
-        log.info("监控未发送的支付弹幕");
+        log.info("支付弹幕发送失败");
         List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
         if(ListUtils.checkListIsNotNull(danmuAddressList)){
             for(DanmuAddressModel danmuAddressModel:danmuAddressList){
@@ -63,18 +65,43 @@ public class PayDanmuScheduler  implements BaseScheduler {
                 Date date =   DateUtils.addSecondsToDate(DateUtils.getCurrentDate(),30);
                 long score = date.getTime();
                 String addressId = danmuAddressModel.getId();
-                PartyLogicModel partyLogicModel = rpcPartyService.findPartyByAddressId(addressId);
-                if(partyLogicModel!=null){
-                    Set<String> danmuSet = danmuCommandBussinessService.getPayDanmuQueueBeforeScore(addressId,Double.parseDouble(0+""),Double.parseDouble(score+""));
-                    if(SetUtils.checkSetIsNotNull(danmuSet)){
-                        for(String str:danmuSet){
-                            log.info("弹幕编号:{}",str);
-                            //alarmCacheService.addAlarmCount(0, AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY,typeName);
-                            long count = alarmCacheService.findAlarmCount(addressId, AlarmKeyConst.BIAOBAISENDERROR,str);
-                            if(count==0){
-                                alarmCacheService.addAlarmCount(0,addressId, AlarmKeyConst.BIAOBAISENDERROR,str);
-                                rpcPayDanmuAlarmService.biaobaiAlarm(partyLogicModel.getPartyId(),addressId,str);
-                            }
+                Set<String> danmuSet = danmuCommandBussinessService.getPayDanmuQueueBeforeScore(addressId,Double.parseDouble(0+""),Double.parseDouble(score+""));
+                if(SetUtils.checkSetIsNotNull(danmuSet)){
+                    for(String str:danmuSet){
+                        log.info("弹幕编号:{}",str);
+                        //alarmCacheService.addAlarmCount(0, AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY,typeName);
+                        long count = alarmCacheService.findAlarmCount(addressId, AlarmKeyConst.PAYSENDERROR,str);
+                        if(count==0){
+                            alarmCacheService.addAlarmCount(0,addressId, AlarmKeyConst.PAYSENDERROR,str);
+                            rpcPayDanmuAlarmService.paySendErrorAlarm(addressId,str);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    @Scheduled(cron = "0 0/1 * * * ?")
+    public void paryNotSendError() throws IOException {
+        log.info("支付弹幕未发送");
+        List<DanmuAddressModel> danmuAddressList = rpcDanmuAddressService.findByType(0);
+        if(ListUtils.checkListIsNotNull(danmuAddressList)){
+            for(DanmuAddressModel danmuAddressModel:danmuAddressList){
+
+                log.info("场地信息:{}", JSON.toJSONString(danmuAddressModel));
+                Date date =   DateUtils.addSecondsToDate(DateUtils.getCurrentDate(),30);
+                long score = date.getTime();
+                String addressId = danmuAddressModel.getId();
+                Set<String> danmuSet = danmuCommandBussinessService.getPayDanmuNotSendQueue(addressId);
+                if(SetUtils.checkSetIsNotNull(danmuSet)){
+                    for(String str:danmuSet){
+                        log.info("弹幕编号:{}",str);
+                        //alarmCacheService.addAlarmCount(0, AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY,typeName);
+                        long count = alarmCacheService.findAlarmCount(addressId, AlarmKeyConst.PARYNOTSENDERROR,str);
+                        if(count==0){
+                            alarmCacheService.addAlarmCount(0,addressId, AlarmKeyConst.PARYNOTSENDERROR,str);
+                            rpcPayDanmuAlarmService.payNotSendAlarm(addressId,str);
                         }
                     }
                 }

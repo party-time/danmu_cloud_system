@@ -5,11 +5,14 @@ import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.dataRpc.RpcDanmuService;
 import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.RpcWechatService;
 import cn.partytime.logicService.CommonDataService;
 import cn.partytime.message.bean.MessageObject;
 import cn.partytime.message.proxy.MessageHandlerService;
 import cn.partytime.model.DanmuModel;
 import cn.partytime.model.PartyModel;
+import cn.partytime.model.WechatUserDto;
+import cn.partytime.model.WechatUserInfoDto;
 import cn.partytime.service.DanmuAlarmService;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -47,22 +50,52 @@ public class RpcPayDanmuAlarmService {
     private DanmuAlarmService danmuAlarmService;
 
     @Autowired
-    private AlarmCacheService alarmCacheService;
+    private RpcWechatService rpcWechatService;
 
-    @RequestMapping(value = "/biaobaiAlarm" ,method = RequestMethod.GET)
-    public void biaobaiAlarm(@RequestParam String partyId, @RequestParam String addressId,@RequestParam String danmuId ) {
+
+
+
+    @RequestMapping(value = "/paySendErrorAlarm" ,method = RequestMethod.GET)
+    public void paySendErrorAlarm(@RequestParam String addressId,@RequestParam String danmuId ) {
         log.info("表白发送失败告警");
-        PartyModel party = rpcPartyService.getPartyByPartyId(partyId);
         Map<String,String> map = new HashMap<String,String>();
         DanmuModel danmuModel =  rpcDanmuService.findById(danmuId);
-        log.info("弹幕信息:{}", JSON.toJSONString(danmuModel));
-        map = commonDataService.setMapByAddressId(AlarmKeyConst.BIAOBAISENDERROR,addressId,partyId);
-        log.info("告警map:{}",JSON.toJSONString(map));
-        //TODO:
-        //long alarmCount = alarmCacheService.findAlarmCount(addressId,partyId,danmuId);
-        ///alarmCacheService.addAlarmCount(0,addressId,partyId,danmuId);
 
-        MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.MoneyLogCode.Money_BIAOBAI_SEND_FAIL,map);
+        String userId = danmuModel.getCreateUserId();
+
+        WechatUserDto wechatUserDto =  rpcWechatService.findByUserId(userId);
+
+
+
+        log.info("弹幕信息:{}", JSON.toJSONString(danmuModel));
+        map = commonDataService.setMapByAddressId(AlarmKeyConst.PAYSENDERROR,addressId,"");
+        map.put("userName",wechatUserDto.getNick());
+
+        log.info("告警map:{}",JSON.toJSONString(map));
+
+        MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.MoneyLogCode.PAYSENDERROR,map);
+        mapMessageObject.setValue(0);
+        mapMessageObject.setThreshold(0);
+        messageHandlerService.messageHandler(danmuAlarmService,mapMessageObject);
+    }
+
+    @RequestMapping(value = "/payNotSendAlarm" ,method = RequestMethod.GET)
+    public void payNotSendAlarm(@RequestParam String addressId,@RequestParam String danmuId ) {
+        log.info("表白发送失败告警");
+        Map<String,String> map = new HashMap<String,String>();
+        DanmuModel danmuModel =  rpcDanmuService.findById(danmuId);
+
+        String userId = danmuModel.getCreateUserId();
+        WechatUserDto wechatUserDto =  rpcWechatService.findByUserId(userId);
+
+
+        log.info("弹幕信息:{}", JSON.toJSONString(danmuModel));
+        map = commonDataService.setMapByAddressId(AlarmKeyConst.PARYNOTSENDERROR,addressId,"");
+        map.put("userName",wechatUserDto.getNick());
+
+        log.info("告警map:{}",JSON.toJSONString(map));
+
+        MessageObject<Map<String,String>> mapMessageObject = new MessageObject<Map<String,String>>(LogCodeConst.MoneyLogCode.PARYNOTSENDERROR,map);
         mapMessageObject.setValue(0);
         mapMessageObject.setThreshold(0);
         messageHandlerService.messageHandler(danmuAlarmService,mapMessageObject);

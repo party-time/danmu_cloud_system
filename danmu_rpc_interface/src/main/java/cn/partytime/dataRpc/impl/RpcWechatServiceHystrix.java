@@ -17,4 +17,9 @@ public class RpcWechatServiceHystrix implements RpcWechatService {
     public WechatUserInfoDto findByWechatId(String wechatId) {
         return null;
     }
+
+    @Override
+    public WechatUserDto findByUserId(String userId) {
+        return null;
+    }
 }

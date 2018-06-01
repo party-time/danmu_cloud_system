@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "${alarmRpcServer}",fallback = RpcPayDanmuAlarmServiceHystrix.class)
 public interface RpcPayDanmuAlarmService {
 
-    @RequestMapping(value = "/rpcPayDanmu/biaobaiAlarm" ,method = RequestMethod.GET)
-    public void biaobaiAlarm(@RequestParam(value = "partyId") String partyId, @RequestParam(value = "addressId") String addressId, @RequestParam(value = "danmuId") String danmuId );
+    @RequestMapping(value = "/rpcPayDanmu/paySendErrorAlarm" ,method = RequestMethod.GET)
+    public void paySendErrorAlarm(@RequestParam(value = "addressId") String addressId, @RequestParam(value = "danmuId") String danmuId );
+
+
+    @RequestMapping(value = "/rpcPayDanmu/payNotSendAlarm" ,method = RequestMethod.GET)
+    public void payNotSendAlarm(@RequestParam(value = "addressId") String addressId, @RequestParam(value = "danmuId") String danmuId );
 
 }

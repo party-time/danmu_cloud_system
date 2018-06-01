@@ -87,27 +87,17 @@ public class DanmuCommandBussinessService {
 
 
     /**
-     * 支付弹幕队列
+     * 支付成功确认队列
      */
     public void putIntoPayDanmuQueue(String addressId,String id){
         String key = DanmuCacheKey.PUB_DANMU_PAY_SORTSET + addressId;
         long score = DateUtils.getCurrentDate().getTime();
         redisService.setSortSet(key,score,id);
     }
-
     /**
-     * 获取支付弹幕列表长度
+     * 支付成功确认队列清除
      * @param addressId
-     * @return
-     */
-    public long getPayDanmuQueueSize(String addressId){
-        String key = DanmuCacheKey.PUB_DANMU_PAY_SORTSET + addressId;
-        return redisService.getSortSetSize(key,0,-1);
-    }
-
-    /**
-     * 从支付弹幕列表清除弹幕
-     * @param addressId
+     * @param id
      * @param id
      */
     public void removePayDanmuQueueSize(String addressId,String id){
@@ -115,10 +105,48 @@ public class DanmuCommandBussinessService {
         redisService.deleteSortData(key,id);
     }
 
+    /**
+     *  从支付成功确认队列获取数据
+     * @param addressId
+     * @param minScore
+     * @param maxScore
+     * @return
+     */
     public Set<String> getPayDanmuQueueBeforeScore(String addressId,Double minScore,Double maxScore){
         String key = DanmuCacheKey.PUB_DANMU_PAY_SORTSET + addressId;
         log.info("key:{}",key);
         return  redisService.findSortSetWithInScore(key,minScore,maxScore);
+    }
+
+
+    /**
+     * 支付未发送队列
+     */
+    public void putIntoPayDanmuNotSendQueue(String addressId,String id){
+        String key = DanmuCacheKey.PUB_DANMU_PAY_NOT_SEND_SORTSET + addressId;
+        long score = DateUtils.getCurrentDate().getTime();
+        redisService.setSortSet(key,score,id);
+    }
+    /**
+     * 支付成功确认队列清除
+     * @param addressId
+     * @param id
+     * @param id
+     */
+    public void removePayDanmuNotSendQueueSize(String addressId,String id){
+        String key = DanmuCacheKey.PUB_DANMU_PAY_NOT_SEND_SORTSET + addressId;
+        redisService.deleteSortData(key,id);
+    }
+
+    /**
+     *  从支付成功确认队列获取数据
+     * @param addressId
+     * @return
+     */
+    public Set<String> getPayDanmuNotSendQueue(String addressId){
+        String key = DanmuCacheKey.PUB_DANMU_PAY_NOT_SEND_SORTSET + addressId;
+        log.info("key:{}",key);
+        return  redisService.getSortSetByRnage(key,0,-1,true);
     }
 
 }

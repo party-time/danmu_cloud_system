@@ -20,4 +20,8 @@ public interface RpcWechatService {
     @RequestMapping(value = "/rpcWechat/findByWechatId" ,method = RequestMethod.GET)
     public WechatUserInfoDto findByWechatId(@RequestParam(value = "wechatId") String wechatId);
 
+
+    @RequestMapping(value = "/rpcWechat/findByUserId" ,method = RequestMethod.GET)
+    public WechatUserDto findByUserId(@RequestParam(value = "userId") String userId);
+
 }

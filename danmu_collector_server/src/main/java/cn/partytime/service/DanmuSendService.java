@@ -202,6 +202,7 @@ public class DanmuSendService {
             boolean isPayFlg = BooleanUtils.objectConvertToBoolean(isPayObject);
             if(isPayFlg){
                 String danmuId = String.valueOf(danmuIdObject);
+                danmuCommandBussinessService.removePayDanmuNotSendQueueSize(addressId,danmuId);
                 danmuCommandBussinessService.putIntoPayDanmuQueue(addressId,danmuId);
             }
         }

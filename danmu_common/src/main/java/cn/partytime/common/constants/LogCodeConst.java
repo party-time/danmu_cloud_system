@@ -54,11 +54,11 @@ public interface LogCodeConst {
 
     public class MoneyLogCode{
 
-        /***表白发送失败*/
-        public static final String Money_BIAOBAI_SEND_FAIL="5000";
+        /***支付弹幕发送失败*/
+        public static final String PAYSENDERROR="5000";
 
-        /**打赏发送失败*/
-        public static final String Money_DASHANG_SEND_ERROR="5000";
+        /***支付弹幕未发送*/
+        public static final String PARYNOTSENDERROR="5001";
 
     }
 }

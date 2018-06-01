@@ -32,6 +32,11 @@ public class DanmuCacheKey {
     public static final String PUB_DANMU_PAY_SORTSET="pub:danmu:pay:sortset:";
 
 
+    /**
+     * 弹幕未发送队列
+     */
+    public static final String PUB_DANMU_PAY_NOT_SEND_SORTSET ="pub:danmu:pay:not:send:sortset:";
+
 
     public static final String TIMERDANMU_NOT_PLARY_RESOUR_LIST = "timerdanmu:notplay:resoure:list:";
 

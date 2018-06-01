@@ -45,10 +45,9 @@ public class RealTimeDanmuTempCacheHandler {
                             boolean isPayFlg = BooleanUtils.objectConvertToBoolean(isPayObject);
                             if(isPayFlg){
                                 String danmuId = String.valueOf(danmuIdObject);
-                                danmuCommandBussinessService.putIntoPayDanmuQueue(addressId,danmuId);
+                                danmuCommandBussinessService.putIntoPayDanmuNotSendQueue(addressId,danmuId);
                             }
                         }
-
                         danmuCommandBussinessService.pubDanmuToNotSendQueue(addressId,map);
                     }
 
