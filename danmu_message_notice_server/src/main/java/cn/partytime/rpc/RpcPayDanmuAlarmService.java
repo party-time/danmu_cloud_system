@@ -67,7 +67,7 @@ public class RpcPayDanmuAlarmService {
         WechatUserDto wechatUserDto =  rpcWechatService.findByUserId(userId);
         String key = danmuModel.getTemplateIdKey();
         CmdTempAllData cmdTempAllData =  rpcCmdService.findCmdTempAllDataByKey(key);
-
+        log.info("cmdTempAllData========================================:{}",JSON.toJSONString(cmdTempAllData));
 
         log.info("弹幕信息:{}", JSON.toJSONString(danmuModel));
         map = commonDataService.setMapByAddressId(AlarmKeyConst.PAYSENDERROR,addressId,"");
@@ -91,7 +91,7 @@ public class RpcPayDanmuAlarmService {
         String key = danmuModel.getTemplateIdKey();
         CmdTempAllData cmdTempAllData =  rpcCmdService.findCmdTempAllDataByKey(key);
 
-        log.info("cmdTempAllData:{}",JSON.toJSONString(cmdTempAllData));
+        log.info("cmdTempAllData========================================:{}",JSON.toJSONString(cmdTempAllData));
         String userId = danmuModel.getCreateUserId();
         WechatUserDto wechatUserDto =  rpcWechatService.findByUserId(userId);
 
