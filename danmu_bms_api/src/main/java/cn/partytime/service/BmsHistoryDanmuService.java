@@ -193,7 +193,7 @@ public class BmsHistoryDanmuService {
                 Object objectMsg = null;
                 String key = cmdTempComponentData.getKey();
                 String value = danmuModel.getContent().get(key)+"";
-                logger.info("value:"+value);
+                logger.info("key:"+key+"value:"+value);
                 if(!"color".equals(key) && cmdTempComponentData.getType()!=1 && cmdTempComponentData.getType()!=0 ){
                     if(cmdTempComponentData.getType()==3){
                         //显示的内容
