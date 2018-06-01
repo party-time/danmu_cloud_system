@@ -125,7 +125,7 @@ public class RpcDanmuService {
         if (ListUtils.checkListIsNotNull(danmuPoolList)) {
             List<String> poolIdList = new ArrayList<String>();
             danmuPoolList.forEach(e -> poolIdList.add(e.getId()));
-            List<Danmu> danmuModelList = danmuService.findByBlockedAndViewFlgAndDanmuPoolIdInOrderByTimeDesc(poolIdList);
+            List<Danmu> danmuModelList = danmuService.findByBlockedAndViewFlgAndDanmuPoolIdInOrderByTimeDesc("pDanmu",poolIdList);
             danmuModelList = resultList(danmuModelList,id,count);
             if (ListUtils.checkListIsNotNull(danmuModelList)) {
                 for (Danmu danmuModel : danmuModelList) {

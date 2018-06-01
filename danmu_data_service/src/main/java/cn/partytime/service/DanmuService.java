@@ -90,8 +90,8 @@ public class DanmuService {
     }
 
 
-    public List<Danmu> findByBlockedAndViewFlgAndDanmuPoolIdInOrderByTimeDesc(List<String> poolIdList){
-        return danmuRepository.findByIsBlockedAndViewFlgAndDanmuSrcAndDanmuPoolIdInOrderByTimeDesc(false,true,1,poolIdList);
+    public List<Danmu> findByBlockedAndViewFlgAndDanmuPoolIdInOrderByTimeDesc(String templateIdKey,List<String> poolIdList){
+        return danmuRepository.findByIsBlockedAndViewFlgAndDanmuSrcAndTemplateIdKeyAndDanmuPoolIdInOrderByTimeDesc(false,true,1,templateIdKey,poolIdList);
     }
 
 
