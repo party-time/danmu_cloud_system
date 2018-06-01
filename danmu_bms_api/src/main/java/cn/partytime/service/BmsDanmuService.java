@@ -254,6 +254,7 @@ public class BmsDanmuService {
         for (Danmu danmuModel : danmuIdList) {
 
             String templateKey = danmuModel.getTemplateIdKey();
+            log.info("templateKey==============================="+templateKey);
             CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByKeyFromCache(templateKey);
 
             userIdList.add(danmuModel.getCreateUserId());
