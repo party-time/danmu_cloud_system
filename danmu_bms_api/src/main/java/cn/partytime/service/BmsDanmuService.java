@@ -442,6 +442,7 @@ public class BmsDanmuService {
             danmuModel.setTemplateId(templateId);
             danmuModel.setContent(map);
             danmuModel.setBlocked(false);
+            danmuModel.setTemplateIdKey(cmdKey);
             danmuModel.setCreateTime(date);
             danmuModel.setUpdateTime(date);
             danmuModel.setCreateUserId(wechatUser.getUserId());
