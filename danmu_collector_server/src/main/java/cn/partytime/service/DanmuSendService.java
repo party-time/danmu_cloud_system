@@ -177,19 +177,14 @@ public class DanmuSendService {
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
         List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
 
-        if(ListUtils.checkListIsNotNull(screenChannelList)){
-            logger.info("当前在线的flash客户端数量是:{}",screenChannelList.size());
-            for(Channel channel:screenChannelList){
-                String message = String.valueOf(object);
-                logger.info("向flash客户端:{},推送弹幕:{}",channel.id(),message);
-                channel.writeAndFlush(new TextWebSocketFrame(message));
-            }
-        }
+
 
         Map<String,Object> map = (Map<String,Object>)JSON.parse(String.valueOf(object));
 
 
         Object objectMessage =map.get("isSendH5");
+
+        Object type =map.get("type");
 
 
         Object danmuIdObject = map.get("danmuId");
@@ -197,6 +192,16 @@ public class DanmuSendService {
         Object dataObject = map.get("data");
         Map<String,Object> dataMap = (Map<String,Object>)JSON.parse(String.valueOf(dataObject));
         Object isPayObject = dataMap.get("isPay");
+
+        //if("584a1a9a0cf2fdb8406efdce")
+
+        if("584a1a9a0cf2fdb8406efdce".equals(addressId) && "pDanmu".equals(String.valueOf(type))){
+            dataMap.put("color","0xffffff");
+        }
+        map.put("data",dataMap);
+
+
+
 
         if(isPayObject!=null){
             boolean isPayFlg = BooleanUtils.objectConvertToBoolean(isPayObject);
@@ -206,6 +211,17 @@ public class DanmuSendService {
                 danmuCommandBussinessService.putIntoPayDanmuQueue(addressId,danmuId);
             }
         }
+
+        if(ListUtils.checkListIsNotNull(screenChannelList)){
+            logger.info("当前在线的flash客户端数量是:{}",screenChannelList.size());
+            for(Channel channel:screenChannelList){
+                String message = String.valueOf(JSON.toJSONString(map));
+                logger.info("向flash客户端:{},推送弹幕:{}",channel.id(),message);
+                channel.writeAndFlush(new TextWebSocketFrame(message));
+            }
+        }
+
+
 
         if(objectMessage!=null){
             int isSendH5 = Integer.parseInt(String.valueOf(objectMessage));
@@ -224,7 +240,7 @@ public class DanmuSendService {
             logger.info("当前在线的手机客户端数量是:{}",channelMobileList.size());
             for(Channel channel:channelMobileList){
                 logger.info("向手机客户端:{},推送弹幕",channel.id());
-                channel.writeAndFlush(new TextWebSocketFrame(String.valueOf(object)));
+                channel.writeAndFlush(new TextWebSocketFrame(String.valueOf(JSON.toJSONString(map))));
             }
         }
     }
