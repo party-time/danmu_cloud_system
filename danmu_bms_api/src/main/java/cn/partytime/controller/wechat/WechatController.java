@@ -157,12 +157,12 @@ public class WechatController {
         List<ResourceFile> expressionconstant = (List<ResourceFile>)resourceFileModels.get("expressionconstant");
         List<ResourceFile> expressions = (List<ResourceFile>)resourceFileModels.get("expressions");
 
-        if( null != expressionconstant){
-            all.addAll(expressionconstant);
-        }
-
         if( null != expressions){
             all.addAll(expressions);
+        }
+
+        if( null != expressionconstant){
+            all.addAll(expressionconstant);
         }
 
         model.addAttribute("expressions",all );

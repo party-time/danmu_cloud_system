@@ -105,7 +105,7 @@ public class FlashConfigService {
                     ResourceJson resourceJson = new ResourceJson();
                     resourceJson.setId(resourceFile.getId());
                     resourceJson.setUrl(this.saveFilePath+"/upload"+resourceFile.getFileUrl());
-                    if (Const.RESOURCE_EXPRESSIONS == resourceFile.getFileType()) {
+                    if (Const.RESOURCE_EXPRESSIONS == resourceFile.getFileType() || Const.RESOURCE_EXPRESSIONS_CONSTANT == resourceFile.getFileType() ) {
                         bigExpressionList.add(resourceJson);
                     } else if (Const.RESOURCE_SPECIAL_IMAGES == resourceFile.getFileType()) {
                         specialImageList.add(resourceJson);
