@@ -249,10 +249,13 @@ public class BmsDanmuService {
         List<DanmuLogicModel> danmuLogicModelList = new ArrayList<DanmuLogicModel>();
         List<String> userIdList = new ArrayList<String>();
         List<String> IdList = new ArrayList<String>();
-        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(ComponentKeyConst.P_DANMU);
 
 
         for (Danmu danmuModel : danmuIdList) {
+
+            String templateKey = danmuModel.getTemplateIdKey();
+            CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByKeyFromCache(templateKey);
+
             userIdList.add(danmuModel.getCreateUserId());
             DanmuLogicModel danmuLogicModel = new DanmuLogicModel();
             for(CmdTempComponentData cmdTempComponentData:cmdTempAllData.getCmdTempComponentDataList()){
@@ -260,7 +263,7 @@ public class BmsDanmuService {
                 Object objectMsg = null;
                 String key = cmdTempComponentData.getKey();
                 String value = danmuModel.getContent().get(key)+"";
-                log.info("value:"+value);
+                log.info("key:"+key+"value:"+value);
                 if(!"color".equals(key) && cmdTempComponentData.getType()!=1 && cmdTempComponentData.getType()!=0 ){
                     if(cmdTempComponentData.getType()==3){
                         //显示的内容
