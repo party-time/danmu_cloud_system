@@ -91,7 +91,7 @@ public class DanmuCommonService {
      * @return
      */
     public boolean checkSpecialComponent(String componentId){
-        if("0".equals(componentId) || "1".equals(componentId) || "2".equals(componentId)){
+        if("0".equals(componentId)){
             return true;
         }
         return  false;
