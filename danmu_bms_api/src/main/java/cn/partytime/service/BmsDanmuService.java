@@ -254,8 +254,9 @@ public class BmsDanmuService {
         for (Danmu danmuModel : danmuIdList) {
 
             String templateKey = danmuModel.getTemplateIdKey();
+            String templateId = danmuModel.getTemplateId();
             log.info("templateKey==============================="+templateKey);
-            CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByKeyFromCache(templateKey);
+            CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
 
             userIdList.add(danmuModel.getCreateUserId());
             DanmuLogicModel danmuLogicModel = new DanmuLogicModel();
@@ -498,6 +499,8 @@ public class BmsDanmuService {
         CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);//组件信息
         String cname = cmdTempAllData.getName();
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
+
+        String commmandKey = cmdTempAllData.getKey();
         Date date = DateUtils.getCurrentDate();
 
         PartyLogicModel party = rpcPartyService.findPartyByAddressId(addressId);
@@ -600,6 +603,7 @@ public class BmsDanmuService {
             String poolId = danmuPool.getId();
             Danmu danmuModel = new Danmu();
             danmuModel.setTemplateId(templateId);
+            danmuModel.setTemplateIdKey(commmandKey);
             //danmuModel.setMsg(msg);
             danmuModel.setContent(map);
             danmuModel.setBlocked(isBlock);
