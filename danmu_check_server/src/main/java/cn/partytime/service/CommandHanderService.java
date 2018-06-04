@@ -460,35 +460,42 @@ public class CommandHanderService {
 
             if(CommandTypeConst.NORMAL_DANMU.equals(type)){
                 log.info("*******************普通弹幕处理********************");
-                DanmuModel danmuModel = rpcDanmuService.findById(id);
-                CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(danmuModel.getTemplateId());
+                DanmuLogModel danmuLog = rpcDanmuService.findDanmuLogById(id);
+                CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(danmuLog.getTemplateId());
                 //更新弹幕状态
                 AdminUserDto adminUser =  rpcAdminService.getAdminUser(adminTaskModel.getAuthKey());
                 log.info("管理员:{},状态更新",adminUser.getId());
-                String danmuId = danmuModel.getId();
+
+                //更新日志信息
+                danmuLog.setCheckUserId(adminUser.getId());
+                danmuLog.setViewFlg(true);
+                danmuLog.setUpdateTime(DateUtils.getCurrentDate());
+                rpcDanmuService.save(danmuLog);
+
+                String danmuId = danmuLog.getDanmuId();
                 if(!StringUtils.isEmpty(danmuId)){
-                    danmuModel = rpcDanmuService.findById(danmuId);
+                    DanmuModel danmuModel = rpcDanmuService.findById(danmuId);
                     danmuModel.setCheckUserId(adminUser.getId());
                     danmuModel.setViewFlg(true);
                     danmuModel.setUpdateTime(DateUtils.getCurrentDate());
                     rpcDanmuService.save(danmuModel);
-
-                    Map<String,Object> commandObject = new HashMap<String,Object>();
-                    commandObject.put("type",cmdTempAllData.getKey());
-                    if(isCallBack(cmdTempAllData)){
-                        commandObject.put("isCallBack",true);
-                        commandObject.put("clientType",0);
-                        Map<String,Object> dataMap = danmuModel.getContent();
-                        if(danmuModel.getDanmuSrc()==0){
-                            dataMap.put("isPay",false);
-                        }
-                        commandObject.put("data",dataMap);
-                    }
-                    commandObject.put("danmuId",danmuId);
-                    commandObject.put("isSendH5",cmdTempAllData.getIsSendH5());
-                    log.info("推送弹幕到客户端：{}",JSON.toJSONString(commandObject));
-                    pubDanmuToUserCachList(partyId, addressId, commandObject);
                 }
+
+                Map<String,Object> commandObject = new HashMap<String,Object>();
+                commandObject.put("type",cmdTempAllData.getKey());
+                if(isCallBack(cmdTempAllData)){
+                    commandObject.put("isCallBack",true);
+                    commandObject.put("clientType",0);
+                    Map<String,Object> dataMap = danmuLog.getContent();
+                    if(danmuLog.getDanmuSrc()==0){
+                        dataMap.put("isPay",false);
+                    }
+                    commandObject.put("data",dataMap);
+                }
+                commandObject.put("danmuId",danmuId);
+                commandObject.put("isSendH5",cmdTempAllData.getIsSendH5());
+                log.info("推送弹幕到客户端：{}",JSON.toJSONString(commandObject));
+                pubDanmuToUserCachList(partyId, addressId, commandObject);
             }else{
 
                 DanmuModel danmuLog = rpcDanmuService.findById(id);
