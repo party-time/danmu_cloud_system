@@ -30,6 +30,27 @@ public class ClientCommandService {
     @Autowired
     private RedisService redisService;
 
+    /**
+     *  向客户端广播信息
+     * @param addressId
+     * @param message
+     */
+    public void pubCommandToJavaClient(String addressId,String message){
+        ConcurrentHashMap<Channel, DanmuClientModel> danmuClientModelConcurrentHashMap =  danmuChannelRepository.findConcurrentHashMap();
+        if (danmuClientModelConcurrentHashMap != null && danmuClientModelConcurrentHashMap.size() > 0) {
+            for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : danmuClientModelConcurrentHashMap.entrySet()) {
+                DanmuClientModel danmuClientModel = entry.getValue();
+                log.info("java clientType:{}",danmuClientModel.getClientType());
+                if (addressId.equals(danmuClientModel.getAddressId()) && danmuClientModel.getClientType()==Integer.parseInt(ClientConst.CLIENT_TYPE_JAVACLIENT)) {
+                    Channel channel = entry.getKey();
+                    log.info("向地址:{}Javaclient发送命令:{}",addressId,message);
+                    channel.writeAndFlush(new TextWebSocketFrame(message));
+                }
+            }
+        }
+    }
+
+
     public void pubCommandToJavaClient(String addressId){
         ConcurrentHashMap<Channel, DanmuClientModel> danmuClientModelConcurrentHashMap =  danmuChannelRepository.findConcurrentHashMap();
         String key = ClientCommandCacheKey.PUB_ClIENT_COMMAND_CACHE + addressId;

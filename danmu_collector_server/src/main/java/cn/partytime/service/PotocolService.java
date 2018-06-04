@@ -76,6 +76,9 @@ public class PotocolService {
     private DanmuSendService danmuSendService;
 
 
+    @Autowired
+    private ClientCommandService clientCommandService;
+
     @Value("${netty.host}")
     private String host;
 
@@ -112,7 +115,8 @@ public class PotocolService {
         }else if(PotocolComTypeConst.COMMANDTYPE_STARTSTAGEANDFULL.equals(type)){
             log.info("转发给flash的协议:{}",JSON.toJSONString(map));
             String addressId = clientInfoModel.getAddressId();
-            danmuSendService.pubDanmuToAllScreenClient(addressId,JSON.toJSONString(map));
+            map.put("clientType","0");
+            danmuSendService.repeatCommandToAllScreenClient(addressId,JSON.toJSONString(map),0);
         }  else {
 
             log.info("客户端JAVACLIENT发送给服务器信息:{},不处理", JSON.toJSONString(map));
@@ -172,8 +176,8 @@ public class PotocolService {
         String type = String.valueOf(map.get("type"));
         boolean isCallBack = BooleanUtils.objectConvertToBoolean(String.valueOf(map.get("isCallBack")));
         log.info("isCallBack===================>"+isCallBack+JSON.toJSONString(map));
+        DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
         if(isCallBack){
-            DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
             String addressId = clientInfoModel.getAddressId();
             log.info("收到客户端返回的弹幕信息:{}",JSON.toJSONString(map));
             Object object = map.get("danmuId");
@@ -189,7 +193,6 @@ public class PotocolService {
             log.info("收到客户端返回的状态信息:{}",JSON.toJSONString(map));
             int status = Integer.parseInt(String.valueOf(map.get("status")));
             String partyId = String.valueOf(map.get("partyId"));
-            DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
             String addressId = clientInfoModel.getAddressId();
             Map<String,Object> commandMap = clientCacheService.getFirstCommandFromCache(addressId);
             if(commandMap!=null){
@@ -204,8 +207,6 @@ public class PotocolService {
             }
 
         } else if(PotocolTypeConst.POTOCOL_DANMU_COUNT.equals(type)){
-
-            DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
             String addressId = clientInfoModel.getAddressId();
             String dataStr = JSON.toJSONString(map.get("data"));
             Integer danmuCount = IntegerUtils.objectConvertToInt(dataStr);
@@ -235,7 +236,6 @@ public class PotocolService {
 
 
         }else if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
-            DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
             log.info("当前客户端信息:{}接受ping",clientInfoModel.getScreenId());
 
             Map<String,Object> resultMap = new HashMap<String,Object>();
@@ -243,7 +243,12 @@ public class PotocolService {
             String msg = JSON.toJSONString(resultMap);
             log.info("返回给客户端信息{}：" + msg);
             channel.writeAndFlush(new TextWebSocketFrame(msg));
-        } else {
+        } else if(PotocolComTypeConst.COMMANDTYPE_STARTSTAGEANDFULL.equals(type)){
+            log.info("转发给java的协议:{}",JSON.toJSONString(map));
+            String addressId = clientInfoModel.getAddressId();
+            map.put("clientType","2");
+            clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
+        }  else {
 
             log.info("客户端发送给服务器信息:{},不处理", JSON.toJSONString(map));
         }

@@ -86,6 +86,10 @@ public class ClientLoginService {
     private int clientOnlineCount;
 
 
+    @Autowired
+    private ClientCommandService clientCommandService;
+
+
     /**
      * 客户端登录
      *
@@ -302,13 +306,19 @@ public class ClientLoginService {
                     notSendDanmuHandler.danmuListenHandler(party.getAddressId());
 
 
+
+
                 }catch (Exception e){
                     logger.info("{}",e);
                 }
             }
-            //计算客户端在线数量
-
+            //告诉javaclient启动发送全屏指令
             String addressId = danmuClientModel.getAddressId();
+            Map<String,Object> map = new HashMap<>();
+            map.put("type","screenMove");
+            map.put("code",danmuClientModel.getRegistCode());
+            clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
+
             //获取已经在线的flashclient数量
             int count =danmuChannelRepository.findDanmuClientCount(0,addressId);
             if(count>=clientOnlineCount){

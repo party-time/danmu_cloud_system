@@ -272,6 +272,30 @@ public class DanmuSendService {
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
         List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
         if (!ListUtils.checkListIsNotNull(screenChannelList)) {
+            logger.info("flash在线数量为0");
+            return;
+        }
+        for (Channel channel : screenChannelList) {
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+        }
+    }
+
+    public void repeatCommandToAllScreenClient(String addressId, String message,int count) {
+        logger.info("向地址{}所有屏幕广播协议:{}", addressId,message);
+        int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
+        List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
+        if (!ListUtils.checkListIsNotNull(screenChannelList)) {
+            logger.info("flash在线数量为0");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            count = count++;
+            if(count>5){
+                return;
+            }
+            repeatCommandToAllScreenClient(addressId,message,count);
             return;
         }
         for (Channel channel : screenChannelList) {

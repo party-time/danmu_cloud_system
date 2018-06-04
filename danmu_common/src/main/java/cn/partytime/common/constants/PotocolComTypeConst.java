@@ -12,7 +12,7 @@ public class PotocolComTypeConst {
     /**
      * FLASH全屏
      */
-    public static final String COMMANDTYPE_STARTSTAGEANDFULL="startStageAndFull";
+    public static final String COMMANDTYPE_STARTSTAGEANDFULL="screenMove";
 
 
 }
