@@ -45,6 +45,18 @@ public class DanmuLogicModel {
 
     private boolean isSend;
 
+
+    /**
+     * 发送状态 0：未发送 1：已发送  2：发送成功
+     */
+    private int sendStatus = 0;
+
+    /**
+     * 弹幕类型
+     */
+    private String danmuTypeName;
+
+
     public String getId() {
         return id;
     }
@@ -163,5 +175,21 @@ public class DanmuLogicModel {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public int getSendStatus() {
+        return sendStatus;
+    }
+
+    public void setSendStatus(int sendStatus) {
+        this.sendStatus = sendStatus;
+    }
+
+    public String getDanmuTypeName() {
+        return danmuTypeName;
+    }
+
+    public void setDanmuTypeName(String danmuTypeName) {
+        this.danmuTypeName = danmuTypeName;
     }
 }
