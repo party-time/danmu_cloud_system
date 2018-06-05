@@ -261,6 +261,8 @@ public class BmsDanmuService {
 
             userIdList.add(danmuModel.getCreateUserId());
             DanmuLogicModel danmuLogicModel = new DanmuLogicModel();
+
+            danmuLogicModel.setDanmuTypeName(cmdTempAllData.getName());
             for(CmdTempComponentData cmdTempComponentData:cmdTempAllData.getCmdTempComponentDataList()){
 
                 Object objectMsg = null;
