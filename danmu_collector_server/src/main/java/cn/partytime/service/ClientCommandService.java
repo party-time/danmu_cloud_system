@@ -1,7 +1,7 @@
 package cn.partytime.service;
 
 import cn.partytime.config.DanmuChannelRepository;
-import cn.partytime.model.DanmuClientModel;
+import cn.partytime.model.DanmuClientInfoModel;
 import cn.partytime.model.ProtocolModel;
 import cn.partytime.common.cachekey.client.ClientCommandCacheKey;
 import cn.partytime.common.constants.ClientConst;
@@ -36,12 +36,12 @@ public class ClientCommandService {
      * @param message
      */
     public void pubCommandToJavaClient(String addressId,String message){
-        ConcurrentHashMap<Channel, DanmuClientModel> danmuClientModelConcurrentHashMap =  danmuChannelRepository.findConcurrentHashMap();
+        ConcurrentHashMap<Channel, DanmuClientInfoModel> danmuClientModelConcurrentHashMap =  danmuChannelRepository.findConcurrentHashMap();
         if (danmuClientModelConcurrentHashMap != null && danmuClientModelConcurrentHashMap.size() > 0) {
-            for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : danmuClientModelConcurrentHashMap.entrySet()) {
-                DanmuClientModel danmuClientModel = entry.getValue();
-                log.info("java clientType:{}",danmuClientModel.getClientType());
-                if (addressId.equals(danmuClientModel.getAddressId()) && danmuClientModel.getClientType()==Integer.parseInt(ClientConst.CLIENT_TYPE_JAVACLIENT)) {
+            for (ConcurrentHashMap.Entry<Channel, DanmuClientInfoModel> entry : danmuClientModelConcurrentHashMap.entrySet()) {
+                DanmuClientInfoModel danmuClientInfoModel = entry.getValue();
+                log.info("java clientType:{}", danmuClientInfoModel.getClientType());
+                if (addressId.equals(danmuClientInfoModel.getAddressId()) && danmuClientInfoModel.getClientType()==Integer.parseInt(ClientConst.CLIENT_TYPE_JAVACLIENT)) {
                     Channel channel = entry.getKey();
                     log.info("向地址:{}Javaclient发送命令:{}",addressId,message);
                     channel.writeAndFlush(new TextWebSocketFrame(message));
@@ -52,7 +52,7 @@ public class ClientCommandService {
 
 
     public void pubCommandToJavaClient(String addressId){
-        ConcurrentHashMap<Channel, DanmuClientModel> danmuClientModelConcurrentHashMap =  danmuChannelRepository.findConcurrentHashMap();
+        ConcurrentHashMap<Channel, DanmuClientInfoModel> danmuClientModelConcurrentHashMap =  danmuChannelRepository.findConcurrentHashMap();
         String key = ClientCommandCacheKey.PUB_ClIENT_COMMAND_CACHE + addressId;
         Object data = redisService.get(key);
         if(data!=null){
@@ -60,10 +60,10 @@ public class ClientCommandService {
             log.info("接收的命令是:{}",command);
             ProtocolModel protocolModel = JSON.parseObject(command,ProtocolModel.class);
             if (danmuClientModelConcurrentHashMap != null && danmuClientModelConcurrentHashMap.size() > 0) {
-                for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : danmuClientModelConcurrentHashMap.entrySet()) {
-                    DanmuClientModel danmuClientModel = entry.getValue();
-                    log.info("java clientType:{}",danmuClientModel.getClientType());
-                    if (addressId.equals(danmuClientModel.getAddressId()) && danmuClientModel.getClientType()==Integer.parseInt(ClientConst.CLIENT_TYPE_JAVACLIENT)) {
+                for (ConcurrentHashMap.Entry<Channel, DanmuClientInfoModel> entry : danmuClientModelConcurrentHashMap.entrySet()) {
+                    DanmuClientInfoModel danmuClientInfoModel = entry.getValue();
+                    log.info("java clientType:{}", danmuClientInfoModel.getClientType());
+                    if (addressId.equals(danmuClientInfoModel.getAddressId()) && danmuClientInfoModel.getClientType()==Integer.parseInt(ClientConst.CLIENT_TYPE_JAVACLIENT)) {
                         Channel channel = entry.getKey();
                         String message = JSON.toJSONString(protocolModel);
                         log.info("向地址:{}Javaclient发送命令:{}",addressId,message);

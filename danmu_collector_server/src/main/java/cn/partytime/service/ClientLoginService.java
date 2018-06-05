@@ -114,7 +114,7 @@ public class ClientLoginService {
 
 
     public void javaClientLogin(String code, Channel channel, String clientType) {
-        DanmuClientModel danmuClient = findDanmuClientInfo(code);
+        DanmuClientInfoModel danmuClient = findDanmuClientInfo(code);
 
         logger.info("将要连接到服务器客户端的信息:{}", JSON.toJSONString(danmuClient));
         if (danmuClient != null) {
@@ -131,18 +131,18 @@ public class ClientLoginService {
                 //isLoginChannel.close();
                 potocolService.forceLogout(isLoginChannel);
             }
-            DanmuClientModel danmuClientModel = new DanmuClientModel();
-            BeanUtils.copyProperties(danmuClient, danmuClientModel);
-            danmuClientModel.setClientType(Integer.parseInt(clientType));
-            danmuClientModel.setDanmuCount(0);
-            danmuClientModel.setLastTime(DateUtils.getCurrentDate().getTime());
+            DanmuClientInfoModel danmuClientInfoModel = new DanmuClientInfoModel();
+            BeanUtils.copyProperties(danmuClient, danmuClientInfoModel);
+            danmuClientInfoModel.setClientType(Integer.parseInt(clientType));
+            danmuClientInfoModel.setDanmuCount(0);
+            danmuClientInfoModel.setLastTime(DateUtils.getCurrentDate().getTime());
 
             logger.info("绑定通道与客户端对象的关系");
-            danmuChannelRepository.set(channel, danmuClientModel);
+            danmuChannelRepository.set(channel, danmuClientInfoModel);
 
             //获取活动信息
             String commandType = PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS;
-            PartyLogicModel party = partyService.findPartyByAddressId(danmuClientModel.getAddressId());
+            PartyLogicModel party = partyService.findPartyByAddressId(danmuClientInfoModel.getAddressId());
             //只有是活动场的情况下，此处才有效果
             if (party != null) {
                 try{
@@ -223,12 +223,12 @@ public class ClientLoginService {
             return;
         }
         //将客户端信息与Channel绑定
-        DanmuClientModel danmuClientModel = new DanmuClientModel();
-        danmuClientModel.setDanmuClientCode(openId);
-        danmuClientModel.setAddressId(addressId);
-        danmuClientModel.setClientType(Integer.parseInt(type));
+        DanmuClientInfoModel danmuClientInfoModel = new DanmuClientInfoModel();
+        danmuClientInfoModel.setDanmuClientCode(openId);
+        danmuClientInfoModel.setAddressId(addressId);
+        danmuClientInfoModel.setClientType(Integer.parseInt(type));
         logger.info("绑定通道与客户端对象的关系");
-        danmuChannelRepository.set(channel, danmuClientModel);
+        danmuChannelRepository.set(channel, danmuClientInfoModel);
     }
 
 
@@ -240,7 +240,7 @@ public class ClientLoginService {
      * @param clientType
      */
     public void screenClientLogin(String code, Channel channel, String clientType) {
-        DanmuClientModel danmuClient = findDanmuClientInfo(code);
+        DanmuClientInfoModel danmuClient = findDanmuClientInfo(code);
 
         logger.info("将要连接到服务器客户端的信息:{}", JSON.toJSONString(danmuClient));
         if (danmuClient != null) {
@@ -260,21 +260,21 @@ public class ClientLoginService {
             }
 
 
-            DanmuClientModel danmuClientModel = new DanmuClientModel();
-            BeanUtils.copyProperties(danmuClient, danmuClientModel);
-            danmuClientModel.setClientType(Integer.parseInt(clientType));
-            danmuClientModel.setDanmuCount(0);
-            danmuClientModel.setLastTime(DateUtils.getCurrentDate().getTime());
+            DanmuClientInfoModel danmuClientInfoModel = new DanmuClientInfoModel();
+            BeanUtils.copyProperties(danmuClient, danmuClientInfoModel);
+            danmuClientInfoModel.setClientType(Integer.parseInt(clientType));
+            danmuClientInfoModel.setDanmuCount(0);
+            danmuClientInfoModel.setLastTime(DateUtils.getCurrentDate().getTime());
             screenDanmuService.setScreenDanmuCount(danmuClient.getAddressId(),0);
             logger.info("绑定通道与客户端对象的关系");
-            danmuChannelRepository.set(channel, danmuClientModel);
+            danmuChannelRepository.set(channel, danmuClientInfoModel);
 
             //将当前客户端的信息存入缓
             //clientCacheService.setClientIdIntoCache(danmuClient.getAddressId(),danmuClient.getRegistCode());
 
             // 获取活动信息
             String commandType = PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS;
-            PartyLogicModel party = partyService.findPartyByAddressId(danmuClientModel.getAddressId());
+            PartyLogicModel party = partyService.findPartyByAddressId(danmuClientInfoModel.getAddressId());
             //只有是活动场的情况下，此处才有效果
             if (party != null) {
                 try{
@@ -296,7 +296,7 @@ public class ClientLoginService {
                     commandObject.put("data",dataMap);
                     String message = JSON.toJSONString(commandObject);
 
-                    clientCacheService.setFirstCommandFromCache(danmuClientModel.getAddressId(),commandObject);
+                    clientCacheService.setFirstCommandFromCache(danmuClientInfoModel.getAddressId(),commandObject);
 
 
                     logger.info("下发消息给客户端:{}",message);
@@ -313,10 +313,10 @@ public class ClientLoginService {
                 }
             }
             //告诉javaclient启动发送全屏指令
-            String addressId = danmuClientModel.getAddressId();
+            String addressId = danmuClientInfoModel.getAddressId();
             Map<String,Object> map = new HashMap<>();
             map.put("type","screenMove");
-            map.put("code",danmuClientModel.getRegistCode());
+            map.put("code", danmuClientInfoModel.getRegistCode());
             clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
 
             //获取已经在线的flashclient数量
@@ -326,7 +326,7 @@ public class ClientLoginService {
                 collectorAlarmCacheService.removeAlarmAllCache(addressId);
             }
 
-            collectorCacheService.removeFlahOfflineCLient(addressId,danmuClientModel.getRegistCode());
+            collectorCacheService.removeFlahOfflineCLient(addressId, danmuClientInfoModel.getRegistCode());
             collectorCacheService.setCollectorIpRelation(addressId,host);
             collectorCacheService.setClientCount(0,addressId,host,count);
 
@@ -338,11 +338,13 @@ public class ClientLoginService {
     }
 
 
-    public DanmuClientModel findDanmuClientInfo(String danmuClientCode) {
+    public DanmuClientInfoModel findDanmuClientInfo(String danmuClientCode) {
         DanmuClientModel danmuClient = rpcDanmuClientService.findByRegistCode(danmuClientCode);
         logger.info("通过注册码：{},获取客户端信息:{}", danmuClientCode, JSON.toJSONString(danmuClient));
         if (danmuClient != null) {
-            return danmuClient;
+            DanmuClientInfoModel danmuClientInfoModel = new DanmuClientInfoModel();
+            BeanUtils.copyProperties(danmuClient,danmuClientInfoModel);
+            return danmuClientInfoModel;
         }
         return null;
     }

@@ -1,10 +1,7 @@
 package cn.partytime.config;
 
-import cn.partytime.common.constants.ClientConst;
-import cn.partytime.model.DanmuClientModel;
-import com.alibaba.fastjson.JSON;
+import cn.partytime.model.DanmuClientInfoModel;
 import io.netty.channel.Channel;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -22,18 +19,18 @@ public class DanmuChannelRepository {
     private static final Logger logger = LoggerFactory.getLogger(DanmuChannelRepository.class);
 
     //通道与客户端关系
-    private ConcurrentHashMap<Channel, DanmuClientModel> channelConcurrentHashMap = new ConcurrentHashMap<Channel, DanmuClientModel>();
+    private ConcurrentHashMap<Channel, DanmuClientInfoModel> channelConcurrentHashMap = new ConcurrentHashMap<Channel, DanmuClientInfoModel>();
 
-    public  ConcurrentHashMap<Channel, DanmuClientModel>  findConcurrentHashMap(){
+    public  ConcurrentHashMap<Channel, DanmuClientInfoModel>  findConcurrentHashMap(){
         return channelConcurrentHashMap;
     }
 
-    public void set(Channel channel, DanmuClientModel danmuClientModel) {
+    public void set(Channel channel, DanmuClientInfoModel danmuClientInfoModel) {
         logger.info("新的通道连接");
-        channelConcurrentHashMap.put(channel, danmuClientModel);
+        channelConcurrentHashMap.put(channel, danmuClientInfoModel);
     }
 
-    public DanmuClientModel get(Channel channel) {
+    public DanmuClientInfoModel get(Channel channel) {
         return  channelConcurrentHashMap.get(channel);
     }
 
@@ -50,9 +47,9 @@ public class DanmuChannelRepository {
     public int findDanmuClientCount(int type,String addressId){
 
         int count =0;
-        for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : channelConcurrentHashMap.entrySet()) {
-            DanmuClientModel danmuClientModel = entry.getValue();
-            if (addressId.equals(danmuClientModel.getAddressId()) && danmuClientModel.getClientType()==type) {
+        for (ConcurrentHashMap.Entry<Channel, DanmuClientInfoModel> entry : channelConcurrentHashMap.entrySet()) {
+            DanmuClientInfoModel danmuClientInfoModel = entry.getValue();
+            if (addressId.equals(danmuClientInfoModel.getAddressId()) && danmuClientInfoModel.getClientType()==type) {
                 count = count+1;
             }
         }

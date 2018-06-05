@@ -14,5 +14,10 @@ public class PotocolComTypeConst {
      */
     public static final String COMMANDTYPE_STARTSTAGEANDFULL="screenMove";
 
+    /**
+     * 客户端信息
+     */
+    public static final String COMMANDTYPE_CLIENTINFO="clientInfo";
+
 
 }

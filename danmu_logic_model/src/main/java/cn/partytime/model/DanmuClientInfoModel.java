@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 
 @Data
-public class DanmuClientModel implements Serializable {
+public class DanmuClientInfoModel implements Serializable {
     private static final long serialVersionUID = 7757607862683701760L;
 
     private String id;
@@ -49,5 +49,7 @@ public class DanmuClientModel implements Serializable {
     private Integer danmuCount;
 
     private Long lastTime;
+
+    private String ip;
 
 }

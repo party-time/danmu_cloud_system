@@ -1,7 +1,7 @@
 package cn.partytime.netty;
 
 import cn.partytime.config.DanmuChannelRepository;
-import cn.partytime.model.DanmuClientModel;
+import cn.partytime.model.DanmuClientInfoModel;
 import cn.partytime.service.PotocolService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -89,9 +89,9 @@ public class DanmuServerHandler extends SimpleChannelInboundHandler<TextWebSocke
         if (IdleStateEvent.class.isAssignableFrom(evt.getClass())) {
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.READER_IDLE) {
-                DanmuClientModel danmuClientModel = danmuChannelRepository.get(channel);
-                logger.info("长时间没有获取到客户端{}的内容踢下线",JSON.toJSONString(danmuClientModel));
-                if (danmuClientModel.getClientType() == 2) {
+                DanmuClientInfoModel danmuClientInfoModel = danmuChannelRepository.get(channel);
+                logger.info("长时间没有获取到客户端{}的内容踢下线",JSON.toJSONString(danmuClientInfoModel));
+                if (danmuClientInfoModel.getClientType() == 2) {
                     potocolService.forceLogout(channel);
                 }
             } else if (event.state() == IdleState.WRITER_IDLE) {

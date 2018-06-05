@@ -1,11 +1,12 @@
 package cn.partytime.scheduler;
 
+import cn.partytime.cache.client.ClientInfoCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
 import cn.partytime.common.util.SetUtils;
 import cn.partytime.config.DanmuChannelRepository;
+import cn.partytime.model.DanmuClientInfoModel;
 import cn.partytime.model.DanmuCollectorInfo;
 import cn.partytime.common.cachekey.CollectorServerCacheKey;
-import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
@@ -22,7 +23,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -66,11 +66,31 @@ public class DanmuServerScheduler {
     private ClientChannelService clientChannelService;
 
     @Autowired
+    private CollectorCacheService collectorCacheService;
+
+    @Autowired
     private ClientCacheService clientCacheService;
 
     @Autowired
-    private CollectorCacheService collectorCacheService;
+    private ClientInfoCacheService clientInfoCacheService;
 
+    @Scheduled(cron = "0/30 * * * * *")
+    public void restScreenClientInfoToCache() {
+        int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
+        Set<String> addressSet =  clientChannelService.findScreenAddresIdList(clientType);
+        if(SetUtils.checkSetIsNotNull(addressSet)){
+            for(String addressId:addressSet){
+                List<DanmuClientInfoModel> danmuClientInfoModelList = clientChannelService.findDanmuClientModelListByAddressIdAndClientType(addressId,clientType);
+                if(ListUtils.checkListIsNotNull(danmuClientInfoModelList)){
+                    for(DanmuClientInfoModel danmuClientInfoModel : danmuClientInfoModelList){
+                        String registerCode = danmuClientInfoModel.getRegistCode();
+                        clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,registerCode);
+                        clientInfoCacheService.setClientToCache(registerCode,ClientConst.CLIENT_TYPE_SCREEN,JSON.toJSONString(danmuClientInfoModel));
+                    }
+                }
+            }
+        }
+    }
 
     @Scheduled(cron = "0/30 * * * * *")
     public void resetClientCount(){
@@ -85,6 +105,7 @@ public class DanmuServerScheduler {
             }
         }
     }
+
 
     @Scheduled(cron = "0/30 * * * * *")
     public void reportCurrentByCron() {

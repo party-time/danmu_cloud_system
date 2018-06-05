@@ -2,11 +2,10 @@ package cn.partytime.service;
 
 import cn.partytime.business.danmu.DanmuCommandBussinessService;
 import cn.partytime.cache.alarm.AlarmCacheService;
+import cn.partytime.cache.client.ClientInfoCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
-import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.ClientConst;
-import cn.partytime.common.constants.LogCodeConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.util.BooleanUtils;
 import cn.partytime.common.util.DateUtils;
@@ -15,11 +14,10 @@ import cn.partytime.config.DanmuChannelRepository;
 import cn.partytime.dataRpc.RpcDanmuService;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.dataRpc.RpcWechatService;
-import cn.partytime.model.DanmuClientModel;
+import cn.partytime.model.DanmuClientInfoModel;
 import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.WechatUserDto;
 import cn.partytime.model.WechatUserInfoDto;
-import cn.partytime.redis.service.RedisService;
 import cn.partytime.util.PotocolTypeConst;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -31,9 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by lENOVO on 2016/8/31.
@@ -84,6 +80,10 @@ public class PotocolService {
 
     @Value("${netty.port}")
     private int port;
+
+    @Autowired
+    private ClientInfoCacheService clientInfoCacheService;
+
     /**
      * 协议处理
      *
@@ -104,7 +104,7 @@ public class PotocolService {
 
     private void javaClientHandler(Map<String,Object> map, Channel channel) {
         String type = String.valueOf(map.get("type"));
-        DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
+        DanmuClientInfoModel clientInfoModel = danmuChannelRepository.get(channel);
         if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
             if(clientInfoModel==null){
                 forceLogout(channel);
@@ -146,19 +146,19 @@ public class PotocolService {
             if (wechatUser != null) {
                 openId = wechatUser.getOpenId();
                 //将客户端信息与Channel绑定
-                DanmuClientModel danmuClientModel = new DanmuClientModel();
-                danmuClientModel.setDanmuClientCode(openId);
-                danmuClientModel.setAddressId(partyLogicModel.getAddressId());
-                danmuClientModel.setClientType(Integer.parseInt(map.get("clientType")+""));
+                DanmuClientInfoModel danmuClientInfoModel = new DanmuClientInfoModel();
+                danmuClientInfoModel.setDanmuClientCode(openId);
+                danmuClientInfoModel.setAddressId(partyLogicModel.getAddressId());
+                danmuClientInfoModel.setClientType(Integer.parseInt(map.get("clientType")+""));
 
                 log.info("绑定通道与客户端对象的关系");
-                danmuChannelRepository.set(channel, danmuClientModel);
+                danmuChannelRepository.set(channel, danmuClientInfoModel);
 
             } else {
                 forceLogout(channel);
             }
         }else if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
-            DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
+            DanmuClientInfoModel clientInfoModel = danmuChannelRepository.get(channel);
             log.info("当前客户端信息:{}接受ping",clientInfoModel.getScreenId());
 
             Map<String,Object> resultMap = new HashMap<String,Object>();
@@ -167,7 +167,7 @@ public class PotocolService {
             log.info("返回给客户端信息{}：" + msg);
             channel.writeAndFlush(new TextWebSocketFrame(msg));
         }else if (PotocolTypeConst.POTOCOL_CLOSE.equals(type)) {
-            DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
+            DanmuClientInfoModel clientInfoModel = danmuChannelRepository.get(channel);
             log.info("关闭客户端：{}",JSON.toJSONString(clientInfoModel));
             forceLogout(channel);
         }
@@ -176,9 +176,9 @@ public class PotocolService {
         String type = String.valueOf(map.get("type"));
         boolean isCallBack = BooleanUtils.objectConvertToBoolean(String.valueOf(map.get("isCallBack")));
         log.info("isCallBack===================>"+isCallBack+JSON.toJSONString(map));
-        DanmuClientModel clientInfoModel = danmuChannelRepository.get(channel);
+        DanmuClientInfoModel clientInfoModel = danmuChannelRepository.get(channel);
+        String addressId = clientInfoModel.getAddressId();
         if(isCallBack){
-            String addressId = clientInfoModel.getAddressId();
             log.info("收到客户端返回的弹幕信息:{}",JSON.toJSONString(map));
             Object object = map.get("danmuId");
             if(object!=null){
@@ -193,7 +193,6 @@ public class PotocolService {
             log.info("收到客户端返回的状态信息:{}",JSON.toJSONString(map));
             int status = Integer.parseInt(String.valueOf(map.get("status")));
             String partyId = String.valueOf(map.get("partyId"));
-            String addressId = clientInfoModel.getAddressId();
             Map<String,Object> commandMap = clientCacheService.getFirstCommandFromCache(addressId);
             if(commandMap!=null){
                 Map<String, Object> dataMap = (Map<String, Object>) JSON.parse(String.valueOf(commandMap.get("data")));
@@ -207,11 +206,8 @@ public class PotocolService {
             }
 
         } else if(PotocolTypeConst.POTOCOL_DANMU_COUNT.equals(type)){
-            String addressId = clientInfoModel.getAddressId();
             String dataStr = JSON.toJSONString(map.get("data"));
             Integer danmuCount = IntegerUtils.objectConvertToInt(dataStr);
-
-
             //当返回的弹幕数量大于0的处理
             if(danmuCount>0){
                 if(danmuCount<15){
@@ -223,8 +219,6 @@ public class PotocolService {
                 alarmCacheService.removeAlarmCount(addressId,AlarmKeyConst.ALARM_KEY_SYSTEMERROR);
                 alarmCacheService.addAlarmTime(DateUtils.getCurrentDate().getTime(),0,addressId,AlarmKeyConst.ALARM_KEY_SYSTEMERROR);
             }
-
-
             log.info("==========================================接收客户端返回的弹幕数量:{}",danmuCount);
             String partyId = String.valueOf(map.get("partyId"));
             if(partyId!=null){
@@ -232,9 +226,8 @@ public class PotocolService {
             }
             danmuChannelRepository.set(channel,clientInfoModel);
             screenDanmuService.setScreenDanmuCount(addressId,danmuCount);
-
-
-
+            //将客户端信息存入缓存
+            clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,clientInfoModel.getRegistCode());
         }else if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
             log.info("当前客户端信息:{}接受ping",clientInfoModel.getScreenId());
 
@@ -245,11 +238,14 @@ public class PotocolService {
             channel.writeAndFlush(new TextWebSocketFrame(msg));
         } else if(PotocolComTypeConst.COMMANDTYPE_STARTSTAGEANDFULL.equals(type)){
             log.info("转发给java的协议:{}",JSON.toJSONString(map));
-            String addressId = clientInfoModel.getAddressId();
             map.put("clientType","2");
             clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
-        }  else {
-
+        }  else if(PotocolComTypeConst.COMMANDTYPE_CLIENTINFO.equals(type)){
+            String ip = String.valueOf(map.get("ip"));
+            clientInfoModel.setIp(ip);
+            danmuChannelRepository.set(channel,clientInfoModel);
+            clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,clientInfoModel.getRegistCode());
+        }else {
             log.info("客户端发送给服务器信息:{},不处理", JSON.toJSONString(map));
         }
     }
@@ -261,18 +257,26 @@ public class PotocolService {
      * @param channel
      */
     public void forceLogout(Channel channel) {
-        DanmuClientModel danmuClientModel = danmuChannelRepository.get(channel);
+        DanmuClientInfoModel danmuClientInfoModel = danmuChannelRepository.get(channel);
 
-        if(danmuClientModel!=null && danmuClientModel.getClientType()==0){
-            String addressId = danmuClientModel.getAddressId();
-            clientCacheService.removeCommandCache(danmuClientModel.getAddressId());
+        if(danmuClientInfoModel !=null && danmuClientInfoModel.getClientType()==0){
+            String addressId = danmuClientInfoModel.getAddressId();
+            clientCacheService.removeCommandCache(danmuClientInfoModel.getAddressId());
 
             int count =danmuChannelRepository.findDanmuClientCount(0,addressId);
             log.info("当前场地下载线的flash client数量是:{}",count);
             collectorCacheService.setFlashOfflineTime(addressId);
             collectorCacheService.setClientCount(0,addressId,host,count-1);
-            collectorCacheService.setFlahOfflineCLient(addressId,danmuClientModel.getRegistCode());
+            collectorCacheService.setFlahOfflineCLient(addressId, danmuClientInfoModel.getRegistCode());
+
+            //从sorset中清除客户端信息
+            String registerCode = danmuClientInfoModel.getRegistCode();
+            clientInfoCacheService.removeClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,registerCode);
+            clientInfoCacheService.removeClientToCache(registerCode,ClientConst.CLIENT_TYPE_SCREEN);
+
         }
+
+
 
         //清除用户状态
         danmuChannelRepository.remove(channel);

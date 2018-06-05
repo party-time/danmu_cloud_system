@@ -1,8 +1,7 @@
 package cn.partytime.service;
 
 import cn.partytime.config.DanmuChannelRepository;
-import cn.partytime.model.DanmuClientModel;
-import com.alibaba.fastjson.JSON;
+import cn.partytime.model.DanmuClientInfoModel;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +28,12 @@ public class ClientChannelService {
 
     public Set<String> findClientAddressSet(int clientType){
         Set<String> addressSet = new HashSet<String>();
-        ConcurrentHashMap<Channel,DanmuClientModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
+        ConcurrentHashMap<Channel,DanmuClientInfoModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
         if (channelConcurrentHashMap != null && channelConcurrentHashMap.size() > 0) {
-            for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : channelConcurrentHashMap.entrySet()) {
-                DanmuClientModel danmuClientModel = entry.getValue();
-                if(danmuClientModel.getClientType()==clientType){
-                    addressSet.add(danmuClientModel.getAddressId());
+            for (ConcurrentHashMap.Entry<Channel, DanmuClientInfoModel> entry : channelConcurrentHashMap.entrySet()) {
+                DanmuClientInfoModel danmuClientInfoModel = entry.getValue();
+                if(danmuClientInfoModel.getClientType()==clientType){
+                    addressSet.add(danmuClientInfoModel.getAddressId());
                 }
             }
         }
@@ -43,11 +42,11 @@ public class ClientChannelService {
 
     public int findDanmuClientCountByAddressIdAndClientType(String addressId,int clientType){
         int count = 0;
-        ConcurrentHashMap<Channel,DanmuClientModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
+        ConcurrentHashMap<Channel,DanmuClientInfoModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
         if (channelConcurrentHashMap != null && channelConcurrentHashMap.size() > 0) {
-            for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : channelConcurrentHashMap.entrySet()) {
-                DanmuClientModel danmuClientModel = entry.getValue();
-                if(addressId.equals(danmuClientModel.getAddressId()) && danmuClientModel.getClientType()==clientType){
+            for (ConcurrentHashMap.Entry<Channel, DanmuClientInfoModel> entry : channelConcurrentHashMap.entrySet()) {
+                DanmuClientInfoModel danmuClientInfoModel = entry.getValue();
+                if(addressId.equals(danmuClientInfoModel.getAddressId()) && danmuClientInfoModel.getClientType()==clientType){
                     count++;
                 }
             }
@@ -58,13 +57,13 @@ public class ClientChannelService {
 
     public Set<String> findScreenAddresIdList(int clientType){
         Set<String> addressSet = new HashSet<String>();
-        ConcurrentHashMap<Channel,DanmuClientModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
+        ConcurrentHashMap<Channel,DanmuClientInfoModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
         if (channelConcurrentHashMap != null && channelConcurrentHashMap.size() > 0) {
-            for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : channelConcurrentHashMap.entrySet()) {
-                DanmuClientModel danmuClientModel = entry.getValue();
+            for (ConcurrentHashMap.Entry<Channel, DanmuClientInfoModel> entry : channelConcurrentHashMap.entrySet()) {
+                DanmuClientInfoModel danmuClientInfoModel = entry.getValue();
                 Channel channel = entry.getKey();
-                if(clientType==danmuClientModel.getClientType()){
-                    addressSet.add(danmuClientModel.getAddressId());
+                if(clientType== danmuClientInfoModel.getClientType()){
+                    addressSet.add(danmuClientInfoModel.getAddressId());
                 }
             }
         }
@@ -73,12 +72,12 @@ public class ClientChannelService {
 
     public List<Channel> findDanmuClientChannelAddressByClientType(String addressId,int clientType){
         List<Channel> channelList = new ArrayList<Channel>();
-        ConcurrentHashMap<Channel,DanmuClientModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
+        ConcurrentHashMap<Channel,DanmuClientInfoModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
         if (channelConcurrentHashMap != null && channelConcurrentHashMap.size() > 0) {
-            for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : channelConcurrentHashMap.entrySet()) {
-                DanmuClientModel danmuClientModel = entry.getValue();
+            for (ConcurrentHashMap.Entry<Channel, DanmuClientInfoModel> entry : channelConcurrentHashMap.entrySet()) {
+                DanmuClientInfoModel danmuClientInfoModel = entry.getValue();
                 Channel channel = entry.getKey();
-                if(clientType==danmuClientModel.getClientType() && addressId.equals(danmuClientModel.getAddressId())){
+                if(clientType== danmuClientInfoModel.getClientType() && addressId.equals(danmuClientInfoModel.getAddressId())){
                     channelList.add(channel);
                 }
             }
@@ -94,17 +93,33 @@ public class ClientChannelService {
      */
     public Channel findChannelByCode(String code,int clientType) {
         logger.info("获取通道信息");
-        ConcurrentHashMap<Channel,DanmuClientModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
+        ConcurrentHashMap<Channel,DanmuClientInfoModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
         if (channelConcurrentHashMap != null && channelConcurrentHashMap.size() > 0) {
-            for (ConcurrentHashMap.Entry<Channel, DanmuClientModel> entry : channelConcurrentHashMap.entrySet()) {
-                DanmuClientModel danmuClientModel = entry.getValue();
+            for (ConcurrentHashMap.Entry<Channel, DanmuClientInfoModel> entry : channelConcurrentHashMap.entrySet()) {
+                DanmuClientInfoModel danmuClientInfoModel = entry.getValue();
 
-                if (code.equals(danmuClientModel.getRegistCode()) && danmuClientModel.getClientType() == clientType) {
+                if (code.equals(danmuClientInfoModel.getRegistCode()) && danmuClientInfoModel.getClientType() == clientType) {
                     return entry.getKey();
                 }
             }
         }
         return null;
+    }
+
+
+    public List<DanmuClientInfoModel> findDanmuClientModelListByAddressIdAndClientType(String addressId, int clientType){
+        List<DanmuClientInfoModel> danmuClientInfoModelList = new ArrayList<DanmuClientInfoModel>();
+        ConcurrentHashMap<Channel,DanmuClientInfoModel> channelConcurrentHashMap = danmuChannelRepository.findConcurrentHashMap();
+        if (channelConcurrentHashMap != null && channelConcurrentHashMap.size() > 0) {
+            for (ConcurrentHashMap.Entry<Channel, DanmuClientInfoModel> entry : channelConcurrentHashMap.entrySet()) {
+                DanmuClientInfoModel danmuClientInfoModel = entry.getValue();
+                Channel channel = entry.getKey();
+                if(clientType== danmuClientInfoModel.getClientType() && addressId.equals(danmuClientInfoModel.getAddressId())){
+                    danmuClientInfoModelList.add(danmuClientInfoModel);
+                }
+            }
+        }
+        return danmuClientInfoModelList;
     }
 
 }
