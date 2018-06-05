@@ -94,7 +94,7 @@ public class WechatUserManagerController {
     }
 
     /**
-     * 分配用户的场地
+     * 用户表白
      * @param wechatId
      * @return
      */
@@ -120,4 +120,29 @@ public class WechatUserManagerController {
         return restResultModel;
     }
 
+    /**
+     * 用户表白
+     * @param wechatId
+     * @return
+     */
+    @RequestMapping(value = "/dashang", method = RequestMethod.GET)
+    public RestResultModel dashang(String addressId,String wechatId){
+
+        RestResultModel restResultModel = new RestResultModel();
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
+        WechatUser wechatUser = wechatUserService.findById(wechatId);
+        Map<String,String> map = new HashMap<>();
+        map.put("userName",wechatUser.getNick());
+        map.put("gift","飞龙在天");
+
+        String openId = wechatUser.getOpenId();
+
+        DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(),wechatUserInfo.getLastLatitude());
+
+        PartyLogicModel partyLogicModel = bmsPartyService.findCurrentParty(openId);
+
+        bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_MONEY, map, openId, partyLogicModel.getPartyId(), danmuAddressModel.getId(), 1,0);
+        restResultModel.setResult(200);
+        return restResultModel;
+    }
 }
