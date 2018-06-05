@@ -132,7 +132,7 @@ public class WechatUserManagerController {
         WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
         WechatUser wechatUser = wechatUserService.findById(wechatId);
         Map<String,String> map = new HashMap<>();
-        map.put("userName",wechatUser.getNick());
+        map.put("name",wechatUser.getNick());
         map.put("gift","飞龙在天");
 
         String openId = wechatUser.getOpenId();
@@ -141,7 +141,7 @@ public class WechatUserManagerController {
 
         PartyLogicModel partyLogicModel = bmsPartyService.findCurrentParty(openId);
 
-        bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_MONEY, map, openId, partyLogicModel.getPartyId(), danmuAddressModel.getId(), 1,0);
+        bmsDanmuService.sendDanmuByWechat(CmdConst.CMD_NAME_MONEY, map, openId, "5ad6bf9b47f1fd2074dceaec", "5a4d9c04e2f0d248cd43f412", 1,0);
         restResultModel.setResult(200);
         return restResultModel;
     }
