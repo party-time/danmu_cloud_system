@@ -26,9 +26,7 @@ import cn.partytime.util.WechatSignUtil;
 import cn.partytime.util.WeixinUtil;
 import cn.partytime.wechat.entity.PayNotifyXmlEntity;
 import cn.partytime.wechat.entity.ReceiveXmlEntity;
-import cn.partytime.wechat.message.TextMessage;
-import cn.partytime.wechat.message.Voice;
-import cn.partytime.wechat.message.VoiceMessage;
+import cn.partytime.wechat.message.*;
 import cn.partytime.wechat.payService.WechatPayService;
 import cn.partytime.wechat.pojo.AccessToken;
 import cn.partytime.wechat.pojo.UserInfo;
@@ -265,17 +263,33 @@ public class WechatRestController {
                                         text.setContent(weixinMessage.getMessage());
                                         result = FormatXmlProcess.textMessageToXml(text);
                                     }else{
-                                        VoiceMessage voiceMessage = new VoiceMessage();
-                                        voiceMessage.setToUserName(xmlEntity.getFromUserName());
-                                        voiceMessage.setFromUserName(xmlEntity.getToUserName());
-                                        voiceMessage.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_VOICE);
-                                        voiceMessage.setCreateTime(new Date().getTime());
-                                        voiceMessage.setFuncFlag(0);
-                                        Voice voice = new Voice();
-                                        voice.setMediaId(weixinMessage.getMediaId());
-                                        voiceMessage.setVoice(voice);
-                                        result = FormatXmlProcess.voiceMessageToXml(voiceMessage);
-                                        log.info(result);
+
+                                        if(weixinMessage.getMeidaType() == 0){
+                                            VoiceMessage voiceMessage = new VoiceMessage();
+                                            voiceMessage.setToUserName(xmlEntity.getFromUserName());
+                                            voiceMessage.setFromUserName(xmlEntity.getToUserName());
+                                            voiceMessage.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_VOICE);
+                                            voiceMessage.setCreateTime(new Date().getTime());
+                                            voiceMessage.setFuncFlag(0);
+                                            Voice voice = new Voice();
+                                            voice.setMediaId(weixinMessage.getMediaId());
+                                            voiceMessage.setVoice(voice);
+                                            result = FormatXmlProcess.voiceMessageToXml(voiceMessage);
+                                            log.info(result);
+                                        }else if(weixinMessage.getMeidaType() == 1){
+                                            ImageMessage imageMessage = new ImageMessage();
+                                            imageMessage.setToUserName(xmlEntity.getFromUserName());
+                                            imageMessage.setFromUserName(xmlEntity.getToUserName());
+                                            imageMessage.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_IMAGE);
+                                            imageMessage.setCreateTime(new Date().getTime());
+                                            imageMessage.setFuncFlag(0);
+                                            Image image = new Image();
+                                            image.setMediaId(weixinMessage.getMediaId());
+                                            imageMessage.setImage(image);
+                                            result = FormatXmlProcess.imageMessageToXml(imageMessage);
+                                            log.info(result);
+                                        }
+
                                     }
                                 }
                             }

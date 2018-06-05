@@ -37,6 +37,11 @@ public class FormatXmlProcess {
         return xstream.toXML(voiceMessage);
     }
 
+    public static String imageMessageToXml(ImageMessage imageMessage) {
+        xstream.alias("xml", imageMessage.getClass());
+        return xstream.toXML(imageMessage);
+    }
+
     /**
      * 音乐消息对象转换成xml
      *
