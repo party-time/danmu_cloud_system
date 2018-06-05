@@ -1,6 +1,7 @@
 package cn.partytime.service.wechat;
 
 
+import cn.partytime.common.constants.DistanceConst;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
 import cn.partytime.model.DanmuAddressModel;
 import cn.partytime.model.PageResultModel;
@@ -10,12 +11,17 @@ import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.model.wechat.WechatUserListModel;
 import cn.partytime.service.DanmuAddressService;
 import com.alibaba.fastjson.JSON;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +45,9 @@ public class BmsWechatUserManagerService {
 
     @Autowired
     private DanmuAddressService danmuAddressService;
+
+    @Resource(name = "managerMongoTemplate")
+    private MongoTemplate managerMongoTemplate;
 
     private PageResultModel findByWechatPage(Page<WechatUser> wechatUserPage ){
         if( null != wechatUserPage){
@@ -124,5 +133,26 @@ public class BmsWechatUserManagerService {
             wechatUserInfoService.update(wechatUserInfo);
             wechatUserService.updateUserInfo(wechatUser);
         }
+    }
+
+
+    public PageResultModel searchWechatUser(String nick,String addressId,Date startRegistTime,Date endRegistTime,Integer status){
+
+        BasicDBObject basicDBObject4 = null;
+        if(StringUtils.isEmpty(addressId)){
+
+            DanmuAddress danmuAddress = danmuAddressService.findById(addressId);
+            basicDBObject4 = new BasicDBObject("coordinates", danmuAddress.getLocation());
+        }
+
+        BasicDBObject geometryObject = new BasicDBObject("$geometry", basicDBObject4);
+        geometryObject.append("$maxDistance", DistanceConst.WEChAT_CLIENT_DISTANCE);
+        BasicDBObject nearObject = new BasicDBObject("$near", geometryObject);
+        BasicDBObject basicDBObject1 = new BasicDBObject("location", nearObject);
+
+        DBCursor cur1 = managerMongoTemplate.getCollection("danmu_address").find(basicDBObject1);
+        PageResultModel pageResultModel = new PageResultModel();
+
+        return pageResultModel;
     }
 }

@@ -29,4 +29,6 @@ public interface WechatUserRepository extends MongoRepository<WechatUser, String
 
     public List<WechatUser> findByIdIn(List<String> idList);
 
+    public Page<WechatUser> findByNickLikeAndSubscribeState(String nick,Integer subscribeState,Pageable pageable);
+
 }

@@ -29,6 +29,9 @@ public class WeixinMessage extends BaseModel {
 
     private String mediaName;
 
+    //多媒体类型 0音频 1图片
+    private Integer meidaType;
+
     public List<String> getWordList() {
         if(!StringUtils.isEmpty(words)){
             return Arrays.asList(words.split(","));
@@ -74,5 +77,13 @@ public class WeixinMessage extends BaseModel {
 
     public void setMediaName(String mediaName) {
         this.mediaName = mediaName;
+    }
+
+    public Integer getMeidaType() {
+        return meidaType;
+    }
+
+    public void setMeidaType(Integer meidaType) {
+        this.meidaType = meidaType;
     }
 }

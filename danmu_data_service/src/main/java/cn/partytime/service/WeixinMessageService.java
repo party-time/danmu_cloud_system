@@ -86,11 +86,12 @@ public class WeixinMessageService {
     }
 
 
-    public void updateWeixinMessageVoice(String id,String mediaId,String mediaName){
+    public void updateWeixinMessageVoice(String id,String mediaId,String mediaName,Integer type){
         WeixinMessage weixinMessage = this.findById(id);
         if( null != weixinMessage){
             weixinMessage.setMediaId(mediaId);
             weixinMessage.setMediaName(mediaName);
+            weixinMessage.setMeidaType(type);
         }
         weixinMessageRepository.save(weixinMessage);
     }

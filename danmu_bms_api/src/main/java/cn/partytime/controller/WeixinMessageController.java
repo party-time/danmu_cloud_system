@@ -123,6 +123,21 @@ public class WeixinMessageController {
     }
 
     /**
+     * 查找上传的图片文件
+     * @param page
+     * @param size
+     * @return
+     */
+    @RequestMapping(value = "/findMedia", method = RequestMethod.GET)
+    public PageResultModel findImage(int page, int size){
+        PageResultModel pageResultModel = new PageResultModel();
+        MaterlListPageResultJson materlListPageResultJson = bmsWechatUserService.getImage(page,size);
+        pageResultModel.setRows(materlListPageResultJson.getItem());
+        pageResultModel.setTotal(materlListPageResultJson.getTotal_count());
+        return pageResultModel;
+    }
+
+    /**
      * 关联音频文件
      * @param id
      * @param mediaId
@@ -132,7 +147,15 @@ public class WeixinMessageController {
     @RequestMapping(value = "/selectVoice", method = RequestMethod.GET)
     public RestResultModel selectVoice(String id,String mediaId,String mediaName){
         RestResultModel restResultModel = new RestResultModel();
-        weixinMessageService.updateWeixinMessageVoice(id,mediaId,mediaName);
+        weixinMessageService.updateWeixinMessageVoice(id,mediaId,mediaName,0);
+        restResultModel.setResult(200);
+        return restResultModel;
+    }
+
+    @RequestMapping(value = "/selectImage", method = RequestMethod.GET)
+    public RestResultModel selectImage(String id,String mediaId,String mediaName){
+        RestResultModel restResultModel = new RestResultModel();
+        weixinMessageService.updateWeixinMessageVoice(id,mediaId,mediaName,1);
         restResultModel.setResult(200);
         return restResultModel;
     }

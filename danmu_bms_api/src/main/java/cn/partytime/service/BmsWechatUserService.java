@@ -346,4 +346,14 @@ public class BmsWechatUserService {
         materialListJson.setCount(size);
         return WeixinUtil.getMaterial(accessToken.getToken(),materialListJson);
     }
+
+    public MaterlListPageResultJson getImage(int page, int size){
+        AccessToken accessToken = this.getAccessToken();
+        MaterialListJson materialListJson = new MaterialListJson();
+        materialListJson.setType("image");
+        int offSet = (page-1)*size;
+        materialListJson.setOffset(offSet);
+        materialListJson.setCount(size);
+        return WeixinUtil.getMaterial(accessToken.getToken(),materialListJson);
+    }
 }

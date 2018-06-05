@@ -6,8 +6,17 @@ import cn.partytime.redis.service.RedisService;
 import cn.partytime.repository.user.WechatUserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.geo.Circle;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +33,9 @@ public class WechatUserInfoService {
     private WechatUserService wechatUserService;
     @Autowired
     private RedisService redisService;
+
+    @Resource(name = "userMongoTemplate")
+    private MongoTemplate userMongoTemplate;
 
     public void saveOrUpdate(String wechatId,Double longitude,Double latitude){
         WechatUserInfo wechatUserInfo = wechatUserInfoRepository.findByWechatId(wechatId);
@@ -91,6 +103,5 @@ public class WechatUserInfoService {
     public void update(WechatUserInfo wechatUserInfo){
         wechatUserInfoRepository.save(wechatUserInfo);
     }
-
 
 }

@@ -6,6 +6,8 @@ import cn.partytime.model.user.User;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.repository.user.WechatUserRepository;
 import cn.partytime.service.UserService;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -138,6 +140,8 @@ public class WechatUserService {
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return wechatUserRepository.findByNickLike(nick, pageRequest);
     }
+
+
 
     public void unsubscribe(String openId) {
         log.info("unsubscribe,openId:{}",openId);
