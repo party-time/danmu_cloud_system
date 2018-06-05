@@ -190,6 +190,7 @@ public class BmsHistoryDanmuService {
             String templateId = danmuModel.getTemplateId();
             CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);
             danmuLogicModel.setKey(templateKey);
+            danmuLogicModel.setDanmuTypeName(cmdTempAllData.getName());
             for(CmdTempComponentData cmdTempComponentData:cmdTempAllData.getCmdTempComponentDataList()){
                 Object objectMsg = null;
                 String key = cmdTempComponentData.getKey();
