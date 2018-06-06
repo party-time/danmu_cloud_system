@@ -302,7 +302,6 @@ public class ClientLoginService {
                     logger.info("下发消息给客户端:{}",message);
                     channel.writeAndFlush(new TextWebSocketFrame(message));
 
-                    //启动积压弹幕的推送
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -311,7 +310,8 @@ public class ClientLoginService {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            notSendDanmuHandler.danmuListenHandler(party.getAddressId());
+                            logger.info("启动积压弹幕的推送逻辑");
+                            notSendDanmuHandler.danmuListenHandler(party.getAddressId(),0);
                         }
                     }).start();
 

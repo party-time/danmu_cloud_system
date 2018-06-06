@@ -20,10 +20,6 @@ import javax.annotation.Resource;
 @Component
 public class NotSendDanmuHandler {
 
-    @Resource(name = "threadPoolTaskExecutor")
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
-
-
     @Autowired
     private DanmuCommandBussinessService danmuCommandBussinessService;
 
@@ -34,41 +30,49 @@ public class NotSendDanmuHandler {
     @Autowired
     private ClientChannelService clientChannelService;
 
-    public void danmuListenHandler(String addressId) {
-        log.info("实时弹幕监听线程启动");
+    public void danmuListenHandler(String addressId,int count) {
         try {
-            sendTempCacheDanmu(addressId);
+            long size = getNotSendQueueSize(addressId);
+            if(size>0){
+                //从未发送
+                int countScreen = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN));
+                int countMobile = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,Integer.parseInt(ClientConst.CLIENT_TYPE_MOBILE));
+                if(countScreen!=0) {
+                    Object object = danmuCommandBussinessService.getDanmuFromNotSendQueue(addressId);
+                    if(object!=null){
+                        danmuSendService.sendMessageToAllClient(addressId,object);
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }else{
+                    count++;
+                }
+            }
+            size =getNotSendQueueSize(addressId);
+            if(size>0 && count<10){
+                log.info("当前队列中剩余的弹幕数:{}",size);
+                log.info("未发送的弹幕队列中，弹幕数量");
+                danmuListenHandler(addressId,count);
+            }
         }catch (Exception e) {
             log.error("实时弹幕监听线程异常:{}", e.getMessage());
         }
     }
 
+    public long getNotSendQueueSize(String addressId){
+        return  danmuCommandBussinessService.getNotSendQueueSize(addressId);
+    }
 
-    private void sendTempCacheDanmu(String addressId){
+
+    /*private void sendTempCacheDanmu(String addressId){
         threadPoolTaskExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                long size = danmuCommandBussinessService.getNotSendQueueSize(addressId);
-                if(size>0){
-                    //从未发送
-                    Object object = danmuCommandBussinessService.getDanmuFromNotSendQueue(addressId);
-                    if(object!=null){
 
-                        int countMobile = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,Integer.parseInt(ClientConst.CLIENT_TYPE_MOBILE));
-                        int countScreen = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN));
-
-                        if(countScreen!=0){
-                            danmuSendService.sendMessageToAllClient(addressId,object);
-                            try {
-                                Thread.sleep(3000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            sendTempCacheDanmu(addressId);
-                        }
-                    }
-                }
             }
         });
-    }
+    }*/
 }
