@@ -303,7 +303,17 @@ public class ClientLoginService {
                     channel.writeAndFlush(new TextWebSocketFrame(message));
 
                     //启动积压弹幕的推送
-                    notSendDanmuHandler.danmuListenHandler(party.getAddressId());
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            notSendDanmuHandler.danmuListenHandler(party.getAddressId());
+                        }
+                    }).start();
 
 
 
@@ -312,12 +322,14 @@ public class ClientLoginService {
                     logger.info("{}",e);
                 }
             }
-            //告诉javaclient启动发送全屏指令
+
             String addressId = danmuClientInfoModel.getAddressId();
-            Map<String,Object> map = new HashMap<>();
-            map.put("type","screenMove");
-            map.put("code", danmuClientInfoModel.getRegistCode());
-            clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
+
+            //告诉javaclient启动发送全屏指令
+            //Map<String,Object> map = new HashMap<>();
+            //map.put("type","screenMove");
+            //map.put("code", danmuClientInfoModel.getRegistCode());
+            //clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
 
             //获取已经在线的flashclient数量
             int count =danmuChannelRepository.findDanmuClientCount(0,addressId);
