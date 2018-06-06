@@ -20,6 +20,7 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -65,6 +66,9 @@ public class DanmuSendService {
 
     @Autowired
     private DanmuCommandBussinessService danmuCommandBussinessService;
+
+    @Value("${whiteColor.addressId:584a1a9a0cf2fdb8406efdce}")
+    private String whiteColorAddrssId;
 
     /**
      * 发送预制弹幕
@@ -143,6 +147,14 @@ public class DanmuSendService {
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
         List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
 
+        Object objectMessage =map.get("isSendH5");
+        Object type =map.get("type");
+        Object dataObject = map.get("data");
+        Map<String,Object> dataMap = (Map<String,Object>)JSON.parse(String.valueOf(JSON.toJSONString(dataObject)));
+        if(whiteColorAddrssId.equals(addressId) && "pDanmu".equals(String.valueOf(type))){
+            dataMap.put("color","0xffffff");
+        }
+        map.put("data",dataMap);
         if(ListUtils.checkListIsNotNull(screenChannelList)){
             logger.info("当前在线的flash客户端数量是:{}",screenChannelList.size());
             for(Channel channel:screenChannelList){
@@ -151,7 +163,7 @@ public class DanmuSendService {
                 channel.writeAndFlush(new TextWebSocketFrame(message));
             }
         }
-        Object objectMessage =map.get("isSendH5");
+
         if(objectMessage!=null){
             int isSendH5 = Integer.parseInt(String.valueOf(objectMessage));
             //是否发送到H5界面 0 发送 1不发送
@@ -195,7 +207,7 @@ public class DanmuSendService {
 
         //if("584a1a9a0cf2fdb8406efdce")
 
-        if("584a1a9a0cf2fdb8406efdce".equals(addressId) && "pDanmu".equals(String.valueOf(type))){
+        if(whiteColorAddrssId.equals(addressId) && "pDanmu".equals(String.valueOf(type))){
             dataMap.put("color","0xffffff");
         }
         map.put("data",dataMap);
