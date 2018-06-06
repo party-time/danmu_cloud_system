@@ -132,8 +132,11 @@ public class MovieLogicService {
                 log.info("startDate:{}",startDate);
                 log.info("movieStartDate:{}",movieStartDate);
                 log.info("currentDate:{}",movieStartDate);
-                //当电影开始时间存在的时候
-                if(movieStartDate!=null){
+
+                if(movieSchedule.getEndTime()!=null){
+                    log.info("进入这个分支，出处理任何逻辑，直接插入一条新的数据");
+                }else if(movieStartDate!=null){
+                    //当电影开始时间存在的时候
                     long minute = DateUtils.subMinute(movieStartDate,currentDate);
                     if(minute<10){
                         logger.info("当前时间距离开始时间在10分钟以内，此次请求忽略");
