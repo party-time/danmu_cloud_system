@@ -14,9 +14,10 @@
 
 </head>
 <body>
-    <image src="/images/wechat/getLocation.png" style="position: absolute;width: 90%;overflow: hidden;margin-left: 5%;"/>
-
-    <image src="/images/wechat/buton.png"  style="position: absolute;width:30%;overflow: hidden;top: 65%;margin-left: 30%;" id="getLocation"/>
+    <div style="position:fixed;bottom:10%;right:15%;z-index:50">
+        <img src="/images/wechat/dkan.png" style="width:200%" id="getLocation">
+    </div>
+    <img src="/images/wechat/dksm.png" style="width:100%;">
 
      <script>
              wx.config({
