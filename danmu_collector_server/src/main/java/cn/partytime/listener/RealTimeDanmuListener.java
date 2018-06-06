@@ -33,7 +33,7 @@ public class RealTimeDanmuListener implements MessageListener {
             String addressId = JSON.parseObject(String.valueOf(message),String.class).replace("'","");
             int countMobile = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,Integer.parseInt(ClientConst.CLIENT_TYPE_MOBILE));
             int countScreen = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN));
-            if((countMobile+countScreen)==0){
+            if(countScreen==0){
                 logger.info("地址:{}客户端都不在线,此时将弹幕缓存到临时队列中",addressId);
                 //return;
                 realTimeDanmuTempCacheHandler.danmuListenHandler(addressId);
