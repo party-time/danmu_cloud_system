@@ -264,7 +264,7 @@ public class WechatRestController {
                                         result = FormatXmlProcess.textMessageToXml(text);
                                     }else{
 
-                                        if(weixinMessage.getMeidaType() == 0){
+                                        if( null == weixinMessage.getMeidaType() || weixinMessage.getMeidaType() == 0){
                                             VoiceMessage voiceMessage = new VoiceMessage();
                                             voiceMessage.setToUserName(xmlEntity.getFromUserName());
                                             voiceMessage.setFromUserName(xmlEntity.getToUserName());
