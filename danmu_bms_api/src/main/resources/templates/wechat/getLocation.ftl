@@ -14,7 +14,7 @@
 
 </head>
 <body>
-    <div style="position:fixed;bottom:10%;right:10%;z-index:50">
+    <div style="position:fixed;bottom:10%;right:5%;z-index:50">
         <img src="/images/wechat/dkan.png" style="width:100%" id="getLocation">
     </div>
     <img src="/images/wechat/dksm.png" style="width:100%;">
