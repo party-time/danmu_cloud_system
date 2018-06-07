@@ -99,7 +99,10 @@ public class PotocolService {
             moblieClientHandler(map, channel);
         }else if (ClientConst.CLIENT_TYPE_JAVACLIENT.equals(clientType)) {
             javaClientHandler(map,channel);
+        }else if (ClientConst.CLIENT_TYPE_NODECLIENT.equals(clientType)) {
+            screenClientHandler(map,channel);
         }
+
     }
 
     private void javaClientHandler(Map<String,Object> map, Channel channel) {
@@ -239,7 +242,7 @@ public class PotocolService {
         } else if(PotocolComTypeConst.COMMANDTYPE_STARTSTAGEANDFULL.equals(type)){
             log.info("转发给java的协议:{}",JSON.toJSONString(map));
             map.put("clientType","2");
-            clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
+            //clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
         }  else if(PotocolComTypeConst.COMMANDTYPE_CLIENTINFO.equals(type)){
             String ip = String.valueOf(map.get("ip"));
             String port = String.valueOf(map.get("port"));
