@@ -258,7 +258,7 @@ public class PotocolService {
             clientInfoCacheService.setClientToCache(clientInfoModel.getRegistCode(),String.valueOf(clientType),JSON.toJSONString(clientInfoModel));
 
             //告诉其他node客户端信息
-            danmuSendService.pubMessageToAllClient(addressId,JSON.toJSONString(clientInfoModel),String.valueOf(clientType));
+            danmuSendService.pubMessageToAllClient(addressId,JSON.toJSONString(map),String.valueOf(clientType));
         }else {
             log.info("客户端发送给服务器信息:{},不处理", JSON.toJSONString(map));
         }
