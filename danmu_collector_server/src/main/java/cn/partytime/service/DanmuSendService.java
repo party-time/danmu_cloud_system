@@ -204,6 +204,7 @@ public class DanmuSendService {
             return;
         }
         for (Channel channel : screenChannelList) {
+            logger.info("==================================>{},{}",channel.id(),message);
             channel.writeAndFlush(new TextWebSocketFrame(message));
         }
     }
