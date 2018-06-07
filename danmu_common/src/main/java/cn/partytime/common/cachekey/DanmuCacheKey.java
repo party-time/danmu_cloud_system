@@ -24,12 +24,12 @@ public class DanmuCacheKey {
     /**
      * 未发送队列
      */
-    public static final String PUB_DANMU_CACHE_NOTE_SEND_LIST="pub:danmu:cache:notsend:list:";
+    public static final String PUB_DANMU_CACHE_NOT_SEND_LIST="pub:danmu:cache:notsend:list:";
 
     /**
      * 弹幕确认队列
      */
-    public static final String PUB_DANMU_PAY_SORTSET="pub:danmu:pay:sortset:";
+    public static final String PUB_DANMU_PAY_SEND_SORTSET="pub:danmu:pay:send:sortset:";
 
 
     /**

@@ -483,15 +483,22 @@ public class CommandHanderService {
 
                 Map<String,Object> commandObject = new HashMap<String,Object>();
                 commandObject.put("type",cmdTempAllData.getKey());
+                int isInDanmuLib = cmdTempAllData.getIsInDanmuLib();
+
+                //判断弹幕是否入库
+                if(isInDanmuLib==0){
+                    commandObject.put("isInDanmuLib",true);
+                }
+                Map<String,Object> dataMap = danmuLog.getContent();
                 if(isCallBack(cmdTempAllData)){
                     commandObject.put("isCallBack",true);
                     commandObject.put("clientType",0);
-                    Map<String,Object> dataMap = danmuLog.getContent();
+
                     if(danmuLog.getDanmuSrc()==0){
                         dataMap.put("isPay",false);
                     }
-                    commandObject.put("data",dataMap);
                 }
+                commandObject.put("data",dataMap);
                 commandObject.put("danmuId",danmuId);
                 commandObject.put("isSendH5",cmdTempAllData.getIsSendH5());
                 log.info("推送弹幕到客户端：{}",JSON.toJSONString(commandObject));
