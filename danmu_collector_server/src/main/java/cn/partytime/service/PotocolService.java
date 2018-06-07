@@ -119,7 +119,7 @@ public class PotocolService {
             log.info("转发给flash的协议:{}",JSON.toJSONString(map));
             String addressId = clientInfoModel.getAddressId();
             map.put("clientType","0");
-            danmuSendService.repeatCommandToAllScreenClient(addressId,JSON.toJSONString(map),0);
+            //danmuSendService.repeatCommandToAllScreenClient(addressId,JSON.toJSONString(map),0);
         }  else {
 
             log.info("客户端JAVACLIENT发送给服务器信息:{},不处理", JSON.toJSONString(map));
