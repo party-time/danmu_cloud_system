@@ -59,6 +59,7 @@ public class FlashClientController {
                 }
             }
             restResultModel.setResult(200);
+            restResultModel.setResult_msg("OK");
             restResultModel.setData(danmuClientInfoModelList);
         }else{
             restResultModel.setResult(404);
