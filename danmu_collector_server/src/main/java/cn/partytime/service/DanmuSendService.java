@@ -133,7 +133,7 @@ public class DanmuSendService {
 
         if(ProtocolConst.PROTOCOL_COMMAND.equals(type)){
             //获取的是命令。直接广播给所有屏幕
-            pubMessageToAllScreenClient(addressId, JSON.toJSONString(protocolModel),ClientConst.CLIENT_TYPE_SCREEN);
+            pubMessageToAllClient(addressId, JSON.toJSONString(protocolModel),ClientConst.CLIENT_TYPE_SCREEN);
         }else{
             Map<String,Object> map = (Map<String,Object>)JSON.parse(String.valueOf(object));
             String danmuType = (String)map.get("type");
@@ -174,9 +174,9 @@ public class DanmuSendService {
         }
         String message = String.valueOf(JSON.toJSONString(map));
         //pubDanmuToAllScreenClient(addressId,message);
-        pubMessageToAllScreenClient(addressId,message,ClientConst.CLIENT_TYPE_SCREEN);
+        pubMessageToAllClient(addressId,message,ClientConst.CLIENT_TYPE_SCREEN);
 
-        pubMessageToAllScreenClient(addressId,message,ClientConst.CLIENT_TYPE_NODECLIENT);
+        pubMessageToAllClient(addressId,message,ClientConst.CLIENT_TYPE_NODECLIENT);
 
         //设置弹幕发送状态
         rpcDanmuService.updateDanmuStatus(danmuId,1);
@@ -188,16 +188,16 @@ public class DanmuSendService {
             }
         }
         //向手机广播弹幕
-        pubMessageToAllScreenClient(addressId,message,ClientConst.CLIENT_TYPE_MOBILE);
+        pubMessageToAllClient(addressId,message,ClientConst.CLIENT_TYPE_MOBILE);
     }
 
     /**
      * 向所有客户端广播消息
      * @param addressId
      */
-    public void pubMessageToAllScreenClient(String addressId, String message,String type) {
+    public void pubMessageToAllClient(String addressId, String message,String type) {
 
-        logger.info("向地址{}客户端{}广播弹幕广播弹幕:{}", addressId,type,message);
+        logger.info("向地址{}客户端{}广播弹幕广播协议:{}", addressId,type,message);
         int clientType = Integer.parseInt(type);
         List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
         if (!ListUtils.checkListIsNotNull(screenChannelList)) {

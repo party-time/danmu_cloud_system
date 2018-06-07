@@ -182,6 +182,7 @@ public class PotocolService {
         log.info("isCallBack===================>"+isCallBack+JSON.toJSONString(map));
         DanmuClientInfoModel clientInfoModel = danmuChannelRepository.get(channel);
         String addressId = clientInfoModel.getAddressId();
+        int clientType = clientInfoModel.getClientType();
         if(isCallBack){
             log.info("收到客户端返回的弹幕信息:{}",JSON.toJSONString(map));
             Object object = map.get("danmuId");
@@ -232,6 +233,7 @@ public class PotocolService {
             screenDanmuService.setScreenDanmuCount(addressId,danmuCount);
             //将客户端信息存入缓存
             clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_NODECLIENT,clientInfoModel.getRegistCode(),clientInfoModel.getScreenId());
+            clientInfoCacheService.setClientToCache(clientInfoModel.getRegistCode(),String.valueOf(clientType),JSON.toJSONString(clientInfoModel));
         }else if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
             log.info("当前客户端信息:{}接受ping",clientInfoModel.getScreenId());
 
@@ -253,6 +255,10 @@ public class PotocolService {
             clientInfoModel.setPort(port);
             danmuChannelRepository.set(channel,clientInfoModel);
             clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_NODECLIENT,clientInfoModel.getRegistCode(),screenId);
+            clientInfoCacheService.setClientToCache(clientInfoModel.getRegistCode(),String.valueOf(clientType),JSON.toJSONString(clientInfoModel));
+
+            //告诉其他node客户端信息
+            danmuSendService.pubMessageToAllClient(addressId,JSON.toJSONString(clientInfoModel),String.valueOf(clientType));
         }else {
             log.info("客户端发送给服务器信息:{},不处理", JSON.toJSONString(map));
         }
@@ -265,6 +271,7 @@ public class PotocolService {
         log.info("isCallBack===================>"+isCallBack+JSON.toJSONString(map));
         DanmuClientInfoModel clientInfoModel = danmuChannelRepository.get(channel);
         String addressId = clientInfoModel.getAddressId();
+        int clientType = clientInfoModel.getClientType();
         if(isCallBack){
             log.info("收到客户端返回的弹幕信息:{}",JSON.toJSONString(map));
             Object object = map.get("danmuId");
@@ -315,6 +322,7 @@ public class PotocolService {
             screenDanmuService.setScreenDanmuCount(addressId,danmuCount);
             //将客户端信息存入缓存
             clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,clientInfoModel.getRegistCode(),clientInfoModel.getScreenId());
+            clientInfoCacheService.setClientToCache(clientInfoModel.getRegistCode(),String.valueOf(clientType),JSON.toJSONString(clientInfoModel));
         }else if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
             log.info("当前客户端信息:{}接受ping",clientInfoModel.getScreenId());
 
@@ -336,6 +344,7 @@ public class PotocolService {
             clientInfoModel.setPort(port);
             danmuChannelRepository.set(channel,clientInfoModel);
             clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,clientInfoModel.getRegistCode(),screenId);
+            clientInfoCacheService.setClientToCache(clientInfoModel.getRegistCode(),String.valueOf(clientType),JSON.toJSONString(clientInfoModel));
         }else {
             log.info("客户端发送给服务器信息:{},不处理", JSON.toJSONString(map));
         }
@@ -362,8 +371,9 @@ public class PotocolService {
 
             //从sorset中清除客户端信息
             String registerCode = danmuClientInfoModel.getRegistCode();
-            clientInfoCacheService.removeClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,registerCode);
-            clientInfoCacheService.removeClientToCache(registerCode,ClientConst.CLIENT_TYPE_SCREEN);
+            int clientType = danmuClientInfoModel.getClientType();
+            clientInfoCacheService.removeClientRegisterCodeIntoSortSet(addressId,String.valueOf(clientType),registerCode);
+            clientInfoCacheService.removeClientToCache(registerCode,String.valueOf(clientType));
 
         }
 
