@@ -52,4 +52,6 @@ public class DanmuClientInfoModel implements Serializable {
 
     private String ip;
 
+    private String port;
+
 }

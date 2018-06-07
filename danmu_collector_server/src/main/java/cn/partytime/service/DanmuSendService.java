@@ -5,6 +5,7 @@ import cn.partytime.business.danmu.DanmuCommandBussinessService;
 import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.cache.danmu.PreDanmuCacheService;
 import cn.partytime.dataRpc.RpcDanmuClientService;
+import cn.partytime.dataRpc.RpcDanmuService;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.dataRpc.RpcPreDanmuService;
 import cn.partytime.model.PartyLogicModel;
@@ -69,6 +70,10 @@ public class DanmuSendService {
 
     @Value("${whiteColor.addressId:584a1a9a0cf2fdb8406efdce}")
     private String whiteColorAddrssId;
+
+
+    @Autowired
+    private RpcDanmuService rpcDanmuService;
 
     /**
      * 发送预制弹幕
@@ -192,6 +197,7 @@ public class DanmuSendService {
         Object type =map.get("type");
         Object danmuIdObject = map.get("danmuId");
         Object dataObject = map.get("data");
+        String danmuId = String.valueOf(danmuIdObject);
         Map<String,Object> dataMap = (Map<String,Object>)JSON.parse(String.valueOf(dataObject));
         Object isPayObject = dataMap.get("isPay");
         //给指定的场地弹幕颜色设置成白色
@@ -203,7 +209,6 @@ public class DanmuSendService {
         if(isPayObject!=null){
             boolean isPayFlg = BooleanUtils.objectConvertToBoolean(isPayObject);
             if(isPayFlg){
-                String danmuId = String.valueOf(danmuIdObject);
                 //从支付成功，未发送成功队列中清除未发送的支付弹幕
                 danmuCommandBussinessService.removePayDanmuNotSendQueueSize(addressId,danmuId);
                 //向支付成功发送成功的队列中存入数据
@@ -212,6 +217,9 @@ public class DanmuSendService {
         }
         String message = String.valueOf(JSON.toJSONString(map));
         pubDanmuToAllScreenClient(addressId,message);
+
+        //设置弹幕发送状态
+        rpcDanmuService.updateDanmuStatus(danmuId,1);
         if(objectMessage!=null){
             int isSendH5 = Integer.parseInt(String.valueOf(objectMessage));
             //是否发送到H5界面 0 发送 1不发送

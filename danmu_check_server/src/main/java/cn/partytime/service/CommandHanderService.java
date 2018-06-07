@@ -499,7 +499,6 @@ public class CommandHanderService {
                     }
                 }
 
-                log.info("----------------------------------------------------------------------------------");
                 commandObject.put("data",dataMap);
                 commandObject.put("danmuId",danmuId);
                 commandObject.put("isSendH5",cmdTempAllData.getIsSendH5());

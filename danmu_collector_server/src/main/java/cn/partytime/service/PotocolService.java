@@ -242,9 +242,11 @@ public class PotocolService {
             clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
         }  else if(PotocolComTypeConst.COMMANDTYPE_CLIENTINFO.equals(type)){
             String ip = String.valueOf(map.get("ip"));
+            String port = String.valueOf(map.get("port"));
             int screenId = IntegerUtils.objectConvertToInt(map.get("number"));
             clientInfoModel.setIp(ip);
             clientInfoModel.setScreenId(screenId);
+            clientInfoModel.setPort(port);
             danmuChannelRepository.set(channel,clientInfoModel);
             clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,clientInfoModel.getRegistCode(),screenId);
         }else {
