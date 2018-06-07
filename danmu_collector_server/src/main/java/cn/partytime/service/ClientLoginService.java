@@ -109,6 +109,10 @@ public class ClientLoginService {
             //移动端弹幕处理
             logger.info("java{}端触发登录", code);
             javaClientLogin(code, channel, clientType);
+        }else if (ClientConst.CLIENT_TYPE_NODECLIENT.equals(clientType)) {
+            //移动端弹幕处理
+            logger.info("h5{}端触发登录", code);
+            screenClientLogin(code, channel, clientType);
         }
     }
 

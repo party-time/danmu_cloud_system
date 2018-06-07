@@ -144,7 +144,7 @@ public class DanmuServerScheduler {
                         clientCacheService.removeFirstCommandFromCache(addressId);
                     }
                     logger.info("向客户重新发送的命令是:{}",message);
-                    danmuSendService.pubDanmuToAllScreenClient(addressId,message);
+                    danmuSendService.sendMessageToAllClient(addressId,message);
                 }
             }
         }

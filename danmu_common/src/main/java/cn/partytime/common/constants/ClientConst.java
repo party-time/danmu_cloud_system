@@ -11,4 +11,6 @@ public class ClientConst {
 
     public static final String CLIENT_TYPE_JAVACLIENT = "2";
 
+    public static final String CLIENT_TYPE_NODECLIENT = "3";
+
 }

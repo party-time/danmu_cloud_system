@@ -135,7 +135,7 @@ public class DanmuSendService {
 
         if(ProtocolConst.PROTOCOL_COMMAND.equals(type)){
             //获取的是命令。直接广播给所有屏幕
-            pubDanmuToAllScreenClient(addressId, protocolModel);
+            pubMessageToAllScreenClient(addressId, JSON.toJSONString(protocolModel),ClientConst.CLIENT_TYPE_SCREEN);
         }else{
             Map<String,Object> map = (Map<String,Object>)JSON.parse(String.valueOf(object));
             String danmuType = (String)map.get("type");
@@ -149,9 +149,6 @@ public class DanmuSendService {
 
 
     public void sendMessageToAllClient(String addressId,Map<String,Object> map){
-        int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
-        List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
-
         Object objectMessage =map.get("isSendH5");
         Object type =map.get("type");
         Object dataObject = map.get("data");
@@ -160,14 +157,10 @@ public class DanmuSendService {
             dataMap.put("color","0xffffff");
         }
         map.put("data",dataMap);
-        if(ListUtils.checkListIsNotNull(screenChannelList)){
-            logger.info("当前在线的flash客户端数量是:{}",screenChannelList.size());
-            for(Channel channel:screenChannelList){
-                String message = JSON.toJSONString(map);
-                logger.info("向flash客户端:{},推送弹幕:{}",channel.id(),message);
-                channel.writeAndFlush(new TextWebSocketFrame(message));
-            }
-        }
+
+        pubMessageToAllScreenClient(addressId,JSON.toJSONString(map),ClientConst.CLIENT_TYPE_SCREEN);
+
+        pubMessageToAllScreenClient(addressId,JSON.toJSONString(map),ClientConst.CLIENT_TYPE_NODECLIENT);
 
         if(objectMessage!=null){
             int isSendH5 = Integer.parseInt(String.valueOf(objectMessage));
@@ -176,18 +169,7 @@ public class DanmuSendService {
                 return;
             }
         }
-
-        clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_MOBILE);
-        List<Channel> channelMobileList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
-
-        if(ListUtils.checkListIsNotNull(channelMobileList)){
-            logger.info("当前在线的手机客户端数量是:{}",channelMobileList.size());
-            for(Channel channel:channelMobileList){
-                String message = JSON.toJSONString(map);
-                logger.info("向手机客户端:{},推送弹幕:{}",channel.id(),message);
-                channel.writeAndFlush(new TextWebSocketFrame(message));
-            }
-        }
+        pubMessageToAllScreenClient(addressId,JSON.toJSONString(map),ClientConst.CLIENT_TYPE_MOBILE);
     }
 
     public void sendMessageToAllClient(String addressId,Object object){
@@ -216,7 +198,10 @@ public class DanmuSendService {
             }
         }
         String message = String.valueOf(JSON.toJSONString(map));
-        pubDanmuToAllScreenClient(addressId,message);
+        //pubDanmuToAllScreenClient(addressId,message);
+        pubMessageToAllScreenClient(addressId,message,ClientConst.CLIENT_TYPE_SCREEN);
+
+        pubMessageToAllScreenClient(addressId,message,ClientConst.CLIENT_TYPE_NODECLIENT);
 
         //设置弹幕发送状态
         rpcDanmuService.updateDanmuStatus(danmuId,1);
@@ -228,16 +213,28 @@ public class DanmuSendService {
             }
         }
         //向手机广播弹幕
-        pubDanmuToAllMobileClient(addressId,message);
+        pubMessageToAllScreenClient(addressId,message,ClientConst.CLIENT_TYPE_MOBILE);
     }
 
     /**
-     * 向所有屏幕广播弹幕
-     *
+     * 向所有客户端广播消息
      * @param addressId
-     * @param protocolModel
      */
-    public void pubDanmuToAllScreenClient(String addressId, ProtocolModel protocolModel) {
+    public void pubMessageToAllScreenClient(String addressId, String message,String type) {
+        logger.info("向地址{}所有屏幕广播弹幕", addressId);
+        int clientType = Integer.parseInt(type);
+        List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
+        if (!ListUtils.checkListIsNotNull(screenChannelList)) {
+            return;
+        }
+        for (Channel channel : screenChannelList) {
+            logger.info("向{}广播弹幕时间{}", channel.id(), DateUtils.getCurrentDate().getTime());
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+        }
+    }
+
+
+    /*public void pubDanmuToAllScreenClient(String addressId, ProtocolModel protocolModel) {
         logger.info("向地址{}所有屏幕广播弹幕", addressId);
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
         List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
@@ -249,14 +246,14 @@ public class DanmuSendService {
             String message = JSON.toJSONString(protocolModel);
             channel.writeAndFlush(new TextWebSocketFrame(message));
         }
-    }
+    }*/
 
     /**
      * 向flash广播数据
      * @param addressId
      * @param message
      */
-    public void pubDanmuToAllScreenClient(String addressId, String message) {
+    /*public void pubDanmuToAllScreenClient(String addressId, String message) {
         logger.info("向地址{}所有屏幕广播协议:{}", addressId,message);
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
         List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
@@ -267,15 +264,15 @@ public class DanmuSendService {
         for (Channel channel : screenChannelList) {
             channel.writeAndFlush(new TextWebSocketFrame(message));
         }
-    }
+    }*/
 
     /**
      * 向flash广播数据
      * @param addressId
      * @param message
      */
-    public void pubDanmuToAllMobileClient(String addressId, String message) {
-        logger.info("向地址{}所有屏幕广播协议:{}", addressId,message);
+    /*public void pubDanmuToAllMobileClient(String addressId, String message) {
+        logger.info("向地址{}所有手机广播协议:{}", addressId,message);
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_MOBILE);
         List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
         if (!ListUtils.checkListIsNotNull(screenChannelList)) {
@@ -285,7 +282,7 @@ public class DanmuSendService {
         for (Channel channel : screenChannelList) {
             channel.writeAndFlush(new TextWebSocketFrame(message));
         }
-    }
+    }*/
 
     public void repeatCommandToAllScreenClient(String addressId, String message,int count) {
         logger.info("向地址{}所有屏幕广播协议:{}", addressId,message);
