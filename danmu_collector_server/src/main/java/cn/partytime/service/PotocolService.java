@@ -258,6 +258,7 @@ public class PotocolService {
             clientInfoCacheService.setClientToCache(clientInfoModel.getRegistCode(),String.valueOf(clientType),JSON.toJSONString(clientInfoModel));
 
             //告诉其他node客户端信息
+            map.put("status","on");
             danmuSendService.pubMessageToAllClient(addressId,JSON.toJSONString(map),String.valueOf(clientType));
         }else {
             log.info("客户端发送给服务器信息:{},不处理", JSON.toJSONString(map));
@@ -358,30 +359,37 @@ public class PotocolService {
      */
     public void forceLogout(Channel channel) {
         DanmuClientInfoModel danmuClientInfoModel = danmuChannelRepository.get(channel);
-
-        if(danmuClientInfoModel !=null && danmuClientInfoModel.getClientType()==0){
+        if(danmuClientInfoModel !=null){
             String addressId = danmuClientInfoModel.getAddressId();
-            clientCacheService.removeCommandCache(danmuClientInfoModel.getAddressId());
 
-            int count =danmuChannelRepository.findDanmuClientCount(0,addressId);
-            log.info("当前场地下载线的flash client数量是:{}",count);
-            collectorCacheService.setFlashOfflineTime(addressId);
-            collectorCacheService.setClientCount(0,addressId,host,count-1);
-            collectorCacheService.setFlahOfflineCLient(addressId, danmuClientInfoModel.getRegistCode());
+            if(danmuClientInfoModel.getClientType()==0){
+                clientCacheService.removeCommandCache(danmuClientInfoModel.getAddressId());
+                int count =danmuChannelRepository.findDanmuClientCount(0,addressId);
+                log.info("当前场地下载线的flash client数量是:{}",count);
+                collectorCacheService.setFlashOfflineTime(addressId);
+                collectorCacheService.setClientCount(0,addressId,host,count-1);
+                collectorCacheService.setFlahOfflineCLient(addressId, danmuClientInfoModel.getRegistCode());
 
+            }
             //从sorset中清除客户端信息
             String registerCode = danmuClientInfoModel.getRegistCode();
             int clientType = danmuClientInfoModel.getClientType();
+            if(ClientConst.CLIENT_TYPE_NODECLIENT.equals(String.valueOf(clientType))){
+                Map<String,Object> command = new HashMap<String,Object>();
+                //{"number":15,"code":"pu43uq","clientType":3,"ip":"192.168.1.89","type":"clientInfo"}
+                command.put("number",danmuClientInfoModel.getScreenId());
+                command.put("code",registerCode);
+                command.put("clientType",clientType);
+                command.put("ip",danmuClientInfoModel.getIp());
+                command.put("port",danmuClientInfoModel.getPort());
+                command.put("status","on");
+                danmuSendService.pubMessageToAllClient(addressId,JSON.toJSONString(command),String.valueOf(clientType));
+            }
             clientInfoCacheService.removeClientRegisterCodeIntoSortSet(addressId,String.valueOf(clientType),registerCode);
-            clientInfoCacheService.removeClientToCache(registerCode,String.valueOf(clientType));
-
+            clientInfoCacheService.removeClientFromCache(registerCode,String.valueOf(clientType));
         }
-
-
-
         //清除用户状态
         danmuChannelRepository.remove(channel);
-
         //关闭通道
         channel.close();
     }

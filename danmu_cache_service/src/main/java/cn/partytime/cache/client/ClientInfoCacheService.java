@@ -59,7 +59,7 @@ public class ClientInfoCacheService {
      * @param registerCode
      * @param type
      */
-    public void removeClientToCache(String registerCode,String type){
+    public void removeClientFromCache(String registerCode,String type){
         String key = ClientInfoCacheKey.CLIENT_INFO+registerCode+ CommonConst.COLON+type;
         redisService.expire(key,0);
     }
