@@ -176,4 +176,15 @@ public class DanmuCommandBussinessService {
         return redisService.getListLength(key);
     }
 
+    /**
+     * 清除 支付成功，发送成功 弹幕队列
+     * @param addressId
+     * @return
+     */
+    public void clearPayDanmuNotSendQueue(String addressId){
+        String key = DanmuCacheKey.PUB_DANMU_PAY_NOT_SEND_SORTSET + addressId;
+        redisService.expire(key,0);
+    }
+
+
 }

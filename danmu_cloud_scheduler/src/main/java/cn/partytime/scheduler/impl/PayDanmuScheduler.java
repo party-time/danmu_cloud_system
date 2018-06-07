@@ -117,16 +117,10 @@ public class PayDanmuScheduler  implements BaseScheduler {
             for(DanmuAddressModel danmuAddressModel:danmuAddressList){
                 String addressId = danmuAddressModel.getId();
                 String name = danmuAddressModel.getName();
-                log.info("场地:{},发送成功，客户端未返回信息，支付弹幕队列缓存清除",name);
-                //Set<String> stringSet =  danmuCommandBussinessService.getPayDanmuSendSuccessQueue(addressId);
-                /*if(SetUtils.checkSetIsNotNull(stringSet)){
-
-                }*/
-                /*log.info("场地:{},发送失败，支付弹幕队列缓存清除",name);
-                stringSet =danmuCommandBussinessService.getPayDanmuNotSendQueue(addressId);
-                if(SetUtils.checkSetIsNotNull(stringSet)){
-
-                }*/
+                log.info("凌晨8点,场地:{},发送成功，客户端未返回信息，支付弹幕队列缓存清除",name);
+                danmuCommandBussinessService.clearPayDanmuNotSendQueue(addressId);
+                log.info("凌晨8点,场地:{},未发送成功，客户端未返回信息，支付弹幕队列缓存清除",name);
+                danmuCommandBussinessService.clearPayDanmuSendSuccessQueue(addressId);
             }
         }
     }
