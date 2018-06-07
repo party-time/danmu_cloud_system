@@ -24,9 +24,6 @@ public class ScreenDanmuService {
     private RedisService redisService;
 
     @Autowired
-    private RpcPartyService rpcPartyService;
-
-    @Autowired
     private RpcPreDanmuService rpcPreDanmuService;
 
     public void addScreenDanmuCount(String addressId){
@@ -55,7 +52,6 @@ public class ScreenDanmuService {
         if(object!=null){
             count = IntegerUtils.objectConvertToInt(object);
         }
-
         logger.info("当前客户端的弹幕数量是=========================>{}",count);
         return count;
     }

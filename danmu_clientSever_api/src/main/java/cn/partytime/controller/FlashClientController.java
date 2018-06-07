@@ -46,10 +46,10 @@ public class FlashClientController {
 
         DanmuClientModel danmuClientModel =  rpcDanmuClientService.findByRegistCode(code);
         if(danmuClientModel!=null){
-            Set<String> stringSet = clientInfoCacheService.findClientRegisterCodeIntoSortSet(danmuClientModel.getAddressId(), ClientConst.CLIENT_TYPE_SCREEN);
+            Set<String> stringSet = clientInfoCacheService.findClientRegisterCodeIntoSortSet(danmuClientModel.getAddressId(), ClientConst.CLIENT_TYPE_NODECLIENT);
             if(SetUtils.checkSetIsNotNull(stringSet)){
                 for(String str:stringSet){
-                    String danmuClientInfoModelStr = clientInfoCacheService.findClientFromCache(str,ClientConst.CLIENT_TYPE_SCREEN);
+                    String danmuClientInfoModelStr = clientInfoCacheService.findClientFromCache(str,ClientConst.CLIENT_TYPE_NODECLIENT);
                     if(danmuClientInfoModelStr!=null){
                         DanmuClientInfoModel danmuClientInfoModel = JSON.parseObject(danmuClientInfoModelStr, DanmuClientInfoModel.class);
                         danmuClientInfoModelList.add(danmuClientInfoModel);
