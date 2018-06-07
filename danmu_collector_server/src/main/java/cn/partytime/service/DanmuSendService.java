@@ -110,10 +110,8 @@ public class DanmuSendService {
                 }
                 return;
             }
-            String key = ScreenClientCacheKey.SCREEN_DANMU_COUNT+addressId;
-
             screenDanmuService.addScreenDanmuCount(addressId);
-            sendMessageToAllClient(addressId,preDanmuMap);
+            convertMessageToProtocolToClient(addressId,preDanmuMap);
         }
 
 
@@ -146,41 +144,18 @@ public class DanmuSendService {
     }
 
 
-
-
-    public void sendMessageToAllClient(String addressId,Map<String,Object> map){
-        Object objectMessage =map.get("isSendH5");
-        Object type =map.get("type");
-        Object dataObject = map.get("data");
-        Map<String,Object> dataMap = (Map<String,Object>)JSON.parse(String.valueOf(JSON.toJSONString(dataObject)));
-        if(whiteColorAddrssId.equals(addressId) && "pDanmu".equals(String.valueOf(type))){
-            dataMap.put("color","0xffffff");
-        }
-        map.put("data",dataMap);
-
-        pubMessageToAllScreenClient(addressId,JSON.toJSONString(map),ClientConst.CLIENT_TYPE_SCREEN);
-
-        pubMessageToAllScreenClient(addressId,JSON.toJSONString(map),ClientConst.CLIENT_TYPE_NODECLIENT);
-
-        if(objectMessage!=null){
-            int isSendH5 = Integer.parseInt(String.valueOf(objectMessage));
-            //是否发送到H5界面 0 发送 1不发送
-            if(isSendH5==1){
-                return;
-            }
-        }
-        pubMessageToAllScreenClient(addressId,JSON.toJSONString(map),ClientConst.CLIENT_TYPE_MOBILE);
+    public void sendMessageToAllClient(String addressId,Object object){
+        Map<String,Object> map = (Map<String,Object>)JSON.parse(String.valueOf(object));
+        convertMessageToProtocolToClient(addressId,map);
     }
 
-    public void sendMessageToAllClient(String addressId,Object object){
-        int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
-        Map<String,Object> map = (Map<String,Object>)JSON.parse(String.valueOf(object));
+    public void convertMessageToProtocolToClient(String addressId, Map<String,Object> map){
         Object objectMessage =map.get("isSendH5");
         Object type =map.get("type");
         Object danmuIdObject = map.get("danmuId");
         Object dataObject = map.get("data");
         String danmuId = String.valueOf(danmuIdObject);
-        Map<String,Object> dataMap = (Map<String,Object>)JSON.parse(String.valueOf(dataObject));
+        Map<String,Object> dataMap = (Map<String,Object>)JSON.parse(String.valueOf(JSON.toJSONString(dataObject)));
         Object isPayObject = dataMap.get("isPay");
         //给指定的场地弹幕颜色设置成白色
         if(whiteColorAddrssId.equals(addressId) && "pDanmu".equals(String.valueOf(type))){
