@@ -100,7 +100,7 @@ public class PotocolService {
         }else if (ClientConst.CLIENT_TYPE_JAVACLIENT.equals(clientType)) {
             javaClientHandler(map,channel);
         }else if (ClientConst.CLIENT_TYPE_NODECLIENT.equals(clientType)) {
-            screenClientHandler(map,channel);
+            nodeClientHandler(map,channel);
         }
 
     }
@@ -175,6 +175,90 @@ public class PotocolService {
             forceLogout(channel);
         }
     }
+
+    private void nodeClientHandler(Map<String,Object> map, Channel channel) {
+        String type = String.valueOf(map.get("type"));
+        boolean isCallBack = BooleanUtils.objectConvertToBoolean(String.valueOf(map.get("isCallBack")));
+        log.info("isCallBack===================>"+isCallBack+JSON.toJSONString(map));
+        DanmuClientInfoModel clientInfoModel = danmuChannelRepository.get(channel);
+        String addressId = clientInfoModel.getAddressId();
+        if(isCallBack){
+            log.info("收到客户端返回的弹幕信息:{}",JSON.toJSONString(map));
+            Object object = map.get("danmuId");
+            if(object!=null){
+                String danmuId = String.valueOf(object);
+                log.info("客户端返回的弹幕编号：{}",danmuId);
+
+                rpcDanmuService.updateDanmuStatus(danmuId,2);
+
+                danmuCommandBussinessService.removePayDanmuSendSuccessQueueSize(addressId,danmuId);
+            }
+        }else if(PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS.equals(type)){
+            log.info("收到客户端返回的状态信息:{}",JSON.toJSONString(map));
+            int status = Integer.parseInt(String.valueOf(map.get("status")));
+            String partyId = String.valueOf(map.get("partyId"));
+            Map<String,Object> commandMap = clientCacheService.getFirstCommandFromCache(addressId);
+            if(commandMap!=null){
+                Map<String, Object> dataMap = (Map<String, Object>) JSON.parse(String.valueOf(commandMap.get("data")));
+                log.info("data:{}",JSON.toJSONString(dataMap));
+                int cacheStatus = Integer.parseInt(String.valueOf(dataMap.get("status")));
+                String cachePartyId = String.valueOf(dataMap.get("partyId"));
+                if(status == cacheStatus && partyId.equals(cachePartyId)){
+                    clientCacheService.removeFirstCommandFromCache(addressId);
+                    clientCacheService.removeTempCommandCount(addressId);
+                }
+            }
+
+        } else if(PotocolTypeConst.POTOCOL_DANMU_COUNT.equals(type)){
+            String dataStr = JSON.toJSONString(map.get("data"));
+            Integer danmuCount = IntegerUtils.objectConvertToInt(dataStr);
+            //当返回的弹幕数量大于0的处理
+            if(danmuCount>0){
+                if(danmuCount<15){
+                    //清除弹幕过量的缓存 和 和时间
+                    alarmCacheService.removeAlarmCount(addressId, AlarmKeyConst.ALARM_KEY_DANMUEXCESS);
+                    alarmCacheService.addAlarmTime(DateUtils.getCurrentDate().getTime(),0,addressId,AlarmKeyConst.ALARM_KEY_DANMUEXCESS);
+                }
+                //清除没有弹幕的计数 和 时间
+                alarmCacheService.removeAlarmCount(addressId,AlarmKeyConst.ALARM_KEY_SYSTEMERROR);
+                alarmCacheService.addAlarmTime(DateUtils.getCurrentDate().getTime(),0,addressId,AlarmKeyConst.ALARM_KEY_SYSTEMERROR);
+            }
+            log.info("==========================================接收客户端返回的弹幕数量:{}",danmuCount);
+            String partyId = String.valueOf(map.get("partyId"));
+            if(partyId!=null){
+                clientInfoModel.setPartyId(partyId);
+            }
+            danmuChannelRepository.set(channel,clientInfoModel);
+            screenDanmuService.setScreenDanmuCount(addressId,danmuCount);
+            //将客户端信息存入缓存
+            clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_NODECLIENT,clientInfoModel.getRegistCode(),clientInfoModel.getScreenId());
+        }else if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
+            log.info("当前客户端信息:{}接受ping",clientInfoModel.getScreenId());
+
+            Map<String,Object> resultMap = new HashMap<String,Object>();
+            resultMap.put("type", PotocolTypeConst.POTOCOL_PONG);
+            String msg = JSON.toJSONString(resultMap);
+            log.info("返回给客户端信息{}：" + msg);
+            channel.writeAndFlush(new TextWebSocketFrame(msg));
+        } else if(PotocolComTypeConst.COMMANDTYPE_STARTSTAGEANDFULL.equals(type)){
+            log.info("转发给java的协议:{}",JSON.toJSONString(map));
+            map.put("clientType","2");
+            //clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
+        }  else if(PotocolComTypeConst.COMMANDTYPE_CLIENTINFO.equals(type)){
+            String ip = String.valueOf(map.get("ip"));
+            String port = String.valueOf(map.get("port"));
+            int screenId = IntegerUtils.objectConvertToInt(map.get("number"));
+            clientInfoModel.setIp(ip);
+            clientInfoModel.setScreenId(screenId);
+            clientInfoModel.setPort(port);
+            danmuChannelRepository.set(channel,clientInfoModel);
+            clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_NODECLIENT,clientInfoModel.getRegistCode(),screenId);
+        }else {
+            log.info("客户端发送给服务器信息:{},不处理", JSON.toJSONString(map));
+        }
+    }
+
+
     private void screenClientHandler(Map<String,Object> map, Channel channel) {
         String type = String.valueOf(map.get("type"));
         boolean isCallBack = BooleanUtils.objectConvertToBoolean(String.valueOf(map.get("isCallBack")));
