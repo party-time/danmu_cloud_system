@@ -187,54 +187,31 @@ public class DanmuSendService {
 
     public void sendMessageToAllClient(String addressId,Object object){
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
-        List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
-
-
-
         Map<String,Object> map = (Map<String,Object>)JSON.parse(String.valueOf(object));
-
-
         Object objectMessage =map.get("isSendH5");
-
         Object type =map.get("type");
-
-
         Object danmuIdObject = map.get("danmuId");
-
         Object dataObject = map.get("data");
         Map<String,Object> dataMap = (Map<String,Object>)JSON.parse(String.valueOf(dataObject));
         Object isPayObject = dataMap.get("isPay");
-
-        //if("584a1a9a0cf2fdb8406efdce")
-
+        //给指定的场地弹幕颜色设置成白色
         if(whiteColorAddrssId.equals(addressId) && "pDanmu".equals(String.valueOf(type))){
             dataMap.put("color","0xffffff");
         }
         map.put("data",dataMap);
-
-
-
-
+        //判断是否是支付弹幕
         if(isPayObject!=null){
             boolean isPayFlg = BooleanUtils.objectConvertToBoolean(isPayObject);
             if(isPayFlg){
                 String danmuId = String.valueOf(danmuIdObject);
+                //从支付成功，未发送成功队列中清除未发送的支付弹幕
                 danmuCommandBussinessService.removePayDanmuNotSendQueueSize(addressId,danmuId);
-                danmuCommandBussinessService.putIntoPayDanmuQueue(addressId,danmuId);
+                //向支付成功发送成功的队列中存入数据
+                danmuCommandBussinessService.putIntoPayDanmuSendSuccessQueue(addressId,danmuId);
             }
         }
-
-        if(ListUtils.checkListIsNotNull(screenChannelList)){
-            logger.info("当前在线的flash客户端数量是:{}",screenChannelList.size());
-            for(Channel channel:screenChannelList){
-                String message = String.valueOf(JSON.toJSONString(map));
-                logger.info("向flash客户端:{},推送弹幕:{}",channel.id(),message);
-                channel.writeAndFlush(new TextWebSocketFrame(message));
-            }
-        }
-
-
-
+        String message = String.valueOf(JSON.toJSONString(map));
+        pubDanmuToAllScreenClient(addressId,message);
         if(objectMessage!=null){
             int isSendH5 = Integer.parseInt(String.valueOf(objectMessage));
             //是否发送到H5界面 0 发送 1不发送
@@ -242,22 +219,9 @@ public class DanmuSendService {
                 return;
             }
         }
-
-
-
-        clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_MOBILE);
-        List<Channel> channelMobileList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
-
-        if(ListUtils.checkListIsNotNull(channelMobileList)){
-            logger.info("当前在线的手机客户端数量是:{}",channelMobileList.size());
-            for(Channel channel:channelMobileList){
-                logger.info("向手机客户端:{},推送弹幕",channel.id());
-                channel.writeAndFlush(new TextWebSocketFrame(String.valueOf(JSON.toJSONString(map))));
-            }
-        }
+        //向手机广播弹幕
+        pubDanmuToAllMobileClient(addressId,message);
     }
-
-
 
     /**
      * 向所有屏幕广播弹幕
@@ -279,9 +243,32 @@ public class DanmuSendService {
         }
     }
 
+    /**
+     * 向flash广播数据
+     * @param addressId
+     * @param message
+     */
     public void pubDanmuToAllScreenClient(String addressId, String message) {
         logger.info("向地址{}所有屏幕广播协议:{}", addressId,message);
         int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
+        List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
+        if (!ListUtils.checkListIsNotNull(screenChannelList)) {
+            logger.info("flash在线数量为0");
+            return;
+        }
+        for (Channel channel : screenChannelList) {
+            channel.writeAndFlush(new TextWebSocketFrame(message));
+        }
+    }
+
+    /**
+     * 向flash广播数据
+     * @param addressId
+     * @param message
+     */
+    public void pubDanmuToAllMobileClient(String addressId, String message) {
+        logger.info("向地址{}所有屏幕广播协议:{}", addressId,message);
+        int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_MOBILE);
         List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId,clientType);
         if (!ListUtils.checkListIsNotNull(screenChannelList)) {
             logger.info("flash在线数量为0");

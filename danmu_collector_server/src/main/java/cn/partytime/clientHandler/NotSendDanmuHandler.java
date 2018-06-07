@@ -36,7 +36,6 @@ public class NotSendDanmuHandler {
             if(size>0){
                 //从未发送
                 int countScreen = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN));
-                int countMobile = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,Integer.parseInt(ClientConst.CLIENT_TYPE_MOBILE));
                 if(countScreen!=0) {
                     Object object = danmuCommandBussinessService.getDanmuFromNotSendQueue(addressId);
                     if(object!=null){
@@ -63,16 +62,6 @@ public class NotSendDanmuHandler {
     }
 
     public long getNotSendQueueSize(String addressId){
-        return  danmuCommandBussinessService.getNotSendQueueSize(addressId);
+        return  danmuCommandBussinessService.getDanmuFromNotSendQueueSize(addressId);
     }
-
-
-    /*private void sendTempCacheDanmu(String addressId){
-        threadPoolTaskExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
-    }*/
 }

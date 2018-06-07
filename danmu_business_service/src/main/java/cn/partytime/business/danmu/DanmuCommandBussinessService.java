@@ -28,20 +28,6 @@ public class DanmuCommandBussinessService {
 
 
     /**
-     * 向客户端发送弹幕
-     * @param addressId
-     * @param messageObject
-     */
-    public void pubMessageCollectorServer(String addressId,Map<String,Object> messageObject){
-        log.info("弹幕审核状态:{},直接广播给客户端:{}",JSON.toJSONString(messageObject));
-        String key = DanmuCacheKey.PUB_DANMU_CACHE_LIST + addressId;
-        redisService.setValueToList(key, JSON.toJSONString(messageObject));
-        redisService.expire(key, 60 * 60 * 1);
-        redisService.subPub("addressId:danmu", addressId);
-    }
-
-
-    /**
      * 从弹幕队列中获取弹幕
      * @param addressId
      * @return
@@ -52,17 +38,16 @@ public class DanmuCommandBussinessService {
     }
 
 
+
     /**
      * 将弹幕放入到未发送队列
      * @param addressId
      * @param messageObject
      */
     public void pubDanmuToNotSendQueue(String addressId,Map<String,Object> messageObject){
-        log.info("弹幕审核状态:{},直接广播给客户端:{}",JSON.toJSONString(messageObject));
-        String key = DanmuCacheKey.PUB_DANMU_CACHE_NOTE_SEND_LIST + addressId;
+        String key = DanmuCacheKey.PUB_DANMU_CACHE_NOT_SEND_LIST + addressId;
         redisService.setValueToList(key, JSON.toJSONString(messageObject));
     }
-
 
     /**
      * 从未发送队列中取出弹幕
@@ -70,57 +55,79 @@ public class DanmuCommandBussinessService {
      * @return
      */
     public Object getDanmuFromNotSendQueue(String addressId){
-        String key = DanmuCacheKey.PUB_DANMU_CACHE_NOTE_SEND_LIST + addressId;
+        String key = DanmuCacheKey.PUB_DANMU_CACHE_NOT_SEND_LIST + addressId;
         return redisService.popFromListFromRight(key);
     }
-
 
     /**
      * 获取未发送队列的长度
      * @param addressId
      * @return
      */
-    public long getNotSendQueueSize(String addressId){
-        String key = DanmuCacheKey.PUB_DANMU_CACHE_NOTE_SEND_LIST + addressId;
-        return redisService.listsize(key);
+    public long getDanmuFromNotSendQueueSize(String addressId){
+        String key = DanmuCacheKey.PUB_DANMU_CACHE_NOT_SEND_LIST + addressId;
+        return redisService.getListLength(key);
     }
 
 
+
     /**
-     * 支付成功确认队列
+     *  支付成功，发送成功 弹幕队列存入数据
      */
-    public void putIntoPayDanmuQueue(String addressId,String id){
-        String key = DanmuCacheKey.PUB_DANMU_PAY_SORTSET + addressId;
+    public void putIntoPayDanmuSendSuccessQueue(String addressId,String id){
+        String key = DanmuCacheKey.PUB_DANMU_PAY_SEND_SORTSET + addressId;
         long score = DateUtils.getCurrentDate().getTime();
         redisService.setSortSet(key,score,id);
     }
+
     /**
-     * 支付成功确认队列清除
+     * 从 支付成功，发送成功 弹幕队列 清除数据
      * @param addressId
      * @param id
      * @param id
      */
-    public void removePayDanmuQueueSize(String addressId,String id){
-        String key = DanmuCacheKey.PUB_DANMU_PAY_SORTSET + addressId;
+    public void removePayDanmuSendSuccessQueueSize(String addressId,String id){
+        String key = DanmuCacheKey.PUB_DANMU_PAY_SEND_SORTSET + addressId;
         redisService.deleteSortData(key,id);
     }
 
     /**
-     *  从支付成功确认队列获取数据
+     *  从 支付成功，发送成功 弹幕队列 取出数据
      * @param addressId
      * @param minScore
      * @param maxScore
      * @return
      */
-    public Set<String> getPayDanmuQueueBeforeScore(String addressId,Double minScore,Double maxScore){
-        String key = DanmuCacheKey.PUB_DANMU_PAY_SORTSET + addressId;
-        log.info("key:{}",key);
+    public Set<String> getPayDanmuSendSuccessBeforeScore(String addressId,Double minScore,Double maxScore){
+        String key = DanmuCacheKey.PUB_DANMU_PAY_SEND_SORTSET + addressId;
         return  redisService.findSortSetWithInScore(key,minScore,maxScore);
     }
 
+    /**
+     * 从 支付成功，发送成功 弹幕队列 取出所有数据
+     * @param addressId
+     * @return
+     */
+    public Set<String> getPayDanmuSendSuccessQueue(String addressId){
+        String key = DanmuCacheKey.PUB_DANMU_PAY_SEND_SORTSET + addressId;
+        return  redisService.getSortSetByRnage(key,0,-1,true);
+    }
 
     /**
-     * 支付未发送队列
+     * 获取 支付成功，发送成功 弹幕队列 的长度
+     * @param addressId
+     * @return
+     */
+    public long getPayDanmuSendSuccessQueueSize(String addressId){
+        String key = DanmuCacheKey.PUB_DANMU_PAY_SEND_SORTSET + addressId;
+        return  redisService.getListLength(key);
+    }
+
+
+
+
+    /**
+     * 支付成功，未发送成功 弹幕队列存入数据
      */
     public void putIntoPayDanmuNotSendQueue(String addressId,String id){
         String key = DanmuCacheKey.PUB_DANMU_PAY_NOT_SEND_SORTSET + addressId;
@@ -128,7 +135,7 @@ public class DanmuCommandBussinessService {
         redisService.setSortSet(key,score,id);
     }
     /**
-     * 支付成功确认队列清除
+     * 支付成功，未发送成功 弹幕队列清除
      * @param addressId
      * @param id
      * @param id
@@ -139,14 +146,23 @@ public class DanmuCommandBussinessService {
     }
 
     /**
-     *  从支付成功确认队列获取数据
+     *  从支付成功，未发送成功 弹幕队列取出所有数据
      * @param addressId
      * @return
      */
     public Set<String> getPayDanmuNotSendQueue(String addressId){
         String key = DanmuCacheKey.PUB_DANMU_PAY_NOT_SEND_SORTSET + addressId;
-        log.info("key:{}",key);
         return  redisService.getSortSetByRnage(key,0,-1,true);
+    }
+
+    /**
+     *  从支付成功，未发送成功 弹幕队列长度
+     * @param addressId
+     * @return
+     */
+    public long getPayDanmuNotSendQueueSize(String addressId){
+        String key = DanmuCacheKey.PUB_DANMU_PAY_NOT_SEND_SORTSET + addressId;
+        return redisService.getListLength(key);
     }
 
 }

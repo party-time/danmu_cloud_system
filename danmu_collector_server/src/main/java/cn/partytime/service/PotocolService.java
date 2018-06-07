@@ -187,7 +187,7 @@ public class PotocolService {
 
                 rpcDanmuService.updateDanmuStatus(danmuId,2);
 
-                danmuCommandBussinessService.removePayDanmuQueueSize(addressId,danmuId);
+                danmuCommandBussinessService.removePayDanmuSendSuccessQueueSize(addressId,danmuId);
             }
         }else if(PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS.equals(type)){
             log.info("收到客户端返回的状态信息:{}",JSON.toJSONString(map));
@@ -227,7 +227,7 @@ public class PotocolService {
             danmuChannelRepository.set(channel,clientInfoModel);
             screenDanmuService.setScreenDanmuCount(addressId,danmuCount);
             //将客户端信息存入缓存
-            clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,clientInfoModel.getRegistCode());
+            clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,clientInfoModel.getRegistCode(),clientInfoModel.getScreenId());
         }else if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
             log.info("当前客户端信息:{}接受ping",clientInfoModel.getScreenId());
 
@@ -242,9 +242,11 @@ public class PotocolService {
             clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
         }  else if(PotocolComTypeConst.COMMANDTYPE_CLIENTINFO.equals(type)){
             String ip = String.valueOf(map.get("ip"));
+            int screenId = IntegerUtils.objectConvertToInt(map.get("number"));
             clientInfoModel.setIp(ip);
+            clientInfoModel.setScreenId(screenId);
             danmuChannelRepository.set(channel,clientInfoModel);
-            clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,clientInfoModel.getRegistCode());
+            clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,clientInfoModel.getRegistCode(),screenId);
         }else {
             log.info("客户端发送给服务器信息:{},不处理", JSON.toJSONString(map));
         }

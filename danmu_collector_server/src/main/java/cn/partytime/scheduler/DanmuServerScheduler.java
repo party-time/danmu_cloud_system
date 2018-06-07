@@ -84,7 +84,7 @@ public class DanmuServerScheduler {
                 if(ListUtils.checkListIsNotNull(danmuClientInfoModelList)){
                     for(DanmuClientInfoModel danmuClientInfoModel : danmuClientInfoModelList){
                         String registerCode = danmuClientInfoModel.getRegistCode();
-                        clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,registerCode);
+                        clientInfoCacheService.setClientRegisterCodeIntoSortSet(addressId,ClientConst.CLIENT_TYPE_SCREEN,registerCode,danmuClientInfoModel.getScreenId());
                         clientInfoCacheService.setClientToCache(registerCode,ClientConst.CLIENT_TYPE_SCREEN,JSON.toJSONString(danmuClientInfoModel));
                     }
                 }

@@ -26,9 +26,9 @@ public class ClientInfoCacheService {
      * @param type 类型 flash:0  h5:1  java:2
      * @param registerCode
      */
-    public void setClientRegisterCodeIntoSortSet(String addressId,String type,String registerCode){
+    public void setClientRegisterCodeIntoSortSet(String addressId,String type,String registerCode,long score){
         String key = ClientInfoCacheKey.CLIENT_SORTSET+addressId+ CommonConst.COLON+type;
-        redisService.setSortSet(key,0,registerCode);
+        redisService.setSortSet(key,score,registerCode);
     }
 
     public Set<String> findClientRegisterCodeIntoSortSet(String addressId, String type){
