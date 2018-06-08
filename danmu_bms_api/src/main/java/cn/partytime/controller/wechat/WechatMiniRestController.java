@@ -144,6 +144,8 @@ public class WechatMiniRestController {
         log.info("useSecretInfo:{}",JSON.toJSONString(useSecretInfo));
 
         RestResultModel restResultModel = new RestResultModel();
+        UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), useSecretInfo.getOpenId());
+
         String openId = "oze02wVALzhbkpW9f7r3g036O6vw";
         PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
         if( null == party){
@@ -188,7 +190,7 @@ public class WechatMiniRestController {
         map.put("baseUrl",fileUploadUrl);
         map.put("openId",openId);
 
-
+        log.info("partyInfo:{}",JSON.toJSONString(map));
         restResultModel.setResult(200);
         restResultModel.setData(map);
         return restResultModel;
