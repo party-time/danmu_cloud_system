@@ -26,7 +26,7 @@ public class RpcPayDanmuService {
     }
 
 
-    @RequestMapping(value = "/save" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/save" ,method = RequestMethod.POST)
     public void save(@RequestBody PayDanmu payDanmu) {
         payDanmuService.save(payDanmu);
     }
