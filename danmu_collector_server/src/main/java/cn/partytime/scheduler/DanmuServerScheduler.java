@@ -23,6 +23,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -154,8 +155,13 @@ public class DanmuServerScheduler {
     public void preDanmuSchedulerSupply() {
         logger.info("预制弹幕补充逻辑定时任务开始");
         long time = DateUtils.getCurrentDate().getTime();
-        int clientType = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
-        Set<String> addressIdList =  clientChannelService.findScreenAddresIdList(clientType);
+        int clientTypeScreen = Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN);
+        int clientTypeNode = Integer.parseInt(ClientConst.CLIENT_TYPE_NODECLIENT);
+        Set<String> screenaddressIdList =  clientChannelService.findScreenAddresIdList(clientTypeScreen);
+        Set<String> nodeaddressIdList =  clientChannelService.findScreenAddresIdList(clientTypeNode);
+        Set<String> addressIdList = new HashSet<>();
+        addressIdList.addAll(screenaddressIdList);
+        addressIdList.addAll(nodeaddressIdList);
         if(SetUtils.checkSetIsNotNull(addressIdList)){
             for(String addressId:addressIdList){
                long lastTime = screenDanmuService.getlastDanmuTime(addressId);
