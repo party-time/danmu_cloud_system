@@ -1,8 +1,6 @@
 package cn.partytime.listener;
 
-import cn.partytime.service.ClientCacheService;
-import cn.partytime.service.ClientChannelService;
-import cn.partytime.service.PreDanmuLogicService;
+import cn.partytime.service.*;
 import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.util.ListUtils;
@@ -39,13 +37,17 @@ public class PartyCommandListener implements MessageListener {
     @Autowired
     private ClientCacheService clientCacheService;
 
+    @Autowired
+    private DanmuSendService danmuSendService;
+
     @Override
     public void onMessage(Message message, byte[] bytes) {
         if (message != null) {
             String addressId = JSON.parseObject(String.valueOf(message), String.class).replace("'", "");
             int flashCount = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId, Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN));
             int javaCount = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId, Integer.parseInt(ClientConst.CLIENT_TYPE_JAVACLIENT));
-            if (flashCount + javaCount == 0) {
+            int nodeCount = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId, Integer.parseInt(ClientConst.CLIENT_TYPE_NODECLIENT));
+            if (flashCount + javaCount+nodeCount == 0) {
                 logger.info("本服务器不处理{}此地址的命令", addressId);
                 return;
             }
@@ -100,8 +102,14 @@ public class PartyCommandListener implements MessageListener {
     public void pubDanmuToAllScreenClient(String addressId, Map<String, Object> map) {
         logger.info("向地址{}所有屏幕下发命令", addressId);
 
-        List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId, Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN));
-        if (ListUtils.checkListIsNotNull(screenChannelList)) {
+        danmuSendService.pubMessageToAllClient(addressId,JSON.toJSONString(map),ClientConst.CLIENT_TYPE_SCREEN);
+        danmuSendService.pubMessageToAllClient(addressId,JSON.toJSONString(map),ClientConst.CLIENT_TYPE_JAVACLIENT);
+        danmuSendService.pubMessageToAllClient(addressId,JSON.toJSONString(map),ClientConst.CLIENT_TYPE_NODECLIENT);
+
+        //List<Channel> screenChannelList = clientChannelService.findDanmuClientChannelAddressByClientType(addressId, Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN));
+
+
+        /*if (ListUtils.checkListIsNotNull(screenChannelList)) {
             logger.info("向flash客户端下发命令");
             for (Channel channel : screenChannelList) {
                 Map<String, Object> dataMap = (Map<String, Object>) JSON.parse(String.valueOf(map.get("data")));
@@ -127,6 +135,7 @@ public class PartyCommandListener implements MessageListener {
                 logger.info("向javaclient客户端:{}下发命令", channel.id());
                 channel.writeAndFlush(new TextWebSocketFrame(message));
             }
-        }
+        }*/
+
     }
 }
