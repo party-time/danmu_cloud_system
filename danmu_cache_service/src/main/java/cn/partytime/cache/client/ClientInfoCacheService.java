@@ -33,7 +33,7 @@ public class ClientInfoCacheService {
 
     public Set<String> findClientRegisterCodeIntoSortSet(String addressId, String type){
         String key = ClientInfoCacheKey.CLIENT_SORTSET+addressId+ CommonConst.COLON+type;
-        return redisService.getSortSetByRnage(key,0,-1,true);
+        return redisService.getSortSetByRnage(key,0,-1,false);
     }
 
 
