@@ -7,6 +7,7 @@ import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
 import cn.partytime.common.util.DateUtils;
+import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.config.DanmuChannelRepository;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
 import cn.partytime.dataRpc.RpcDanmuClientService;
@@ -112,7 +113,7 @@ public class ClientLoginService {
         }else if (ClientConst.CLIENT_TYPE_NODECLIENT.equals(clientType)) {
             //移动端弹幕处理
             logger.info("h5{}端触发登录", code);
-            screenClientLogin(code, channel, clientType);
+            nodeClientLogin(code, channel, clientType);
         }
     }
 
@@ -235,7 +236,6 @@ public class ClientLoginService {
         danmuChannelRepository.set(channel, danmuClientInfoModel);
     }
 
-
     /**
      * 屏幕登录
      *
@@ -329,12 +329,6 @@ public class ClientLoginService {
 
             String addressId = danmuClientInfoModel.getAddressId();
 
-            //告诉javaclient启动发送全屏指令
-            //Map<String,Object> map = new HashMap<>();
-            //map.put("type","screenMove");
-            //map.put("code", danmuClientInfoModel.getRegistCode());
-            //clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
-
             //获取已经在线的flashclient数量
             int count =danmuChannelRepository.findDanmuClientCount(0,addressId);
             if(count>=clientOnlineCount){
@@ -345,6 +339,112 @@ public class ClientLoginService {
             collectorCacheService.removeFlahOfflineCLient(addressId, danmuClientInfoModel.getRegistCode());
             collectorCacheService.setCollectorIpRelation(addressId,host);
             collectorCacheService.setClientCount(0,addressId,host,count);
+
+        } else {
+            logger.info("当前连接的用户未非法用户,强制下线");
+            channel.close();
+            return;
+        }
+    }
+
+
+    /**
+     * 屏幕登录
+     *
+     * @param code
+     * @param channel
+     * @param clientType
+     */
+    public void nodeClientLogin(String code, Channel channel, String clientType) {
+        DanmuClientInfoModel danmuClient = findDanmuClientInfo(code);
+
+        logger.info("将要连接到服务器客户端的信息:{}", JSON.toJSONString(danmuClient));
+        if (danmuClient != null) {
+            Channel isLoginChannel = getIsLoginChannel(code,Integer.parseInt(clientType));
+            if(isLoginChannel!=null){
+                logger.info("对已经登录过的客户端，进行踢下线处理");
+                potocolService.forceLogout(isLoginChannel);
+            }
+
+
+            DanmuClientInfoModel danmuClientInfoModel = new DanmuClientInfoModel();
+            BeanUtils.copyProperties(danmuClient, danmuClientInfoModel);
+            danmuClientInfoModel.setClientType(Integer.parseInt(clientType));
+            danmuClientInfoModel.setDanmuCount(0);
+            danmuClientInfoModel.setLastTime(DateUtils.getCurrentDate().getTime());
+            screenDanmuService.setScreenDanmuCount(danmuClient.getAddressId(),0);
+            logger.info("绑定通道与客户端对象的关系");
+            danmuChannelRepository.set(channel, danmuClientInfoModel);
+
+
+            // 获取活动信息
+            String commandType = PotocolComTypeConst.COMMANDTYPE_PARTY_STATUS;
+            PartyLogicModel party = partyService.findPartyByAddressId(danmuClientInfoModel.getAddressId());
+            //只有是活动场的情况下，此处才有效果
+            if (party != null) {
+                try{
+                    int status = party.getStatus();
+                    logger.info("commandType:{},partyId:{},activeTime:{},status:{}",commandType,party.getPartyId(),party.getActiveTime(),status);
+                    Map<String,Object> commandObject = new HashMap<String,Object>();
+                    commandObject.put("type", ProtocolConst.PROTOCOL_COMMAND);
+                    Map<String,Object> dataMap = new HashMap<String,Object>();
+                    dataMap.put("clientType",ClientConst.CLIENT_TYPE_SCREEN);
+                    dataMap.put("type",commandType);
+                    dataMap.put("status",status);
+                    dataMap.put("partyId",party.getPartyId());
+                    if(party.getStartTime()!=null){
+                        dataMap.put("partyTime",party.getStartTime().getTime());
+                    }
+                    if(party.getActiveTime()!=null){
+                        dataMap.put("movieTime",party.getActiveTime().getTime());
+                    }
+                    commandObject.put("data",dataMap);
+                    String message = JSON.toJSONString(commandObject);
+
+                    clientCacheService.setFirstCommandFromCache(danmuClientInfoModel.getAddressId(),commandObject);
+
+
+                    logger.info("下发消息给客户端:{}",message);
+                    channel.writeAndFlush(new TextWebSocketFrame(message));
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            logger.info("启动积压弹幕的推送逻辑");
+                            notSendDanmuHandler.danmuListenHandler(party.getAddressId(),0);
+                        }
+                    }).start();
+
+
+
+
+                }catch (Exception e){
+                    logger.info("{}",e);
+                }
+            }
+
+            String addressId = danmuClientInfoModel.getAddressId();
+
+            //告诉javaclient启动发送全屏指令
+            //Map<String,Object> map = new HashMap<>();
+            //map.put("type","screenMove");
+            //map.put("code", danmuClientInfoModel.getRegistCode());
+            //clientCommandService.pubCommandToJavaClient(addressId,JSON.toJSONString(map));
+
+            //获取已经在线的NODE数量
+            int count =danmuChannelRepository.findDanmuClientCount(IntegerUtils.objectConvertToInt(clientType),addressId);
+            if(count>=clientOnlineCount){
+                collectorAlarmCacheService.removeAlarmAllCache(addressId);
+            }
+
+            collectorCacheService.removeFlahOfflineCLient(addressId, danmuClientInfoModel.getRegistCode());
+            collectorCacheService.setCollectorIpRelation(addressId,host);
+            collectorCacheService.setClientCount(IntegerUtils.objectConvertToInt(clientType),addressId,host,count);
 
         } else {
             logger.info("当前连接的用户未非法用户,强制下线");

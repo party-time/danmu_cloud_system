@@ -36,7 +36,8 @@ public class NotSendDanmuHandler {
             if(size>0){
                 //从未发送
                 int countScreen = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,Integer.parseInt(ClientConst.CLIENT_TYPE_SCREEN));
-                if(countScreen!=0) {
+                int nodeScreen = clientChannelService.findDanmuClientCountByAddressIdAndClientType(addressId,Integer.parseInt(ClientConst.CLIENT_TYPE_NODECLIENT));
+                if(countScreen!=0 || nodeScreen!=0) {
                     Object object = danmuCommandBussinessService.getDanmuFromNotSendQueue(addressId);
                     if(object!=null){
                         danmuSendService.sendMessageToAllClient(addressId,object);
