@@ -8,10 +8,7 @@ import cn.partytime.common.util.ComponentKeyConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.CacheDataRepository;
-import cn.partytime.dataRpc.RpcCmdService;
-import cn.partytime.dataRpc.RpcDanmuAddressService;
-import cn.partytime.dataRpc.RpcOperationRpcLogService;
-import cn.partytime.dataRpc.RpcPartyService;
+import cn.partytime.dataRpc.*;
 import cn.partytime.model.*;
 import cn.partytime.model.danmu.Danmu;
 import cn.partytime.model.danmu.DanmuLog;
@@ -102,6 +99,10 @@ public class BmsDanmuService {
 
     @Autowired
     private RpcOperationRpcLogService rpcOperationRpcLogService;
+
+
+    @Autowired
+    private RpcPayDanmuService rpcPayDanmuService;
 
     /**
      * ‘
@@ -471,10 +472,12 @@ public class BmsDanmuService {
             //是否保存弹幕
             if(isInDanmuLib==0){
                 danmuModel = danmuService.save(danmuModel);
-            }
-
-            if(isPay){
-                log.info("--------------------------------支付弹幕");
+                if(isPay){
+                    log.info("--------------------------------支付弹幕");
+                    PayDanmuDto payDanmuDto = new PayDanmuDto();
+                    payDanmuDto.setDanmuId(danmuModel.getId());
+                    rpcPayDanmuService.save(payDanmuDto);
+                }
             }
 
             //记录弹幕历史
