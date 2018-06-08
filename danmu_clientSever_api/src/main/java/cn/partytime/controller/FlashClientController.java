@@ -58,6 +58,7 @@ public class FlashClientController {
                     }
                 }
             }
+            log.info("danmuClientInfoModelList:{}",JSON.toJSONString(danmuClientInfoModelList));
             restResultModel.setResult(200);
             restResultModel.setResult_msg("OK");
             restResultModel.setData(danmuClientInfoModelList);
