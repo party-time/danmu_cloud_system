@@ -20,7 +20,7 @@ public class RpcPayDanmuService {
     @Autowired
     private PayDanmuService payDanmuService;
 
-    @RequestMapping(value = "/findByDanmuId" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/findByDanmuId" ,method = RequestMethod.POST)
     public PayDanmu findByDanmuId(@RequestParam String danmuId) {
         return payDanmuService.findByDanmuId(danmuId);
     }
