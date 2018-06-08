@@ -18,12 +18,12 @@ public interface RpcPayDanmuService {
 
 
 
-    @RequestMapping(value = "/rpcPayDanmu/save" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/rpcPayDanmu/findByDanmuId" ,method = RequestMethod.POST)
     public PayDanmuDto findDanmuLogById(@RequestParam(value = "id") String id);
 
 
 
-    @RequestMapping(value = "/rpcPayDanmu/findByDanmuId" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/rpcPayDanmu/save" ,method = RequestMethod.POST)
     public void save(PayDanmuDto payDanmuDto);
 
 
