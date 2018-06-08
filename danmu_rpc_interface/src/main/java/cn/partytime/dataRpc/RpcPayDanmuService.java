@@ -18,7 +18,7 @@ public interface RpcPayDanmuService {
 
 
 
-    @RequestMapping(value = "/rpcPayDanmu/save" ,method = RequestMethod.GET)
+    @RequestMapping(value = "/rpcPayDanmu/save" ,method = RequestMethod.POST)
     public PayDanmuDto findDanmuLogById(@RequestParam(value = "id") String id);
 
 
