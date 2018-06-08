@@ -206,6 +206,7 @@ public class ResourceFileService {
                     specialVideos.add(resourceFileModel);
                 }else if (Const.RESOURCE_H5_BACKGROUND == resourceFileModel.getFileType()){
                     h5Background.add(resourceFileModel);
+                    log.info("findResourceMapByPartyId"+resourceFileModel.getFilePath());
                 }else if(Const.RESOURCE_EXPRESSIONS_CONSTANT == resourceFileModel.getFileType()){
                     bigExpressionsConstant.add(resourceFileModel);
                 }

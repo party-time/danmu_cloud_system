@@ -44,6 +44,7 @@ public class BmsPartyResourceService {
                 List<ResourceFile> expressionsConstantList = new ArrayList<>();
                 for(ResourceFile resourceFile : resourceFileList){
                     if(resourceFile.getFileType() == Const.RESOURCE_H5_BACKGROUND){
+                        log.info("findByPartyId"+resourceFile.getFilePath());
                         partyResourceFileResult.setH5BackgroundFile(resourceFile);
                     }
                     if(resourceFile.getFileType() == Const.RESOURCE_EXPRESSIONS){
