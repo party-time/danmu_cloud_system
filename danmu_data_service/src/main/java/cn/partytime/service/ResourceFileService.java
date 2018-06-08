@@ -6,8 +6,6 @@ import cn.partytime.model.manager.PartyResource;
 import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.repository.manager.ResourceFileRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -157,10 +155,12 @@ public class ResourceFileService {
      */
     public List<ResourceFile> findByPartyId(String partyId){
         List<PartyResource> partyResourceList =partyResourceService.findByPartyId(partyId);
+
         if( null != partyResourceList){
             List<String> resourceIdList = new ArrayList<String>();
             for(PartyResource partyResource : partyResourceList){
                 resourceIdList.add(partyResource.getResourceId());
+                log.info("findByPartyId"+partyResource.getResourceId());
             }
             return this.findByIds(resourceIdList);
         }

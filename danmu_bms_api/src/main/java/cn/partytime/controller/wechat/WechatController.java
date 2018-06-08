@@ -168,8 +168,9 @@ public class WechatController {
         model.addAttribute("expressions",all );
 
         if (null != resourceFileModels.get("h5Background")) {
-            List reList = (ArrayList) resourceFileModels.get("h5Background");
+            List<ResourceFile> reList = (List<ResourceFile>) resourceFileModels.get("h5Background");
             if (reList.size() > 0) {
+                log.info("sendDM :"+reList.get(0).getFilePath());
                 model.addAttribute("background", reList.get(0));
             }
         }
