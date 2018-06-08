@@ -3,6 +3,7 @@ package cn.partytime.service;
 import cn.partytime.common.cachekey.client.ClientCacheKey;
 import cn.partytime.common.cachekey.DanmuCacheKey;
 import cn.partytime.common.constants.CommonConst;
+import cn.partytime.common.util.BooleanUtils;
 import cn.partytime.common.util.ComponentKeyConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.ListUtils;
@@ -335,6 +336,7 @@ public class BmsDanmuService {
         String templateId = cmdTempAllData.getId();
         //是否入弹幕库 0入库  1不入库
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
+        boolean isPay = false;
 
         if(StringUtils.isEmpty(addressId)){
             log.info("活动编号或者场地编号是空！");
@@ -401,6 +403,9 @@ public class BmsDanmuService {
                 boolean specialCompontentBoolean =  danmuCommonService.checkSpecialComponent(componentId);
                 if(specialCompontentBoolean && "0".equals(componentId)){
                     map.put(key,cmdTempComponentData.getDefaultValue());
+                    if( "isPay".equals(key) && BooleanUtils.objectConvertToBoolean(cmdTempComponentData.getDefaultValue())){
+                        isPay = true;
+                    }
                 }else{
                     if(type==3){
                         //显示的内容
@@ -466,6 +471,10 @@ public class BmsDanmuService {
             //是否保存弹幕
             if(isInDanmuLib==0){
                 danmuModel = danmuService.save(danmuModel);
+            }
+
+            if(isPay){
+                log.info("--------------------------------支付弹幕");
             }
 
             //记录弹幕历史
