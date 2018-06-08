@@ -214,9 +214,9 @@ public class JavaClientController {
     @RequestMapping(value = "/findFlashConfig", method = RequestMethod.GET)
     public RestResultModel findFlashConfig(String code){
         RestResultModel restResultModel = new RestResultModel();
-        String objStr = paramLogicService.createJson(rpcParamService.findByRegistCode(code));
+        //String objStr = paramLogicService.createJson();
         restResultModel.setResult(200);
-        restResultModel.setData(objStr);
+        restResultModel.setData(rpcParamService.findByRegistCode(code));
         return restResultModel;
     }
 
