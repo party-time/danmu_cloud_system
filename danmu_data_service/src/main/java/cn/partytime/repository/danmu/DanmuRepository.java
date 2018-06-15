@@ -45,6 +45,10 @@ public interface DanmuRepository extends MongoRepository<Danmu, String> {
 
     public Page<Danmu> findByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(List<String> danmuPoolIdList, int danmuSrc, boolean isBlocked, boolean viewFlg, Pageable pageable);
 
+
+    public Page<Danmu> findByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTemplateIdKey(List<String> danmuPoolIdList, int danmuSrc, boolean isBlocked, boolean viewFlg, Pageable pageable,String templateIdKey);
+
+
     public long countByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId,int danmuSrc,boolean isBlocked,boolean viewFlg);
 
     public long countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(List<String> danmuPoolIdList,int danmuSrc,boolean isBlocked,boolean viewFlg);

@@ -126,6 +126,12 @@ public class DanmuService {
         return danmuRepository.findByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlg(danmuPoolIdList,danmuSrc,isBlocked,viewFlg,pageRequest);
     }
 
+    public Page<Danmu> findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(int danmuSrc, boolean isBlocked, boolean viewFlg, Integer page, Integer size, List<String> danmuPoolIdList,String templateIdKey) {
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+        PageRequest pageRequest = new PageRequest(page, size, sort);
+        return danmuRepository.findByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTemplateIdKey(danmuPoolIdList,danmuSrc,isBlocked,viewFlg,pageRequest,templateIdKey);
+    }
+
 
     public Page<Danmu> findByDanmuPoolIdAndDanmuSrcAndIsBlockedAndViewFlg(String danmuPoolId, int danmuSrc, boolean isBlocked, boolean viewFlg, Integer page, Integer size) {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");

@@ -241,7 +241,7 @@ public class WechatMiniRestController {
     public PageResultModel historyDanmu(@PathVariable("openId")String openId , @PathVariable("pageNo") Integer pageNo, @PathVariable("pageSize")Integer pageSize) {
         PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
         log.info("party:{}",JSON.toJSONString(party));
-        PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(pageNo-1,pageSize,party.getAddressId(),party.getPartyId(),1);
+        PageResultModel pageResultModel = bmsDanmuService.findPageResultDanmuModel(pageNo-1,pageSize,party.getAddressId(),party.getPartyId(),1);
         return pageResultModel;
     }
 }

@@ -195,6 +195,58 @@ public class BmsDanmuService {
 
 
 
+    public PageResultModel findPageResultDanmuModel(int index, int size, String addressIdArray, String partyId, int danmuSrc) {
+
+        String[] addressArray = {};
+        List<String> addressList = new ArrayList<String>();
+        if(!StringUtils.isEmpty(addressIdArray)){
+            addressArray = addressIdArray.split(",");
+            for(String addressId:addressArray){
+                addressList.add(addressId);
+            }
+        }
+
+        PageResultModel pageResultModel = new PageResultModel();
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        //DanmuPool danmuPool = findDanmuPool(addressId, partyId);
+        //String danmuPoolId = danmuPool.getId();
+
+        List<DanmuPool> danmuPoolList = null;
+        if(ListUtils.checkListIsNotNull(addressList)){
+            danmuPoolList = danmuPoolService.findByPartyIdAndAddressList(partyId,addressList);
+        }else{
+            danmuPoolList = danmuPoolService.findByPartyId(partyId);
+        }
+        List<DanmuLogicModel> danmuLogicModelList = new ArrayList<DanmuLogicModel>();
+        log.info("当前活动下绑定的弹幕池信息:{}",JSON.toJSONString(danmuPoolList));
+        List<String> danmuPoolIdLIST = new ArrayList<String>();
+        if(ListUtils.checkListIsNotNull(danmuPoolList)){
+            for(DanmuPool danmuPool:danmuPoolList){
+                danmuPoolIdLIST.add(danmuPool.getId());
+            }
+            log.info("当前活动下绑定的弹幕池数量:{}",danmuPoolIdLIST.size());
+        }else{
+            pageResultModel.setRows(danmuLogicModelList);
+            return pageResultModel;
+        }
+
+
+        Page<Danmu> danmuListByPage = danmuService.findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(1,false,true,index,size,danmuPoolIdLIST,"pDanmu");
+        long count = danmuListByPage.getTotalElements();
+        pageResultModel.setTotal(count);
+        if(count==0){
+            pageResultModel.setRows(danmuLogicModelList);
+            return pageResultModel;
+        }
+        List<Danmu> danmuList = danmuListByPage.getContent();
+        log.info("danmuList:{}",JSON.toJSONString(danmuList));
+        if(ListUtils.checkListIsNotNull(danmuList)){
+            pageResultModel.setRows(findDanmuLogicModelList(danmuList));
+        }
+        return pageResultModel;
+    }
+
     public PageResultModel findPageResultModel(int index, int size, String addressIdArray, String partyId, int danmuSrc) {
 
         String[] addressArray = {};
