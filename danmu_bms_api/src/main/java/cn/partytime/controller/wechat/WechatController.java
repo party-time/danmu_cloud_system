@@ -392,7 +392,7 @@ public class WechatController {
             }
             model.addAttribute("partyName",party.getPartyName());
             if(!StringUtils.isEmpty(party.getPartyId())){
-                PageResultModel pageResultModel = bmsDanmuService.findPageResultModel(pageNumber,20,party.getAddressId(),party.getPartyId(),1);
+                PageResultModel pageResultModel = bmsDanmuService.findPageResultDanmuModel(pageNumber,20,party.getAddressId(),party.getPartyId(),1);
                 model.addAttribute("dataList",pageResultModel.getRows());
                 model.addAttribute("total",pageResultModel.getTotal());
                 model.addAttribute("pageNumber",pageNumber);
