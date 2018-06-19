@@ -49,12 +49,6 @@ public class WechatMiniRestController {
     private BmsWechatUserService bmsWechatUserService;
 
     @Autowired
-    private WechatUserInfoService wechatUserInfoService;
-
-    @Autowired
-    private WechatUserService wechatUserService;
-
-    @Autowired
     private BmsColorService bmsColorService;
 
     @Autowired
@@ -68,6 +62,9 @@ public class WechatMiniRestController {
 
     @Autowired
     private WechatPayService wechatPayService;
+
+    @Autowired
+    private BmsReportService bmsReportService;
 
 
     @RequestMapping(value = "/wxBingPay", method = RequestMethod.POST)
@@ -243,5 +240,18 @@ public class WechatMiniRestController {
         log.info("party:{}",JSON.toJSONString(party));
         PageResultModel pageResultModel = bmsDanmuService.findPageResultDanmuModel(pageNo-1,pageSize,party.getAddressId(),party.getPartyId(),1);
         return pageResultModel;
+    }
+
+    @RequestMapping(value = "/historyDanmu/report/{openId}/{danmuId}", method = RequestMethod.GET)
+    public RestResultModel report(@PathVariable("openId")String openId,@PathVariable("danmuId")String danmuId){
+        RestResultModel restResultModel = new RestResultModel();
+        String result = bmsReportService.reportDanmu(openId,danmuId);
+        if(StringUtils.isEmpty(result)){
+            restResultModel.setResult(200);
+        }else{
+            restResultModel.setResult(500);
+            restResultModel.setResult_msg(result);
+        }
+        return restResultModel;
     }
 }
