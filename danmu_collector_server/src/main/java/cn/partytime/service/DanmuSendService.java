@@ -159,7 +159,7 @@ public class DanmuSendService {
         Object isPayObject = dataMap.get("isPay");
         //给指定的场地弹幕颜色设置成白色
         if(whiteColorAddrssId.equals(addressId) && "pDanmu".equals(String.valueOf(type))){
-            logger.info("给场地：{}弹幕颜色设置成白色",addressId);
+            logger.info("whiteColorAddrssId:{},给场地：{}弹幕颜色设置成白色",whiteColorAddrssId,addressId);
             dataMap.put("color","0xffffff");
         }
         map.put("data",dataMap);
