@@ -1,4 +1,4 @@
-package cn.partytime.common.cachekey;
+package cn.partytime.common.cachekey.danmu;
 
 /**
  * Created by lENOVO on 2016/9/14.
@@ -8,12 +8,19 @@ public class DanmuCacheKey {
     /**
      * 发送弹幕缓存
      */
-    public static final String SEND_DANMU_CACHE_LIST="send:danmu:cache:list:";
+    public static final String SEND_DANMU_CACHE_LIST="send:party:danmu:cache:list:";
+
+    /**
+     * 发送弹幕临时缓存
+     */
+    public static final String SEND_TEMP_DANMU_CACHE_LIST="send:party:danmu:cache:list:";
 
     /**
      * 电影弹幕缓存
      */
     public static final String SEND_FILM_DANMU_CACHE_LIST="send:film:danmu:cache:list";
+
+
 
     /**
      * 弹幕广播队列

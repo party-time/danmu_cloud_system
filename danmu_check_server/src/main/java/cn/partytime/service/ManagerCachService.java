@@ -21,51 +21,6 @@ public class ManagerCachService {
     @Autowired
     private RedisService redisService;
 
-
-    /**
-     * 当前通道可分配的任务数
-     *
-     * @param ChannelId
-     * @param partyId
-     * @return
-     */
-    public int appointTaskCount(String ChannelId, String partyId) {
-        String key = AdminTaskCacheKey.ADMIN_PARTY_TASK_COUNT_KEY + partyId + CommonConst.COLON + ChannelId;
-        Object countObject = redisService.get(key);
-        int count = IntegerUtils.objectConvertToInt(countObject);
-        logger.info("通道:{},活动:{},任务数:{}", ChannelId, partyId, count);
-        return count;
-    }
-
-    public int appointTaskCount(String channelId) {
-        String key = AdminTaskCacheKey.ADMIN_PARTY_TASK_COUNT_KEY + channelId;
-        Object countObject = redisService.get(key);
-        int count = IntegerUtils.objectConvertToInt(countObject);
-        return count;
-    }
-
-    /**
-     * 管理弹幕计数
-     * 设置屏幕弹幕计数(-1)
-     */
-    public void addAppointCount(String channelId) {
-        logger.info("通道:{},任务数计数操作", channelId);
-        String key = AdminTaskCacheKey.ADMIN_PARTY_TASK_COUNT_KEY + channelId;
-        redisService.incrKey(key, 1);
-        redisService.expire(key, 60 * 60 * 4);
-    }
-
-    /**
-     * 管理弹幕计数
-     * 设置屏幕弹幕计数(-1)
-     */
-    public void addAppointCount(String channelId, String partyId) {
-        logger.info("通道:{},活动:{},任务数计数操作", channelId, partyId);
-        String key = AdminTaskCacheKey.ADMIN_PARTY_TASK_COUNT_KEY + partyId + CommonConst.COLON + channelId;
-        redisService.incrKey(key, 1);
-        redisService.expire(key, 60 * 60 * 4);
-    }
-
     /**
      * 发送测试弹幕数计数
      *

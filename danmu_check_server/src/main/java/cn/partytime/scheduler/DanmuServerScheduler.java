@@ -1,13 +1,22 @@
 package cn.partytime.scheduler;
 
 import cn.partytime.cache.admin.CheckAdminCacheService;
+import cn.partytime.cache.danmu.DanmuCacheService;
+import cn.partytime.common.cachekey.danmu.DanmuCacheKey;
+import cn.partytime.common.util.ListUtils;
+import cn.partytime.common.util.SetUtils;
 import cn.partytime.config.DanmuChannelRepository;
+import cn.partytime.handlerThread.PartyDanmuPushHandler;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Set;
 
 @Component
 @EnableScheduling
@@ -21,12 +30,40 @@ public class DanmuServerScheduler {
     @Autowired
     private CheckAdminCacheService checkAdminCacheService;
 
+    @Autowired
+    private PartyDanmuPushHandler partyDanmuPushHandler;
+
+    @Autowired
+    private DanmuCacheService danmuCacheService;
+
     @Scheduled(cron = "0/60 * * * * *")
     public void resetOnlineCheckAdminCount(){
         log.info("重置在线审核管理员的个数");
         int type=1;
         int count = danmuChannelRepository.getAdminCount(type);
         checkAdminCacheService.setCheckAdminCount(type,count);
+    }
+
+    /**
+     * 将活动缓存中弹幕推送给管理员
+     */
+    @Scheduled(cron = "0/5 * * * * *")
+    public void pushPartyDanmuToCheckManager(){
+        log.info("将缓存中弹幕推送给管理员");
+        //int partyType = 0;
+        Set<String> partySet =  danmuChannelRepository.getPartySet();
+        if(SetUtils.checkSetIsNotNull(partySet)){
+            for(String partyId:partySet){
+                List<Channel> channelList = danmuChannelRepository.findChannelListByPartyId(partyId);
+                if(ListUtils.checkListIsNotNull(channelList)){
+                    Object object = danmuCacheService.getDanmuFromTempList(partyId);
+                    if(object!=null){
+                        partyDanmuPushHandler.pushDanmuToManager(object,channelList);
+                    }
+                }
+
+            }
+        }
     }
 
 

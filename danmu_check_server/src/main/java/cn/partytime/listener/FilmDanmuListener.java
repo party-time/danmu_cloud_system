@@ -1,6 +1,6 @@
 package cn.partytime.listener;
 
-import cn.partytime.common.cachekey.DanmuCacheKey;
+import cn.partytime.common.cachekey.danmu.DanmuCacheKey;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.DanmuChannelRepository;
 import cn.partytime.model.AdminTaskModel;
@@ -9,21 +9,18 @@ import cn.partytime.service.ManagerCachService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import lombok.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Slf4j
 @Component("filmDanmuListener")
 public class FilmDanmuListener  implements MessageListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(FilmDanmuListener.class);
 
     @Autowired
     private DanmuChannelRepository danmuChannelRepository;
@@ -42,7 +39,7 @@ public class FilmDanmuListener  implements MessageListener {
             List<Channel> channelList = danmuChannelRepository.findAdminTaskModelFilmChannelList();
             if (object != null) {
                 String acceptMessage = String.valueOf(object);
-                logger.info("推送给管理员的消息:{}", acceptMessage);
+                log.info("推送给管理员的消息:{}", acceptMessage);
                 //QueueDanmuModel queueDanmuModel = JSON.parseObject(acceptMessage, QueueDanmuModel.class);
                 Map<String,Object> danmuMap = (Map<String,Object>)JSON.parse(acceptMessage);
                 Map<String,Object> map = new HashMap<String,Object>();
@@ -54,22 +51,20 @@ public class FilmDanmuListener  implements MessageListener {
         }
     }
     public void appointTaskToManager(String message, String partyId, List<Channel> channelList) {
-        logger.info("开始给管理员分配任务");
+        log.info("开始给管理员分配任务");
         List<AdminTaskModel> adminTaskModelList = new ArrayList<AdminTaskModel>();
         for (Channel channel : channelList) {
             AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(channel);
             if(adminTaskModel.getCheckFlg()==0){
 
                 adminTaskModel.setChannel(channel);
-                int count = managerCachService.appointTaskCount(adminTaskModel.getLongChannelId());
-                adminTaskModel.setCount(count);
                 adminTaskModelList.add(adminTaskModel);
-                logger.info("管理员信息:{}", JSON.toJSONString(adminTaskModel));
+                //log.info("管理员信息:{}", JSON.toJSONString(adminTaskModel));
             }
         }
 
         if (ListUtils.checkListIsNotNull(adminTaskModelList)) {
-            Collections.sort(adminTaskModelList, new Comparator<AdminTaskModel>() {
+            /*Collections.sort(adminTaskModelList, new Comparator<AdminTaskModel>() {
                 @Override
                 public int compare(AdminTaskModel o1, AdminTaskModel o2) {
                     int i = o1.getCount() - o2.getCount();
@@ -81,12 +76,14 @@ public class FilmDanmuListener  implements MessageListener {
                     return 0;
                 }
             });
-            //TODO:当前管理员的弹幕数大于等于taskCount就不分配弹幕了
-            AdminTaskModel adminTaskModel = adminTaskModelList.get(0);
+            AdminTaskModel adminTaskModel = adminTaskModelList.get(0);*/
+            int random = (int) (Math.random() * adminTaskModelList.size());
+            log.info("给{}分配弹幕",random);
+            AdminTaskModel adminTaskModel = adminTaskModelList.get(random);
 
             Channel channel = adminTaskModel.getChannel();
             channel.writeAndFlush(new TextWebSocketFrame(message));
-            managerCachService.addAppointCount(adminTaskModel.getAdminId());
+            //managerCachService.addAppointCount(adminTaskModel.getAdminId());
         }
 
     }

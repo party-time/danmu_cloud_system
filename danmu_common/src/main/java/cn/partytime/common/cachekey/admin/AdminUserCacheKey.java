@@ -17,6 +17,12 @@ public class AdminUserCacheKey {
 
     public static final String  CHECK_AMIN_OFFLINE_TIME="admin:offline:time:";
 
+    //在线管理员sortset
+    public static final String CHECK_ADMIN_ONLINE_SORTSET="check:admin:online:sortset:";
+
+    //离线管理员sortset
+    public static final String CHECK_ADMIN_OFFLINE_SORTSET="check:admin:offline:sortset:";
+
 
 //
 //    public static final String AMIN_OFFLINE_ALARM_COUNT="admin:offlinealarm:count";

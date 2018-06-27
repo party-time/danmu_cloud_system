@@ -4,7 +4,7 @@ import cn.partytime.cache.admin.CheckAdminAlarmCacheService;
 import cn.partytime.cache.admin.CheckAdminCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
 import cn.partytime.common.cachekey.CommandCacheKey;
-import cn.partytime.common.cachekey.DanmuCacheKey;
+import cn.partytime.common.cachekey.danmu.DanmuCacheKey;
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
 import cn.partytime.common.constants.PotocolComTypeConst;
 import cn.partytime.common.constants.ProtocolConst;
@@ -842,9 +842,11 @@ public class CommandHanderService {
         AdminUserDto adminInfo = rpcAdminService.findById(adminUserDto.getId());
         AdminTaskModel adminTaskModel = new AdminTaskModel();
         log.info("adminInfo:{}",JSON.toJSONString(adminInfo));
+
+        String adminId = adminUser.getId();
         adminTaskModel.setAuthKey(key);
         adminTaskModel.setAdminName(adminUser.getUserName());
-        adminTaskModel.setAdminId(adminUser.getId());
+        adminTaskModel.setAdminId(adminId);
         adminTaskModel.setLongChannelId(channel.id().asLongText());
         adminTaskModel.setShortChannelId(channel.id().asShortText());
         adminTaskModel.setPartyId(partyId);
@@ -854,6 +856,10 @@ public class CommandHanderService {
 
         //缓存管理信息
         danmuChannelRepository.saveChannelAdminRelation(partyType,channel, adminTaskModel);
+
+        checkAdminCacheService.removeOfflineAdminSortSet(partyType,adminId);
+        checkAdminCacheService.addOnlineAdminSortSet(partyType,adminId);
+
 
         //adminLoginService.adminLogin(key,channelFuture.channel(),Integer.parseInt(partyType));
         result.put("checkStatus", adminInfo.getCheckFlg());
@@ -886,14 +892,15 @@ public class CommandHanderService {
 
             DanmuAddressModel danmuAddressModel = danmuAddressService.findById(addressId);
 
-
-
             result.put("addressName", danmuAddressModel.getName());
             //初始化内容发送个管理界面
             sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
             checkAdminCacheService.addCheckAdminCount(partyType,1);
             checkAdminAlarmCacheService.removeAlarmAllCache(partyType);
         }else{
+
+
+
 
             sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms(type, result)));
             checkAdminCacheService.addCheckAdminCount(partyType,1);
@@ -980,19 +987,24 @@ public class CommandHanderService {
     private void clearClientCacheData(AdminTaskModel adminTaskModel, Channel channel) {
         if (adminTaskModel != null) {
 
-            int type = adminTaskModel.getPartyType();
-            checkAdminCacheService.addCheckAdminCount(type,-1);
+            int partyType = adminTaskModel.getPartyType();
+            String adminId = adminTaskModel.getAdminId();
+
+            checkAdminCacheService.addCheckAdminCount(partyType,-1);
+
+
+            checkAdminCacheService.removeOnlineAdminSortSet(partyType,adminId);
+            checkAdminCacheService.addOfflineAdminSortSet(partyType,adminId);
+
+
             String partyId = adminTaskModel.getPartyId();
 
             //设置管理员掉线时间
-            checkAdminCacheService.setAdminOfflineTime(type);
+            checkAdminCacheService.setAdminOfflineTime(partyType);
 
             //清除分配的弹幕数量
             managerCachService.subOnlineAdminCount(channel, partyId);
-
-            //清除屏幕与地址关系
-            danmuChannelRepository.remove(channel);
-
+            
             //redisService.expire(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+adminTaskModel.getAuthKey(),0);
             //移除通道信息
             danmuChannelRepository.remove(channel);

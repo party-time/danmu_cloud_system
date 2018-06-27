@@ -2,7 +2,6 @@ package cn.partytime.rpc;
 
 import cn.partytime.cache.alarm.AlarmCacheService;
 import cn.partytime.cache.danmu.DanmuAlarmCacheService;
-import cn.partytime.common.cachekey.DanmuCacheKey;
 import cn.partytime.common.constants.AlarmConst;
 import cn.partytime.common.constants.AlarmKeyConst;
 import cn.partytime.common.constants.LogCodeConst;

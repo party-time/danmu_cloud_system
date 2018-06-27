@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -133,5 +130,16 @@ public class DanmuChannelRepository {
         channelFilmConcurrentHashMap.remove(channel);
     }
 
-
+    public Set<String> getPartySet(){
+        //List<Channel> channelList = new ArrayList<>();
+        Set<String> partySet = new HashSet<String>();
+        Iterator<Map.Entry<Channel, AdminTaskModel>> entries = channelPartyConcurrentHashMap.entrySet().iterator();
+        while (entries.hasNext()) {
+            Map.Entry<Channel, AdminTaskModel> entry = entries.next();
+            if(entry.getValue().getPartyType() == 0){
+                partySet.add(entry.getValue().getPartyId());
+            }
+        }
+        return partySet;
+    }
 }

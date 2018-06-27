@@ -35,7 +35,6 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<FullHttp
     @Autowired
     private AdminLoginService adminLoginService;
 
-
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
         if (request instanceof FullHttpRequest) {
