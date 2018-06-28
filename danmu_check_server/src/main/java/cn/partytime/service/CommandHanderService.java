@@ -3,6 +3,7 @@
 import cn.partytime.cache.admin.CheckAdminAlarmCacheService;
 import cn.partytime.cache.admin.CheckAdminCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
+import cn.partytime.cache.danmu.DanmuCacheService;
 import cn.partytime.common.cachekey.CommandCacheKey;
 import cn.partytime.common.cachekey.danmu.DanmuCacheKey;
 import cn.partytime.common.cachekey.FunctionControlCacheKey;
@@ -91,6 +92,12 @@ public class CommandHanderService {
 
     @Autowired
     private RpcOperationRpcLogService rpcOperationRpcLogService;
+
+    @Autowired
+    private AdminDanmuService adminDanmuService;
+
+    @Autowired
+    private DanmuCacheService danmuCacheService;
 
 
 
@@ -467,7 +474,9 @@ public class CommandHanderService {
                 log.info("管理员:{},状态更新",adminUser.getId());
 
                 //更新日志信息
-                danmuLog.setCheckUserId(adminUser.getId());
+                String danmuLogId = danmuLog.getId();
+                String adminId = adminUser.getId();
+                danmuLog.setCheckUserId(adminId);
                 danmuLog.setViewFlg(true);
                 danmuLog.setUpdateTime(DateUtils.getCurrentDate());
                 rpcDanmuService.save(danmuLog);
@@ -504,6 +513,12 @@ public class CommandHanderService {
                 commandObject.put("isSendH5",cmdTempAllData.getIsSendH5());
                 log.info("推送弹幕到客户端：{}",JSON.toJSONString(commandObject));
                 pubDanmuToUserCachList(partyId, addressId, commandObject);
+
+                //从自己的弹幕队列中清除弹幕
+                danmuCacheService.reomvePartyDanmuFromCheckUserSortSet(partyId,adminId,danmuLogId);
+                danmuCacheService.removeSendDanmuInfo(danmuLogId);
+
+
             }else{
 
                 DanmuModel danmuLog = rpcDanmuService.findById(id);
@@ -817,22 +832,6 @@ public class CommandHanderService {
                 forceLogout(oldChannel);
             }
         }
-        //log.info("long==>oldChannel:{}",oldChannel.id().asLongText());
-        //log.info("long==>channel:{}",channel.id().asLongText());
-
-        //log.info("short==>oldChannel:{}",oldChannel.id().asShortText());
-        //log.info("short==>channel:{}",channel.id().asShortText());
-        /*String cacheKey = AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+key;
-        Object object = redisService.get(cacheKey);
-        if(object!=null){
-            result.put("message","审核界面已经打开过!");
-            sendMessageToBMS(channel, JSON.toJSONString(setObjectToBms("isRepeateLogin", result)));
-            return;
-        }else{
-            log.info("重来未登录过");
-            redisService.set(cacheKey,adminUser.getId());
-            //redisService.expire(AdminUserCacheKey.CHECK_AMDIN_CACHE_KEY+key,60*5);
-        }*/
 
         //缓存管理员与通道的关系
         //AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(partyType,channel);
@@ -857,9 +856,12 @@ public class CommandHanderService {
         //缓存管理信息
         danmuChannelRepository.saveChannelAdminRelation(partyType,channel, adminTaskModel);
 
+
         checkAdminCacheService.removeOfflineAdminSortSet(partyType,adminId);
         checkAdminCacheService.addOnlineAdminSortSet(partyType,adminId);
 
+
+        adminDanmuService.pushTempDanmuToCheckUser(partyType,adminId,partyId,channel);
 
         //adminLoginService.adminLogin(key,channelFuture.channel(),Integer.parseInt(partyType));
         result.put("checkStatus", adminInfo.getCheckFlg());

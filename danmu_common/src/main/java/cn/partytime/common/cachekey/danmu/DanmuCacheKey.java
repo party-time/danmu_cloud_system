@@ -5,6 +5,11 @@ package cn.partytime.common.cachekey.danmu;
  */
 public class DanmuCacheKey {
 
+
+    /**
+     * 要发送的的弹木信息
+     */
+    public static final String SEND_DANMU_INFO="send:danmu:";
     /**
      * 发送弹幕缓存
      */
@@ -13,12 +18,27 @@ public class DanmuCacheKey {
     /**
      * 发送弹幕临时缓存
      */
-    public static final String SEND_TEMP_DANMU_CACHE_LIST="send:party:danmu:cache:list:";
+    public static final String SEND_TEMP_DANMU_CACHE_LIST="send:temp:party:danmu:cache:list:";
 
     /**
      * 电影弹幕缓存
      */
-    public static final String SEND_FILM_DANMU_CACHE_LIST="send:film:danmu:cache:list";
+    public static final String SEND_FILM_DANMU_CACHE_LIST="send:film:danmu:cache:list:";
+
+    /**
+     * 电影弹幕临时缓存
+     */
+    public static final String SEND_TEMP_FILM_DANMU_CACHE_LIST="send:temp:film:danmu:cache:list:";
+
+    /**
+     * 分配给管理员的活动弹幕
+     */
+    public static final String SEND_USER_DANMU_CACHE_LIST="send:party:user:danmu:cache:sortset:";
+
+    /**
+     * 分配给管理员的电影弹幕
+     */
+    public static final String SEND_USER_FILM_DANMU_CACHE_LIST="send:film:user:danmu:cache:sortset:";
 
 
 

@@ -3,11 +3,14 @@ package cn.partytime.scheduler;
 import cn.partytime.cache.admin.CheckAdminCacheService;
 import cn.partytime.cache.danmu.DanmuCacheService;
 import cn.partytime.common.cachekey.danmu.DanmuCacheKey;
+import cn.partytime.common.constants.PartyConst;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.common.util.SetUtils;
 import cn.partytime.config.DanmuChannelRepository;
 import cn.partytime.handlerThread.PartyDanmuPushHandler;
+import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -16,6 +19,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Component
@@ -45,7 +49,7 @@ public class DanmuServerScheduler {
     }
 
     /**
-     * 将活动缓存中弹幕推送给管理员
+     * 将活动缓存中弹幕推送给管理员(管理员都不在线的时候缓存中积累的弹幕)
      */
     @Scheduled(cron = "0/5 * * * * *")
     public void pushPartyDanmuToCheckManager(){
@@ -58,10 +62,43 @@ public class DanmuServerScheduler {
                 if(ListUtils.checkListIsNotNull(channelList)){
                     Object object = danmuCacheService.getDanmuFromTempList(partyId);
                     if(object!=null){
-                        partyDanmuPushHandler.pushDanmuToManager(object,channelList);
+                        partyDanmuPushHandler.pushDanmuToManager(object,channelList,partyId);
                     }
                 }
 
+            }
+        }
+    }
+
+
+    /**
+     * 活动场的情况下：给掉线审核员未审核的弹幕推送给在线审核员
+     */
+    @Scheduled(cron = "0/10 * * * * *")
+    public void pushOffLineCheckmanDanmuToOnlineCheckmanInParty() {
+        log.info("给掉线审核员未审核的弹幕推送给在线审核员");
+        Set<String> partySet = danmuChannelRepository.getPartySet();
+        if (SetUtils.checkSetIsNotNull(partySet)) {
+            for (String partyId : partySet) {
+                Set<String> offAdminSet = checkAdminCacheService.getOfflineAdminSortSet(PartyConst.PARTY_TYPE_PARTY);
+                if(SetUtils.checkSetIsNotNull(offAdminSet)){
+                    for(String adminId:offAdminSet){
+                        Object danmuIdObject = danmuCacheService.getOnePartyDanmuFromCheckUserSortSet(partyId,adminId);
+                        String danmuId = String.valueOf(danmuIdObject);
+                        Object object = danmuCacheService.getSendDanmuInfo(danmuId);
+                        if(object!=null){
+                            log.info(JSON.toJSONString(object));
+                            Map<String, Object> danmuMap = (Map<String, Object>) JSON.parse(JSON.toJSONString(object));
+                            partyDanmuPushHandler.pushOfflineAdminDanmuToOtherAdmin(adminId,partyId,danmuId,danmuMap);
+                            //log.info(String.valueOf(danmuMap));
+                            //channel.write(new TextWebSocketFrame(JSON.toJSONString(danmuMap)));
+                        }
+
+                        //Map<String, Object> danmuMap = (Map<String, Object>) JSON.parse(JSON.toJSONString(object));
+                        //channel.write(new TextWebSocketFrame(JSON.toJSONString(danmuMap)));
+                        //partyDanmuPushHandler.pushOfflineAdminDanmuToOtherAdmin(adminId,partyId,danmuId,map);
+                    }
+                }
             }
         }
     }

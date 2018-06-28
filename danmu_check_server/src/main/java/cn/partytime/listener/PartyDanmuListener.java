@@ -67,7 +67,8 @@ public class PartyDanmuListener implements MessageListener {
                     map.put("type", "normalDanmu");
                     map.put("data", danmuMap);
                     String msg = JSON.toJSONString(map);*/
-                    partyDanmuPushHandler.pushDanmuToManager(object, channelList);
+
+                    partyDanmuPushHandler.pushDanmuToManager(object, channelList,partyId);
                 }
             }
         }

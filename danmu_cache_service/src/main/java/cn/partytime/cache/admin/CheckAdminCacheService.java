@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 @Slf4j
 public class CheckAdminCacheService {
@@ -99,6 +101,17 @@ public class CheckAdminCacheService {
         redisService.expire(key,60*60*2);
     }
 
+
+    /**
+     * 获取在线的管理员
+     * @param type
+     * @return
+     */
+    public Set<String> getOnlineAmdinSortSet(int type){
+        String key = AdminUserCacheKey.CHECK_ADMIN_ONLINE_SORTSET+type;
+        return redisService.getSortSetByRnage(key,0,0,true);
+    }
+
     /**
      * 将离线线管理员id存入到sortset
      * @param type
@@ -119,5 +132,15 @@ public class CheckAdminCacheService {
         String key = AdminUserCacheKey.CHECK_ADMIN_OFFLINE_SORTSET+type;
         redisService.deleteSortData(key,admingId);
         redisService.expire(key,60*60*2);
+    }
+
+    /**
+     * 获取离线的管理员
+     * @param type
+     * @return
+     */
+    public Set<String> getOfflineAdminSortSet(int type){
+        String key = AdminUserCacheKey.CHECK_ADMIN_OFFLINE_SORTSET+type;
+        return redisService.getSortSetByRnage(key,0,0,true);
     }
 }

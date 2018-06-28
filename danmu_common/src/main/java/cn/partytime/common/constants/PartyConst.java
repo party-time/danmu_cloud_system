@@ -10,4 +10,12 @@ public class PartyConst {
 
     /**弹幕密度（活动）*/
     public static int danmuDensity=3;
+
+
+    /**活动*/
+    public static final int PARTY_TYPE_PARTY = 0;
+
+    /**电影*/
+    public static final int PARTY_TYPE_FILM = 0;
+
 }

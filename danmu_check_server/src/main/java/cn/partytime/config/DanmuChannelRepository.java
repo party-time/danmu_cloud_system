@@ -1,6 +1,7 @@
 package cn.partytime.config;
 
 
+import cn.partytime.common.constants.PartyConst;
 import cn.partytime.model.AdminTaskModel;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -86,7 +87,7 @@ public class DanmuChannelRepository {
 
     public List<Channel> findAdminTaskModelChnnelListByPartyId(int partyType,String partyId) {
         ConcurrentHashMap<Channel, AdminTaskModel> adminTaskModelConcurrentHashMap = new ConcurrentHashMap<Channel, AdminTaskModel>();
-        if(partyType==0){
+        if(partyType==PartyConst.PARTY_TYPE_PARTY){
             adminTaskModelConcurrentHashMap = channelPartyConcurrentHashMap;
         }else{
             adminTaskModelConcurrentHashMap = channelFilmConcurrentHashMap;
@@ -128,6 +129,24 @@ public class DanmuChannelRepository {
     public void remove(Channel channel){
         channelPartyConcurrentHashMap.remove(channel);
         channelFilmConcurrentHashMap.remove(channel);
+    }
+
+    public Channel getChannelByAdminId(String adminId,int partyType){
+        ConcurrentHashMap<Channel, AdminTaskModel> adminTaskModelConcurrentHashMap = new ConcurrentHashMap<Channel, AdminTaskModel>();
+        if(partyType==PartyConst.PARTY_TYPE_PARTY){
+            adminTaskModelConcurrentHashMap = channelPartyConcurrentHashMap;
+        }else{
+            adminTaskModelConcurrentHashMap = channelFilmConcurrentHashMap;
+        }
+
+        Iterator<Map.Entry<Channel, AdminTaskModel>> entries = adminTaskModelConcurrentHashMap.entrySet().iterator();
+        while (entries.hasNext()) {
+            Map.Entry<Channel, AdminTaskModel> entry = entries.next();
+            if(adminId.equals(entry.getValue().getAdminId())){
+               return  entry.getKey();
+            }
+        }
+        return null;
     }
 
     public Set<String> getPartySet(){
