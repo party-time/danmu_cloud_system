@@ -60,7 +60,7 @@ public class DanmuServerScheduler {
             for(String partyId:partySet){
                 List<Channel> channelList = danmuChannelRepository.findChannelListByPartyId(partyId);
                 if(ListUtils.checkListIsNotNull(channelList)){
-                    Object object = danmuCacheService.getDanmuFromTempList(partyId);
+                    Object object = danmuCacheService.getPartyDanmuFromTempList(partyId);
                     if(object!=null){
                         partyDanmuPushHandler.pushDanmuToManager(object,channelList,partyId);
                     }
@@ -74,7 +74,7 @@ public class DanmuServerScheduler {
     /**
      * 活动场的情况下：给掉线审核员未审核的弹幕推送给在线审核员
      */
-    @Scheduled(cron = "0/10 * * * * *")
+    @Scheduled(cron = "0/1 * * * * *")
     public void pushOffLineCheckmanDanmuToOnlineCheckmanInParty() {
         log.info("给掉线审核员未审核的弹幕推送给在线审核员");
         Set<String> partySet = danmuChannelRepository.getPartySet();

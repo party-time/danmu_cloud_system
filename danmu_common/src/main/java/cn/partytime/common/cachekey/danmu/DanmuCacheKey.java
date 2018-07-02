@@ -28,17 +28,17 @@ public class DanmuCacheKey {
     /**
      * 电影弹幕临时缓存
      */
-    public static final String SEND_TEMP_FILM_DANMU_CACHE_LIST="send:temp:film:danmu:cache:list:";
+    public static final String SEND_TEMP_FILM_DANMU_CACHE_LIST="send:temp:film:danmu:cache:list";
 
     /**
      * 分配给管理员的活动弹幕
      */
-    public static final String SEND_USER_DANMU_CACHE_LIST="send:party:user:danmu:cache:sortset:";
+    public static final String SEND_USER_DANMU_CACHE_SORTSET="send:party:user:danmu:cache:sortset:";
 
     /**
      * 分配给管理员的电影弹幕
      */
-    public static final String SEND_USER_FILM_DANMU_CACHE_LIST="send:film:user:danmu:cache:sortset:";
+    public static final String SEND_USER_FILM_DANMU_CACHE_SORTSET="send:film:user:danmu:cache:sortset:";
 
 
 

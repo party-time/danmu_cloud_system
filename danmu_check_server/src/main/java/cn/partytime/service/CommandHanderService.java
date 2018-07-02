@@ -123,7 +123,7 @@ public class CommandHanderService {
             preDanmuHandler(type,key, partyId, addressId, object, channel,partyType);
         } else if (CommandTypeConst.BLOCK_DANMU.equals(type)) {
             //屏蔽弹幕处理
-            blockDanmuHandler(object,channel,partyType);
+            blockDanmuHandler(object,channel,partyType,partyId);
         } else if (CommandTypeConst.NORMAL_DANMU.equals(type)) {
             //普通弹幕处理
             normalOrtestDanmuDanmuHandler(type, partyId, addressId, object,channel,partyType);
@@ -562,7 +562,7 @@ public class CommandHanderService {
     /**
      * 屏蔽弹幕处理
      */
-    public void blockDanmuHandler(Object datObject,Channel channel,int partyType) {
+    public void blockDanmuHandler(Object datObject,Channel channel,int partyType,String partyId) {
         log.info("屏幕弹幕操作");
         try {
 
@@ -571,10 +571,12 @@ public class CommandHanderService {
             AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(partyType,channel);
             AdminUserDto adminUser =  rpcAdminService.getAdminUser(adminTaskModel.getAuthKey());
             DanmuLogModel danmuLog =rpcDanmuService.findDanmuLogById(id);
-            danmuLog.setCheckUserId(adminUser.getId());
+            String adminId = adminUser.getId();
+            danmuLog.setCheckUserId(adminId);
             danmuLog.setIsBlocked(true);
             danmuLog.setViewFlg(true);
             danmuLog.setUpdateTime(DateUtils.getCurrentDate());
+            String danmuLogId = danmuLog.getId();
             rpcDanmuService.save(danmuLog);
 
             String danmuId = danmuLog.getDanmuId();
@@ -586,6 +588,10 @@ public class CommandHanderService {
                 danmuLog.setUpdateTime(DateUtils.getCurrentDate());
                 rpcDanmuService.save(danmuModel);
             }
+
+            //从自己的弹幕队列中清除弹幕
+            danmuCacheService.reomvePartyDanmuFromCheckUserSortSet(partyId,adminId,danmuLogId);
+            danmuCacheService.removeSendDanmuInfo(danmuLogId);
 
         } catch (Exception e) {
             log.info("屏幕弹幕操作异常:{}", e.getMessage());

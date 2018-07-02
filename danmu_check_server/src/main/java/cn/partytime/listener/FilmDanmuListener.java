@@ -1,8 +1,10 @@
 package cn.partytime.listener;
 
+import cn.partytime.cache.danmu.DanmuCacheService;
 import cn.partytime.common.cachekey.danmu.DanmuCacheKey;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.DanmuChannelRepository;
+import cn.partytime.handlerThread.FilmDanmuHandler;
 import cn.partytime.model.AdminTaskModel;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.service.ManagerCachService;
@@ -31,6 +33,12 @@ public class FilmDanmuListener  implements MessageListener {
     @Autowired
     private ManagerCachService managerCachService;
 
+    @Autowired
+    private DanmuCacheService danmuCacheService;
+
+    @Autowired
+    private FilmDanmuHandler filmDanmuHandler;
+
     @Override
     public void onMessage(Message message, byte[] bytes) {
         if (message != null) {
@@ -46,45 +54,13 @@ public class FilmDanmuListener  implements MessageListener {
                 map.put("type", "normalDanmu");
                 map.put("data", danmuMap);
                 String msg = JSON.toJSONString(map);
-                appointTaskToManager(msg, partyId, channelList);
-            }
-        }
-    }
-    public void appointTaskToManager(String message, String partyId, List<Channel> channelList) {
-        log.info("开始给管理员分配任务");
-        List<AdminTaskModel> adminTaskModelList = new ArrayList<AdminTaskModel>();
-        for (Channel channel : channelList) {
-            AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(channel);
-            if(adminTaskModel.getCheckFlg()==0){
-
-                adminTaskModel.setChannel(channel);
-                adminTaskModelList.add(adminTaskModel);
-                //log.info("管理员信息:{}", JSON.toJSONString(adminTaskModel));
-            }
-        }
-
-        if (ListUtils.checkListIsNotNull(adminTaskModelList)) {
-            /*Collections.sort(adminTaskModelList, new Comparator<AdminTaskModel>() {
-                @Override
-                public int compare(AdminTaskModel o1, AdminTaskModel o2) {
-                    int i = o1.getCount() - o2.getCount();
-                    if (i > 0) {
-                        return 1;
-                    } else if (i < 0) {
-                        return -1;
-                    }
-                    return 0;
+                if(ListUtils.checkListIsNull(channelList)){
+                    danmuCacheService.setFilmDanmuToTempList(object);
+                }else{
+                    filmDanmuHandler.pushDanmuToManager(msg, partyId, channelList);
                 }
-            });
-            AdminTaskModel adminTaskModel = adminTaskModelList.get(0);*/
-            int random = (int) (Math.random() * adminTaskModelList.size());
-            log.info("给{}分配弹幕",random);
-            AdminTaskModel adminTaskModel = adminTaskModelList.get(random);
-
-            Channel channel = adminTaskModel.getChannel();
-            channel.writeAndFlush(new TextWebSocketFrame(message));
-            //managerCachService.addAppointCount(adminTaskModel.getAdminId());
+            }
         }
-
     }
+
 }
