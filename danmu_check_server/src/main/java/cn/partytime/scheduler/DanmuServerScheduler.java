@@ -81,18 +81,11 @@ public class DanmuServerScheduler {
     @Scheduled(cron = "0/5 * * * * *")
     public void pushFilmDanmuToCheckManager(){
         log.info("将缓存中弹幕推送给管理员(电影)");
-        //int partyType = 0;
-        Set<String> partySet =  danmuChannelRepository.getPartySet();
-        if(SetUtils.checkSetIsNotNull(partySet)){
-            for(String partyId:partySet){
-                List<Channel> channelList = danmuChannelRepository.findAdminTaskModelFilmChannelList();
-                if(ListUtils.checkListIsNotNull(channelList)){
-                    Object object = danmuCacheService.getFilmDanmuFromTempList();
-                    if(object!=null){
-                        filmDanmuHandler.pushDanmuToManager(object,partyId,channelList);
-                    }
-                }
-
+        List<Channel> channelList = danmuChannelRepository.findAdminTaskModelFilmChannelList();
+        if(ListUtils.checkListIsNotNull(channelList)){
+            Object object = danmuCacheService.getFilmDanmuFromTempList();
+            if(object!=null){
+                filmDanmuHandler.pushDanmuToManager(object,channelList);
             }
         }
     }

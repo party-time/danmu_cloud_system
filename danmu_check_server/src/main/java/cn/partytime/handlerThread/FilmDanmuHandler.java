@@ -22,7 +22,7 @@ public class FilmDanmuHandler {
     private DanmuChannelRepository danmuChannelRepository;
 
 
-    public void pushDanmuToManager(Object object, String partyId, List<Channel> channelList) {
+    public void pushDanmuToManager(Object object, List<Channel> channelList) {
         log.info("开始给管理员分配任务");
         List<AdminTaskModel> adminTaskModelList = new ArrayList<AdminTaskModel>();
         for (Channel channel : channelList) {
