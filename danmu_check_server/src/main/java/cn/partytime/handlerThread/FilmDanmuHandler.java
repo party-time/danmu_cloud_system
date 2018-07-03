@@ -79,7 +79,7 @@ public class FilmDanmuHandler {
             }*/
 
             Channel channel = adminTaskModel.getChannel();
-            channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(object)));
+            channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(map)));
             //managerCachService.addAppointCount(adminTaskModel.getAdminId());
         }
 
