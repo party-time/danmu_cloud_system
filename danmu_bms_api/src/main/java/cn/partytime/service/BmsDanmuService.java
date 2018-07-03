@@ -979,6 +979,7 @@ public class BmsDanmuService {
             String key = DanmuCacheKey.SEND_FILM_DANMU_CACHE_LIST;
             String message = JSON.toJSONString(messageObject);
             redisService.setValueToList(key, message);
+            log.info("将电影的弹幕存入redis：{}中",key);
             log.info("推送给电影审核界面端弹幕信息:{},{}",partyId,message);
             redisService.expire(key, 60 * 60 * 1);
             redisTemplate.convertAndSend("filmId:danmu", partyId);

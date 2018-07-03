@@ -23,7 +23,7 @@ public class DanmuCacheKey {
     /**
      * 电影弹幕缓存
      */
-    public static final String SEND_FILM_DANMU_CACHE_LIST="send:film:danmu:cache:list:";
+    public static final String SEND_FILM_DANMU_CACHE_LIST="send:film:danmu:cache:list";
 
     /**
      * 电影弹幕临时缓存
