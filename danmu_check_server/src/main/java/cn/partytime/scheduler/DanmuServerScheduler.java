@@ -83,6 +83,7 @@ public class DanmuServerScheduler {
         log.info("将缓存中弹幕推送给管理员(电影)");
         List<Channel> channelList = danmuChannelRepository.findAdminTaskModelFilmChannelList();
         if(ListUtils.checkListIsNotNull(channelList)){
+            log.info("电影审核员的数量:{}",channelList.size());
             Object object = danmuCacheService.getFilmDanmuFromTempList();
             if(object!=null){
                 filmDanmuHandler.pushDanmuToManager(object,channelList);
