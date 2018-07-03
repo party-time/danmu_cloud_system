@@ -59,7 +59,7 @@ public class FilmDanmuListener  implements MessageListener {
                 if(ListUtils.checkListIsNull(channelList)){
                     danmuCacheService.setFilmDanmuToTempList(map);
                 }else{
-                    filmDanmuHandler.pushDanmuToManager(map, partyId, channelList);
+                    filmDanmuHandler.pushDanmuToManager(map,channelList);
                 }
             }
         }
