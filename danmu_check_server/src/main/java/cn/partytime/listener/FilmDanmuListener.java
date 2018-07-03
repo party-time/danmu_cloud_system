@@ -48,18 +48,11 @@ public class FilmDanmuListener  implements MessageListener {
             List<Channel> channelList = danmuChannelRepository.findAdminTaskModelFilmChannelList();
             log.info("监听到电影场有人发弹幕：{}",JSON.toJSONString(object));
             if (object != null) {
-                String acceptMessage = String.valueOf(object);
-                log.info("推送给管理员的消息:{}", acceptMessage);
-                //QueueDanmuModel queueDanmuModel = JSON.parseObject(acceptMessage, QueueDanmuModel.class);
-                Map<String,Object> danmuMap = (Map<String,Object>)JSON.parse(acceptMessage);
-                Map<String,Object> map = new HashMap<String,Object>();
-                map.put("type", "normalDanmu");
-                map.put("data", danmuMap);
                 //String msg = JSON.toJSONString(map);
                 if(ListUtils.checkListIsNull(channelList)){
-                    danmuCacheService.setFilmDanmuToTempList(map);
+                    danmuCacheService.setFilmDanmuToTempList(object);
                 }else{
-                    filmDanmuHandler.pushDanmuToManager(map,channelList);
+                    filmDanmuHandler.pushDanmuToManager(object,channelList);
                 }
             }
         }
