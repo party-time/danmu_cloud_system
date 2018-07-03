@@ -111,18 +111,35 @@ public class DanmuServerScheduler {
                             log.info(JSON.toJSONString(object));
                             Map<String, Object> danmuMap = (Map<String, Object>) JSON.parse(JSON.toJSONString(object));
                             partyDanmuPushHandler.pushOfflineAdminDanmuToOtherAdmin(adminId,partyId,danmuId,danmuMap);
-                            //log.info(String.valueOf(danmuMap));
-                            //channel.write(new TextWebSocketFrame(JSON.toJSONString(danmuMap)));
                         }
-
-                        //Map<String, Object> danmuMap = (Map<String, Object>) JSON.parse(JSON.toJSONString(object));
-                        //channel.write(new TextWebSocketFrame(JSON.toJSONString(danmuMap)));
-                        //partyDanmuPushHandler.pushOfflineAdminDanmuToOtherAdmin(adminId,partyId,danmuId,map);
                     }
                 }
             }
         }
     }
+
+
+    /**
+     * 活动场的情况下：给掉线审核员未审核的弹幕推送给在线审核员
+     */
+    @Scheduled(cron = "0/1 * * * * *")
+    public void pushOffLineCheckmanDanmuToOnlineCheckmanInFilm() {
+        log.info("给掉线审核员未审核的弹幕推送给在线审核员----------电影");
+        Set<String> offAdminSet = checkAdminCacheService.getOfflineAdminSortSet(PartyConst.PARTY_TYPE_FILM);
+        if(SetUtils.checkSetIsNotNull(offAdminSet)){
+            for(String adminId:offAdminSet){
+                Object danmuIdObject = danmuCacheService.getOneFilmDanmuFromCheckUserSortSet(adminId);
+                String danmuId = String.valueOf(danmuIdObject);
+                Object object = danmuCacheService.getSendDanmuInfo(danmuId);
+                if(object!=null){
+                    log.info(JSON.toJSONString(object));
+                    Map<String, Object> danmuMap = (Map<String, Object>) JSON.parse(JSON.toJSONString(object));
+                    filmDanmuHandler.pushOfflineAdminDanmuToOtherAdmin(adminId,danmuId,danmuMap);
+                }
+            }
+        }
+    }
+
 
     /**
      * 活动场的情况下：给掉线审核员未审核的弹幕推送给在线审核员

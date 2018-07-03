@@ -40,6 +40,18 @@ public class FilmDanmuHandler {
         map.put("type", "normalDanmu");
         map.put("data", danmuMap);
 
+        String danmuLogId = String.valueOf(danmuMap.get("id"));
+
+        pushDanmu(channelList,danmuLogId,map,null);
+
+    }
+
+    public void pushOfflineAdminDanmuToOtherAdmin(String adminId,String danmuLogId,Map<String, Object> map){
+        List<Channel> channelList = danmuChannelRepository.findAdminTaskModelFilmChannelList();
+        pushDanmu(channelList,danmuLogId,map,adminId);
+    }
+
+    public void pushDanmu(List<Channel> channelList,String danmuLogId,Map<String, Object> map,String srcAdmin){
         log.info("开始给管理员分配任务");
         List<AdminTaskModel> adminTaskModelList = new ArrayList<AdminTaskModel>();
         for (Channel channel : channelList) {
@@ -51,37 +63,23 @@ public class FilmDanmuHandler {
         }
 
         if (ListUtils.checkListIsNotNull(adminTaskModelList)) {
-            /*Collections.sort(adminTaskModelList, new Comparator<AdminTaskModel>() {
-                @Override
-                public int compare(AdminTaskModel o1, AdminTaskModel o2) {
-                    int i = o1.getCount() - o2.getCount();
-                    if (i > 0) {
-                        return 1;
-                    } else if (i < 0) {
-                        return -1;
-                    }
-                    return 0;
-                }
-            });
-            AdminTaskModel adminTaskModel = adminTaskModelList.get(0);*/
             int random = (int) (Math.random() * adminTaskModelList.size());
             log.info("给{}分配弹幕",random);
             AdminTaskModel adminTaskModel = adminTaskModelList.get(random);
 
             //分配弹幕给管理员
-            //danmuCacheService.addFilmDanmuToCheckUserSortSet(adminTaskModel.getAdminId(),danmuLogId);
+            danmuCacheService.addFilmDanmuToCheckUserSortSet(adminTaskModel.getAdminId(),danmuLogId);
 
-            //danmuCacheService.setSendDanmuInfo(danmuLogId,map);
+            danmuCacheService.setSendDanmuInfo(danmuLogId,map);
 
-            /*if(!StringUtils.isEmpty(srcAdmin)){
+            if(!StringUtils.isEmpty(srcAdmin)){
                 //从自己的弹幕队列中清除弹幕
-                danmuCacheService.reomvePartyDanmuFromCheckUserSortSet(partyId,srcAdmin,danmuLogId);
-            }*/
+                danmuCacheService.reomveFilmDanmuFromCheckUserSortSet(srcAdmin,danmuLogId);
+            }
 
             Channel channel = adminTaskModel.getChannel();
             channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(map)));
             //managerCachService.addAppointCount(adminTaskModel.getAdminId());
         }
-
     }
 }
