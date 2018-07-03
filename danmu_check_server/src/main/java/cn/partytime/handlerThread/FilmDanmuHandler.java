@@ -4,6 +4,7 @@ package cn.partytime.handlerThread;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.DanmuChannelRepository;
 import cn.partytime.model.AdminTaskModel;
+import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class FilmDanmuHandler {
     private DanmuChannelRepository danmuChannelRepository;
 
 
-    public void pushDanmuToManager(String message, String partyId, List<Channel> channelList) {
+    public void pushDanmuToManager(Object object, String partyId, List<Channel> channelList) {
         log.info("开始给管理员分配任务");
         List<AdminTaskModel> adminTaskModelList = new ArrayList<AdminTaskModel>();
         for (Channel channel : channelList) {
@@ -52,7 +53,7 @@ public class FilmDanmuHandler {
             AdminTaskModel adminTaskModel = adminTaskModelList.get(random);
 
             Channel channel = adminTaskModel.getChannel();
-            channel.writeAndFlush(new TextWebSocketFrame(message));
+            channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(object)));
             //managerCachService.addAppointCount(adminTaskModel.getAdminId());
         }
 

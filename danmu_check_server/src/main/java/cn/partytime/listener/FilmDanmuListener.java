@@ -53,11 +53,11 @@ public class FilmDanmuListener  implements MessageListener {
                 Map<String,Object> map = new HashMap<String,Object>();
                 map.put("type", "normalDanmu");
                 map.put("data", danmuMap);
-                String msg = JSON.toJSONString(map);
+                //String msg = JSON.toJSONString(map);
                 if(ListUtils.checkListIsNull(channelList)){
-                    danmuCacheService.setFilmDanmuToTempList(object);
+                    danmuCacheService.setFilmDanmuToTempList(map);
                 }else{
-                    filmDanmuHandler.pushDanmuToManager(msg, partyId, channelList);
+                    filmDanmuHandler.pushDanmuToManager(map, partyId, channelList);
                 }
             }
         }

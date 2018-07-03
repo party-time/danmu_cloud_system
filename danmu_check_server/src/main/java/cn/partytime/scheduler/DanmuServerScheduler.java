@@ -7,6 +7,7 @@ import cn.partytime.common.constants.PartyConst;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.common.util.SetUtils;
 import cn.partytime.config.DanmuChannelRepository;
+import cn.partytime.handlerThread.FilmDanmuHandler;
 import cn.partytime.handlerThread.PartyDanmuPushHandler;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -38,6 +39,9 @@ public class DanmuServerScheduler {
     private PartyDanmuPushHandler partyDanmuPushHandler;
 
     @Autowired
+    private FilmDanmuHandler filmDanmuHandler;
+
+    @Autowired
     private DanmuCacheService danmuCacheService;
 
     @Scheduled(cron = "0/60 * * * * *")
@@ -53,7 +57,7 @@ public class DanmuServerScheduler {
      */
     @Scheduled(cron = "0/5 * * * * *")
     public void pushPartyDanmuToCheckManager(){
-        log.info("将缓存中弹幕推送给管理员");
+        log.info("将缓存中弹幕推送给管理员(活动)");
         //int partyType = 0;
         Set<String> partySet =  danmuChannelRepository.getPartySet();
         if(SetUtils.checkSetIsNotNull(partySet)){
@@ -72,11 +76,34 @@ public class DanmuServerScheduler {
 
 
     /**
+     * 将电影缓存中弹幕推送给管理员(管理员都不在线的时候缓存中积累的弹幕)
+     */
+    @Scheduled(cron = "0/5 * * * * *")
+    public void pushFilmDanmuToCheckManager(){
+        log.info("将缓存中弹幕推送给管理员(电影)");
+        //int partyType = 0;
+        Set<String> partySet =  danmuChannelRepository.getPartySet();
+        if(SetUtils.checkSetIsNotNull(partySet)){
+            for(String partyId:partySet){
+                List<Channel> channelList = danmuChannelRepository.findAdminTaskModelFilmChannelList();
+                if(ListUtils.checkListIsNotNull(channelList)){
+                    Object object = danmuCacheService.getFilmDanmuFromTempList();
+                    if(object!=null){
+                        filmDanmuHandler.pushDanmuToManager(object,partyId,channelList);
+                    }
+                }
+
+            }
+        }
+    }
+
+
+    /**
      * 活动场的情况下：给掉线审核员未审核的弹幕推送给在线审核员
      */
     @Scheduled(cron = "0/1 * * * * *")
     public void pushOffLineCheckmanDanmuToOnlineCheckmanInParty() {
-        log.info("给掉线审核员未审核的弹幕推送给在线审核员");
+        log.info("给掉线审核员未审核的弹幕推送给在线审核员----------活动");
         Set<String> partySet = danmuChannelRepository.getPartySet();
         if (SetUtils.checkSetIsNotNull(partySet)) {
             for (String partyId : partySet) {
@@ -102,6 +129,34 @@ public class DanmuServerScheduler {
             }
         }
     }
+
+    /**
+     * 活动场的情况下：给掉线审核员未审核的弹幕推送给在线审核员
+     */
+    /*@Scheduled(cron = "0/1 * * * * *")
+    public void pushOffLineCheckmanDanmuToOnlineCheckmanInFilm() {
+        log.info("给掉线审核员未审核的弹幕推送给在线审核员----------电影");
+        Set<String> partySet = danmuChannelRepository.getPartySet();
+        if (SetUtils.checkSetIsNotNull(partySet)) {
+            for (String partyId : partySet) {
+                Set<String> offAdminSet = checkAdminCacheService.getOfflineAdminSortSet(PartyConst.PARTY_TYPE_FILM);
+                if(SetUtils.checkSetIsNotNull(offAdminSet)){
+                    for(String adminId:offAdminSet){
+                        Object danmuIdObject = danmuCacheService.getFilmDanmuFromTempList();
+                        String danmuId = String.valueOf(danmuIdObject);
+                        Object object = danmuCacheService.getSendDanmuInfo(danmuId);
+                        if(object!=null){
+                            log.info(JSON.toJSONString(object));
+                            Map<String, Object> danmuMap = (Map<String, Object>) JSON.parse(JSON.toJSONString(object));
+                            partyDanmuPushHandler.pushOfflineAdminDanmuToOtherAdmin(adminId,partyId,danmuId,danmuMap);
+                            //log.info(String.valueOf(danmuMap));
+                            //channel.write(new TextWebSocketFrame(JSON.toJSONString(danmuMap)));
+                        }
+                    }
+                }
+            }
+        }
+    }*/
 
 
     //@Scheduled(cron = "0/10 * * * * *")
