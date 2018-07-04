@@ -249,14 +249,17 @@ public class BmsDanmuService {
 
     public PageResultModel findHistoryDanmu(int index, int size,int danmuSrc) {
         log.info("------------------------------------------------");
-        String formatStart = "yyyy-MM-dd 00:00:01";
-        String formatEnd = "yyyy-MM-dd 23:59:59";
-        SimpleDateFormat formatterStart = new SimpleDateFormat(formatStart);
-        SimpleDateFormat formatterEnd = new SimpleDateFormat(formatEnd);
-        String startDateStr = formatterStart.format(DateUtils.getCurrentDate());
-        String endDateStr = formatterEnd.format(DateUtils.getCurrentDate());
-        Date startDate = DateUtils.strToDate(startDateStr,formatStart);
-        Date endDate = DateUtils.strToDate(endDateStr,formatEnd);
+        SimpleDateFormat formatterStart = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatterEnd = new SimpleDateFormat("yyyy-MM-dd");
+
+        String startDateStr = formatterStart.format(new Date())+" 00:00:00";
+        String endDateStr = formatterEnd.format(new Date())+" 23:59:33";
+        System.out.println(startDateStr);
+        System.out.println(endDateStr);
+
+        Date startDate = DateUtils.strToDate(startDateStr,"yyyy-MM-dd HH:mm:ss");
+        Date endDate = DateUtils.strToDate(endDateStr,"yyyy-MM-dd HH:mm:ss");
+
         List<DanmuLogicModel> danmuLogicModelList = new ArrayList<DanmuLogicModel>();
         PageResultModel pageResultModel = new PageResultModel();
         log.info("startDate:{}",startDate);
