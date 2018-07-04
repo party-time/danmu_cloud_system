@@ -124,7 +124,8 @@ public class DanmuService {
     public Page<Danmu> findDanmuByDanmuSrcAndIsBlockedAndViewFlgAndUpdateTimeBetween(int danmuSrc, boolean isBlocked, boolean viewFlg, Integer page, Integer size,Date startDate,Date endDate){
         Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
-        return danmuRepository.findDanmuByDanmuSrcAndIsBlockedAndViewFlgAndUpdateTimeBetween(danmuSrc,isBlocked,viewFlg,startDate,endDate,pageRequest);
+        //return danmuRepository.findDanmuByDanmuSrcAndIsBlockedAndViewFlgAndUpdateTimeBetween(danmuSrc,isBlocked,viewFlg,startDate,endDate,pageRequest);
+        return danmuRepository.findDanmuByUpdateTimeBetween(startDate,endDate,pageRequest);
     }
 
     public Page<Danmu> findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(int danmuSrc, boolean isBlocked, boolean viewFlg, Integer page, Integer size, List<String> danmuPoolIdList) {

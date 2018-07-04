@@ -61,5 +61,6 @@ public interface DanmuRepository extends MongoRepository<Danmu, String> {
 
 
     public Page<Danmu> findDanmuByDanmuSrcAndIsBlockedAndViewFlgAndUpdateTimeBetween(int danmuSrc, boolean isBlocked, boolean viewFlg, Date startDate, Date endDate, Pageable pageable);
+    public Page<Danmu> findDanmuByUpdateTimeBetween(Date startDate, Date endDate, Pageable pageable);
 
 }
