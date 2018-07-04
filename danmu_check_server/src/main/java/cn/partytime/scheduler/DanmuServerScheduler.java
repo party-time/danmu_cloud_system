@@ -131,6 +131,7 @@ public class DanmuServerScheduler {
             for(String adminId:offAdminSet){
                 Object danmuIdObject = danmuCacheService.getOneFilmDanmuFromCheckUserSortSet(adminId);
                 String danmuId = String.valueOf(danmuIdObject);
+                log.info("danmuId:{}",danmuId);
                 Object object = danmuCacheService.getSendDanmuInfo(danmuId);
                 if(object!=null){
                     log.info("object:{}",JSON.toJSONString(object));
