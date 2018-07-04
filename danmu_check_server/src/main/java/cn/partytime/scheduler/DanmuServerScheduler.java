@@ -126,6 +126,7 @@ public class DanmuServerScheduler {
     public void pushOffLineCheckmanDanmuToOnlineCheckmanInFilm() {
         log.info("给掉线审核员未审核的弹幕推送给在线审核员----------电影");
         Set<String> offAdminSet = checkAdminCacheService.getOfflineAdminSortSet(PartyConst.PARTY_TYPE_FILM);
+        log.info("掉线管理员:{}",JSON.toJSONString(offAdminSet));
         if(SetUtils.checkSetIsNotNull(offAdminSet)){
             for(String adminId:offAdminSet){
                 Object danmuIdObject = danmuCacheService.getOneFilmDanmuFromCheckUserSortSet(adminId);
