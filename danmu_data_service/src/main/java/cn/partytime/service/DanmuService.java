@@ -132,8 +132,8 @@ public class DanmuService {
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("danmuSrc").is(danmuSrc),
                 Criteria.where("isBlocked").is(isBlocked),
-                Criteria.where("viewFlg").is(viewFlg),
-                Criteria.where("updateTime").gte(startDate)/*,
+                Criteria.where("viewFlg").is(viewFlg)/*,
+                Criteria.where("updateTime").gte(startDate),
                 Criteria.where("updateTime").lte(endDate)*/
         );
 
