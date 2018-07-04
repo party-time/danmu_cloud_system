@@ -259,14 +259,14 @@ public class BmsDanmuService {
         Date endDate = DateUtils.strToDate(endDateStr,formatEnd);
         List<DanmuLogicModel> danmuLogicModelList = new ArrayList<DanmuLogicModel>();
         PageResultModel pageResultModel = new PageResultModel();
-        Page<Danmu> danmuListByPage = danmuService.findDanmuByDanmuSrcAndIsBlockedAndViewFlgAndUpdateTimeBetween(1,false,true,index,size,startDate,endDate);
-        long count = danmuListByPage.getTotalElements();
+        PageResultModel<Danmu> danmuListByPage = danmuService.findDanmuByDanmuSrcAndIsBlockedAndViewFlgAndUpdateTimeBetween(1,false,true,index,size,startDate,endDate);
+        long count = danmuListByPage.getTotal();
         pageResultModel.setTotal(count);
         if(count==0){
             pageResultModel.setRows(danmuLogicModelList);
             return pageResultModel;
         }
-        List<Danmu> danmuList = danmuListByPage.getContent();
+        List<Danmu> danmuList = danmuListByPage.getRows();
         log.info("danmuList:{}",JSON.toJSONString(danmuList));
         if(ListUtils.checkListIsNotNull(danmuList)){
             pageResultModel.setRows(findDanmuLogicModelList(danmuList));

@@ -121,11 +121,35 @@ public class DanmuService {
     }
 
 
-    public Page<Danmu> findDanmuByDanmuSrcAndIsBlockedAndViewFlgAndUpdateTimeBetween(int danmuSrc, boolean isBlocked, boolean viewFlg, Integer page, Integer size,Date startDate,Date endDate){
-        Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
+    public PageResultModel<Danmu> findDanmuByDanmuSrcAndIsBlockedAndViewFlgAndUpdateTimeBetween(int danmuSrc, boolean isBlocked, boolean viewFlg, Integer page, Integer size,Date startDate,Date endDate){
+        /*Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         //return danmuRepository.findDanmuByDanmuSrcAndIsBlockedAndViewFlgAndUpdateTimeBetween(danmuSrc,isBlocked,viewFlg,startDate,endDate,pageRequest);
-        return danmuRepository.findDanmuByUpdateTimeBetween(startDate,endDate,pageRequest);
+        return danmuRepository.findDanmuByUpdateTimeBetween(startDate,endDate,pageRequest);*/
+        //criteria.where("content.message").regex("/^111*/");
+        //criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"),Criteria.where("danmuLibraryId").is(dlId));
+        Criteria criteria = new Criteria().andOperator(
+                Criteria.where("danmuSrc").is(danmuSrc),
+                Criteria.where("isBlocked").is(isBlocked),
+                Criteria.where("viewFlg").is(viewFlg),
+                Criteria.where("updateTime").gte(startDate),
+                Criteria.where("updateTime").lte(endDate)
+        );
+
+        Map<String, Object> result = new HashMap<>();
+        Query query = new Query(criteria);
+        query.skip(page * size);
+        query.limit(size);
+        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
+
+        List<Danmu> list = this.danmuMongoTemplate.find(query, Danmu.class);
+        long count = this.danmuMongoTemplate.count(query, PreDanmu.class);
+
+        PageResultModel<Danmu> danmuPageResultModel = new PageResultModel<>();
+        danmuPageResultModel.setTotal(count);
+        danmuPageResultModel.setRows(list);
+        return danmuPageResultModel;
+
     }
 
     public Page<Danmu> findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(int danmuSrc, boolean isBlocked, boolean viewFlg, Integer page, Integer size, List<String> danmuPoolIdList) {
