@@ -132,8 +132,8 @@ public class DanmuService {
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("danmuSrc").is(danmuSrc),
                 Criteria.where("isBlocked").is(isBlocked),
-                Criteria.where("viewFlg").is(viewFlg)/*,
-                Criteria.where("updateTime").gte(startDate),
+                Criteria.where("viewFlg").is(viewFlg),
+                Criteria.where("updateTime").gte(startDate)/*,
                 Criteria.where("updateTime").lte(endDate)*/
         );
 
@@ -146,7 +146,7 @@ public class DanmuService {
         List<Danmu> list = this.danmuMongoTemplate.find(query, Danmu.class);
         log.info("list:{}",JSON.toJSONString(list));
 
-        long count = this.danmuMongoTemplate.count(query, PreDanmu.class);
+        long count = this.danmuMongoTemplate.count(query, Danmu.class);
         log.info("count:{}",count);
 
         PageResultModel<Danmu> danmuPageResultModel = new PageResultModel<>();
