@@ -130,9 +130,9 @@ public class DanmuService {
         //criteria.where("content.message").regex("/^111*/");
         //criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"),Criteria.where("danmuLibraryId").is(dlId));
         Criteria criteria = new Criteria().andOperator(
-                Criteria.where("danmuSrc").is(danmuSrc),
+                /*Criteria.where("danmuSrc").is(danmuSrc),
                 Criteria.where("isBlocked").is(isBlocked),
-                Criteria.where("viewFlg").is(viewFlg),
+                Criteria.where("viewFlg").is(viewFlg),*/
                 Criteria.where("updateTime").gte(startDate).lte(endDate)
         );
 
