@@ -29,11 +29,12 @@ public class AdminDanmuService {
         if(partyType == PartyConst.PARTY_TYPE_PARTY){
             pushPartyDanmuToChecker(partyId,adminId,channel);
         }else if(partyType == PartyConst.PARTY_TYPE_FILM){
-
+            pushFilmDanmuToChecker(adminId,channel);
         }
     }
 
     public void pushPartyDanmuToChecker(String partyId,String adminId,Channel channel){
+        log.info("将管理员自己未审核的弹幕推送给自己（活动）");
         Set<String> danmuSet =  danmuCacheService.getAllPartyDanmuFromCheckUserSortSet(partyId,adminId);
         if(SetUtils.checkSetIsNotNull(danmuSet)){
             for(String danmuId:danmuSet){
@@ -49,6 +50,7 @@ public class AdminDanmuService {
     }
 
     public void pushFilmDanmuToChecker(String adminId,Channel channel){
+        log.info("将管理员自己未审核的弹幕推送给自己（电影）");
         Set<String> danmuSet =  danmuCacheService.getAllFilmDanmuFromCheckUserSortSet(adminId);
         if(SetUtils.checkSetIsNotNull(danmuSet)){
             for(String danmuId:danmuSet){
