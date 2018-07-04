@@ -133,6 +133,7 @@ public class DanmuServerScheduler {
                 String danmuId = String.valueOf(danmuIdObject);
                 Object object = danmuCacheService.getSendDanmuInfo(danmuId);
                 if(object!=null){
+                    log.info("object:{}",JSON.toJSONString(object));
                     log.info(JSON.toJSONString(object));
                     Map<String, Object> danmuMap = (Map<String, Object>) JSON.parse(JSON.toJSONString(object));
                     filmDanmuHandler.pushOfflineAdminDanmuToOtherAdmin(adminId,danmuId,danmuMap);
