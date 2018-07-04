@@ -27,13 +27,13 @@ public class AdminDanmuService {
 
     public void pushTempDanmuToCheckUser(int partyType,String adminId,String partyId,Channel channel){
         if(partyType == PartyConst.PARTY_TYPE_PARTY){
-            pushDanmuToAdmin(partyId,adminId,channel);
+            pushPartyDanmuToChecker(partyId,adminId,channel);
         }else if(partyType == PartyConst.PARTY_TYPE_FILM){
 
         }
     }
 
-    public void pushDanmuToAdmin(String partyId,String adminId,Channel channel){
+    public void pushPartyDanmuToChecker(String partyId,String adminId,Channel channel){
         Set<String> danmuSet =  danmuCacheService.getAllPartyDanmuFromCheckUserSortSet(partyId,adminId);
         if(SetUtils.checkSetIsNotNull(danmuSet)){
             for(String danmuId:danmuSet){
@@ -44,10 +44,22 @@ public class AdminDanmuService {
                     Map<String, Object> danmuMap = (Map<String, Object>) JSON.parse(JSON.toJSONString(object));
                     channel.write(new TextWebSocketFrame(JSON.toJSONString(danmuMap)));
                 }
-                //DanmuLogModel danmuLogModel = rpcDanmuService.findDanmuLogById(danmuId);
-
-
             }
         }
     }
+
+    public void pushFilmDanmuToChecker(String adminId,Channel channel){
+        Set<String> danmuSet =  danmuCacheService.getAllFilmDanmuFromCheckUserSortSet(adminId);
+        if(SetUtils.checkSetIsNotNull(danmuSet)){
+            for(String danmuId:danmuSet){
+                Object object = danmuCacheService.getSendDanmuInfo(danmuId);
+                if(object!=null){
+                    log.info(JSON.toJSONString(object));
+                    Map<String, Object> danmuMap = (Map<String, Object>) JSON.parse(JSON.toJSONString(object));
+                    channel.write(new TextWebSocketFrame(JSON.toJSONString(danmuMap)));
+                }
+            }
+        }
+    }
+
 }
