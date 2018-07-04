@@ -33,7 +33,7 @@ import java.util.Map;
  */
 
 @RestController
-@RequestMapping(value = "/v1/api")
+@RequestMapping(value = "/v1/api/admin")
 @Slf4j
 public class HistoryDanmuController extends BaseAdminController {
 
@@ -64,9 +64,14 @@ public class HistoryDanmuController extends BaseAdminController {
     @Value("${sendGift.id}")
     private String sendGiftId;
 
+    @RequestMapping(value = "/historyCheckDanmu/page", method = RequestMethod.GET)
+    @ResponseBody
+    public PageResultModel historyCheckDanmu(Integer pageNumber, Integer pageSize, String arrayArea, String partyId) {
+        return bmsDanmuService.findHistoryDanmu(pageNumber - 1, pageSize,  1);
+    }
 
 
-    @RequestMapping(value = "/admin/historyDanmu/page", method = RequestMethod.GET)
+    @RequestMapping(value = "/historyDanmu/page", method = RequestMethod.GET)
     @ResponseBody
     public PageResultModel historyDMList(Integer pageNumber, Integer pageSize, String arrayArea, String partyId) {
         return bmsDanmuService.findPageResultModel(pageNumber - 1, pageSize, arrayArea, partyId, 1);
@@ -77,7 +82,7 @@ public class HistoryDanmuController extends BaseAdminController {
      *
      * @return
      */
-    @RequestMapping(value = "/admin/historyDanmu/addPrize", method = RequestMethod.GET)
+    @RequestMapping(value = "/historyDanmu/addPrize", method = RequestMethod.GET)
     @ResponseBody
     public RestResultModel prize(String danmuId, String openId,String partyId, HttpServletRequest request) {
         String userId = getAdminUser().getId();
@@ -95,7 +100,8 @@ public class HistoryDanmuController extends BaseAdminController {
         return restResultModel;
     }
 
-    @RequestMapping("/admin/historyDanmu/download")
+
+    @RequestMapping("/historyDanmu/download")
     public String download(String fileName, HttpServletRequest request, HttpServletResponse response, String addressArea, String partyId) {
         InputStream inputStream =null;
         OutputStream os =null;
@@ -142,7 +148,7 @@ public class HistoryDanmuController extends BaseAdminController {
         return null;
     }
 
-    @RequestMapping(value = "/admin/historyDanmu/sendGift", method = RequestMethod.GET)
+    @RequestMapping(value = "/historyDanmu/sendGift", method = RequestMethod.GET)
     @ResponseBody
     public RestResultModel sendGift(String id, String msg) {
         RestResultModel restResultModel = new RestResultModel();

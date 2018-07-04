@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,5 +58,8 @@ public interface DanmuRepository extends MongoRepository<Danmu, String> {
     public long countByDanmuPoolIdInAndDanmuSrcAndIsBlockedAndViewFlgAndTimeGreaterThan(List<String> danmuPoolIdList,int danmuSrc,boolean isBlocked,boolean viewFlg,long time);
 
     public List<Danmu> findByIdIn(List<String> danmuIdList);
+
+
+    public Page<Danmu> findDanmuByDanmuSrcAndIsBlockedAndViewFlgAndUpdateTimeBetween(int danmuSrc, boolean isBlocked, boolean viewFlg, Date startDate, Date endDate, Pageable pageable);
 
 }

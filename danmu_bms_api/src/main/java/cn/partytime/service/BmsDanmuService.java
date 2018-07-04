@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -232,6 +233,33 @@ public class BmsDanmuService {
 
 
         Page<Danmu> danmuListByPage = danmuService.findByDanmuSrcAndIsBlockedAndViewFlgAndDanmuPoolIdWithin(1,false,true,index,size,danmuPoolIdLIST,"pDanmu");
+        long count = danmuListByPage.getTotalElements();
+        pageResultModel.setTotal(count);
+        if(count==0){
+            pageResultModel.setRows(danmuLogicModelList);
+            return pageResultModel;
+        }
+        List<Danmu> danmuList = danmuListByPage.getContent();
+        log.info("danmuList:{}",JSON.toJSONString(danmuList));
+        if(ListUtils.checkListIsNotNull(danmuList)){
+            pageResultModel.setRows(findDanmuLogicModelList(danmuList));
+        }
+        return pageResultModel;
+    }
+
+    public PageResultModel findHistoryDanmu(int index, int size,int danmuSrc) {
+
+        String formatStart = "yyyy-MM-dd 00:00:01";
+        String formatEnd = "yyyy-MM-dd 23:59:59";
+        SimpleDateFormat formatterStart = new SimpleDateFormat(formatStart);
+        SimpleDateFormat formatterEnd = new SimpleDateFormat(formatEnd);
+        String startDateStr = formatterStart.format(DateUtils.getCurrentDate());
+        String endDateStr = formatterEnd.format(DateUtils.getCurrentDate());
+        Date startDate = DateUtils.strToDate(startDateStr,formatStart);
+        Date endDate = DateUtils.strToDate(endDateStr,formatEnd);
+        List<DanmuLogicModel> danmuLogicModelList = new ArrayList<DanmuLogicModel>();
+        PageResultModel pageResultModel = new PageResultModel();
+        Page<Danmu> danmuListByPage = danmuService.findDanmuByDanmuSrcAndIsBlockedAndViewFlgAndUpdateTimeBetween(1,false,true,index,size,startDate,endDate);
         long count = danmuListByPage.getTotalElements();
         pageResultModel.setTotal(count);
         if(count==0){
