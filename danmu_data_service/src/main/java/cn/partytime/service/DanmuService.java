@@ -131,8 +131,8 @@ public class DanmuService {
         //criteria.andOperator(Criteria.where("content.message").regex(".*?" + msg + ".*"),Criteria.where("danmuLibraryId").is(dlId));
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("danmuSrc").is(danmuSrc),
-                /*Criteria.where("isBlocked").is(isBlocked),
-                Criteria.where("viewFlg").is(viewFlg),*/
+                Criteria.where("isBlocked").is(isBlocked),
+                /*Criteria.where("viewFlg").is(viewFlg),*/
                 Criteria.where("updateTime").gte(startDate).lte(endDate)
         );
 
