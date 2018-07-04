@@ -66,7 +66,7 @@ public class HistoryDanmuController extends BaseAdminController {
 
     @RequestMapping(value = "/historyCheckDanmu/page", method = RequestMethod.GET)
     @ResponseBody
-    public PageResultModel historyCheckDanmu(Integer pageNumber, Integer pageSize, String arrayArea, String partyId) {
+    public PageResultModel historyCheckDanmu(Integer pageNumber, Integer pageSize) {
         return bmsDanmuService.findHistoryDanmu(pageNumber - 1, pageSize,  1);
     }
 

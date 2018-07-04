@@ -4,6 +4,7 @@ import cn.partytime.model.PageResultModel;
 import cn.partytime.model.danmu.Danmu;
 import cn.partytime.model.danmu.PreDanmu;
 import cn.partytime.repository.danmu.DanmuRepository;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -143,7 +144,10 @@ public class DanmuService {
         query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
 
         List<Danmu> list = this.danmuMongoTemplate.find(query, Danmu.class);
+        log.info("list:{}",JSON.toJSONString(list));
+
         long count = this.danmuMongoTemplate.count(query, PreDanmu.class);
+        log.info("count:{}",count);
 
         PageResultModel<Danmu> danmuPageResultModel = new PageResultModel<>();
         danmuPageResultModel.setTotal(count);

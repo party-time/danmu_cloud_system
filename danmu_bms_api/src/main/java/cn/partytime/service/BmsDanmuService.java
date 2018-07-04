@@ -248,7 +248,7 @@ public class BmsDanmuService {
     }
 
     public PageResultModel findHistoryDanmu(int index, int size,int danmuSrc) {
-
+        log.info("------------------------------------------------");
         String formatStart = "yyyy-MM-dd 00:00:01";
         String formatEnd = "yyyy-MM-dd 23:59:59";
         SimpleDateFormat formatterStart = new SimpleDateFormat(formatStart);
@@ -259,6 +259,8 @@ public class BmsDanmuService {
         Date endDate = DateUtils.strToDate(endDateStr,formatEnd);
         List<DanmuLogicModel> danmuLogicModelList = new ArrayList<DanmuLogicModel>();
         PageResultModel pageResultModel = new PageResultModel();
+        log.info("startDate:{}",startDate);
+        log.info("endDate:{}",endDate);
         PageResultModel<Danmu> danmuListByPage = danmuService.findDanmuByDanmuSrcAndIsBlockedAndViewFlgAndUpdateTimeBetween(1,false,true,index,size,startDate,endDate);
         long count = danmuListByPage.getTotal();
         pageResultModel.setTotal(count);
