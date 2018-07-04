@@ -42,13 +42,10 @@ public class FilmDanmuListener  implements MessageListener {
     @Override
     public void onMessage(Message message, byte[] bytes) {
         if (message != null) {
-
-            String partyId = JSON.parseObject(String.valueOf(message), String.class).replace("'", "");
             Object object = redisService.popFromList(DanmuCacheKey.SEND_FILM_DANMU_CACHE_LIST);
             List<Channel> channelList = danmuChannelRepository.findAdminTaskModelFilmChannelList();
             log.info("监听到电影场有人发弹幕：{}",JSON.toJSONString(object));
             if (object != null) {
-                //String msg = JSON.toJSONString(map);
                 if(ListUtils.checkListIsNull(channelList)){
                     danmuCacheService.setFilmDanmuToTempList(object);
                 }else{

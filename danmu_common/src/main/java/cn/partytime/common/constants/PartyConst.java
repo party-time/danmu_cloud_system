@@ -16,6 +16,6 @@ public class PartyConst {
     public static final int PARTY_TYPE_PARTY = 0;
 
     /**电影*/
-    public static final int PARTY_TYPE_FILM = 0;
+    public static final int PARTY_TYPE_FILM = 1;
 
 }

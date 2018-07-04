@@ -26,10 +26,12 @@ public class AdminDanmuService {
     private DanmuCacheService danmuCacheService;
 
     public void pushTempDanmuToCheckUser(int partyType,String adminId,String partyId,Channel channel){
-        log.info("*********************************************************");
+        log.info("*********************************************************"+partyType);
         if(partyType == PartyConst.PARTY_TYPE_PARTY){
+            log.info("*********************************************************1");
             pushPartyDanmuToChecker(partyId,adminId,channel);
         }else if(partyType == PartyConst.PARTY_TYPE_FILM){
+            log.info("*********************************************************1");
             pushFilmDanmuToChecker(adminId,channel);
         }
     }
