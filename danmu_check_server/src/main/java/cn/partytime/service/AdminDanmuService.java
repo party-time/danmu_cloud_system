@@ -26,6 +26,7 @@ public class AdminDanmuService {
     private DanmuCacheService danmuCacheService;
 
     public void pushTempDanmuToCheckUser(int partyType,String adminId,String partyId,Channel channel){
+        log.info("*********************************************************");
         if(partyType == PartyConst.PARTY_TYPE_PARTY){
             pushPartyDanmuToChecker(partyId,adminId,channel);
         }else if(partyType == PartyConst.PARTY_TYPE_FILM){
