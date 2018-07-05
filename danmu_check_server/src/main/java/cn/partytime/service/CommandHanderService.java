@@ -570,6 +570,8 @@ public class CommandHanderService {
             String id= String.valueOf(map.get("id"));
             AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(partyType,channel);
             AdminUserDto adminUser =  rpcAdminService.getAdminUser(adminTaskModel.getAuthKey());
+
+            log.info("adminUser:{}",JSON.toJSONString(adminUser));
             DanmuLogModel danmuLog =rpcDanmuService.findDanmuLogById(id);
             String adminId = adminUser.getId();
             danmuLog.setCheckUserId(adminId);
