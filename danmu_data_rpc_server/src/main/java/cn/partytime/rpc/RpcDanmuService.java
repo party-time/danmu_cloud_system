@@ -97,7 +97,7 @@ public class RpcDanmuService {
     public List<Danmu> findDanmuByIsBlocked(@RequestParam int page, @RequestParam int size, @RequestParam boolean isBlocked){
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
-        Page<Danmu> danmuModelPage = danmuRepository.findByIsBlocked(isBlocked,pageRequest);
+        Page<Danmu> danmuModelPage = danmuRepository.findByIsBlockedAndTemplateIdKey(isBlocked,"pDanmu",pageRequest);
         return danmuModelPage.getContent();
     }
 

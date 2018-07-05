@@ -21,7 +21,7 @@ public interface DanmuRepository extends MongoRepository<Danmu, String> {
 
     public List<Danmu> findByIsBlockedAndViewFlgAndDanmuSrcAndTemplateIdKeyAndDanmuPoolIdInOrderByTimeDesc(boolean isBlock,boolean viewFlg,int danmuSc,String templateIdKey,List<String>poolIds);
 
-    public Page<Danmu> findByIsBlocked(boolean isBlocked, Pageable pageable);
+    public Page<Danmu> findByIsBlockedAndTemplateIdKey(boolean isBlocked,String templateKey, Pageable pageable);
 
     /**
      * 通过弹幕池编号 与弹幕来源获取弹幕列表

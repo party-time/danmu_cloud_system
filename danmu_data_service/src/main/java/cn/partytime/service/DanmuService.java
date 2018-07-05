@@ -59,12 +59,6 @@ public class DanmuService {
         return danmuRepository.findAll(pageRequest);
     }
 
-    public Page<Danmu> findDanmuByIsBlocked(int page, int size, boolean isBlocked){
-        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
-        PageRequest pageRequest = new PageRequest(page, size, sort);
-        return danmuRepository.findByIsBlocked(isBlocked,pageRequest);
-    }
-
 
     public PageResultModel<Danmu> findByMsgLike(String msg, int page, int size){
         /*Sort sort = new Sort(Sort.Direction.DESC, "createTime");
