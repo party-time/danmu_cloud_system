@@ -590,6 +590,7 @@ public class CommandHanderService {
             }
 
             //从自己的弹幕队列中清除弹幕
+            log.info("屏蔽弹幕:{}",danmuLogId);
             danmuCacheService.reomvePartyDanmuFromCheckUserSortSet(partyId,adminId,danmuLogId);
             danmuCacheService.removeSendDanmuInfo(danmuLogId);
 
