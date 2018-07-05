@@ -577,11 +577,15 @@ public class CommandHanderService {
             danmuLog.setViewFlg(true);
             danmuLog.setUpdateTime(DateUtils.getCurrentDate());
             String danmuLogId = danmuLog.getId();
+            log.info("danmuLog:{}",JSON.toJSONString(danmuLog));
+
             rpcDanmuService.save(danmuLog);
 
             String danmuId = danmuLog.getDanmuId();
             if(!StringUtils.isEmpty(danmuId)){
                 DanmuModel danmuModel = rpcDanmuService.findById(danmuId);
+                log.info("danmuModel:{}",JSON.toJSONString(danmuModel));
+
                 danmuLog.setCheckUserId(adminUser.getId());
                 danmuLog.setIsBlocked(true);
                 danmuLog.setViewFlg(true);
