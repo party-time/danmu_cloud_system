@@ -565,10 +565,15 @@ public class CommandHanderService {
     public void blockDanmuHandler(Object datObject,Channel channel,int partyType,String partyId) {
         log.info("屏幕弹幕操作");
         try {
-
             Map<String,Object> map = convertObjectToMap(datObject);
+            log.info("datObject:{}",JSON.toJSONString(datObject));
+
             String id= String.valueOf(map.get("id"));
             AdminTaskModel adminTaskModel = danmuChannelRepository.findAdminTaskModel(partyType,channel);
+            log.info("adminTaskModel:{}",JSON.toJSONString(adminTaskModel));
+
+
+
             AdminUserDto adminUser =  rpcAdminService.getAdminUser(adminTaskModel.getAuthKey());
 
             log.info("adminUser:{}",JSON.toJSONString(adminUser));
