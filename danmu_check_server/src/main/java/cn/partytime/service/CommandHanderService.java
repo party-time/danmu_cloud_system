@@ -595,6 +595,7 @@ public class CommandHanderService {
             danmuCacheService.removeSendDanmuInfo(danmuLogId);
 
         } catch (Exception e) {
+            e.printStackTrace();
             log.info("屏幕弹幕操作异常:{}", e.getMessage());
         }
 
