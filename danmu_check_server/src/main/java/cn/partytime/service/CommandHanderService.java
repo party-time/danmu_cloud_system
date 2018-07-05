@@ -123,6 +123,7 @@ public class CommandHanderService {
             preDanmuHandler(type,key, partyId, addressId, object, channel,partyType);
         } else if (CommandTypeConst.BLOCK_DANMU.equals(type)) {
             //屏蔽弹幕处理
+            log.info("屏蔽弹幕处理：{}",object);
             blockDanmuHandler(object,channel,partyType,partyId);
         } else if (CommandTypeConst.NORMAL_DANMU.equals(type)) {
             //普通弹幕处理
