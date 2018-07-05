@@ -596,6 +596,7 @@ public class CommandHanderService {
 
         } catch (Exception e) {
             e.printStackTrace();
+            log.info("-------------------------------------------");
             log.info("屏幕弹幕操作异常:{}", e.getMessage());
         }
 
