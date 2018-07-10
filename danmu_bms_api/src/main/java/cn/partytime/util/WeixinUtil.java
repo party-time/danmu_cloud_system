@@ -198,7 +198,7 @@ public class WeixinUtil {
         if(StringUtils.isEmpty(code)){
             return null;
         }
-        String requestUrl = wexin_program_openId_sessionKey_Url.replace("APPID",weixinUtil.partyTimeConfig.getAppId() ).replace("SECRET", weixinUtil.partyTimeConfig.getAppSecret()).replace("JSCODE", code);
+        String requestUrl = wexin_program_openId_sessionKey_Url.replace("APPID","wx213d8180b5e1df6c" ).replace("SECRET", "d207eadd7e236c564845568baa4b3d3b").replace("JSCODE", code);
         log.info("code=>openid url:"+requestUrl);
 
         JSONObject jsonObject = httpRequest(requestUrl, "GET", null);

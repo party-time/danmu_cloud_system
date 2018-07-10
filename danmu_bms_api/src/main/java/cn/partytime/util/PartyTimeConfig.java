@@ -1,11 +1,13 @@
 package cn.partytime.util;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by liuwei on 2016/10/31.
  */
+@Data
 @Component
 public class PartyTimeConfig {
 
@@ -21,35 +23,10 @@ public class PartyTimeConfig {
     @Value("${appKey}")
     private String appKey;
 
-    public String getUrl() {
-        return url;
-    }
+    @Value("${mini_appId}")
+    private String mini_appId;
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+    @Value("${mini_appSecret}")
+    private String mini_appSecret;
 
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
-    public String getAppSecret() {
-        return appSecret;
-    }
-
-    public void setAppSecret(String appSecret) {
-        this.appSecret = appSecret;
-    }
-
-    public String getAppKey() {
-        return appKey;
-    }
-
-    public void setAppKey(String appKey) {
-        this.appKey = appKey;
-    }
 }
