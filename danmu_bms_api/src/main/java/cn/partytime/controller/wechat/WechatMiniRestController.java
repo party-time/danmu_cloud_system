@@ -1,6 +1,7 @@
 package cn.partytime.controller.wechat;
 
 import cn.partytime.dataRpc.RpcCmdService;
+import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.*;
 import cn.partytime.model.manager.FastDanmu;
 import cn.partytime.model.manager.H5Template;
@@ -65,6 +66,9 @@ public class WechatMiniRestController {
 
     @Autowired
     private BmsReportService bmsReportService;
+
+    @Autowired
+    private RpcPartyService rpcPartyService;
 
 
     @RequestMapping(value = "/wxBingPay", method = RequestMethod.POST)
@@ -136,16 +140,20 @@ public class WechatMiniRestController {
         }*/
 
         String code  = request.getParameter("code");
-        log.info("小程序请求的code:{}",code);
+        String latitude = request.getParameter("latitude");
+        String longitude = request.getParameter("longitude");
+
+        log.info("小程序请求的code:{},纬度:{},经度:{}",code,latitude,longitude);
         UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
         log.info("useSecretInfo:{}",JSON.toJSONString(useSecretInfo));
+        String openId = useSecretInfo.getOpenId();
 
         RestResultModel restResultModel = new RestResultModel();
         //UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), useSecretInfo.getOpenId());
 
-        String openId = "oze02wVALzhbkpW9f7r3g036O6vw";
-        PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
-
+        //String openId = "oze02wVALzhbkpW9f7r3g036O6vw";
+        //PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
+        PartyLogicModel party = rpcPartyService.findPartyByLonLat(Double.parseDouble(longitude+""),Double.parseDouble(latitude+""));
         log.info("PartyLogicModel:{}",JSON.toJSONString(party));
         if( null == party){
             restResultModel.setResult(404);
