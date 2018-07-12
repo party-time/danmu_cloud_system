@@ -148,6 +148,10 @@ public class WechatMiniRestController {
         log.info("useSecretInfo:{}",JSON.toJSONString(useSecretInfo));
         String openId = useSecretInfo.getOpenId();
 
+        UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
+        log.info("userInfo:{}",JSON.toJSONString(useSecretInfo));
+
+
         RestResultModel restResultModel = new RestResultModel();
         //UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), useSecretInfo.getOpenId());
 
