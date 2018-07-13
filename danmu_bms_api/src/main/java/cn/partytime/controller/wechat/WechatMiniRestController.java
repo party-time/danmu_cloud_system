@@ -277,7 +277,7 @@ public class WechatMiniRestController {
     public RestResultModel login(HttpServletRequest request) {
         RestResultModel restResultModel = new RestResultModel();
         String code  = request.getParameter("code");
-        log.info("小程序请求的code:{},纬度:{},经度:{}");
+        log.info("小程序登陆请求的code:{},纬度:{},经度:{}");
         UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
 
         String openId = useSecretInfo.getOpenId();
