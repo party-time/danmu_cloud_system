@@ -290,7 +290,7 @@ public class WechatMiniRestController {
             wechatUser = new WechatUser();
         }
         wechatUser.setOpenId(openId);
-        wechatUser =  wechatUserService.Save(wechatUser);
+        wechatUser =  wechatUserService.save(wechatUser);
         log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
 
         String wechatId =wechatUser.getId();

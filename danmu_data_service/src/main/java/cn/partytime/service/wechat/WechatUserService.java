@@ -181,8 +181,4 @@ public class WechatUserService {
     }
 
 
-    public WechatUser Save(WechatUser wechatUser) {
-
-        return wechatUserRepository.save(wechatUser);
-    }
 }
