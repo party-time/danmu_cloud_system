@@ -1,5 +1,6 @@
 package cn.partytime.controller.wechat;
 
+import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.*;
@@ -70,6 +71,12 @@ public class WechatMiniRestController {
     @Autowired
     private RpcPartyService rpcPartyService;
 
+    @Autowired
+    private WechatUserService wechatUserService;
+
+    @Autowired
+    private WechatUserInfoService wechatUserInfoService;
+
 
     @RequestMapping(value = "/wxBingPay", method = RequestMethod.POST)
     public RestResultModel wxBingPay(HttpServletRequest request) {
@@ -113,6 +120,8 @@ public class WechatMiniRestController {
         return restResultModel;
     }
 
+
+
     @RequestMapping(value = "/findPartyInfo", method = RequestMethod.POST)
     public RestResultModel partyInfo(HttpServletRequest request) {
         /*String code  = request.getParameter("code");
@@ -147,9 +156,6 @@ public class WechatMiniRestController {
         UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
         log.info("useSecretInfo:{}",JSON.toJSONString(useSecretInfo));
         String openId = useSecretInfo.getOpenId();
-
-        UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
-        log.info("userInfo:{}",JSON.toJSONString(useSecretInfo));
 
 
         RestResultModel restResultModel = new RestResultModel();
@@ -265,5 +271,75 @@ public class WechatMiniRestController {
             restResultModel.setResult_msg(result);
         }
         return restResultModel;
+    }
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public RestResultModel login(HttpServletRequest request) {
+        RestResultModel restResultModel = new RestResultModel();
+        String code  = request.getParameter("code");
+        log.info("小程序请求的code:{},纬度:{},经度:{}");
+        UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
+        restResultModel.setResult(200);
+        restResultModel.setData(useSecretInfo);
+        return  restResultModel;
+    }
+    @RequestMapping(value = "/updateWechatUser", method = RequestMethod.GET)
+    public RestResultModel updateWechatUser(HttpServletRequest request){
+        String openId = request.getParameter("openId");
+        RestResultModel restResultModel = new RestResultModel();
+        WechatUser wechatUser =  wechatUserService.findByOpenId(openId);
+        String avatarUrl = request.getParameter("avatarUrl");
+        String city = request.getParameter("city");
+        String country = request.getParameter("country");
+        String gender = request.getParameter("gender");
+        String nickName = request.getParameter("nickName");
+        String language = request.getParameter("language");
+        String province = request.getParameter("province");
+
+        String latitude = request.getParameter("latitude");
+        String longitude = request.getParameter("longitude");
+        if(wechatUser ==null){
+            wechatUser = new WechatUser();
+        }
+        if(!StringUtils.isEmpty(avatarUrl)){
+            wechatUser.setImgUrl(avatarUrl);
+        }
+        if(!StringUtils.isEmpty(city)) {
+            wechatUser.setCity(city);
+        }
+        if(!StringUtils.isEmpty(country)) {
+            wechatUser.setCountry(country);
+        }
+        if(!StringUtils.isEmpty(gender)) {
+            wechatUser.setSex(IntegerUtils.objectConvertToInt(gender));
+        }
+        if(!StringUtils.isEmpty(nickName)) {
+            wechatUser.setNick(nickName);
+        }
+        if(!StringUtils.isEmpty(language)) {
+            wechatUser.setLanguage(language);
+        }
+        if(!StringUtils.isEmpty(province)) {
+            wechatUser.setProvince(province);
+        }
+
+        if(!StringUtils.isEmpty(latitude)) {
+            wechatUser.setLatitude(Double.parseDouble(latitude+""));
+        }
+        if(!StringUtils.isEmpty(longitude)) {
+            wechatUser.setLongitude(Double.parseDouble(longitude+""));
+        }
+
+        if(wechatUser==null){
+            wechatUser = wechatUserService.save(wechatUser);
+        }
+
+        if(wechatUser==null){
+            restResultModel.setResult(500);
+            restResultModel.setResult_msg("更新异常");
+        }else{
+            restResultModel.setResult(200);
+            restResultModel.setData(wechatUser);
+        }
+        return  restResultModel;
     }
 }

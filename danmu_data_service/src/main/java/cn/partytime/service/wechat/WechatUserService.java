@@ -180,4 +180,9 @@ public class WechatUserService {
         return wechatUserRepository.findByIdIn(idList);
     }
 
+
+    public WechatUser Save(WechatUser wechatUser) {
+
+        return wechatUserRepository.save(wechatUser);
+    }
 }
