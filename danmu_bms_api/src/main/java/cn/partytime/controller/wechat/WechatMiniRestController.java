@@ -277,7 +277,7 @@ public class WechatMiniRestController {
     public RestResultModel login(HttpServletRequest request) {
         RestResultModel restResultModel = new RestResultModel();
         String code  = request.getParameter("code");
-        log.info("小程序登陆请求的code:{},纬度:{},经度:{}");
+        log.info("小程序登陆请求的code:{}",code);
         UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
 
         String openId = useSecretInfo.getOpenId();
@@ -298,7 +298,7 @@ public class WechatMiniRestController {
         restResultModel.setData(useSecretInfo);
         return  restResultModel;
     }
-    @RequestMapping(value = "/updateWechatUser", method = RequestMethod.GET)
+    @RequestMapping(value = "/updateWechatUser", method = RequestMethod.POST)
     public RestResultModel updateWechatUser(HttpServletRequest request){
         String openId = request.getParameter("openId");
         RestResultModel restResultModel = new RestResultModel();
