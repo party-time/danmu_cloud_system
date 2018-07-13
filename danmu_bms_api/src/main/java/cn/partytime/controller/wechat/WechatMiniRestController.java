@@ -1,5 +1,6 @@
 package cn.partytime.controller.wechat;
 
+import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.dataRpc.RpcPartyService;
@@ -278,6 +279,21 @@ public class WechatMiniRestController {
         String code  = request.getParameter("code");
         log.info("小程序请求的code:{},纬度:{},经度:{}");
         UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
+
+        String openId = useSecretInfo.getOpenId();
+
+        WechatUser wechatUser =  wechatUserService.findByOpenId(openId);
+
+        if(wechatUser==null){
+            wechatUser = new WechatUser();
+        }
+        wechatUser.setOpenId(openId);
+        wechatUser =  wechatUserService.Save(wechatUser);
+
+
+        String wechatId =wechatUser.getId();
+        wechatUserInfoService.updateLastOpenDate(wechatId);
+
         restResultModel.setResult(200);
         restResultModel.setData(useSecretInfo);
         return  restResultModel;
