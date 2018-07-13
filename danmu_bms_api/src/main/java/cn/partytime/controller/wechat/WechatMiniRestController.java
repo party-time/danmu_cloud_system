@@ -294,7 +294,12 @@ public class WechatMiniRestController {
         log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
 
         String wechatId =wechatUser.getId();
-        wechatUserInfoService.updateLastOpenDate(wechatId);
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
+        if(wechatUserInfo==null){
+            wechatUserInfo = new WechatUserInfo();
+        }
+
+        wechatUserInfoService.update(wechatUserInfo);
 
         restResultModel.setResult(200);
         restResultModel.setData(useSecretInfo);
