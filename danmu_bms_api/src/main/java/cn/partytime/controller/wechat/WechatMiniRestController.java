@@ -282,6 +282,8 @@ public class WechatMiniRestController {
 
         String openId = useSecretInfo.getOpenId();
 
+
+        log.info("登陆时候获取的openId:{}",openId);
         WechatUser wechatUser =  wechatUserService.findByOpenId(openId);
 
         if(wechatUser==null){
@@ -289,7 +291,7 @@ public class WechatMiniRestController {
         }
         wechatUser.setOpenId(openId);
         wechatUser =  wechatUserService.Save(wechatUser);
-
+        log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
 
         String wechatId =wechatUser.getId();
         wechatUserInfoService.updateLastOpenDate(wechatId);
