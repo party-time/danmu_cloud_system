@@ -279,10 +279,7 @@ public class WechatMiniRestController {
         String code  = request.getParameter("code");
         log.info("小程序登陆请求的code:{}",code);
         UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
-
         String openId = useSecretInfo.getOpenId();
-
-
         log.info("登陆时候获取的openId:{}",openId);
         WechatUser wechatUser =  wechatUserService.findByOpenId(openId);
 
@@ -308,8 +305,11 @@ public class WechatMiniRestController {
     @RequestMapping(value = "/updateWechatUser", method = RequestMethod.POST)
     public RestResultModel updateWechatUser(HttpServletRequest request){
         String openId = request.getParameter("openId");
+
+        log.info("更新用户信息获取的openId:{}",openId);
         RestResultModel restResultModel = new RestResultModel();
         WechatUser wechatUser =  wechatUserService.findByOpenId(openId);
+
         String avatarUrl = request.getParameter("avatarUrl");
         String city = request.getParameter("city");
         String country = request.getParameter("country");
