@@ -320,6 +320,19 @@ public class WechatMiniRestController {
 
         String latitude = request.getParameter("latitude");
         String longitude = request.getParameter("longitude");
+
+        log.info("+++++++++++++++++++++++openIdopenId========"+openId);
+        log.info("+++++++++++++++++++++++avatarUrlavatarUrl========"+avatarUrl);
+        log.info("+++++++++++++++++++++++citycity========"+city);
+        log.info("+++++++++++++++++++++++countrycountry========"+country);
+        log.info("+++++++++++++++++++++++gendergender========"+gender);
+        log.info("+++++++++++++++++++++++nickNamenickName========"+nickName);
+        log.info("+++++++++++++++++++++++languagelanguage========"+language);
+        log.info("+++++++++++++++++++++++provinceprovince========"+province);
+        log.info("+++++++++++++++++++++++latitudelatitude========"+latitude);
+        log.info("+++++++++++++++++++++++longitudelongitude========"+longitude);
+
+
         if(wechatUser ==null){
             wechatUser = new WechatUser();
         }
