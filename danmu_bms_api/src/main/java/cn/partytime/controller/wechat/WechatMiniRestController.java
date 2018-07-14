@@ -365,6 +365,7 @@ public class WechatMiniRestController {
             wechatUser.setLongitude(Double.parseDouble(longitude+""));
         }
 
+        log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
         if(wechatUser==null){
             wechatUser = wechatUserService.save(wechatUser);
         }
