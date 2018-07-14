@@ -195,7 +195,7 @@ public class WechatMiniRestController {
             }
         }
         map.put("colors", bmsColorService.findDanmuColor(0));
-        map.put("openId", openId);
+        //map.put("openId", openId);
         map.put("partyId",party.getPartyId());
         map.put("addressId",party.getAddressId());
 
@@ -206,7 +206,7 @@ public class WechatMiniRestController {
 
         String fileUploadUrl = fileUploadUtil.getUrl();
         map.put("baseUrl",fileUploadUrl);
-        map.put("openId",openId);
+        //map.put("openId",openId);
 
         log.info("partyInfo:{}",JSON.toJSONString(map));
         restResultModel.setResult(200);
