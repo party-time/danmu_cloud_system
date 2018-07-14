@@ -154,9 +154,9 @@ public class WechatMiniRestController {
         String longitude = request.getParameter("longitude");
 
         log.info("小程序请求的code:{},纬度:{},经度:{}",code,latitude,longitude);
-        UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
-        log.info("useSecretInfo:{}",JSON.toJSONString(useSecretInfo));
-        String openId = useSecretInfo.getOpenId();
+        //UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
+        //log.info("useSecretInfo:{}",JSON.toJSONString(useSecretInfo));
+       // String openId = useSecretInfo.getOpenId();
 
 
         RestResultModel restResultModel = new RestResultModel();
