@@ -206,6 +206,7 @@ public class WechatMiniRestController {
 
         String fileUploadUrl = fileUploadUtil.getUrl();
         map.put("baseUrl",fileUploadUrl);
+        map.put("partyName",party.getPartyName());
         //map.put("openId",openId);
 
         log.info("partyInfo:{}",JSON.toJSONString(map));
