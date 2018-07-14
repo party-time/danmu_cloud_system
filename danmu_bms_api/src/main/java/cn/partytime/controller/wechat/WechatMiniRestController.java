@@ -366,17 +366,12 @@ public class WechatMiniRestController {
         }
 
         log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
-        if(wechatUser==null){
-            wechatUser = wechatUserService.save(wechatUser);
-        }
 
-        if(wechatUser==null){
-            restResultModel.setResult(500);
-            restResultModel.setResult_msg("更新异常");
-        }else{
-            restResultModel.setResult(200);
-            restResultModel.setData(wechatUser);
-        }
+        wechatUser = wechatUserService.save(wechatUser);
+
+
+        restResultModel.setResult(200);
+        restResultModel.setData(wechatUser);
         return  restResultModel;
     }
 }
