@@ -3,6 +3,7 @@ package cn.partytime.scheduler.impl;
 
 import cn.partytime.cache.user.WechatUserCountCacheService;
 import cn.partytime.common.util.IntegerUtils;
+import cn.partytime.common.util.ListUtils;
 import cn.partytime.common.util.LocalDateTimeUtils;
 import cn.partytime.dataRpc.RpcDanmuAddressService;
 import cn.partytime.dataRpc.RpcWechatService;
@@ -57,25 +58,30 @@ public class UserCountScheduler {
 
         List<WechatUserInfoDto> wechatUserInfoDtoList = rpcWechatService.findByRegistDateInRange(startDate,endDate);
 
-        wechatUserInfoDtoList.forEach(wechatUserInfoDto -> addAddressUser(wechatUserInfoDto));
-        Set<String> stringSet = wechatUserCountCacheService.getWechatUserAddress();
-        if(stringSet!=null){
-            for(String addressId:stringSet){
-                //DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findById(addressId);
-                Object object = wechatUserCountCacheService.getWechatUserCount(addressId);
-                int count = IntegerUtils.objectConvertToInt(object);
-                WechatUserWeekCountDto wechatUserWeekCountDto = rpcWechatService.findByAddressIdAndStartDateAndEndDate(addressId,startDate,endDate);
+        if(ListUtils.checkListIsNotNull(wechatUserInfoDtoList)){
+            log.info("上周注册的用户数量：{}",wechatUserInfoDtoList.size());
+            wechatUserInfoDtoList.forEach(wechatUserInfoDto -> addAddressUser(wechatUserInfoDto));
+            Set<String> stringSet = wechatUserCountCacheService.getWechatUserAddress();
+            if(stringSet!=null){
+                for(String addressId:stringSet){
+                    //DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findById(addressId);
+                    Object object = wechatUserCountCacheService.getWechatUserCount(addressId);
+                    int count = IntegerUtils.objectConvertToInt(object);
+                    WechatUserWeekCountDto wechatUserWeekCountDto = rpcWechatService.findByAddressIdAndStartDateAndEndDate(addressId,startDate,endDate);
 
-                if(wechatUserWeekCountDto==null){
-                    wechatUserWeekCountDto = new WechatUserWeekCountDto();
+                    if(wechatUserWeekCountDto==null){
+                        wechatUserWeekCountDto = new WechatUserWeekCountDto();
+                    }
+
+                    wechatUserWeekCountDto.setAddressId(addressId);
+                    wechatUserWeekCountDto.setStartDate(startDate);
+                    wechatUserWeekCountDto.setEndDate(endDate);
+                    wechatUserWeekCountDto.setCount(count);
+                    rpcWechatService.saveWechatUserWeekCount(wechatUserWeekCountDto);
                 }
-
-                wechatUserWeekCountDto.setAddressId(addressId);
-                wechatUserWeekCountDto.setStartDate(startDate);
-                wechatUserWeekCountDto.setEndDate(endDate);
-                wechatUserWeekCountDto.setCount(count);
-                rpcWechatService.saveWechatUserWeekCount(wechatUserWeekCountDto);
             }
+        }else{
+            log.info("上周没有注册新用户");
         }
 
     }
