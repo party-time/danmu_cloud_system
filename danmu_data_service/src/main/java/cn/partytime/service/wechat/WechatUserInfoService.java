@@ -104,4 +104,9 @@ public class WechatUserInfoService {
         wechatUserInfoRepository.save(wechatUserInfo);
     }
 
+
+    public List<WechatUserInfo> findByRegistDateBetween(Date startDate,Date endDate){
+        return wechatUserInfoRepository.findByRegistDateBetween(startDate,endDate);
+    }
+
 }
