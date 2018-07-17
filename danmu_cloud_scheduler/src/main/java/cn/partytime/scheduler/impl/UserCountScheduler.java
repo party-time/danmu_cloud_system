@@ -40,7 +40,8 @@ public class UserCountScheduler {
 
 
 
-    @Scheduled(cron = "0 1 0 ? * MON")
+    //@Scheduled(cron = "0 1 0 ? * MON")
+    @Scheduled(cron = "0/30 * * * * ?")
     public void countUser(){
         log.info("统计上周产生的用户");
         LocalDateTime now = LocalDateTime.now();
