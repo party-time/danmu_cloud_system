@@ -35,13 +35,9 @@ public interface RpcWechatService {
     public List<WechatUserInfoDto> findByRegistDateInRange(@RequestParam(value = "startDate") Date startDate, @RequestParam(value = "endDate") Date endDate );
 
 
-    @RequestMapping(value = "/rpcWechat/findByAddressIdAndStartDateAndEndDate" ,method = RequestMethod.GET)
-    public WechatUserWeekCountDto findByAddressIdAndStartDateAndEndDate(@RequestParam(value = "addressId") String addressId,
-                                                                        @RequestParam(value = "startDate")  Date startDate,
-                                                                        @RequestParam(value = "endDate")  Date endDate );
 
 
-    @RequestMapping(value = "/rpcWechat/saveWechatUserWeekCount" ,method = RequestMethod.POST)
-    public void saveWechatUserWeekCount(WechatUserWeekCountDto wechatUserWeekCount);
+    @RequestMapping(value = "/rpcWechat/countNewWechatUser" ,method = RequestMethod.GET)
+    public void countNewWechatUser();
 
 }

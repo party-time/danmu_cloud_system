@@ -33,12 +33,8 @@ public class RpcWechatServiceHystrix implements RpcWechatService {
     }
 
     @Override
-    public WechatUserWeekCountDto findByAddressIdAndStartDateAndEndDate(String addressId, Date startDate, Date endDate) {
-        return null;
-    }
-
-    @Override
-    public void saveWechatUserWeekCount(WechatUserWeekCountDto wechatUserWeekCount) {
+    public void countNewWechatUser() {
 
     }
+
 }

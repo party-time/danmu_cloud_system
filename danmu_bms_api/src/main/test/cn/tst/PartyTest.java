@@ -1,18 +1,30 @@
 package cn.tst;
 
 import cn.partytime.Application;
-import cn.partytime.common.util.DateUtils;
+import cn.partytime.common.util.LocalDateTimeUtils;
+import cn.partytime.model.DanmuAddressModel;
+import cn.partytime.model.WechatUserInfoDto;
+import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.manager.Party;
+import cn.partytime.model.wechat.WechatUserInfo;
+import cn.partytime.service.DanmuAddressService;
 import cn.partytime.service.PartyService;
+import cn.partytime.service.wechat.WechatUserInfoService;
+import cn.partytime.service.wechat.WechatUserWeekCountService;
+import cn.partytime.wechat.pojo.UserInfo;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.data.domain.Page;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,24 +32,52 @@ import java.util.List;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration
+@SpringBootTest(classes={Application.class,PartyTest.class})
 public class PartyTest {
 
 
     @Autowired
-    private PartyService partyService;
+    private WechatUserInfoService wechatUserInfoService;
+
+    @Autowired
+    private DanmuAddressService danmuAddressService;
 
     @Test
     public void findParty(){
-        //Page<Party> partyList = partyService.findAllByPage(0,10);
-        //List<Party>  partyList =  partyService.findPartyByTime(DateUtils.getCurrentDate(),0);
-        //List<Party> partyList1 = partyList.getContent();
-        //for(Party party:partyList){
-          //  System.out.println(JSON.toJSONString(party));
-        //}
-        Party party = partyService.findById("5885774bda4fba36f84ca966");
 
 
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime endLocalDateTime = LocalDateTimeUtils.minu(now,
+                1,
+                ChronoUnit.DAYS);
+        LocalDateTime startLocalDateTime = LocalDateTimeUtils.minu(now,
+                7,
+                ChronoUnit.DAYS);
+        Date startDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayStart(startLocalDateTime));
+
+        Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(endLocalDateTime));
+
+
+        List<WechatUserInfo> wechatUserInfoDtoList = wechatUserInfoService.findByRegistDateBetween(startDate,endDate);
+
+        for(WechatUserInfo wechatUserInfo:wechatUserInfoDtoList){
+            addAddressUser(wechatUserInfo);
+        }
+
+    }
+
+    public void addAddressUser(WechatUserInfo wechatUserInfo){
+
+        if(wechatUserInfo!=null){
+            Double registLongitude = wechatUserInfo.getLastLongitude();
+            Double registLatitude = wechatUserInfo.getRegistLatitude();
+            try{
+                List<String> stringList = danmuAddressService.findAddressIdList(registLongitude,registLatitude,2000);
+                System.out.println(stringList.get(0));
+            }catch (Exception e){
+                //log.info("============{}",JSON.toJSONString(wechatUserInfo));
+            }
+
+        }
     }
 }
