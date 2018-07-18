@@ -31,10 +31,10 @@ public class WechatUserWeekCountService {
     @Autowired
     private WechatUserWeekCountRepository wechatUserWeekCountRepository;
 
-    public Page<WechatUserWeekCount> findAll(Integer page, Integer size) {
+    public Page<WechatUserWeekCount> findAll(Date startDate,Date endDate,Integer page, Integer size) {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
-        return wechatUserWeekCountRepository.findAll(pageRequest);
+        return wechatUserWeekCountRepository.findByStartDateAndEndDate(startDate,endDate,pageRequest);
     }
 
     public WechatUserWeekCount findByAddressIdAndStartDateAndEndDate(String addressId,Date startDate, Date endDate){
@@ -63,7 +63,7 @@ public class WechatUserWeekCountService {
         query.addCriteria(criteria);
         return mongoTemplate.count(query, Table.class, "tabletest");*/
 
-        List<WechatUserWeekCount> wechatUserWeekCountList = wechatUserWeekCountRepository.findAll();
+        /*List<WechatUserWeekCount> wechatUserWeekCountList = wechatUserWeekCountRepository.findAll();
         WechatUserWeekCount wechatUserWeekCountTemp = wechatUserWeekCountList.get(0);
 
         System.out.println("start=====================:"+DateUtils.dateToString(startDate,"yyyy-MM-dd HH:mm:ss"));
@@ -74,12 +74,12 @@ public class WechatUserWeekCountService {
 
         if(endDate.equals(wechatUserWeekCountTemp.getEndDate())){
             System.out.println("=============================end");
-        }
+        }*/
 
 
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("startDate").gte(startDate).lte(startDate),
-                //Criteria.where("endDate").gte(endDate).lte(endDate),
+                Criteria.where("endDate").gte(endDate).lte(endDate),
                 Criteria.where("addressId").is(addressId));
         Query query = new Query(criteria);
         WechatUserWeekCount wechatUserWeekCount = mongoTemplate.findOne(query,WechatUserWeekCount.class);

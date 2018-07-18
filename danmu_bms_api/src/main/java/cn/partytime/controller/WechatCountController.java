@@ -10,6 +10,7 @@ import cn.partytime.model.wechat.WechatUserWeekCount;
 import cn.partytime.service.DanmuAddressService;
 import cn.partytime.service.wechat.WechatUserInfoService;
 import cn.partytime.service.wechat.WechatUserWeekCountService;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,36 +48,31 @@ public class WechatCountController {
     @RequestMapping(value = "/page", method = RequestMethod.GET)
     public PageResultModel findAll(int pageNumber, int pageSize){
 
-        /*LocalDateTime now = LocalDateTime.now();
-
-        LocalDateTime localDateTimeTemp = LocalDateTimeUtils.minu(now,
-                5,
-                ChronoUnit.DAYS);
+        //DanmuAddress danmuAddress =  danmuAddressService.findById("5a4d9c04e2f0d248cd43f412");
 
 
-        Date tempDate = LocalDateTimeUtils.convertLDTToDate(localDateTimeTemp);
+        /*WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId("58f9bf4d0cf2df5c0b020990");
 
-        LocalDateTime endLocalDateTime = LocalDateTimeUtils.minu(now,
-                1,
-                ChronoUnit.DAYS);
-        LocalDateTime startLocalDateTime = LocalDateTimeUtils.minu(now,
-                1000,
-                ChronoUnit.DAYS);
-        Date startDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayStart(startLocalDateTime));
+        System.out.println("================================="+JSON.toJSONString(wechatUserInfo));
 
-        Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(endLocalDateTime));
+        wechatUserInfo.setRegistLatitude(34.586868);
+        wechatUserInfo.setRegistLongitude(133.481247307);
+        wechatUserInfoService.update(wechatUserInfo);*/
 
-        List<WechatUserInfo>  wechatUserInfoList = wechatUserInfoService.findByRegistDateBetween(startDate,endDate);
-        //wechatUserInfoList.forEach(wechatUserInfo -> wechatUserInfo.setRegistDate(tempDate));
-        for(WechatUserInfo wechatUserInfo:wechatUserInfoList){
-            wechatUserInfo.setRegistDate(tempDate);
-            wechatUserInfoService.update(wechatUserInfo);
-        }*/
 
+
+        LocalDate local = LocalDate.now();//获取当前时间
+        DayOfWeek dayOfWeek = local.getDayOfWeek();//获取今天是周几
+        LocalDate mondayLocalDate = local.minusDays(7+dayOfWeek.getValue()-1);//算出上周一
+        LocalDate weekendLocalDateMoring = local.minusDays(dayOfWeek.getValue());//算出上周一
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDateTime WeekendLocalDateTime = LocalDateTimeUtils.convertDateToLDT(Date.from(weekendLocalDateMoring.atStartOfDay().atZone(zone).toInstant()));
+        Date startDate = Date.from(mondayLocalDate.atStartOfDay().atZone(zone).toInstant());
+        Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(WeekendLocalDateTime));
 
 
         PageResultModel pageResultModel = new PageResultModel();
-        Page<WechatUserWeekCount> wechatUserWeekCountPage =  wechatUserWeekCountService.findAll(pageNumber,pageSize);
+        Page<WechatUserWeekCount> wechatUserWeekCountPage =  wechatUserWeekCountService.findAll(startDate,endDate,pageNumber-1,pageSize);
         long count  = wechatUserWeekCountPage.getTotalElements();
         pageResultModel.setTotal(count);
         if(count>0){

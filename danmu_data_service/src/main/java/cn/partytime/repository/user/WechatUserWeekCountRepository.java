@@ -13,7 +13,7 @@ import java.util.List;
 @EnableMongoRepositories(mongoTemplateRef = "userMongoTemplate")
 public interface WechatUserWeekCountRepository extends MongoRepository<WechatUserWeekCount,String> {
 
-    public Page<WechatUserWeekCount> findAll(Pageable pageable);
+    public Page<WechatUserWeekCount> findByStartDateAndEndDate(Date startDate,Date endDate,Pageable pageable);
 
     WechatUserWeekCount  findByAddressIdAndStartDateAfterAndEndDateBefore(String addressId,Date startDate, Date endDate);
 

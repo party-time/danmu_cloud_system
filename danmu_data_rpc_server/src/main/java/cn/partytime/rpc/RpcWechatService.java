@@ -12,6 +12,7 @@ import cn.partytime.model.manager.DanmuAddress;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.model.wechat.WechatUserWeekCount;
+import cn.partytime.service.DanmuAddressService;
 import cn.partytime.service.wechat.WechatUserInfoService;
 import cn.partytime.service.wechat.WechatUserService;
 import cn.partytime.service.wechat.WechatUserWeekCountService;
@@ -21,7 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +55,9 @@ public class RpcWechatService {
 
     @Autowired
     private WechatUserCountCacheService wechatUserCountCacheService;
+
+    @Autowired
+    private DanmuAddressService danmuAddressService;
 
 
 
@@ -82,36 +89,43 @@ public class RpcWechatService {
         //return wechatUserWeekCountService.findByAddressIdAndStartDateAndEndDate(addressId,startDate,endDate);
 
         log.info("统计上周产生的用户");
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime endLocalDateTime = LocalDateTimeUtils.minu(now,
-                1,
-                ChronoUnit.DAYS);
-        LocalDateTime startLocalDateTime = LocalDateTimeUtils.minu(now,
-                7,
-                ChronoUnit.DAYS);
-        Date startDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayStart(startLocalDateTime));
+        LocalDate local = LocalDate.now();//获取当前时间
+        DayOfWeek dayOfWeek = local.getDayOfWeek();//获取今天是周几
+        LocalDate mondayLocalDate = local.minusDays(7+dayOfWeek.getValue()-1);//算出上周一
+        LocalDate weekendLocalDateMoring = local.minusDays(dayOfWeek.getValue());//算出上周一
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDateTime WeekendLocalDateTime = LocalDateTimeUtils.convertDateToLDT(Date.from(weekendLocalDateMoring.atStartOfDay().atZone(zone).toInstant()));
+        Date startDate = Date.from(mondayLocalDate.atStartOfDay().atZone(zone).toInstant());
+        Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(WeekendLocalDateTime));
 
-        Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(endLocalDateTime));
+
 
         List<WechatUserInfo> wechatUserInfoDtoList = wechatUserInfoService.findByRegistDateBetween(startDate,endDate);
 
+
+
         if(ListUtils.checkListIsNotNull(wechatUserInfoDtoList)){
             log.info("上周注册的用户数量：{}",wechatUserInfoDtoList.size());
+
+            List<DanmuAddress> danmuAddressList = danmuAddressService.findAll();
+            danmuAddressList.forEach(danmuAddress -> wechatUserCountCacheService.clearUserCountCacheData(danmuAddress.getId()));
+            wechatUserCountCacheService.clearUserCountCacheData("0");
+
+
             wechatUserInfoDtoList.forEach(wechatUserInfo -> addAddressUser(wechatUserInfo));
             Set<String> stringSet = wechatUserCountCacheService.getWechatUserAddress();
+
+
+
             if(stringSet!=null){
                 for(String addressId:stringSet){
-                    //DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findById(addressId);
                     Object object = wechatUserCountCacheService.getWechatUserCount(addressId);
                     int count = IntegerUtils.objectConvertToInt(object);
                     System.out.println("start=====================:"+DateUtils.dateToString(startDate,"yyyy-MM-dd HH:mm:ss"));
-
                     WechatUserWeekCount wechatUserWeekCount = wechatUserWeekCountService.findByAddressIdAndStartDateAndEndDate(addressId,startDate,endDate);
-
                     if(wechatUserWeekCount==null){
                         wechatUserWeekCount = new WechatUserWeekCount();
                     }
-
                     wechatUserWeekCount.setAddressId(addressId);
                     wechatUserWeekCount.setStartDate(startDate);
                     wechatUserWeekCount.setEndDate(endDate);

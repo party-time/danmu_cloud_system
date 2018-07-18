@@ -20,8 +20,7 @@ public class UserCountScheduler {
     @Autowired
     private RpcWechatService rpcWechatService;
 
-    //@Scheduled(cron = "0 1 0 ? * MON")
-    @Scheduled(cron = "0/30 * * * * ?")
+    @Scheduled(cron = "0 1 0 ? * MON")
     public void countUser(){
         rpcWechatService.countNewWechatUser();
     }

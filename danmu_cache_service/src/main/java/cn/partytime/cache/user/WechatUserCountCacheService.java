@@ -20,6 +20,7 @@ public class WechatUserCountCacheService {
     public void setWechatUserAddress(String addressId){
         String key = WechatUserCountKey.WECHATUSER_ADDRESS_SORTSET;
         redisService.setSortSet(key,0,addressId);
+        redisService.expire(key,60*60*1);
     }
 
     public Set<String> getWechatUserAddress(){
@@ -31,6 +32,7 @@ public class WechatUserCountCacheService {
     public void addWechatUser(String addressId){
         String key = WechatUserCountKey.WECHATUSER_COUNT+addressId;
         redisService.incrKey(key,1);
+        redisService.expire(key,60*5);
     }
 
     public long getWechatUserCount(String addressId){
@@ -38,7 +40,8 @@ public class WechatUserCountCacheService {
         return IntegerUtils.objectConvertToInt(redisService.get(key));
     }
 
-
-
-
+    public void clearUserCountCacheData(String addressId){
+        String key = WechatUserCountKey.WECHATUSER_COUNT+addressId;
+        redisService.expire(key,0);
+    }
 }

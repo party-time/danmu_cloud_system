@@ -37,47 +37,17 @@ public class PartyTest {
 
 
     @Autowired
-    private WechatUserInfoService wechatUserInfoService;
+    private DanmuAddressService danmuAddressService;
+
 
     @Autowired
-    private DanmuAddressService danmuAddressService;
+    private WechatUserInfoService wechatUserInfoService;
 
     @Test
     public void findParty(){
 
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime endLocalDateTime = LocalDateTimeUtils.minu(now,
-                1,
-                ChronoUnit.DAYS);
-        LocalDateTime startLocalDateTime = LocalDateTimeUtils.minu(now,
-                7,
-                ChronoUnit.DAYS);
-        Date startDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayStart(startLocalDateTime));
-
-        Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(endLocalDateTime));
-
-
-        List<WechatUserInfo> wechatUserInfoDtoList = wechatUserInfoService.findByRegistDateBetween(startDate,endDate);
-
-        for(WechatUserInfo wechatUserInfo:wechatUserInfoDtoList){
-            addAddressUser(wechatUserInfo);
-        }
 
     }
 
-    public void addAddressUser(WechatUserInfo wechatUserInfo){
-
-        if(wechatUserInfo!=null){
-            Double registLongitude = wechatUserInfo.getLastLongitude();
-            Double registLatitude = wechatUserInfo.getRegistLatitude();
-            try{
-                List<String> stringList = danmuAddressService.findAddressIdList(registLongitude,registLatitude,2000);
-                System.out.println(stringList.get(0));
-            }catch (Exception e){
-                //log.info("============{}",JSON.toJSONString(wechatUserInfo));
-            }
-
-        }
-    }
 }
