@@ -485,8 +485,7 @@ public class CommandHanderService {
                 String danmuId = danmuLog.getDanmuId();
                 if(!StringUtils.isEmpty(danmuId)){
                     DanmuModel danmuModel = rpcDanmuService.findById(danmuId);
-
-                    log.info("=============================================={}",JSON.toJSONString(danmuModel));
+                    log.info("+++++++++++++++++++++++++++++++++++++++{}",JSON.toJSONString(danmuModel));
                     danmuModel.setCheckUserId(adminUser.getId());
                     danmuModel.setViewFlg(true);
                     danmuModel.setUpdateTime(DateUtils.getCurrentDate());
