@@ -368,6 +368,7 @@ public class BmsDanmuService {
 
             IdList.add(danmuModel.getId());
             BeanUtils.copyProperties(danmuModel, danmuLogicModel);
+            log.info("danmuModel:{}",JSON.toJSONString(danmuModel));
             log.info("danmuLogicModel对象:{}",JSON.toJSONString(danmuLogicModel));
             danmuLogicModelList.add(danmuLogicModel);
         }
