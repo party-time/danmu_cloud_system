@@ -62,6 +62,9 @@ public class RpcDanmuService {
     public void updateDanmuStatus(@RequestParam String danmuLogId) {
 
         DanmuLog danmuLog =  danmuLogService.findDanmuLogById(danmuLogId);
+        log.info("danmuLog:{}",JSON.toJSONString(danmuLog));
+
+
         if(danmuLog!=null){
             String danmuId = danmuLog.getDanmuId();
             Danmu danmu = danmuService.findById(danmuId);
