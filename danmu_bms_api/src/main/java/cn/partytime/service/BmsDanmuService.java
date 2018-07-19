@@ -792,8 +792,8 @@ public class BmsDanmuService {
 
         Map<String,Object> contentMap = new HashMap<String,Object>();
         contentMap.put("danmuName",name);
-        contentMap.put("color","");
-        contentMap.put("content","");
+        //contentMap.put("color","");
+        //contentMap.put("content","");
 
         //是否入弹幕库 0入库  1不入库
         int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();

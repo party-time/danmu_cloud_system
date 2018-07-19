@@ -17,6 +17,9 @@ import java.util.Map;
 public interface RpcDanmuService {
 
 
+    @RequestMapping(value = "/rpcDanmu/setAdminAccepetTime" ,method = RequestMethod.GET)
+    public void setAdminAccepetTime(@RequestParam(value = "danmuLogId") String danmuLogId);
+
     @RequestMapping(value = "/rpcDanmu/updateDanmuStatus" ,method = RequestMethod.GET)
     public void updateDanmuStatus(@RequestParam(value = "id") String id,@RequestParam(value = "sendStatus") int sendStatus);
 
