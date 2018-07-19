@@ -94,9 +94,9 @@ public class AdminUserController extends BaseAdminController{
 
     @RequestMapping(value = "/del", method = RequestMethod.GET)
     public RestResultModel del(String id){
-        if( !"admin".equals(getAdminUser().getUserName()) ){
+        /*if( !"admin".equals(getAdminUser().getUserName()) ){
             throw new IllegalArgumentException("只有管理员才可以使用");
-        }
+        }*/
         RestResultModel restResultModel = new RestResultModel();
         adminUserService.deleteById(id);
         restResultModel.setResult(200);
