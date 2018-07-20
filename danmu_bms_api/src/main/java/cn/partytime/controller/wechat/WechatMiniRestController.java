@@ -293,6 +293,7 @@ public class WechatMiniRestController {
             weChatMiniUser = new WeChatMiniUser();
             weChatMiniUser.setUnionId(unionId);
             weChatMiniUser.setOpenId(openId);
+            weChatMiniUserService.saveWeChatMiniUser(weChatMiniUser);
         }
         log.info("登陆时候获取的openId:{}",openId);
         WechatUser wechatUser = wechatUserService.findByUnionId(unionId);

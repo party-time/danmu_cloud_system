@@ -22,10 +22,7 @@ public class WeChatMiniUserService {
         return weChatMiniUserRepository.findByUnionId(unionId);
     }
 
-    private void saveWeChatMiniUser(String openId,String unionId){
-        WeChatMiniUser weChatMiniUser = new WeChatMiniUser();
-        weChatMiniUser.setOpenId(openId);
-        weChatMiniUser.setUnionId(unionId);
+    public void saveWeChatMiniUser(WeChatMiniUser weChatMiniUser){
         weChatMiniUserRepository.save(weChatMiniUser);
     }
 }
