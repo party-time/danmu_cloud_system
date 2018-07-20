@@ -4,6 +4,7 @@ package cn.partytime.handlerThread;
 import cn.partytime.cache.danmu.DanmuCacheService;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.DanmuChannelRepository;
+import cn.partytime.dataRpc.RpcDanmuService;
 import cn.partytime.model.AdminTaskModel;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -28,6 +29,10 @@ public class PartyDanmuPushHandler {
     @Autowired
     private DanmuCacheService danmuCacheService;
 
+    @Autowired
+    private RpcDanmuService rpcDanmuService;
+
+
     public void pushDanmuToManager(Object object, List<Channel> channelList,String partyId) {
         String acceptMessage = String.valueOf(object);
         log.info("推送给管理员的消息:{}", acceptMessage);
@@ -36,6 +41,9 @@ public class PartyDanmuPushHandler {
         map.put("type", "normalDanmu");
         map.put("data", danmuMap);
         String danmuLogId = String.valueOf(danmuMap.get("id"));
+
+        rpcDanmuService.setAdminAccepetTime(danmuLogId);
+
         pushDanmu(channelList,partyId,danmuLogId,map,null);
     }
 

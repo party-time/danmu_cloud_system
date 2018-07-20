@@ -62,4 +62,5 @@ public class DanmuAddressModel {
     //该场地的广告时间
     private Integer adTime;
 
+
 }

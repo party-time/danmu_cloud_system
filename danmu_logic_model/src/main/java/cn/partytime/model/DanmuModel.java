@@ -63,5 +63,11 @@ public class DanmuModel {
      * 发送状态 0：未发送 1：已发送  2：发送成功
      */
     private int sendStatus = 0;
+
+
+    /**
+     * 管理员接收用户发送弹幕的时间
+     */
+    private Date adminAccepetTime;
 }
 

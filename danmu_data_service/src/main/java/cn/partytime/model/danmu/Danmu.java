@@ -4,6 +4,7 @@ import cn.partytime.baseModel.BaseModel;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -60,6 +61,18 @@ public class Danmu extends BaseModel{
     /**是否查看状态*/
     private boolean viewFlg=false;
 
+    /**
+     * 管理员接收用户发送弹幕的时间
+     */
+    private Date adminAccepetTime;
+
+    public Date getAdminAccepetTime() {
+        return adminAccepetTime;
+    }
+
+    public void setAdminAccepetTime(Date adminAccepetTime) {
+        this.adminAccepetTime = adminAccepetTime;
+    }
 
     public String getId() {
         return id;
