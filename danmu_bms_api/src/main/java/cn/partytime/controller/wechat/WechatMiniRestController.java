@@ -225,8 +225,17 @@ public class WechatMiniRestController {
     @RequestMapping(value = "/wechartSend", method = RequestMethod.POST)
     public RestResultModel wechartSend(HttpServletRequest request) {
         log.info("小程序端，弹幕发送");
-        String openId = request.getParameter("openId");
+        String minProgram_openId = request.getParameter("openId");
         RestResultModel restResultModel = new RestResultModel();
+        WeChatMiniUser weChatMiniUser =  weChatMiniUserService.findByOpenId(minProgram_openId);
+        if(weChatMiniUser==null){
+            restResultModel.setResult(405);
+            restResultModel.setResult_msg("用户不存在");
+            return restResultModel;
+        }
+        WechatUser wechatUser =  wechatUserService.findByUnionId(weChatMiniUser.getUnionId());
+
+        String openId =  wechatUser.getOpenId();
         if (bmsDanmuService.checkFrequency(request)) {
             restResultModel.setResult(403);
             restResultModel.setResult_msg("Limited Frequency");

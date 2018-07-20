@@ -13,4 +13,7 @@ public interface WeChatMiniUserRepository extends MongoRepository<WeChatMiniUser
 
     public WeChatMiniUser findByUnionId(String unionId);
 
+
+    public WeChatMiniUser findByOpenId(String openId);
+
 }
