@@ -57,6 +57,7 @@ public class WechatUserService {
             oldWebchatUser.setLanguage(wechatUser.getLanguage());
             oldWebchatUser.setNick(wechatUser.getNick());
             oldWebchatUser.setLastOpenDate(new Date());
+            oldWebchatUser.setUnionId(wechatUser.getUnionId());
             if (null != wechatUser.getSubscribeState()) {
                 oldWebchatUser.setSubscribeState(wechatUser.getSubscribeState());
             }
@@ -88,6 +89,7 @@ public class WechatUserService {
             oldWebchatUser.setLanguage(wechatUser.getLanguage());
             oldWebchatUser.setNick(wechatUser.getNick());
             oldWebchatUser.setLastOpenDate(new Date());
+            oldWebchatUser.setUnionId(wechatUser.getUnionId());
             if( null != wechatUser.getAssignAddressTime()){
                 oldWebchatUser.setAssignAddressTime(wechatUser.getAssignAddressTime());
             }
