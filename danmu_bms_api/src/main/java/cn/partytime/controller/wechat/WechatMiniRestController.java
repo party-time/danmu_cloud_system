@@ -290,6 +290,7 @@ public class WechatMiniRestController {
 
         WeChatMiniUser weChatMiniUser =  weChatMiniUserService.findByUnionId(unionId);
         if(weChatMiniUser==null){
+            weChatMiniUser = new WeChatMiniUser();
             weChatMiniUser.setUnionId(unionId);
             weChatMiniUser.setOpenId(openId);
         }
