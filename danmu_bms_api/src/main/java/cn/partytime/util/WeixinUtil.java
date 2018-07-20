@@ -212,7 +212,7 @@ public class WeixinUtil {
                 //session_key = jsonObject.getString("session_key");
                 //session_key = jsonObject.getString("");
                 log.info("minprogram-----jsonObject:{}", JSON.toJSONString(jsonObject));
-                useSecretInfo = new UseSecretInfo(jsonObject.getString("openid"),jsonObject.getString("session_key"));
+                useSecretInfo = new UseSecretInfo(jsonObject.getString("openid"),jsonObject.getString("session_key"),jsonObject.getString("unionid"));
             } catch (JSONException e) {
                 // 获取token失败
                 log.error("获取openId失败 errcode:{"+ jsonObject.getInt("errcode")+"} errmsg:{"+ jsonObject.getString("errmsg")+"}");

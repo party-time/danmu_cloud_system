@@ -9,9 +9,11 @@ import cn.partytime.model.manager.FastDanmu;
 import cn.partytime.model.manager.H5Template;
 import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.model.wechat.UseSecretInfo;
+import cn.partytime.model.wechat.WeChatMiniUser;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.service.*;
+import cn.partytime.service.wechat.WeChatMiniUserService;
 import cn.partytime.service.wechat.WechatUserInfoService;
 import cn.partytime.service.wechat.WechatUserService;
 import cn.partytime.util.FileUploadUtil;
@@ -77,6 +79,9 @@ public class WechatMiniRestController {
 
     @Autowired
     private WechatUserInfoService wechatUserInfoService;
+
+    @Autowired
+    private WeChatMiniUserService weChatMiniUserService;
 
 
     @RequestMapping(value = "/wxBingPay", method = RequestMethod.POST)
@@ -281,22 +286,27 @@ public class WechatMiniRestController {
         log.info("小程序登陆请求的code:{}",code);
         UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
         String openId = useSecretInfo.getOpenId();
-        log.info("登陆时候获取的openId:{}",openId);
-        WechatUser wechatUser =  wechatUserService.findByOpenId(openId);
+        String unionId = useSecretInfo.getUnionId();
 
+        WeChatMiniUser weChatMiniUser =  weChatMiniUserService.findByUnionId(unionId);
+        if(weChatMiniUser==null){
+            weChatMiniUser.setUnionId(unionId);
+            weChatMiniUser.setOpenId(openId);
+        }
+        log.info("登陆时候获取的openId:{}",openId);
+        WechatUser wechatUser = wechatUserService.findByUnionId(unionId);
         if(wechatUser==null){
             wechatUser = new WechatUser();
         }
-        wechatUser.setOpenId(openId);
+        //wechatUser.setOpenId(openId);
         wechatUser =  wechatUserService.save(wechatUser);
         log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
 
         String wechatId =wechatUser.getId();
         WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
-        if(wechatUserInfo==null){
+        if(wechatUserInfo==null) {
             wechatUserInfo = new WechatUserInfo();
         }
-
         wechatUserInfoService.update(wechatUserInfo);
 
         restResultModel.setResult(200);
