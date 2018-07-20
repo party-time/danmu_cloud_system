@@ -229,6 +229,7 @@ public class WechatMiniRestController {
         RestResultModel restResultModel = new RestResultModel();
         WeChatMiniUser weChatMiniUser =  weChatMiniUserService.findByOpenId(minProgram_openId);
         if(weChatMiniUser==null){
+            log.info("------------------小程序用户不存在--------------:{}",minProgram_openId);
             restResultModel.setResult(405);
             restResultModel.setResult_msg("用户不存在");
             return restResultModel;
