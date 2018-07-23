@@ -155,6 +155,7 @@ public class RpcWechatService {
                     wechatUserCountCacheService.setWechatUserAddress("0");
                 }
             }catch (Exception e){
+                e.printStackTrace();
                 log.info("============{}",JSON.toJSONString(wechatUserInfo));
             }
         }else{
