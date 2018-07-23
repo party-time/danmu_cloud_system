@@ -142,22 +142,24 @@ public class RpcWechatService {
         if(wechatUserInfo!=null){
             Double registLongitude = wechatUserInfo.getLastLongitude();
             Double registLatitude = wechatUserInfo.getRegistLatitude();
-            try{
-                DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(registLongitude,registLatitude);
-                log.info("----------------------------------------------------------------");
-                log.info("danmuAddressModel:{}",JSON.toJSONString(danmuAddress));
-                if(danmuAddress!=null){
-                    String addressId = danmuAddress.getId();
-                    wechatUserCountCacheService.addWechatUser(addressId);
-                    wechatUserCountCacheService.setWechatUserAddress(addressId);
-                }else{
-                    wechatUserCountCacheService.addWechatUser("0");
-                    wechatUserCountCacheService.setWechatUserAddress("0");
-                }
+            /*try{
+
             }catch (Exception e){
                 e.printStackTrace();
                 log.info("============{}",JSON.toJSONString(wechatUserInfo));
+            }*/
+            DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(registLongitude,registLatitude);
+            log.info("----------------------------------------------------------------");
+            log.info("danmuAddressModel:{}",JSON.toJSONString(danmuAddress));
+            if(danmuAddress!=null){
+                String addressId = danmuAddress.getId();
+                wechatUserCountCacheService.addWechatUser(addressId);
+                wechatUserCountCacheService.setWechatUserAddress(addressId);
+            }else{
+                wechatUserCountCacheService.addWechatUser("0");
+                wechatUserCountCacheService.setWechatUserAddress("0");
             }
+
         }else{
             log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
