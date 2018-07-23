@@ -103,6 +103,7 @@ public class RpcWechatService {
             List<DanmuAddress> danmuAddressList = danmuAddressService.findAll();
             danmuAddressList.forEach(danmuAddress -> wechatUserCountCacheService.clearUserCountCacheData(danmuAddress.getId()));
             wechatUserCountCacheService.clearUserCountCacheData("0");
+
             wechatUserInfoDtoList.forEach(wechatUserInfo -> addAddressUser(wechatUserInfo));
             Set<String> stringSet = wechatUserCountCacheService.getWechatUserAddress();
             log.info("stringSet:{}",JSON.toJSONString(stringSet));
@@ -136,7 +137,7 @@ public class RpcWechatService {
 
 
     public void addAddressUser(WechatUserInfo wechatUserInfo){
-
+        log.info("----------用户信息添加到缓存----------------");
         if(wechatUserInfo!=null){
             Double registLongitude = wechatUserInfo.getLastLongitude();
             Double registLatitude = wechatUserInfo.getRegistLatitude();
