@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-@Service("uerCountScheduler")
+@Service("userCountScheduler")
 @EnableScheduling
 @RefreshScope
 @Slf4j
