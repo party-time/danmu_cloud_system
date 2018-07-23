@@ -56,7 +56,6 @@ import java.util.*;
 @RequestMapping(value = "/wechat")
 @Slf4j
 public class WechatRestController {
-    private static final Logger logger = LoggerFactory.getLogger(WechatRestController.class);
     @Autowired
     private BmsWechatUserService bmsWechatUserService;
 
@@ -165,14 +164,16 @@ public class WechatRestController {
         String openId = xmlEntity.getFromUserName();
         UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
         WechatUser wechatUser = null;
+        log.info("##################updateUserInfo event:"+xmlEntity.getEvent());
         if( null != userInfo && !MessageUtil.EVENT_TYPE_UNSUBSCRIBE.equals(xmlEntity.getEvent())){
+            log.info("##################updateUserInfo");
             wechatUser = wechatUserService.updateUserInfo(userInfo.toWechatUser());
         }
 
         String result = "";
         //消息类型为event
         if (MessageUtil.REQ_MESSAGE_TYPE_EVENT.equals(xmlEntity.getMsgType())) {
-            logger.info("event------->"+xmlEntity.getEvent());
+            log.info("event------->"+xmlEntity.getEvent());
             //当用户同意允许公众账号获取地理位置时，每次打开微信公众账号，都会收到此消息
             if (MessageUtil.REQ_MESSAGE_TYPE_LOCATION.equals(xmlEntity.getEvent())) {
                 log.info("REQ_MESSAGE_TYPE_LOCATION" + xmlEntity.getContent());
