@@ -22,7 +22,7 @@ public class UserCountScheduler {
 
     @Scheduled(cron = "0 1 0 ? * MON")
     public void countUser(){
-        log.info("每周一对上周新注册用户的统计");
+        log.info("执行统计用户数据定时任务");
         rpcWechatService.countNewWechatUser();
     }
 
