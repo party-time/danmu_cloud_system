@@ -144,6 +144,9 @@ public class RpcWechatService {
             Double registLatitude = wechatUserInfo.getRegistLatitude();
             try{
                 DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(registLongitude,registLatitude);
+
+                log.info("----------------------------------------------------------------");
+
                 log.info("danmuAddressModel:{}",JSON.toJSONString(danmuAddress));
                 if(danmuAddress!=null){
                     String addressId = danmuAddress.getId();
