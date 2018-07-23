@@ -148,6 +148,7 @@ public class RpcWechatService {
                 e.printStackTrace();
                 log.info("============{}",JSON.toJSONString(wechatUserInfo));
             }*/
+            log.info("registLongitude:{},registLatitude:{}",registLongitude,registLatitude);
             DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(registLongitude,registLatitude);
             log.info("----------------------------------------------------------------");
             log.info("danmuAddressModel:{}",JSON.toJSONString(danmuAddress));
