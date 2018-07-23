@@ -97,26 +97,15 @@ public class RpcWechatService {
         LocalDateTime WeekendLocalDateTime = LocalDateTimeUtils.convertDateToLDT(Date.from(weekendLocalDateMoring.atStartOfDay().atZone(zone).toInstant()));
         Date startDate = Date.from(mondayLocalDate.atStartOfDay().atZone(zone).toInstant());
         Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(WeekendLocalDateTime));
-
-
-
         List<WechatUserInfo> wechatUserInfoDtoList = wechatUserInfoService.findByRegistDateBetween(startDate,endDate);
-
-
-
         if(ListUtils.checkListIsNotNull(wechatUserInfoDtoList)){
             log.info("上周注册的用户数量：{}",wechatUserInfoDtoList.size());
-
             List<DanmuAddress> danmuAddressList = danmuAddressService.findAll();
             danmuAddressList.forEach(danmuAddress -> wechatUserCountCacheService.clearUserCountCacheData(danmuAddress.getId()));
             wechatUserCountCacheService.clearUserCountCacheData("0");
-
-
             wechatUserInfoDtoList.forEach(wechatUserInfo -> addAddressUser(wechatUserInfo));
             Set<String> stringSet = wechatUserCountCacheService.getWechatUserAddress();
-
-
-
+            log.info("stringSet:{}",JSON.toJSONString(stringSet));
             if(stringSet!=null){
                 for(String addressId:stringSet){
                     Object object = wechatUserCountCacheService.getWechatUserCount(addressId);
