@@ -57,6 +57,7 @@ public class WechatUserService {
             oldWebchatUser.setLanguage(wechatUser.getLanguage());
             oldWebchatUser.setNick(wechatUser.getNick());
             oldWebchatUser.setLastOpenDate(new Date());
+            oldWebchatUser.setUnionId(wechatUser.getUnionId());
             if (null != wechatUser.getSubscribeState()) {
                 oldWebchatUser.setSubscribeState(wechatUser.getSubscribeState());
             }
@@ -80,6 +81,7 @@ public class WechatUserService {
     public WechatUser updateUserInfo(WechatUser wechatUser) {
         WechatUser oldWebchatUser = wechatUserRepository.findByOpenId(wechatUser.getOpenId());
         if (null != oldWebchatUser) {
+            log.info("updateUserInfo UnionId:"+wechatUser.getUnionId());
             oldWebchatUser.setCity(wechatUser.getCity());
             oldWebchatUser.setProvince(wechatUser.getProvince());
             oldWebchatUser.setSex(wechatUser.getSex());
@@ -88,9 +90,11 @@ public class WechatUserService {
             oldWebchatUser.setLanguage(wechatUser.getLanguage());
             oldWebchatUser.setNick(wechatUser.getNick());
             oldWebchatUser.setLastOpenDate(new Date());
+            oldWebchatUser.setUnionId(wechatUser.getUnionId());
             if( null != wechatUser.getAssignAddressTime()){
                 oldWebchatUser.setAssignAddressTime(wechatUser.getAssignAddressTime());
             }
+
             return wechatUserRepository.save(oldWebchatUser);
         } else {
             return null;
