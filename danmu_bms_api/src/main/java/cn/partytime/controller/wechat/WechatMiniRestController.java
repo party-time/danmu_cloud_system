@@ -1,14 +1,19 @@
 package cn.partytime.controller.wechat;
 
+import cn.partytime.common.util.DateUtils;
+import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.dataRpc.RpcCmdService;
+import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.*;
 import cn.partytime.model.manager.FastDanmu;
 import cn.partytime.model.manager.H5Template;
 import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.model.wechat.UseSecretInfo;
+import cn.partytime.model.wechat.WeChatMiniUser;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.service.*;
+import cn.partytime.service.wechat.WeChatMiniUserService;
 import cn.partytime.service.wechat.WechatUserInfoService;
 import cn.partytime.service.wechat.WechatUserService;
 import cn.partytime.util.FileUploadUtil;
@@ -66,6 +71,18 @@ public class WechatMiniRestController {
     @Autowired
     private BmsReportService bmsReportService;
 
+    @Autowired
+    private RpcPartyService rpcPartyService;
+
+    @Autowired
+    private WechatUserService wechatUserService;
+
+    @Autowired
+    private WechatUserInfoService wechatUserInfoService;
+
+    @Autowired
+    private WeChatMiniUserService weChatMiniUserService;
+
 
     @RequestMapping(value = "/wxBingPay", method = RequestMethod.POST)
     public RestResultModel wxBingPay(HttpServletRequest request) {
@@ -109,6 +126,8 @@ public class WechatMiniRestController {
         return restResultModel;
     }
 
+
+
     @RequestMapping(value = "/findPartyInfo", method = RequestMethod.POST)
     public RestResultModel partyInfo(HttpServletRequest request) {
         /*String code  = request.getParameter("code");
@@ -136,16 +155,21 @@ public class WechatMiniRestController {
         }*/
 
         String code  = request.getParameter("code");
-        log.info("小程序请求的code:{}",code);
-        UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
-        log.info("useSecretInfo:{}",JSON.toJSONString(useSecretInfo));
+        String latitude = request.getParameter("latitude");
+        String longitude = request.getParameter("longitude");
+
+        log.info("小程序请求的code:{},纬度:{},经度:{}",code,latitude,longitude);
+        //UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
+        //log.info("useSecretInfo:{}",JSON.toJSONString(useSecretInfo));
+       // String openId = useSecretInfo.getOpenId();
+
 
         RestResultModel restResultModel = new RestResultModel();
         //UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), useSecretInfo.getOpenId());
 
-        String openId = "oze02wVALzhbkpW9f7r3g036O6vw";
-        PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
-
+        //String openId = "oze02wVALzhbkpW9f7r3g036O6vw";
+        //PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
+        PartyLogicModel party = rpcPartyService.findPartyByLonLat(Double.parseDouble(longitude+""),Double.parseDouble(latitude+""));
         log.info("PartyLogicModel:{}",JSON.toJSONString(party));
         if( null == party){
             restResultModel.setResult(404);
@@ -176,7 +200,7 @@ public class WechatMiniRestController {
             }
         }
         map.put("colors", bmsColorService.findDanmuColor(0));
-        map.put("openId", openId);
+        //map.put("openId", openId);
         map.put("partyId",party.getPartyId());
         map.put("addressId",party.getAddressId());
 
@@ -187,7 +211,8 @@ public class WechatMiniRestController {
 
         String fileUploadUrl = fileUploadUtil.getUrl();
         map.put("baseUrl",fileUploadUrl);
-        map.put("openId",openId);
+        map.put("partyName",party.getPartyName());
+        //map.put("openId",openId);
 
         log.info("partyInfo:{}",JSON.toJSONString(map));
         restResultModel.setResult(200);
@@ -200,8 +225,18 @@ public class WechatMiniRestController {
     @RequestMapping(value = "/wechartSend", method = RequestMethod.POST)
     public RestResultModel wechartSend(HttpServletRequest request) {
         log.info("小程序端，弹幕发送");
-        String openId = request.getParameter("openId");
+        String minProgram_openId = request.getParameter("openId");
         RestResultModel restResultModel = new RestResultModel();
+        WeChatMiniUser weChatMiniUser =  weChatMiniUserService.findByOpenId(minProgram_openId);
+        if(weChatMiniUser==null){
+            log.info("------------------小程序用户不存在--------------:{}",minProgram_openId);
+            restResultModel.setResult(405);
+            restResultModel.setResult_msg("用户不存在");
+            return restResultModel;
+        }
+        WechatUser wechatUser =  wechatUserService.findByUnionId(weChatMiniUser.getUnionId());
+
+        String openId =  wechatUser.getOpenId();
         if (bmsDanmuService.checkFrequency(request)) {
             restResultModel.setResult(403);
             restResultModel.setResult_msg("Limited Frequency");
@@ -253,5 +288,113 @@ public class WechatMiniRestController {
             restResultModel.setResult_msg(result);
         }
         return restResultModel;
+    }
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public RestResultModel login(HttpServletRequest request) {
+        RestResultModel restResultModel = new RestResultModel();
+        String code  = request.getParameter("code");
+        log.info("小程序登陆请求的code:{}",code);
+        UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
+        String openId = useSecretInfo.getOpenId();
+        String unionId = useSecretInfo.getUnionId();
+
+        WeChatMiniUser weChatMiniUser =  weChatMiniUserService.findByUnionId(unionId);
+        if(weChatMiniUser==null){
+            weChatMiniUser = new WeChatMiniUser();
+            weChatMiniUser.setUnionId(unionId);
+            weChatMiniUser.setOpenId(openId);
+            weChatMiniUserService.saveWeChatMiniUser(weChatMiniUser);
+        }
+        log.info("登陆时候获取的openId:{}",openId);
+        WechatUser wechatUser = wechatUserService.findByUnionId(unionId);
+        if(wechatUser==null){
+            wechatUser = new WechatUser();
+        }
+        //wechatUser.setOpenId(openId);
+        wechatUser =  wechatUserService.save(wechatUser);
+        log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
+
+        String wechatId =wechatUser.getId();
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
+        if(wechatUserInfo==null) {
+            wechatUserInfo = new WechatUserInfo();
+        }
+        wechatUserInfoService.update(wechatUserInfo);
+
+        restResultModel.setResult(200);
+        restResultModel.setData(useSecretInfo);
+        return  restResultModel;
+    }
+    @RequestMapping(value = "/updateWechatUser", method = RequestMethod.POST)
+    public RestResultModel updateWechatUser(HttpServletRequest request){
+        String openId = request.getParameter("openId");
+
+        log.info("更新用户信息获取的openId:{}",openId);
+        RestResultModel restResultModel = new RestResultModel();
+        WechatUser wechatUser =  wechatUserService.findByOpenId(openId);
+
+        String avatarUrl = request.getParameter("avatarUrl");
+        String city = request.getParameter("city");
+        String country = request.getParameter("country");
+        String gender = request.getParameter("gender");
+        String nickName = request.getParameter("nickName");
+        String language = request.getParameter("language");
+        String province = request.getParameter("province");
+
+        String latitude = request.getParameter("latitude");
+        String longitude = request.getParameter("longitude");
+
+        log.info("+++++++++++++++++++++++openIdopenId========"+openId);
+        log.info("+++++++++++++++++++++++avatarUrlavatarUrl========"+avatarUrl);
+        log.info("+++++++++++++++++++++++citycity========"+city);
+        log.info("+++++++++++++++++++++++countrycountry========"+country);
+        log.info("+++++++++++++++++++++++gendergender========"+gender);
+        log.info("+++++++++++++++++++++++nickNamenickName========"+nickName);
+        log.info("+++++++++++++++++++++++languagelanguage========"+language);
+        log.info("+++++++++++++++++++++++provinceprovince========"+province);
+        log.info("+++++++++++++++++++++++latitudelatitude========"+latitude);
+        log.info("+++++++++++++++++++++++longitudelongitude========"+longitude);
+
+
+        if(wechatUser ==null){
+            wechatUser = new WechatUser();
+        }
+        if(!StringUtils.isEmpty(avatarUrl)){
+            wechatUser.setImgUrl(avatarUrl);
+        }
+        if(!StringUtils.isEmpty(city)) {
+            wechatUser.setCity(city);
+        }
+        if(!StringUtils.isEmpty(country)) {
+            wechatUser.setCountry(country);
+        }
+        if(!StringUtils.isEmpty(gender)) {
+            wechatUser.setSex(IntegerUtils.objectConvertToInt(gender));
+        }
+        if(!StringUtils.isEmpty(nickName)) {
+            wechatUser.setNick(nickName);
+        }
+        if(!StringUtils.isEmpty(language)) {
+            wechatUser.setLanguage(language);
+        }
+        if(!StringUtils.isEmpty(province)) {
+            wechatUser.setProvince(province);
+        }
+
+        if(!StringUtils.isEmpty(latitude)) {
+            wechatUser.setLatitude(Double.parseDouble(latitude+""));
+        }
+        if(!StringUtils.isEmpty(longitude)) {
+            wechatUser.setLongitude(Double.parseDouble(longitude+""));
+        }
+
+        log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
+
+        wechatUser = wechatUserService.save(wechatUser);
+
+
+        restResultModel.setResult(200);
+        restResultModel.setData(wechatUser);
+        return  restResultModel;
     }
 }

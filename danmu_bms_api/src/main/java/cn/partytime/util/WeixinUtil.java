@@ -8,6 +8,7 @@ import cn.partytime.wechat.entity.ReceiveUnifiedOrderXmlEntity;
 import cn.partytime.wechat.pojo.*;
 import cn.partytime.wechat.process.FormatXmlProcess;
 import cn.partytime.wechat.process.ReceiveXmlProcess;
+import com.alibaba.fastjson.JSON;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONException;
@@ -210,7 +211,8 @@ public class WeixinUtil {
                 //openId = jsonObject.getString("openid");
                 //session_key = jsonObject.getString("session_key");
                 //session_key = jsonObject.getString("");
-                useSecretInfo = new UseSecretInfo(jsonObject.getString("openid"),jsonObject.getString("session_key"));
+                log.info("minprogram-----jsonObject:{}", JSON.toJSONString(jsonObject));
+                useSecretInfo = new UseSecretInfo(jsonObject.getString("openid"),jsonObject.getString("session_key"),jsonObject.getString("unionid"));
             } catch (JSONException e) {
                 // 获取token失败
                 log.error("获取openId失败 errcode:{"+ jsonObject.getInt("errcode")+"} errmsg:{"+ jsonObject.getString("errmsg")+"}");

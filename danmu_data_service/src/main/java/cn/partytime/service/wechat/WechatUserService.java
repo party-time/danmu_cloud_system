@@ -129,8 +129,11 @@ public class WechatUserService {
     }
 
     public WechatUser findByOpenId(String openId) {
-
         return wechatUserRepository.findByOpenId(openId);
+    }
+
+    public WechatUser findByUnionId(String unionId) {
+        return wechatUserRepository.findByUnionId(unionId);
     }
 
     public Page<WechatUser> findAll(Integer page, Integer size) {
@@ -183,5 +186,6 @@ public class WechatUserService {
     public List<WechatUser> findByIds(List<String> idList){
         return wechatUserRepository.findByIdIn(idList);
     }
+
 
 }

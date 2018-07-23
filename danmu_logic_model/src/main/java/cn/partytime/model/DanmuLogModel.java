@@ -54,4 +54,9 @@ public class DanmuLogModel {
     private String updateUserId;
 
     private Date updateTime = new Date();
+
+    /**
+     * 管理员接收用户发送弹幕的时间
+     */
+    private Date adminAccepetTime;
 }

@@ -1,5 +1,6 @@
 package cn.partytime.model;
 
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
@@ -7,6 +8,8 @@ import java.util.Date;
 /**
  * Created by lENOVO on 2016/10/17.
  */
+
+@Data
 public class DanmuLogicModel {
 
 
@@ -57,139 +60,8 @@ public class DanmuLogicModel {
     private String danmuTypeName;
 
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public Boolean getBlocked() {
-        return isBlocked;
-    }
-
-    public void setBlocked(Boolean blocked) {
-        isBlocked = blocked;
-    }
-
-    public String getDanmuPoolId() {
-        return danmuPoolId;
-    }
-
-    public void setDanmuPoolId(String danmuPoolId) {
-        this.danmuPoolId = danmuPoolId;
-    }
-
-    public int getDanmuSrc() {
-        return danmuSrc;
-    }
-
-    public void setDanmuSrc(int danmuSrc) {
-        this.danmuSrc = danmuSrc;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getOpenId() {
-        return openId;
-    }
-
-    public void setOpenId(String openId) {
-        this.openId = openId;
-    }
-
-    public String getCreateUserId() {
-        return createUserId;
-    }
-
-    public void setCreateUserId(String createUserId) {
-        this.createUserId = createUserId;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getNick() {
-        return nick;
-    }
-
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
-
-    public boolean isSend() {
-        return isSend;
-    }
-
-    public void setSend(boolean send) {
-        isSend = send;
-    }
-
-    public Object getMsg() {
-        return msg;
-    }
-
-    public void setMsg(Object msg) {
-        this.msg = msg;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public int getSendStatus() {
-        return sendStatus;
-    }
-
-    public void setSendStatus(int sendStatus) {
-        this.sendStatus = sendStatus;
-    }
-
-    public String getDanmuTypeName() {
-        return danmuTypeName;
-    }
-
-    public void setDanmuTypeName(String danmuTypeName) {
-        this.danmuTypeName = danmuTypeName;
-    }
+    /**
+     * 管理员接收用户发送弹幕的时间
+     */
+    private Date adminAccepetTime;
 }

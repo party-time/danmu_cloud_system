@@ -4,6 +4,7 @@ package cn.partytime.handlerThread;
 import cn.partytime.cache.danmu.DanmuCacheService;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.DanmuChannelRepository;
+import cn.partytime.dataRpc.RpcDanmuService;
 import cn.partytime.model.AdminTaskModel;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -29,6 +30,9 @@ public class FilmDanmuHandler {
     @Autowired
     private DanmuCacheService danmuCacheService;
 
+    @Autowired
+    private RpcDanmuService rpcDanmuService;
+
 
     public void pushDanmuToManager(Object object, List<Channel> channelList) {
 
@@ -41,7 +45,7 @@ public class FilmDanmuHandler {
         map.put("data", danmuMap);
 
         String danmuLogId = String.valueOf(danmuMap.get("id"));
-
+        rpcDanmuService.setAdminAccepetTime(danmuLogId);
         pushDanmu(channelList,danmuLogId,map,null);
 
     }

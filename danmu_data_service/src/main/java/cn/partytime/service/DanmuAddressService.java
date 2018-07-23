@@ -269,4 +269,8 @@ public class DanmuAddressService {
         }
     }
 
+    public List<DanmuAddress> findAll(){
+        return danmuAddressRepository.findAll();
+    }
+
 }

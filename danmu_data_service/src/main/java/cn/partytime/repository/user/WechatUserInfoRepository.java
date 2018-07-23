@@ -4,6 +4,7 @@ import cn.partytime.model.wechat.WechatUserInfo;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,4 +16,7 @@ public interface WechatUserInfoRepository extends MongoRepository<WechatUserInfo
     WechatUserInfo findByWechatId(String wechatId);
 
     List<WechatUserInfo> findByWechatIdIn(List<String> wechatIdList);
+
+
+    List<WechatUserInfo> findByRegistDateBetween(Date startDate,Date endDate);
 }

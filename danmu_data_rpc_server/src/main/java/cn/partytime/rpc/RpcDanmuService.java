@@ -1,6 +1,7 @@
 package cn.partytime.rpc;
 
 import cn.partytime.common.util.ListUtils;
+import cn.partytime.common.util.LocalDateTimeUtils;
 import cn.partytime.logicService.CmdLogicService;
 import cn.partytime.model.CmdTempAllData;
 import cn.partytime.model.CmdTempComponentData;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +56,24 @@ public class RpcDanmuService {
 
     @Autowired
     private CmdLogicService cmdLogicService;
+
+
+    @RequestMapping(value = "/setAdminAccepetTime" ,method = RequestMethod.GET)
+    public void updateDanmuStatus(@RequestParam String danmuLogId) {
+
+        DanmuLog danmuLog =  danmuLogService.findDanmuLogById(danmuLogId);
+        log.info("danmuLog:{}",JSON.toJSONString(danmuLog));
+
+
+        if(danmuLog!=null){
+            String danmuId = danmuLog.getDanmuId();
+            Danmu danmu = danmuService.findById(danmuId);
+            if (danmu != null) {
+                danmu.setAdminAccepetTime(LocalDateTimeUtils.convertLDTToDate(LocalDateTime.now()));
+                danmuService.save(danmu);
+            }
+        }
+    }
 
 
     /**

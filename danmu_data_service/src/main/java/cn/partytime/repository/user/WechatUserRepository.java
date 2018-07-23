@@ -15,6 +15,8 @@ import java.util.List;
 @EnableMongoRepositories(mongoTemplateRef = "userMongoTemplate")
 public interface WechatUserRepository extends MongoRepository<WechatUser, String> {
 
+    public WechatUser findByUnionId(String unionId);
+
     public WechatUser findByOpenId(String openId);
 
     public Page<WechatUser> findAll(Pageable pageable);

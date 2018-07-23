@@ -109,7 +109,7 @@ public class CheckAdminCacheService {
      */
     public Set<String> getOnlineAmdinSortSet(int type){
         String key = AdminUserCacheKey.CHECK_ADMIN_ONLINE_SORTSET+type;
-        return redisService.getSortSetByRnage(key,0,0,true);
+        return redisService.getSortSetByRnage(key,0,-1,true);
     }
 
     /**
@@ -141,6 +141,6 @@ public class CheckAdminCacheService {
      */
     public Set<String> getOfflineAdminSortSet(int type){
         String key = AdminUserCacheKey.CHECK_ADMIN_OFFLINE_SORTSET+type;
-        return redisService.getSortSetByRnage(key,0,0,true);
+        return redisService.getSortSetByRnage(key,0,-1,true);
     }
 }
