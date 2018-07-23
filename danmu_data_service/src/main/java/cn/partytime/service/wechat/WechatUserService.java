@@ -81,6 +81,7 @@ public class WechatUserService {
     public WechatUser updateUserInfo(WechatUser wechatUser) {
         WechatUser oldWebchatUser = wechatUserRepository.findByOpenId(wechatUser.getOpenId());
         if (null != oldWebchatUser) {
+            log.info("updateUserInfo UnionId:"+wechatUser.getUnionId());
             oldWebchatUser.setCity(wechatUser.getCity());
             oldWebchatUser.setProvince(wechatUser.getProvince());
             oldWebchatUser.setSex(wechatUser.getSex());
@@ -93,6 +94,7 @@ public class WechatUserService {
             if( null != wechatUser.getAssignAddressTime()){
                 oldWebchatUser.setAssignAddressTime(wechatUser.getAssignAddressTime());
             }
+
             return wechatUserRepository.save(oldWebchatUser);
         } else {
             return null;
