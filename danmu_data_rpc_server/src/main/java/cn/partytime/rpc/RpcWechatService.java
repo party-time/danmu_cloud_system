@@ -138,6 +138,7 @@ public class RpcWechatService {
 
     public void addAddressUser(WechatUserInfo wechatUserInfo){
         log.info("----------用户信息添加到缓存----------------");
+        log.info("----------用户信wechatUserInfo:{}----------------",JSON.toJSONString(wechatUserInfo));
         if(wechatUserInfo!=null){
             Double registLongitude = wechatUserInfo.getLastLongitude();
             Double registLatitude = wechatUserInfo.getRegistLatitude();
