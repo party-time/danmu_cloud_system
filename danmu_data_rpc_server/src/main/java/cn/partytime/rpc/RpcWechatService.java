@@ -102,7 +102,10 @@ public class RpcWechatService {
             log.info("上周注册的用户数量：{}",wechatUserInfoDtoList.size());
             List<DanmuAddress> danmuAddressList = danmuAddressService.findAll();
             danmuAddressList.forEach(danmuAddress -> wechatUserCountCacheService.clearUserCountCacheData(danmuAddress.getId()));
+
             wechatUserCountCacheService.clearUserCountCacheData("0");
+
+            wechatUserCountCacheService.clearUserCountCacheData("1");
 
             wechatUserInfoDtoList.forEach(wechatUserInfo -> addAddressUser(wechatUserInfo));
             Set<String> stringSet = wechatUserCountCacheService.getWechatUserAddress();
@@ -111,7 +114,7 @@ public class RpcWechatService {
                 for(String addressId:stringSet){
                     Object object = wechatUserCountCacheService.getWechatUserCount(addressId);
                     int count = IntegerUtils.objectConvertToInt(object);
-                    System.out.println("start=====================:"+DateUtils.dateToString(startDate,"yyyy-MM-dd HH:mm:ss"));
+                    //System.out.println("start=====================:"+DateUtils.dateToString(startDate,"yyyy-MM-dd HH:mm:ss"));
                     WechatUserWeekCount wechatUserWeekCount = wechatUserWeekCountService.findByAddressIdAndStartDateAndEndDate(addressId,startDate,endDate);
                     if(wechatUserWeekCount==null){
                         wechatUserWeekCount = new WechatUserWeekCount();
@@ -140,26 +143,37 @@ public class RpcWechatService {
         log.info("----------用户信息添加到缓存----------------");
         log.info("----------用户信wechatUserInfo:{}----------------",JSON.toJSONString(wechatUserInfo));
         if(wechatUserInfo!=null){
+
+
+
             Double registLongitude = wechatUserInfo.getLastLongitude();
             Double registLatitude = wechatUserInfo.getRegistLatitude();
+            if(registLatitude==null || registLatitude==null){
+                //用户关注了，没有经纬度
+                wechatUserCountCacheService.addWechatUser("1");
+                wechatUserCountCacheService.setWechatUserAddress("1");
+            }else{
+                log.info("registLongitude:{},registLatitude:{}",registLongitude,registLatitude);
+                DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(registLongitude,registLatitude);
+                log.info("----------------------------------------------------------------");
+                log.info("danmuAddressModel:{}",JSON.toJSONString(danmuAddress));
+                if(danmuAddress!=null){
+                    String addressId = danmuAddress.getId();
+                    wechatUserCountCacheService.addWechatUser(addressId);
+                    wechatUserCountCacheService.setWechatUserAddress(addressId);
+                }else{
+                    wechatUserCountCacheService.addWechatUser("0");
+                    wechatUserCountCacheService.setWechatUserAddress("0");
+                }
+            }
+
             /*try{
 
             }catch (Exception e){
                 e.printStackTrace();
                 log.info("============{}",JSON.toJSONString(wechatUserInfo));
             }*/
-            log.info("registLongitude:{},registLatitude:{}",registLongitude,registLatitude);
-            DanmuAddress danmuAddress = danmuAddressLogicService.findAddressByLonLat(registLongitude,registLatitude);
-            log.info("----------------------------------------------------------------");
-            log.info("danmuAddressModel:{}",JSON.toJSONString(danmuAddress));
-            if(danmuAddress!=null){
-                String addressId = danmuAddress.getId();
-                wechatUserCountCacheService.addWechatUser(addressId);
-                wechatUserCountCacheService.setWechatUserAddress(addressId);
-            }else{
-                wechatUserCountCacheService.addWechatUser("0");
-                wechatUserCountCacheService.setWechatUserAddress("0");
-            }
+
 
         }else{
             log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
