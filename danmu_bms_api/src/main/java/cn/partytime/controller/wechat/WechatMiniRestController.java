@@ -396,7 +396,7 @@ public class WechatMiniRestController {
 
         log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
 
-        //wechatUser = wechatUserService.save(wechatUser);
+        wechatUser = wechatUserService.save(wechatUser);
 
 
         restResultModel.setResult(200);
