@@ -39,6 +39,4 @@ public interface WechatUserRepository extends MongoRepository<WechatUser, String
     public List<WechatUser> findByCreateDateBetween(Date startDate, Date endDate);
 
 
-    public List<WechatUser> findByCreateTimeBetween(Date startDate, Date endDate);
-
 }
