@@ -61,7 +61,7 @@ public class WechatCountController {
         List<WechatUserWeekCount> wechatUserWeekCountList = wechatUserWeekCountService.findAll(startDate,endDate);
         Set<String> set = new HashSet<>();
         for(WechatUserWeekCount wechatUserWeekCount:wechatUserWeekCountList){
-            String date = DateUtils.dateToString(wechatUserWeekCount.getStartDate(),"yyyy-MM-dd HH:mm:ss");
+            String date = DateUtils.dateToString(wechatUserWeekCount.getStartDate(),"yyyy-MM-dd");
             set.add(date);
         }
         restResultModel.setData(set);
@@ -75,7 +75,7 @@ public class WechatCountController {
         //DanmuAddress danmuAddress =  danmuAddressService.findById("5a4d9c04e2f0d248cd43f412");
 
 
-        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId("5b56e909e6e9b841696f1966");
+        /*WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId("5b56e909e6e9b841696f1966");
 
         wechatUserInfo.setRegistDate(DateUtils.strToDate("2018-07-17 12:25:15","yyyy-MM-dd HH:mm:ss"));
         wechatUserInfoService.update(wechatUserInfo);
@@ -97,7 +97,7 @@ public class WechatCountController {
         wechatUserInfo = wechatUserInfoService.findByWechatId("5af4128be6e9b8031a28cf1b");
 
         wechatUserInfo.setRegistDate(DateUtils.strToDate("2018-07-17 12:25:15","yyyy-MM-dd HH:mm:ss"));
-        wechatUserInfoService.update(wechatUserInfo);
+        wechatUserInfoService.update(wechatUserInfo);*/
 
 
         /*System.out.println("================================="+JSON.toJSONString(wechatUserInfo));
