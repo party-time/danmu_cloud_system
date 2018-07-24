@@ -115,21 +115,27 @@ public class WechatCountController {
         ZoneId zone = ZoneId.systemDefault();
 
         LocalDate local = LocalDate.now();//获取当前时间
+        LocalDate mondayLocalDate = null;
+        LocalDateTime WeekendLocalDateTime = null;
         if(!StringUtils.isEmpty(dateStr)){
             LocalDateTime localDateTime = LocalDateTimeUtils.convertDateToLDT(DateUtils.strToDate(dateStr+" 00:00:00","yyyy-MM-dd HH:mm:ss"));
             local = localDateTime.toLocalDate();
+            mondayLocalDate =  local;
+            LocalDate sundayLocalDate = local.plusDays(6);
+            WeekendLocalDateTime = LocalDateTimeUtils.convertDateToLDT(Date.from(sundayLocalDate.atStartOfDay().atZone(zone).toInstant()));
+        }else{
+            //LocalDate local = LocalDate.now();//获取当前时间
+            DayOfWeek dayOfWeek = local.getDayOfWeek();//获取今天是周几
+            mondayLocalDate = local.minusDays(7+dayOfWeek.getValue()-1);//算出上周一
+            LocalDate sundayLocalDate = local.minusDays(dayOfWeek.getValue());//sundayLocalDate
+            WeekendLocalDateTime = LocalDateTimeUtils.convertDateToLDT(Date.from(sundayLocalDate.atStartOfDay().atZone(zone).toInstant()));
+
         }
 
-        //LocalDate local = LocalDate.now();//获取当前时间
-        DayOfWeek dayOfWeek = local.getDayOfWeek();//获取今天是周几
-        LocalDate mondayLocalDate = local.minusDays(7+dayOfWeek.getValue()-1);//算出上周一
-        LocalDate weekendLocalDateMoring = local.minusDays(dayOfWeek.getValue());//算出上周一
-
-        LocalDateTime WeekendLocalDateTime = LocalDateTimeUtils.convertDateToLDT(Date.from(weekendLocalDateMoring.atStartOfDay().atZone(zone).toInstant()));
         Date startDate = Date.from(mondayLocalDate.atStartOfDay().atZone(zone).toInstant());
         Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(WeekendLocalDateTime));
-
-
+        log.info("startDate:"+startDate);
+        log.info("endDate:"+endDate);
 
 
         PageResultModel pageResultModel = new PageResultModel();
