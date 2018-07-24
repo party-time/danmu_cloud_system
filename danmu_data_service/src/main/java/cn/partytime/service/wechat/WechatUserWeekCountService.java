@@ -31,7 +31,11 @@ public class WechatUserWeekCountService {
     @Autowired
     private WechatUserWeekCountRepository wechatUserWeekCountRepository;
 
-    public Page<WechatUserWeekCount> findAll(Date startDate,Date endDate,Integer page, Integer size) {
+    public List<WechatUserWeekCount> findAll(Date startDate,Date endDate){
+        return wechatUserWeekCountRepository.findByRegistDateBetween(startDate,endDate);
+    }
+
+    public Page<WechatUserWeekCount> findAllByPage(Date startDate,Date endDate,Integer page, Integer size) {
         Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         return wechatUserWeekCountRepository.findByStartDateAndEndDate(startDate,endDate,pageRequest);
