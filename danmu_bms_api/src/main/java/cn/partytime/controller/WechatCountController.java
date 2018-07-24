@@ -57,6 +57,17 @@ public class WechatCountController {
         wechatUserInfo.setRegistDate(DateUtils.strToDate("2018-07-17 12:25:15","yyyy-MM-dd HH:mm:ss"));
         wechatUserInfoService.update(wechatUserInfo);
 
+        wechatUserInfo = wechatUserInfoService.findByWechatId("5b4f07f0e6e9b872c2f457b7");
+
+        wechatUserInfo.setRegistDate(DateUtils.strToDate("2018-07-17 12:25:15","yyyy-MM-dd HH:mm:ss"));
+        wechatUserInfoService.update(wechatUserInfo);
+
+        wechatUserInfo = wechatUserInfoService.findByWechatId("5af94d16e6e9b8031a28e960");
+
+        wechatUserInfo.setRegistDate(DateUtils.strToDate("2018-07-17 12:25:15","yyyy-MM-dd HH:mm:ss"));
+        wechatUserInfoService.update(wechatUserInfo);
+
+
         /*System.out.println("================================="+JSON.toJSONString(wechatUserInfo));
 
         wechatUserInfo.setRegistLatitude(34.586868);
@@ -88,7 +99,7 @@ public class WechatCountController {
                 String addressId = wechatUserWeekCount.getAddressId();
                 DanmuAddress danmuAddress =  danmuAddressService.findById(addressId);
                 if("0".equals(addressId)){
-                    wechatUserWeekCountModel.setAddressName("-");
+                    wechatUserWeekCountModel.setAddressName("没有找到匹配场地");
                 }else if("1".equals(addressId)){
                     wechatUserWeekCountModel.setAddressName("其他");
                 }else{
