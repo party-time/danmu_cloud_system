@@ -151,8 +151,8 @@ public class WeixinUtil {
                 }
 
                 //unionId有问题
-                if(jsonObject.has("openid")) {
-                    userInfo.setUnionid(jsonObject.getString("openid"));
+                if(jsonObject.has("unionid")) {
+                    userInfo.setUnionid(jsonObject.getString("unionid"));
                 }
             } catch (JSONException e) {
                 userInfo = null;
