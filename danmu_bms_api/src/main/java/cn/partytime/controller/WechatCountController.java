@@ -51,9 +51,11 @@ public class WechatCountController {
         //DanmuAddress danmuAddress =  danmuAddressService.findById("5a4d9c04e2f0d248cd43f412");
 
 
-        /*WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId("58f9bf4d0cf2df5c0b020990");
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId("5b56c3e8e6e9b85304c14769");
+        wechatUserInfo.setRegistDate(new Date());
+        wechatUserInfoService.update(wechatUserInfo);
 
-        System.out.println("================================="+JSON.toJSONString(wechatUserInfo));
+        /*System.out.println("================================="+JSON.toJSONString(wechatUserInfo));
 
         wechatUserInfo.setRegistLatitude(34.586868);
         wechatUserInfo.setRegistLongitude(133.481247307);
