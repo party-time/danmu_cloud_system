@@ -361,9 +361,7 @@ public class WechatMiniRestController {
         log.info("+++++++++++++++++++++++latitudelatitude========"+latitude);
         log.info("+++++++++++++++++++++++longitudelongitude========"+longitude);*/
 
-        log.info("=========================================wechatUser:{}",JSON.toJSONString(wechatUser));
         if(wechatUser ==null){
-            log.info("-------------------------------------wechatUser:{}",JSON.toJSONString(wechatUser));
             wechatUser = new WechatUser();
         }
         if(!StringUtils.isEmpty(avatarUrl)){
@@ -395,9 +393,8 @@ public class WechatMiniRestController {
             wechatUser.setLongitude(Double.parseDouble(longitude+""));
         }
 
-        log.info("++++++++++++++++++++++++wechatUser:{}",JSON.toJSONString(wechatUser));
 
-        //wechatUser = wechatUserService.save(wechatUser);
+        wechatUser = wechatUserService.save(wechatUser);
 
 
         restResultModel.setResult(200);
