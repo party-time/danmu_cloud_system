@@ -339,7 +339,7 @@ public class WechatMiniRestController {
         RestResultModel restResultModel = new RestResultModel();
         WechatUser wechatUser =  wechatUserService.findByOpenId(openId);
 
-        String avatarUrl = request.getParameter("avatarUrl");
+        /*String avatarUrl = request.getParameter("avatarUrl");
         String city = request.getParameter("city");
         String country = request.getParameter("country");
         String gender = request.getParameter("gender");
@@ -396,7 +396,7 @@ public class WechatMiniRestController {
 
         log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
 
-        wechatUser = wechatUserService.save(wechatUser);
+        //wechatUser = wechatUserService.save(wechatUser);*/
 
 
         restResultModel.setResult(200);
