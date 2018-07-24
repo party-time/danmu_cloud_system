@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -63,6 +64,8 @@ public class WechatCountController {
         for(WechatUserWeekCount wechatUserWeekCount:wechatUserWeekCountList){
             String date = DateUtils.dateToString(wechatUserWeekCount.getStartDate(),"yyyy-MM-dd");
             set.add(date);
+
+            set.add("2018-07-09");
         }
         restResultModel.setData(set);
         return restResultModel;
@@ -70,7 +73,7 @@ public class WechatCountController {
 
 
     @RequestMapping(value = "/page", method = RequestMethod.GET)
-    public PageResultModel findAll(int pageNumber, int pageSize){
+    public PageResultModel findAll(int pageNumber, int pageSize,HttpServletRequest request){
 
         //DanmuAddress danmuAddress =  danmuAddressService.findById("5a4d9c04e2f0d248cd43f412");
 
@@ -107,15 +110,26 @@ public class WechatCountController {
         wechatUserInfoService.update(wechatUserInfo);*/
 
 
+        String dateStr = request.getParameter("date");
+
+        ZoneId zone = ZoneId.systemDefault();
 
         LocalDate local = LocalDate.now();//获取当前时间
+        if(!StringUtils.isEmpty(dateStr)){
+            LocalDateTime localDateTime = LocalDateTimeUtils.convertDateToLDT(DateUtils.strToDate(dateStr+" 00:00:00","yyyy-MM-dd HH:mm:ss"));
+            local = localDateTime.toLocalDate();
+        }
+
+        //LocalDate local = LocalDate.now();//获取当前时间
         DayOfWeek dayOfWeek = local.getDayOfWeek();//获取今天是周几
         LocalDate mondayLocalDate = local.minusDays(7+dayOfWeek.getValue()-1);//算出上周一
         LocalDate weekendLocalDateMoring = local.minusDays(dayOfWeek.getValue());//算出上周一
-        ZoneId zone = ZoneId.systemDefault();
+
         LocalDateTime WeekendLocalDateTime = LocalDateTimeUtils.convertDateToLDT(Date.from(weekendLocalDateMoring.atStartOfDay().atZone(zone).toInstant()));
         Date startDate = Date.from(mondayLocalDate.atStartOfDay().atZone(zone).toInstant());
         Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(WeekendLocalDateTime));
+
+
 
 
         PageResultModel pageResultModel = new PageResultModel();
