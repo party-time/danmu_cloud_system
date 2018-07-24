@@ -32,7 +32,7 @@ public class WechatUserWeekCountService {
     private WechatUserWeekCountRepository wechatUserWeekCountRepository;
 
     public List<WechatUserWeekCount> findAll(Date startDate,Date endDate){
-        return wechatUserWeekCountRepository.findByRegistDateBetween(startDate,endDate);
+        return wechatUserWeekCountRepository.findByStartDateBetween(startDate,endDate);
     }
 
     public Page<WechatUserWeekCount> findAllByPage(Date startDate,Date endDate,Integer page, Integer size) {
