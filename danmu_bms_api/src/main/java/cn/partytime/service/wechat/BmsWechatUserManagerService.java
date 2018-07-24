@@ -65,7 +65,7 @@ public class BmsWechatUserManagerService {
                         wechatUserListModel.setWechatUserInfo(wechatUserInfo);
                         if( null != wechatUserInfo.getRegistLongitude() && null != wechatUserInfo.getRegistLatitude()){
                             DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getRegistLongitude(),wechatUserInfo.getRegistLatitude());
-                            log.info("通过经纬度:{},{}，获取的地址信息,{}",wechatUserInfo.getRegistLongitude(),wechatUserInfo.getRegistLatitude(), JSON.toJSONString(danmuAddressModel));
+                            //log.info("通过经纬度:{},{}，获取的地址信息,{}",wechatUserInfo.getRegistLongitude(),wechatUserInfo.getRegistLatitude(), JSON.toJSONString(danmuAddressModel));
                             DanmuAddress danmuAddress = new DanmuAddress();
                             if(danmuAddressModel!=null){
                                 BeanUtils.copyProperties(danmuAddressModel,danmuAddress);
@@ -74,7 +74,7 @@ public class BmsWechatUserManagerService {
                         }
                         if( null != wechatUserInfo.getLastLongitude() && null != wechatUserInfo.getLastLatitude() ){
                             DanmuAddressModel danmuAddressModel = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(),wechatUserInfo.getLastLatitude());
-                            log.info("通过经纬度:{},{}，获取的地址信息,{}",wechatUserInfo.getRegistLongitude(),wechatUserInfo.getRegistLatitude(), JSON.toJSONString(danmuAddressModel));
+                            //log.info("通过经纬度:{},{}，获取的地址信息,{}",wechatUserInfo.getRegistLongitude(),wechatUserInfo.getRegistLatitude(), JSON.toJSONString(danmuAddressModel));
                             DanmuAddress danmuAddress = new DanmuAddress();
                             if(danmuAddressModel!=null){
                                 BeanUtils.copyProperties(danmuAddressModel,danmuAddress);

@@ -88,6 +88,8 @@ public class WechatCountController {
                 String addressId = wechatUserWeekCount.getAddressId();
                 DanmuAddress danmuAddress =  danmuAddressService.findById(addressId);
                 if("0".equals(addressId)){
+                    wechatUserWeekCountModel.setAddressName("-");
+                }else if("1".equals(addressId)){
                     wechatUserWeekCountModel.setAddressName("其他");
                 }else{
                     wechatUserWeekCountModel.setAddressName(danmuAddress.getName());
