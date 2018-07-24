@@ -52,10 +52,10 @@ public class WechatCountController {
         //DanmuAddress danmuAddress =  danmuAddressService.findById("5a4d9c04e2f0d248cd43f412");
 
 
-        /*WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId("5b56c3e8e6e9b85304c14769");
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId("5b56c3e8e6e9b85304c14769");
 
-        wechatUserInfo.setRegistDate(DateUtils.strToDate("2017-07-17 12:25:15","yyyy-MM-dd HH:mm:ss"));
-        wechatUserInfoService.update(wechatUserInfo);*/
+        wechatUserInfo.setRegistDate(DateUtils.strToDate("2017-08-17 12:25:15","yyyy-MM-dd HH:mm:ss"));
+        wechatUserInfoService.update(wechatUserInfo);
 
         /*System.out.println("================================="+JSON.toJSONString(wechatUserInfo));
 
