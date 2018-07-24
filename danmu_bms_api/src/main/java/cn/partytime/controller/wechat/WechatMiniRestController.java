@@ -84,6 +84,7 @@ public class WechatMiniRestController {
     private WeChatMiniUserService weChatMiniUserService;
 
 
+
     @RequestMapping(value = "/wxBingPay", method = RequestMethod.POST)
     public RestResultModel wxBingPay(HttpServletRequest request) {
         RestResultModel restResultModel = new RestResultModel();
@@ -386,15 +387,22 @@ public class WechatMiniRestController {
             wechatUser.setProvince(province);
         }
 
-        if(!StringUtils.isEmpty(latitude)) {
+        if(!StringUtils.isEmpty(latitude) && !StringUtils.isEmpty(longitude)) {
             wechatUser.setLatitude(Double.parseDouble(latitude+""));
-        }
-        if(!StringUtils.isEmpty(longitude)) {
             wechatUser.setLongitude(Double.parseDouble(longitude+""));
         }
 
 
         wechatUser = wechatUserService.save(wechatUser);
+        String wechatId = wechatUser.getId();
+
+        WechatUserInfo wechatUserInfo =  wechatUserInfoService.findByWechatId(wechatId);
+        if(!StringUtils.isEmpty(latitude) && !StringUtils.isEmpty(longitude)) {
+            //wechatUserInfo.setLastLatitude(Double.parseDouble(latitude+""));
+            //wechatUserInfo.setLastLongitude(Double.parseDouble(longitude+""));
+            wechatUserInfoService.saveOrUpdate(wechatId,Double.parseDouble(longitude+""),Double.parseDouble(latitude+""));
+        }
+
 
 
         restResultModel.setResult(200);
