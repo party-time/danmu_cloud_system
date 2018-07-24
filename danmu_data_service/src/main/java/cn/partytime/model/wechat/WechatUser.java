@@ -1,5 +1,6 @@
 package cn.partytime.model.wechat;
 
+import cn.partytime.baseModel.BaseModel;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -9,7 +10,7 @@ import java.util.Date;
  * Created by liuwei on 16/7/21.
  */
 @Document(collection = "wechat_user")
-public class WechatUser {
+public class WechatUser extends BaseModel {
 
 
     private String id;

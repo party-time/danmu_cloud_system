@@ -98,7 +98,7 @@ public class RpcWechatService {
         Date startDate = Date.from(mondayLocalDate.atStartOfDay().atZone(zone).toInstant());
         Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(WeekendLocalDateTime));
         //List<WechatUserInfo> wechatUserInfoDtoList = wechatUserInfoService.findByRegistDateBetween(startDate,endDate);
-        List<WechatUser> wechatUserList =  wechatUserService.findByCreateDateBetween(startDate,endDate);
+        List<WechatUser> wechatUserList =  wechatUserService.findByCreateTimeBetween(startDate,endDate);
 
         if(ListUtils.checkListIsNotNull(wechatUserList)){
             log.info("上周注册的用户数量：{}",wechatUserList.size());
