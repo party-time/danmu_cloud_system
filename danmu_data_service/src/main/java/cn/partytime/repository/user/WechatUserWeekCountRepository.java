@@ -1,6 +1,7 @@
 package cn.partytime.repository.user;
 
 
+import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.model.wechat.WechatUserWeekCount;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,16 +16,9 @@ public interface WechatUserWeekCountRepository extends MongoRepository<WechatUse
 
     public Page<WechatUserWeekCount> findByStartDateAndEndDate(Date startDate,Date endDate,Pageable pageable);
 
-    WechatUserWeekCount  findByAddressIdAndStartDateAfterAndEndDateBefore(String addressId,Date startDate, Date endDate);
-
-
-    List<WechatUserWeekCount>  findByAddressIdAndStartDateGreaterThanEqual(String addressId, Date startDate);
-
     List<WechatUserWeekCount>  findByAddressId(String addressId);
 
-    List<WechatUserWeekCount> findByStartDateAndEndDate(Date startDate, Date endDate);
-
-    List<WechatUserWeekCount>  findByAddressIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(String addressId, Date startDate,Date endDate);
+    List<WechatUserWeekCount> findByStartDateBetween(Date startDate, Date endDate);
 
 
 
