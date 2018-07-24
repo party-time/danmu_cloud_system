@@ -18,7 +18,7 @@ public interface WechatUserWeekCountRepository extends MongoRepository<WechatUse
 
     List<WechatUserWeekCount>  findByAddressId(String addressId);
 
-    List<WechatUserWeekCount> findByRegistDateBetween(Date startDate, Date endDate);
+    List<WechatUserWeekCount> findByStartDateBetween(Date startDate, Date endDate);
 
 
 
