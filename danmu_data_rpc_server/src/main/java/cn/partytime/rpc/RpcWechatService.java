@@ -98,6 +98,12 @@ public class RpcWechatService {
         Date startDate = Date.from(mondayLocalDate.atStartOfDay().atZone(zone).toInstant());
         Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(WeekendLocalDateTime));
 
+
+        List<WechatUserInfo> wechatUserInfoDtoListTemp = wechatUserInfoService.findAll();
+        for(WechatUserInfo wechatUserInfo:wechatUserInfoDtoListTemp){
+            log.info("registDate:"+wechatUserInfo.getRegistDate());
+        }
+
         log.info("startDate:"+startDate);
         log.info("endDate:"+endDate);
         List<WechatUserInfo> wechatUserInfoDtoList = wechatUserInfoService.findByRegistDateBetween(startDate,endDate);
