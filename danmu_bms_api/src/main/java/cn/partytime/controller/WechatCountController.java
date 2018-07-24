@@ -64,8 +64,6 @@ public class WechatCountController {
         for(WechatUserWeekCount wechatUserWeekCount:wechatUserWeekCountList){
             String date = DateUtils.dateToString(wechatUserWeekCount.getStartDate(),"yyyy-MM-dd");
             set.add(date);
-
-            set.add("2018-07-09");
         }
         restResultModel.setData(set);
         return restResultModel;
