@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by liuwei on 16/7/21.
  */
 @Document(collection = "wechat_user")
-public class WechatUser extends BaseModel {
+public class WechatUser {
 
 
     private String id;
