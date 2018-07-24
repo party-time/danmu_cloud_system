@@ -299,7 +299,13 @@ public class WechatMiniRestController {
         String unionId = useSecretInfo.getUnionId();
 
         WeChatMiniUser weChatMiniUser =  weChatMiniUserService.findByUnionId(unionId);
-        if(weChatMiniUser==null){
+
+        log.info("weChatMiniUser:{}",JSON.toJSONString(weChatMiniUser));
+
+
+
+
+        /*if(weChatMiniUser==null){
             weChatMiniUser = new WeChatMiniUser();
             weChatMiniUser.setUnionId(unionId);
             weChatMiniUser.setOpenId(openId);
@@ -319,7 +325,7 @@ public class WechatMiniRestController {
         if(wechatUserInfo==null) {
             wechatUserInfo = new WechatUserInfo();
         }
-        wechatUserInfoService.update(wechatUserInfo);
+        wechatUserInfoService.update(wechatUserInfo);*/
 
         restResultModel.setResult(200);
         restResultModel.setData(useSecretInfo);
