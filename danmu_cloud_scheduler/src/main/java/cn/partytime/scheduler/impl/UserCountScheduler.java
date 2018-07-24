@@ -23,7 +23,8 @@ public class UserCountScheduler  implements BaseScheduler {
     @Autowired
     private RpcWechatService rpcWechatService;
 
-    @Scheduled(cron = "0 26 17 ? * MON")
+    //@Scheduled(cron = "0 26 17 ? * MON")
+    @Scheduled(cron = "0 48 15 ? * TUE")
     public void execute() throws IOException {
         log.info("执行统计用户数据定时任务");
         rpcWechatService.countNewWechatUser();
