@@ -350,7 +350,7 @@ public class WechatMiniRestController {
         String latitude = request.getParameter("latitude");
         String longitude = request.getParameter("longitude");
 
-        log.info("+++++++++++++++++++++++openIdopenId========"+unionId);
+        /*log.info("+++++++++++++++++++++++openIdopenId========"+unionId);
         log.info("+++++++++++++++++++++++avatarUrlavatarUrl========"+avatarUrl);
         log.info("+++++++++++++++++++++++citycity========"+city);
         log.info("+++++++++++++++++++++++countrycountry========"+country);
@@ -359,7 +359,7 @@ public class WechatMiniRestController {
         log.info("+++++++++++++++++++++++languagelanguage========"+language);
         log.info("+++++++++++++++++++++++provinceprovince========"+province);
         log.info("+++++++++++++++++++++++latitudelatitude========"+latitude);
-        log.info("+++++++++++++++++++++++longitudelongitude========"+longitude);
+        log.info("+++++++++++++++++++++++longitudelongitude========"+longitude);*/
 
 
         if(wechatUser ==null){
@@ -396,7 +396,7 @@ public class WechatMiniRestController {
 
         log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
 
-        wechatUser = wechatUserService.save(wechatUser);
+        //wechatUser = wechatUserService.save(wechatUser);
 
 
         restResultModel.setResult(200);
