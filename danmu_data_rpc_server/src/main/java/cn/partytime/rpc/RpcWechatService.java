@@ -97,9 +97,11 @@ public class RpcWechatService {
         LocalDateTime WeekendLocalDateTime = LocalDateTimeUtils.convertDateToLDT(Date.from(weekendLocalDateMoring.atStartOfDay().atZone(zone).toInstant()));
         Date startDate = Date.from(mondayLocalDate.atStartOfDay().atZone(zone).toInstant());
         Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(WeekendLocalDateTime));
-        List<WechatUserInfo> wechatUserInfoDtoList = wechatUserInfoService.findByRegistDateBetween(startDate,endDate);
-        if(ListUtils.checkListIsNotNull(wechatUserInfoDtoList)){
-            log.info("上周注册的用户数量：{}",wechatUserInfoDtoList.size());
+        //List<WechatUserInfo> wechatUserInfoDtoList = wechatUserInfoService.findByRegistDateBetween(startDate,endDate);
+        List<WechatUser> wechatUserList =  wechatUserService.findByCreateDateBetween(startDate,endDate);
+
+        if(ListUtils.checkListIsNotNull(wechatUserList)){
+            log.info("上周注册的用户数量：{}",wechatUserList.size());
             List<DanmuAddress> danmuAddressList = danmuAddressService.findAll();
             danmuAddressList.forEach(danmuAddress -> wechatUserCountCacheService.clearUserCountCacheData(danmuAddress.getId()));
 
@@ -107,7 +109,7 @@ public class RpcWechatService {
 
             wechatUserCountCacheService.clearUserCountCacheData("1");
 
-            wechatUserInfoDtoList.forEach(wechatUserInfo -> addAddressUser(wechatUserInfo));
+            wechatUserList.forEach(wechatUser -> addAddressUser(wechatUser));
             Set<String> stringSet = wechatUserCountCacheService.getWechatUserAddress();
             log.info("stringSet:{}",JSON.toJSONString(stringSet));
             if(stringSet!=null){
@@ -139,9 +141,12 @@ public class RpcWechatService {
     }
 
 
-    public void addAddressUser(WechatUserInfo wechatUserInfo){
+    public void addAddressUser(WechatUser wechatUser){
         log.info("----------用户信息添加到缓存----------------");
-        log.info("----------用户信wechatUserInfo:{}----------------",JSON.toJSONString(wechatUserInfo));
+        log.info("----------wechatUser:{}----------------",JSON.toJSONString(wechatUser));
+        String wechatId = wechatUser.getId();
+
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
         if(wechatUserInfo!=null){
 
 

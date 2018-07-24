@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,5 +33,9 @@ public interface WechatUserRepository extends MongoRepository<WechatUser, String
     public List<WechatUser> findByIdIn(List<String> idList);
 
     public Page<WechatUser> findByNickLikeAndSubscribeState(String nick,Integer subscribeState,Pageable pageable);
+
+
+
+    public List<WechatUser> findByCreateDateBetween(Date startDate, Date endDate);
 
 }

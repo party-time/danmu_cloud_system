@@ -188,4 +188,10 @@ public class WechatUserService {
     }
 
 
+    public List<WechatUser> findByCreateDateBetween(Date startDate, Date endDate){
+        return wechatUserRepository.findByCreateDateBetween(startDate,endDate);
+    }
+
+
+
 }
