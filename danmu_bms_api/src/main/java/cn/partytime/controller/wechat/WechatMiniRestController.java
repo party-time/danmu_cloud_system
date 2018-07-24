@@ -214,7 +214,7 @@ public class WechatMiniRestController {
         map.put("partyName",party.getPartyName());
         //map.put("openId",openId);
 
-        log.info("partyInfo:{}",JSON.toJSONString(map));
+        //log.info("partyInfo:{}",JSON.toJSONString(map));
         restResultModel.setResult(200);
         restResultModel.setData(map);
         return restResultModel;
@@ -305,7 +305,7 @@ public class WechatMiniRestController {
 
 
 
-        /*if(weChatMiniUser==null){
+        if(weChatMiniUser==null){
             weChatMiniUser = new WeChatMiniUser();
             weChatMiniUser.setUnionId(unionId);
             weChatMiniUser.setOpenId(openId);
@@ -325,7 +325,7 @@ public class WechatMiniRestController {
         if(wechatUserInfo==null) {
             wechatUserInfo = new WechatUserInfo();
         }
-        wechatUserInfoService.update(wechatUserInfo);*/
+        wechatUserInfoService.update(wechatUserInfo);
 
         restResultModel.setResult(200);
         restResultModel.setData(useSecretInfo);
@@ -333,13 +333,13 @@ public class WechatMiniRestController {
     }
     @RequestMapping(value = "/updateWechatUser", method = RequestMethod.POST)
     public RestResultModel updateWechatUser(HttpServletRequest request){
-        String openId = request.getParameter("openId");
+        String unionId = request.getParameter("unionId");
 
-        log.info("更新用户信息获取的openId:{}",openId);
+        log.info("更新用户信息获取的unionId:{}",unionId);
         RestResultModel restResultModel = new RestResultModel();
-        WechatUser wechatUser =  wechatUserService.findByOpenId(openId);
+        WechatUser wechatUser =  wechatUserService.findByOpenId(unionId);
 
-        /*String avatarUrl = request.getParameter("avatarUrl");
+        String avatarUrl = request.getParameter("avatarUrl");
         String city = request.getParameter("city");
         String country = request.getParameter("country");
         String gender = request.getParameter("gender");
@@ -350,7 +350,7 @@ public class WechatMiniRestController {
         String latitude = request.getParameter("latitude");
         String longitude = request.getParameter("longitude");
 
-        log.info("+++++++++++++++++++++++openIdopenId========"+openId);
+        log.info("+++++++++++++++++++++++openIdopenId========"+unionId);
         log.info("+++++++++++++++++++++++avatarUrlavatarUrl========"+avatarUrl);
         log.info("+++++++++++++++++++++++citycity========"+city);
         log.info("+++++++++++++++++++++++countrycountry========"+country);
@@ -396,7 +396,7 @@ public class WechatMiniRestController {
 
         log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
 
-        //wechatUser = wechatUserService.save(wechatUser);*/
+        wechatUser = wechatUserService.save(wechatUser);
 
 
         restResultModel.setResult(200);
