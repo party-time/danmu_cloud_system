@@ -1,9 +1,11 @@
 package cn.partytime.model.wechat;
 
 import cn.partytime.baseModel.BaseModel;
+import cn.partytime.common.util.DateUtils;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -44,7 +46,7 @@ public class WechatUser {
 
     private Date lastOpenDate;
 
-    private Date createDate;
+    private Date createDate = DateUtils.getCurrentDate();
 
     private Double latitude;
 
