@@ -61,13 +61,15 @@ public class WelcomeService {
         Object obj = redisService.get(WelcomeCacheKey.WELCOME_KEY+openId);
         if( null == obj){
             List<Welcome> welcomeList = welcomeRepository.findAll();
-            Random r = new Random(new Date().getTime());
-            int a = r.nextInt(welcomeList.size());
-            redisService.set(WelcomeCacheKey.WELCOME_KEY+openId,"",60*10);
-            return welcomeList.get(a);
-        }else{
-            return null;
+            if( null != welcomeList && welcomeList.size()>0){
+                Random r = new Random(new Date().getTime());
+                int a = r.nextInt(welcomeList.size());
+                redisService.set(WelcomeCacheKey.WELCOME_KEY+openId,"",60*10);
+                return welcomeList.get(a);
+            }
         }
+        return null;
+
     }
 
 }
