@@ -54,7 +54,7 @@ public class WechatCountController {
 
         WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId("5b56c3e8e6e9b85304c14769");
 
-        wechatUserInfo.setRegistDate(DateUtils.strToDate("2017-08-17 12:25:15","yyyy-MM-dd HH:mm:ss"));
+        wechatUserInfo.setRegistDate(DateUtils.strToDate("2018-07-17 12:25:15","yyyy-MM-dd HH:mm:ss"));
         wechatUserInfoService.update(wechatUserInfo);
 
         /*System.out.println("================================="+JSON.toJSONString(wechatUserInfo));
