@@ -73,6 +73,7 @@ public class WechatUserService {
             wechatUser.setUserId(user.getId());
             wechatUser.setLastOpenDate(new Date());
             wechatUser.setSubscribeState(0);
+            wechatUser.setCreateDate(DateUtils.getCurrentDate());
             //保存微信用户信息
             return wechatUserRepository.insert(wechatUser);
         }

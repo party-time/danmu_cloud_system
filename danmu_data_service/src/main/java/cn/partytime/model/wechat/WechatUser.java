@@ -46,7 +46,7 @@ public class WechatUser {
 
     private Date lastOpenDate;
 
-    private Date createDate = DateUtils.getCurrentDate();
+    private Date createDate;
 
     private Double latitude;
 
