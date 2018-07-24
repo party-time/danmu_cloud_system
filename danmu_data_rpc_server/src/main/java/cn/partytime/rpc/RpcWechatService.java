@@ -97,11 +97,10 @@ public class RpcWechatService {
         LocalDateTime WeekendLocalDateTime = LocalDateTimeUtils.convertDateToLDT(Date.from(weekendLocalDateMoring.atStartOfDay().atZone(zone).toInstant()));
         Date startDate = Date.from(mondayLocalDate.atStartOfDay().atZone(zone).toInstant());
         Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(WeekendLocalDateTime));
-        //List<WechatUserInfo> wechatUserInfoDtoList = wechatUserInfoService.findByRegistDateBetween(startDate,endDate);
-        List<WechatUser> wechatUserList =  wechatUserService.findByCreateTimeBetween(startDate,endDate);
+        List<WechatUserInfo> wechatUserInfoDtoList = wechatUserInfoService.findByRegistDateBetween(startDate,endDate);
 
-        if(ListUtils.checkListIsNotNull(wechatUserList)){
-            log.info("上周注册的用户数量：{}",wechatUserList.size());
+        if(ListUtils.checkListIsNotNull(wechatUserInfoDtoList)){
+            log.info("上周注册的用户数量：{}",wechatUserInfoDtoList.size());
             List<DanmuAddress> danmuAddressList = danmuAddressService.findAll();
             danmuAddressList.forEach(danmuAddress -> wechatUserCountCacheService.clearUserCountCacheData(danmuAddress.getId()));
 
@@ -109,14 +108,13 @@ public class RpcWechatService {
 
             wechatUserCountCacheService.clearUserCountCacheData("1");
 
-            wechatUserList.forEach(wechatUser -> addAddressUser(wechatUser));
+            wechatUserInfoDtoList.forEach(wechatUser -> addAddressUser(wechatUser));
             Set<String> stringSet = wechatUserCountCacheService.getWechatUserAddress();
             log.info("stringSet:{}",JSON.toJSONString(stringSet));
             if(stringSet!=null){
                 for(String addressId:stringSet){
                     Object object = wechatUserCountCacheService.getWechatUserCount(addressId);
                     int count = IntegerUtils.objectConvertToInt(object);
-                    //System.out.println("start=====================:"+DateUtils.dateToString(startDate,"yyyy-MM-dd HH:mm:ss"));
                     WechatUserWeekCount wechatUserWeekCount = wechatUserWeekCountService.findByAddressIdAndStartDateAndEndDate(addressId,startDate,endDate);
                     if(wechatUserWeekCount==null){
                         wechatUserWeekCount = new WechatUserWeekCount();
@@ -141,20 +139,15 @@ public class RpcWechatService {
     }
 
 
-    public void addAddressUser(WechatUser wechatUser){
+    public void addAddressUser(WechatUserInfo wechatUserInfo){
         log.info("----------用户信息添加到缓存----------------");
-        log.info("----------wechatUser:{}----------------",JSON.toJSONString(wechatUser));
-        String wechatId = wechatUser.getId();
+        log.info("----------wechatUser:{}----------------",JSON.toJSONString(wechatUserInfo));
 
-        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
         if(wechatUserInfo!=null){
-
-
-
             Double registLongitude = wechatUserInfo.getLastLongitude();
             Double registLatitude = wechatUserInfo.getRegistLatitude();
             if(registLatitude==null || registLatitude==null){
-                //用户关注了，没有经纬度
+                //用户关注了(未知用户)
                 wechatUserCountCacheService.addWechatUser("1");
                 wechatUserCountCacheService.setWechatUserAddress("1");
             }else{
@@ -171,17 +164,6 @@ public class RpcWechatService {
                     wechatUserCountCacheService.setWechatUserAddress("0");
                 }
             }
-
-            /*try{
-
-            }catch (Exception e){
-                e.printStackTrace();
-                log.info("============{}",JSON.toJSONString(wechatUserInfo));
-            }*/
-
-
-        }else{
-            log.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
     }
 
