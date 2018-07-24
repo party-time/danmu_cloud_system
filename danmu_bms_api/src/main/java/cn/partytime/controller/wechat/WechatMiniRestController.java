@@ -337,7 +337,7 @@ public class WechatMiniRestController {
 
         log.info("更新用户信息获取的unionId:{}",unionId);
         RestResultModel restResultModel = new RestResultModel();
-        WechatUser wechatUser =  wechatUserService.findByOpenId(unionId);
+        WechatUser wechatUser =  wechatUserService.findByUnionId(unionId);
 
         String avatarUrl = request.getParameter("avatarUrl");
         String city = request.getParameter("city");
