@@ -150,6 +150,8 @@ public class DanmuSendService {
     }
 
     public void convertMessageToProtocolToClient(String addressId, Map<String,Object> map){
+
+        logger.info("推送弹幕给客户端*************************************************************************");
         Object objectMessage =map.get("isSendH5");
         Object type =map.get("type");
         Object danmuIdObject = map.get("danmuId");
