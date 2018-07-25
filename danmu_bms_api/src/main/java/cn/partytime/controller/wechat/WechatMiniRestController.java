@@ -389,14 +389,16 @@ public class WechatMiniRestController {
     public RestResultModel sendExpression(HttpServletRequest request) {
         log.info("小程序端，发送表情");
         RestResultModel restResultModel = new RestResultModel();
-        String openId = request.getParameter("openId");
+        String userCookieKey = request.getParameter("userCookieKey");
+        Object object =  wechatMiniCacheService.getWechatMiniUserCache(userCookieKey);
+        String unionId = String.valueOf(object);
         if (bmsDanmuService.checkFrequency(request)) {
             restResultModel.setResult(403);
             restResultModel.setResult_msg("Limited Frequency");
-            log.info("用户{}，发送弹幕,太频繁",openId);
+            log.info("用户{}，发送弹幕,太频繁",unionId);
             return restResultModel;
         }else {
-            return  bmsDanmuService.sendDanmu(request,openId,0);
+            return  bmsDanmuService.sendDanmuFromWechatMini(request,unionId,0);
         }
     }
 
