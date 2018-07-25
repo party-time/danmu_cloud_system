@@ -952,6 +952,183 @@ public class BmsDanmuService {
         restResultModel.setResult_msg("OK");
         return restResultModel;
     }
+
+
+    /**
+     * 发送弹幕
+     * @param request
+     * @param unionId
+     * @param danmuType
+     * @return
+     */
+    public RestResultModel sendDanmuFromWechatMini(HttpServletRequest request,String unionId,int danmuType){
+        Integer danmuSrc = 1;
+        RestResultModel restResultModel = new RestResultModel();
+        String templateId = request.getParameter("templateId");//模板编号
+        String partyId = request.getParameter("partyId");//活动编号
+        String addressId = request.getParameter("addressId");//地址编号
+        log.info("指令编号:{},unionId:{},活动编号:{},地址编号:{},弹幕来源:{},弹幕类型:{}",templateId,unionId,partyId,addressId,danmuSrc,danmuType);
+
+        CmdTempAllData cmdTempAllData = rpcCmdService.findCmdTempAllDataByIdFromCache(templateId);//组件信息
+        String cname = cmdTempAllData.getName();
+        int isInDanmuLib = cmdTempAllData.getIsInDanmuLib()==null?1:cmdTempAllData.getIsInDanmuLib();
+
+        String commmandKey = cmdTempAllData.getKey();
+        Date date = DateUtils.getCurrentDate();
+
+        PartyLogicModel party = rpcPartyService.findPartyByAddressId(addressId);
+        if(party==null){
+            log.info("当前场地没有活动正在进行");
+            restResultModel.setResult(404);
+            restResultModel.setResult_msg("没有活动正在进行");
+            return restResultModel;
+        }
+
+
+        WechatUser wechatUser = wechatUserService.findByUnionId(unionId);
+        if(wechatUser==null){
+            log.info("微信用户不存在");
+            restResultModel.setResult(404);
+            restResultModel.setResult_msg("微信用户不存在");
+            return restResultModel;
+        }
+
+        int time = calculateDanmuTime(party,date);
+
+        Object msg = null;
+        boolean bCheck=false;
+
+        CmdTempComponentData checkCmdTempComponentData = null;
+
+        boolean isBlock = false;
+        //模板下的所有组件
+        List<CmdTempComponentData> cmdTempComponentDataList = cmdTempAllData.getCmdTempComponentDataList();
+        Map<String,Object> map = new HashMap<String,Object>();
+        if(ListUtils.checkListIsNotNull(cmdTempComponentDataList)){
+            for(CmdTempComponentData cmdTempComponentData:cmdTempComponentDataList){
+                String key = cmdTempComponentData.getKey();
+                //数据类型
+                int type = cmdTempComponentData.getType();
+                //组件的id 0无组件 1特效视频 2特效图片 3表情图片
+                String componentId = cmdTempComponentData.getComponentId();
+
+                log.info("当前的组件类型:{}",componentId);
+                int isCheck  = cmdTempComponentData.getIsCheck();
+                Integer componentType = cmdTempComponentData.getComponentType();//组件的类型 0text 1textarea 2select  3radiobutton 4checkbox
+                Object content = null;
+                Object msgContent = null;
+                boolean specialCompontentBoolean =  danmuCommonService.checkSpecialComponent(componentId);
+                if(specialCompontentBoolean && "0".equals(componentId)){
+                    map.put(key,cmdTempComponentData.getDefaultValue());
+                }else{
+                    if(type==3){
+                        //显示的内容
+                        content = danmuCommonService.setProtocolArrayContent(componentType,request.getParameter(key),cmdTempComponentData.getDefaultValue());
+                        msgContent = danmuCommonService.setShowArrayContent(componentType,request.getParameter(key),componentId,cmdTempComponentData.getDefaultValue());
+                        if("color".equals(key) ){
+                            map.put("color",request.getParameter(key+"name"));
+                        }
+                        /*if(msgContent!=null && (!"1".equals(componentId) && !"2".equals(componentId))){
+                            List<String> messageList = (List<String>)msgContent;
+                            for(int i=0; i<messageList.size(); i++){
+                                restResultModel = checkDanmuIsOk(messageList.get(i));
+                                if(restResultModel!=null){
+                                    isBlock=true;
+                                }
+                            }
+                        }*/
+                    }else{
+                        if("color".equals(key)){
+                            String color = request.getParameter(key);
+                            if(StringUtils.isEmpty(color)){
+                                content = bmsColorService.getRandomColor();
+                            }else{
+                                content = danmuCommonService.setShowNotArrayContent(request.getParameter(key),type);
+                            }
+                        }else{
+                            log.info("key===========:"+key);
+                            content = danmuCommonService.setShowNotArrayContent(request.getParameter(key),type);
+                            msgContent = danmuCommonService.setShowNotArrayContent(request.getParameter(key),componentId,type);
+                            if(!"1".equals(componentId) && !"2".equals(componentId)){
+                                log.info("msgContent===========:"+String.valueOf(msgContent));
+                                restResultModel = checkDanmuIsOk(String.valueOf(msgContent));
+                                if(restResultModel!=null){
+
+                                    log.info("屏蔽的消息内容:{}",msgContent);
+                                    //return restResultModel;
+                                    isBlock=true;
+                                }
+                            }
+
+                        }
+                    }
+                    map.put(key,content);
+                }
+                if(isCheck==0){
+                    checkCmdTempComponentData = cmdTempComponentData;
+                    bCheck = true;
+                }
+            }
+
+            //是否保存弹幕
+            DanmuPool danmuPool = findDanmuPool(addressId, partyId);
+            //弹幕池编号
+            String poolId = danmuPool.getId();
+            Danmu danmuModel = new Danmu();
+            danmuModel.setTemplateId(templateId);
+            danmuModel.setTemplateIdKey(commmandKey);
+            //danmuModel.setMsg(msg);
+            danmuModel.setContent(map);
+            danmuModel.setBlocked(isBlock);
+            danmuModel.setCreateTime(date);
+            danmuModel.setUpdateTime(date);
+            danmuModel.setCreateUserId(wechatUser.getUserId());
+            danmuModel.setUpdateUserId(wechatUser.getUserId());
+            danmuModel.setDanmuPoolId(poolId);
+            danmuModel.setDanmuSrc(danmuSrc);
+            danmuModel.setViewFlg(false);
+
+            danmuModel.setTime(time);
+            //弹幕类型
+            danmuModel.setType(danmuType);
+
+            //是否保存弹幕
+            if(isInDanmuLib==0){
+                danmuModel = danmuService.save(danmuModel);
+            }
+
+            //记录弹幕历史
+            DanmuLog danmuLog = saveDanmuModel(danmuModel);
+
+
+            if(isBlock){
+                restResultModel = new RestResultModel();
+                restResultModel.setResult(403);
+                restResultModel.setResult_msg("发送的弹幕含有敏感词!");
+                return restResultModel;
+            }
+
+            if(bCheck){
+
+                //发送弹幕到
+                log.info("发送给服务器的弹幕信息:{}",JSON.toJSONString(danmuModel));
+                sendDanmuToMq(partyId, addressId,danmuLog,wechatUser,party.getType(),cname,checkCmdTempComponentData);
+
+            }else{
+                CmdTemp cmdTemp = cmdTempService.findById(danmuModel.getTemplateId());
+                Map<String,Object> commandObject = new HashMap<String,Object>();
+                commandObject.put("type",cmdTemp.getKey());
+                commandObject.put("data",danmuModel.getContent());
+                pubMessageCollectorServer(partyId,addressId,commandObject);
+            }
+        }
+
+        restResultModel = new RestResultModel();
+        restResultModel.setResult(200);
+        restResultModel.setResult_msg("OK");
+        return restResultModel;
+    }
+
     /**
      * 发送弹幕到消息队列
      *

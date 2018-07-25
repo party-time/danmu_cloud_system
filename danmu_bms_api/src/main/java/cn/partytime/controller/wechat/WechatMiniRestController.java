@@ -225,52 +225,7 @@ public class WechatMiniRestController {
 
 
 
-    @RequestMapping(value = "/wechartSend", method = RequestMethod.POST)
-    public RestResultModel wechartSend(HttpServletRequest request) {
-        log.info("小程序端，弹幕发送");
-        String minProgram_openId = request.getParameter("openId");
-        RestResultModel restResultModel = new RestResultModel();
-        WeChatMiniUser weChatMiniUser =  weChatMiniUserService.findByOpenId(minProgram_openId);
-        if(weChatMiniUser==null){
-            log.info("------------------小程序用户不存在--------------:{}",minProgram_openId);
-            restResultModel.setResult(405);
-            restResultModel.setResult_msg("用户不存在");
-            return restResultModel;
-        }
-        WechatUser wechatUser =  wechatUserService.findByUnionId(weChatMiniUser.getUnionId());
 
-        String openId =  wechatUser.getOpenId();
-        if (bmsDanmuService.checkFrequency(request)) {
-            restResultModel.setResult(403);
-            restResultModel.setResult_msg("Limited Frequency");
-            log.info("用户{}，发送弹幕,太频繁",openId);
-            return restResultModel;
-        }else if(bmsDanmuService.checkDanmuIsRepeat(openId,request.getParameter("message"))){
-            restResultModel.setResult(403);
-            restResultModel.setResult_msg("相同弹幕发送太多");
-            log.info("用户{}，相同弹幕发送太多",openId);
-            return restResultModel;
-        }else {
-            log.info("===========================================================");
-            return bmsDanmuService.sendDanmu(request,openId,0);
-        }
-
-    }
-
-    @RequestMapping(value = "/sendExpression", method = RequestMethod.POST)
-    public RestResultModel sendExpression(HttpServletRequest request) {
-        log.info("小程序端，发送表情");
-        RestResultModel restResultModel = new RestResultModel();
-        String openId = request.getParameter("openId");
-        if (bmsDanmuService.checkFrequency(request)) {
-            restResultModel.setResult(403);
-            restResultModel.setResult_msg("Limited Frequency");
-            log.info("用户{}，发送弹幕,太频繁",openId);
-            return restResultModel;
-        }else {
-            return  bmsDanmuService.sendDanmu(request,openId,0);
-        }
-    }
 
     @RequestMapping(value = "/historyDanmu/{openId}/{pageNo}/{pageSize}", method = RequestMethod.GET)
     public PageResultModel historyDanmu(@PathVariable("openId")String openId , @PathVariable("pageNo") Integer pageNo, @PathVariable("pageSize")Integer pageSize) {
@@ -360,7 +315,7 @@ public class WechatMiniRestController {
         String latitude = request.getParameter("latitude");
         String longitude = request.getParameter("longitude");
 
-        /*if(wechatUser ==null){
+        if(wechatUser ==null){
             wechatUser = new WechatUser();
         }
         if(!StringUtils.isEmpty(avatarUrl)){
@@ -400,12 +355,49 @@ public class WechatMiniRestController {
             //wechatUserInfo.setLastLatitude(Double.parseDouble(latitude+""));
             //wechatUserInfo.setLastLongitude(Double.parseDouble(longitude+""));
             wechatUserInfoService.saveOrUpdate(wechatId,Double.parseDouble(longitude+""),Double.parseDouble(latitude+""));
-        }*/
-
-
-
+        }
         restResultModel.setResult(200);
         restResultModel.setData(wechatUser);
         return  restResultModel;
     }
+
+    @RequestMapping(value = "/wechartSend", method = RequestMethod.POST)
+    public RestResultModel wechartSend(HttpServletRequest request) {
+        log.info("小程序端，弹幕发送");
+        String userCookieKey = request.getParameter("userCookieKey");
+        Object object =  wechatMiniCacheService.getWechatMiniUserCache(userCookieKey);
+        String unionId = String.valueOf(object);
+        RestResultModel restResultModel = new RestResultModel();
+        if (bmsDanmuService.checkFrequency(request)) {
+            restResultModel.setResult(403);
+            restResultModel.setResult_msg("Limited Frequency");
+            log.info("小程序{}，发送弹幕,太频繁",unionId);
+            return restResultModel;
+        }else if(bmsDanmuService.checkDanmuIsRepeat(unionId,request.getParameter("message"))){
+            restResultModel.setResult(403);
+            restResultModel.setResult_msg("相同弹幕发送太多");
+            log.info("小程序{}，相同弹幕发送太多",unionId);
+            return restResultModel;
+        }else {
+            log.info("===========================================================");
+            return bmsDanmuService.sendDanmuFromWechatMini(request,unionId,0);
+        }
+
+    }
+
+    @RequestMapping(value = "/sendExpression", method = RequestMethod.POST)
+    public RestResultModel sendExpression(HttpServletRequest request) {
+        log.info("小程序端，发送表情");
+        RestResultModel restResultModel = new RestResultModel();
+        String openId = request.getParameter("openId");
+        if (bmsDanmuService.checkFrequency(request)) {
+            restResultModel.setResult(403);
+            restResultModel.setResult_msg("Limited Frequency");
+            log.info("用户{}，发送弹幕,太频繁",openId);
+            return restResultModel;
+        }else {
+            return  bmsDanmuService.sendDanmu(request,openId,0);
+        }
+    }
+
 }
