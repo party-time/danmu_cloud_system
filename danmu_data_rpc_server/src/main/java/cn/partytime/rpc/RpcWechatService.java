@@ -77,6 +77,11 @@ public class RpcWechatService {
         return wechatUserService.findByUserId(userId);
     }
 
+    @RequestMapping(value = "/findByUnionId" ,method = RequestMethod.GET)
+    public WechatUser findByUnionId(@RequestParam String unionId) {
+        return wechatUserService.findByUnionId(unionId);
+    }
+
     @RequestMapping(value = "/findByRegistDateInRange" ,method = RequestMethod.GET)
     public List<WechatUserInfo> findByRegistDateInRange(@RequestParam Date startDate, @RequestParam Date endDate ) {
         return wechatUserInfoService.findByRegistDateBetween(startDate,endDate);

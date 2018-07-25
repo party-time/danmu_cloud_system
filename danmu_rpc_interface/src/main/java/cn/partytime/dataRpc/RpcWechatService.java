@@ -30,6 +30,11 @@ public interface RpcWechatService {
     public WechatUserDto findByUserId(@RequestParam(value = "userId") String userId);
 
 
+    @RequestMapping(value = "/rpcWechat/findByUnionId" ,method = RequestMethod.GET)
+    public WechatUserDto findByUnionId(@RequestParam(value = "unionId") String unionId);
+
+
+
 
     @RequestMapping(value = "/rpcWechat/findByRegistDateInRange" ,method = RequestMethod.GET)
     public List<WechatUserInfoDto> findByRegistDateInRange(@RequestParam(value = "startDate") Date startDate, @RequestParam(value = "endDate") Date endDate );

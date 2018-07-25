@@ -28,6 +28,11 @@ public class RpcWechatServiceHystrix implements RpcWechatService {
     }
 
     @Override
+    public WechatUserDto findByUnionId(String unionId) {
+        return null;
+    }
+
+    @Override
     public List<WechatUserInfoDto> findByRegistDateInRange(Date startDate, Date endDate) {
         return null;
     }
