@@ -101,8 +101,27 @@ public class PotocolService {
             javaClientHandler(map,channel);
         }else if (ClientConst.CLIENT_TYPE_NODECLIENT.equals(clientType)) {
             nodeClientHandler(map,channel);
+        }else if (ClientConst.CLIENT_TYPE_WECHATMIN.equals(clientType)) {
+            wechatminiClientHandler(map,channel);
         }
+    }
+    private void wechatminiClientHandler(Map<String,Object> map, Channel channel) {
+        log.info("收到小程序端数据请求:{}",JSON.toJSONString(map));
+        String type = String.valueOf(map.get("type"));
+        if (PotocolTypeConst.POTOCOL_PING.equals(type)) {
+            DanmuClientInfoModel clientInfoModel = danmuChannelRepository.get(channel);
+            log.info("当前客户端信息:{}接受ping",clientInfoModel.getScreenId());
 
+            Map<String,Object> resultMap = new HashMap<String,Object>();
+            resultMap.put("type", PotocolTypeConst.POTOCOL_PONG);
+            String msg = JSON.toJSONString(resultMap);
+            log.info("返回给客户端信息{}：" + msg);
+            channel.writeAndFlush(new TextWebSocketFrame(msg));
+        }else if (PotocolTypeConst.POTOCOL_CLOSE.equals(type)) {
+            DanmuClientInfoModel clientInfoModel = danmuChannelRepository.get(channel);
+            log.info("关闭客户端：{}",JSON.toJSONString(clientInfoModel));
+            forceLogout(channel);
+        }
     }
 
     private void javaClientHandler(Map<String,Object> map, Channel channel) {
