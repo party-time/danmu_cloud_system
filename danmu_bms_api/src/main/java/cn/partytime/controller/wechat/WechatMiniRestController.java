@@ -339,11 +339,15 @@ public class WechatMiniRestController {
     }
     @RequestMapping(value = "/updateWechatUser", method = RequestMethod.POST)
     public RestResultModel updateWechatUser(HttpServletRequest request){
-        String unionId = request.getParameter("unionId");
+        String userCookieKey = request.getParameter("userCookieKey");
 
-        log.info("更新用户信息获取的unionId:{}",unionId);
+        log.info("更新用户信息获取用户的userCookieKey:{}",userCookieKey);
         RestResultModel restResultModel = new RestResultModel();
+        Object object =  wechatMiniCacheService.getWechatMiniUserCache(userCookieKey);
+        String unionId = String.valueOf(object);
         WechatUser wechatUser =  wechatUserService.findByUnionId(unionId);
+
+        log.info("取得的用户信息:{}",JSON.toJSONString(wechatUser));
 
         String avatarUrl = request.getParameter("avatarUrl");
         String city = request.getParameter("city");
