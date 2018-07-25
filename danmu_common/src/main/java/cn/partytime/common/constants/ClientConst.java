@@ -13,4 +13,7 @@ public class ClientConst {
 
     public static final String CLIENT_TYPE_NODECLIENT = "3";
 
+
+    public static final String CLIENT_TYPE_WECHATMIN = "4";
+
 }

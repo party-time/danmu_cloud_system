@@ -190,6 +190,8 @@ public class DanmuSendService {
         }
         //向手机广播弹幕
         pubMessageToAllClient(addressId,message,ClientConst.CLIENT_TYPE_MOBILE);
+        //向小程序输送弹幕
+        pubMessageToAllClient(addressId,message,ClientConst.CLIENT_TYPE_WECHATMIN);
     }
 
     /**

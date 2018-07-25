@@ -2,6 +2,7 @@ package cn.partytime.service;
 
 import cn.partytime.cache.collector.CollectorAlarmCacheService;
 import cn.partytime.cache.collector.CollectorCacheService;
+import cn.partytime.cache.wechatmin.WechatMiniCacheService;
 import cn.partytime.clientHandler.NotSendDanmuHandler;
 import cn.partytime.common.constants.ClientConst;
 import cn.partytime.common.constants.PotocolComTypeConst;
@@ -88,7 +89,8 @@ public class ClientLoginService {
 
 
     @Autowired
-    private ClientCommandService clientCommandService;
+    private WechatMiniCacheService wechatMiniCacheService;
+
 
 
     /**
@@ -114,7 +116,79 @@ public class ClientLoginService {
             //移动端弹幕处理
             logger.info("h5{}端触发登录", code);
             nodeClientLogin(code, channel, clientType);
+        }else if (ClientConst.CLIENT_TYPE_WECHATMIN.equals(clientType)) {
+            //移动端弹幕处理
+            logger.info("小程序{}端触发登录", code);
+            wechatMiniClientLogin(code, channel, clientType);
         }
+    }
+
+    /**
+     * 小程序客户端登录
+     *
+     * @param code
+     * @param channel
+     * @param type
+     */
+    private void wechatMiniClientLogin(String code, Channel channel, String type) {
+
+        logger.info("手机端登录服务器,发送的唯一标示:{}", code);
+        if (StringUtils.isEmpty(code)) {
+            logger.info("手机端为非法用户，强制下线");
+            channel.close();
+            return;
+        }
+
+        Object object = wechatMiniCacheService.getWechatMiniUserCache(code);
+        if (object == null) {
+            logger.info("手机端为非法用户，强制下线");
+            channel.close();
+            return;
+        }
+
+        String unionId = String.valueOf(object);
+
+        //判断微信用户是否合法
+        WechatUserDto wechatUser = rpcWechatService.findByUnionId(unionId);
+        logger.info("当前登录的手机用户信息:{}", JSON.toJSONString(wechatUser));
+        if (wechatUser == null) {
+            logger.info("通过unionId:{}获取的微信用户信息为空,用户为非法用户", unionId);
+            channel.close();
+            return;
+        }
+
+        WechatUserInfoDto wechatUserInfo = rpcWechatService.findByWechatId(wechatUser.getId());
+        if (wechatUserInfo == null) {
+            logger.info("通过wechatId:{}获取的微信用户地理位置为空,用户为非法用户", wechatUserInfo);
+            channel.close();
+            return;
+        }
+
+        DanmuAddressModel danmuAddress = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+        logger.info("通过经纬度:{},{}获取地址信息",wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude(),JSON.toJSONString(danmuAddress));
+        //如果查询不到场地
+        if (danmuAddress == null) {
+            channel.close();
+        }
+        String addressId = danmuAddress.getId();
+        logger.info("手机获取的地址信息：{}",addressId);
+
+        PartyLogicModel party = partyService.findPartyByAddressId(addressId);
+
+        logger.info("活动信息：{}",JSON.toJSONString(party));
+        //如果活动不存在，不做任何处理
+        if (party == null) {
+            logger.info("通过地址{}获取不到活动信息，让用户下线", addressId);
+            channel.close();
+            return;
+        }
+        //将客户端信息与Channel绑定
+        DanmuClientInfoModel danmuClientInfoModel = new DanmuClientInfoModel();
+        danmuClientInfoModel.setDanmuClientCode(unionId);
+        danmuClientInfoModel.setAddressId(addressId);
+        danmuClientInfoModel.setClientType(Integer.parseInt(type));
+        logger.info("绑定通道与客户端对象的关系");
+        danmuChannelRepository.set(channel, danmuClientInfoModel);
     }
 
 
