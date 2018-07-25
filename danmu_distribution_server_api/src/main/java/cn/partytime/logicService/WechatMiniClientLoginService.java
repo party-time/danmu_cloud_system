@@ -10,11 +10,14 @@ import cn.partytime.model.ServerInfo;
 import cn.partytime.model.WechatUserDto;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+
+@Slf4j
 @Service
 public class WechatMiniClientLoginService {
 
@@ -32,6 +35,7 @@ public class WechatMiniClientLoginService {
     public ResultInfo findCollectorInfo(String userKey) {
         ResultInfo resultInfo = new ResultInfo();
         Object object = wechatMiniCacheService.getWechatMiniUserCache(userKey);
+        log.info("userKey:{},unionId:{}",userKey,object);
         if (object == null) {
             resultInfo.setCode(403);
             resultInfo.setMessage("小程序没有登录");
@@ -39,6 +43,7 @@ public class WechatMiniClientLoginService {
         }
         String unionId = String.valueOf(object);
         WechatUserDto wechatUser = rpcWechatService.findByUnionId(unionId);
+        log.info("wechatUser:{}",JSON.toJSONString(wechatUser));
         if (wechatUser == null) {
             resultInfo.setCode(404);
             resultInfo.setMessage("无效的unionId");
