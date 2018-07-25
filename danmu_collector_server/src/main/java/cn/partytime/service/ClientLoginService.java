@@ -132,16 +132,16 @@ public class ClientLoginService {
      */
     private void wechatMiniClientLogin(String code, Channel channel, String type) {
 
-        logger.info("手机端登录服务器,发送的唯一标示:{}", code);
+        logger.info("小程序端登录服务器,发送的唯一标示:{}", code);
         if (StringUtils.isEmpty(code)) {
-            logger.info("手机端为非法用户，强制下线");
+            logger.info("小程序端为非法用户，强制下线");
             channel.close();
             return;
         }
 
         Object object = wechatMiniCacheService.getWechatMiniUserCache(code);
         if (object == null) {
-            logger.info("手机端为非法用户，强制下线");
+            logger.info("小程序端为非法用户，强制下线");
             channel.close();
             return;
         }
@@ -150,7 +150,7 @@ public class ClientLoginService {
 
         //判断微信用户是否合法
         WechatUserDto wechatUser = rpcWechatService.findByUnionId(unionId);
-        logger.info("当前登录的手机用户信息:{}", JSON.toJSONString(wechatUser));
+        logger.info("当前登录的小程序端信息:{}", JSON.toJSONString(wechatUser));
         if (wechatUser == null) {
             logger.info("通过unionId:{}获取的微信用户信息为空,用户为非法用户", unionId);
             channel.close();
@@ -163,7 +163,7 @@ public class ClientLoginService {
             channel.close();
             return;
         }
-
+        logger.info("wechatUserInfo:{}",JSON.toJSONString(wechatUserInfo));
         DanmuAddressModel danmuAddress = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
         logger.info("通过经纬度:{},{}获取地址信息",wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude(),JSON.toJSONString(danmuAddress));
         //如果查询不到场地
