@@ -333,7 +333,7 @@ public class WechatMiniRestController {
 
         restResultModel.setResult(200);
         Map<String,String> resultMap = new HashMap<String,String>();
-        resultMap.put("cookieCode",cookie);
+        resultMap.put("userCookieKey",cookie);
         restResultModel.setData(resultMap);
         return  restResultModel;
     }
