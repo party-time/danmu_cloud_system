@@ -1,5 +1,6 @@
 package cn.partytime.filter;
 
+import cn.partytime.cache.wechatmin.WechatMiniCacheService;
 import cn.partytime.common.cachekey.admin.AdminUserCacheKey;
 import cn.partytime.common.constants.CommonConst;
 import cn.partytime.controller.base.BaseAdminController;
@@ -28,6 +29,9 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Autowired
     private RedisService redisService;
 
+    @Autowired
+    private WechatMiniCacheService wechatMiniCacheService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         if( o instanceof HandlerMethod) {
@@ -35,7 +39,22 @@ public class AuthInterceptor implements HandlerInterceptor {
             String url = request.getRequestURI();
             String cookieValue = "";
             //判断是否需要登录验证
-            if( url.indexOf("/v1/api/admin") != -1 || url.equals("/v1/logout")){
+            if(url.indexOf("/v1/api/wechatMini")!=-1){
+                if(url.indexOf("/v1/api/wechatMini/login")!=-1){
+                    log.info("小程序登录直接放开");
+                    return true;
+                }else{
+                    log.info("小程序其他接口都要验证登录信息");
+                    String cookiekey = request.getParameter("userCookieKey");
+                    Object object = wechatMiniCacheService.getWechatMiniUserCache(cookiekey);
+                    log.info("当前小程序客户端的:{}",cookiekey);
+                    if(object==null){
+                        return false;
+                    }
+                    return true;
+
+                }
+            }else if( url.indexOf("/v1/api/admin") != -1 || url.equals("/v1/logout")){
                 Cookie[] cookies =request.getCookies();
                 if( null != cookies) {
                     for (Cookie cookie : cookies) {

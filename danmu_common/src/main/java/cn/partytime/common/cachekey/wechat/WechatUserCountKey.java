@@ -1,4 +1,4 @@
-package cn.partytime.common.cachekey;
+package cn.partytime.common.cachekey.wechat;
 
 public class WechatUserCountKey {
 

@@ -1,5 +1,6 @@
 package cn.partytime.controller.wechat;
 
+import cn.partytime.cache.wechatmin.WechatMiniCacheService;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.dataRpc.RpcCmdService;
@@ -25,6 +26,7 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -82,6 +84,9 @@ public class WechatMiniRestController {
 
     @Autowired
     private WeChatMiniUserService weChatMiniUserService;
+
+    @Autowired
+    private WechatMiniCacheService wechatMiniCacheService;
 
 
 
@@ -154,12 +159,9 @@ public class WechatMiniRestController {
         if( null != userInfo){
             wechatUserService.updateUserInfo(userInfo.toWechatUser());
         }*/
-
-        String code  = request.getParameter("code");
         String latitude = request.getParameter("latitude");
         String longitude = request.getParameter("longitude");
 
-        log.info("小程序请求的code:{},纬度:{},经度:{}",code,latitude,longitude);
         //UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
         //log.info("useSecretInfo:{}",JSON.toJSONString(useSecretInfo));
        // String openId = useSecretInfo.getOpenId();
@@ -303,9 +305,6 @@ public class WechatMiniRestController {
 
         log.info("weChatMiniUser:{}",JSON.toJSONString(weChatMiniUser));
 
-
-
-
         if(weChatMiniUser==null){
             weChatMiniUser = new WeChatMiniUser();
             weChatMiniUser.setUnionId(unionId);
@@ -328,8 +327,14 @@ public class WechatMiniRestController {
         }
         wechatUserInfoService.update(wechatUserInfo);
 
+
+        String cookie = BCrypt.hashpw(unionId, BCrypt.gensalt());
+        wechatMiniCacheService.setWechatMiniUserCache(cookie,unionId);
+
         restResultModel.setResult(200);
-        restResultModel.setData(useSecretInfo);
+        Map<String,String> resultMap = new HashMap<String,String>();
+        resultMap.put("cookieCode",cookie);
+        restResultModel.setData(resultMap);
         return  restResultModel;
     }
     @RequestMapping(value = "/updateWechatUser", method = RequestMethod.POST)
@@ -351,18 +356,7 @@ public class WechatMiniRestController {
         String latitude = request.getParameter("latitude");
         String longitude = request.getParameter("longitude");
 
-        /*log.info("+++++++++++++++++++++++openIdopenId========"+unionId);
-        log.info("+++++++++++++++++++++++avatarUrlavatarUrl========"+avatarUrl);
-        log.info("+++++++++++++++++++++++citycity========"+city);
-        log.info("+++++++++++++++++++++++countrycountry========"+country);
-        log.info("+++++++++++++++++++++++gendergender========"+gender);
-        log.info("+++++++++++++++++++++++nickNamenickName========"+nickName);
-        log.info("+++++++++++++++++++++++languagelanguage========"+language);
-        log.info("+++++++++++++++++++++++provinceprovince========"+province);
-        log.info("+++++++++++++++++++++++latitudelatitude========"+latitude);
-        log.info("+++++++++++++++++++++++longitudelongitude========"+longitude);*/
-
-        if(wechatUser ==null){
+        /*if(wechatUser ==null){
             wechatUser = new WechatUser();
         }
         if(!StringUtils.isEmpty(avatarUrl)){
@@ -393,6 +387,7 @@ public class WechatMiniRestController {
         }
 
 
+
         wechatUser = wechatUserService.save(wechatUser);
         String wechatId = wechatUser.getId();
 
@@ -401,7 +396,7 @@ public class WechatMiniRestController {
             //wechatUserInfo.setLastLatitude(Double.parseDouble(latitude+""));
             //wechatUserInfo.setLastLongitude(Double.parseDouble(longitude+""));
             wechatUserInfoService.saveOrUpdate(wechatId,Double.parseDouble(longitude+""),Double.parseDouble(latitude+""));
-        }
+        }*/
 
 
 

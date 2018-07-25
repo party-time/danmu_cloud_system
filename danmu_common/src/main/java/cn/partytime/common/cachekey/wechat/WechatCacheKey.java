@@ -1,4 +1,4 @@
-package cn.partytime.common.cachekey;
+package cn.partytime.common.cachekey.wechat;
 
 /**
  * Created by liuwei on 2016/9/29.

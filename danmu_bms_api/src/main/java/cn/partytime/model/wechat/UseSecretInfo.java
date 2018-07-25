@@ -14,16 +14,19 @@ public class UseSecretInfo {
 
     private String unionId;
 
+    private int expire;
+
     public UseSecretInfo(String openId, String session_key) {
         this.openId = openId;
         this.session_key = session_key;
     }
 
 
-    public UseSecretInfo(String openId, String session_key,String unionId) {
+    public UseSecretInfo(String openId, String session_key,String unionId,int expire) {
         this.openId = openId;
         this.session_key = session_key;
         this.unionId = unionId;
+        this.expire = expire;
     }
 
 

@@ -1,6 +1,6 @@
 package cn.partytime.cache.user;
 
-import cn.partytime.common.cachekey.WechatUserCountKey;
+import cn.partytime.common.cachekey.wechat.WechatUserCountKey;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.redis.service.RedisService;
 import lombok.extern.slf4j.Slf4j;

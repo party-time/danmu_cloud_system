@@ -1,5 +1,6 @@
 package cn.partytime.util;
 
+import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.model.wechat.MaterialListJson;
 import cn.partytime.model.wechat.MaterlListPageResultJson;
 import cn.partytime.model.wechat.MaterlResultJson;
@@ -212,7 +213,8 @@ public class WeixinUtil {
                 //session_key = jsonObject.getString("session_key");
                 //session_key = jsonObject.getString("");
                 log.info("minprogram-----jsonObject:{}", JSON.toJSONString(jsonObject));
-                useSecretInfo = new UseSecretInfo(jsonObject.getString("openid"),jsonObject.getString("session_key"),jsonObject.getString("unionid"));
+                String expire = jsonObject.getString("expires_in");
+                useSecretInfo = new UseSecretInfo(jsonObject.getString("openid"),jsonObject.getString("session_key"),jsonObject.getString("unionid"),IntegerUtils.objectConvertToInt(expire));
             } catch (JSONException e) {
                 // 获取token失败
                 log.error("获取openId失败 errcode:{"+ jsonObject.getInt("errcode")+"} errmsg:{"+ jsonObject.getString("errmsg")+"}");

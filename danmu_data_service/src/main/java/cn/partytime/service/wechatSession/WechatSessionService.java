@@ -1,6 +1,6 @@
 package cn.partytime.service.wechatSession;
 
-import cn.partytime.common.cachekey.WechatSessionKey;
+import cn.partytime.common.cachekey.wechat.WechatSessionKey;
 import cn.partytime.model.WechatSession;
 import cn.partytime.redis.service.RedisService;
 import com.alibaba.fastjson.JSON;

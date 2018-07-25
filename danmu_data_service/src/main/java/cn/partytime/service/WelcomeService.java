@@ -1,6 +1,6 @@
 package cn.partytime.service;
 
-import cn.partytime.common.cachekey.WelcomeCacheKey;
+import cn.partytime.common.cachekey.wechat.WelcomeCacheKey;
 import cn.partytime.model.welcome.Welcome;
 import cn.partytime.redis.service.RedisService;
 import cn.partytime.repository.manager.WelcomeRepository;
