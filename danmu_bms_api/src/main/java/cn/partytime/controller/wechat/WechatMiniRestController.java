@@ -173,7 +173,7 @@ public class WechatMiniRestController {
         //String openId = "oze02wVALzhbkpW9f7r3g036O6vw";
         //PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
         PartyLogicModel party = rpcPartyService.findPartyByLonLat(Double.parseDouble(longitude+""),Double.parseDouble(latitude+""));
-        //log.info("PartyLogicModel:{}",JSON.toJSONString(party));
+        log.info("PartyLogicModel:{}",JSON.toJSONString(party));
         if( null == party){
             restResultModel.setResult(404);
             restResultModel.setResult_msg("位置授权");
