@@ -165,11 +165,15 @@ public class ClientLoginService {
         }
         logger.info("wechatUserInfo:{}",JSON.toJSONString(wechatUserInfo));
         DanmuAddressModel danmuAddress = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
-        logger.info("通过经纬度:{},{}获取地址信息",wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude(),JSON.toJSONString(danmuAddress));
+
         //如果查询不到场地
         if (danmuAddress == null) {
+            logger.info("经纬度查询不到地址信息");
             channel.close();
+            return;
         }
+
+        logger.info("通过经纬度:{},{}获取地址信息",wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude(),JSON.toJSONString(danmuAddress));
         String addressId = danmuAddress.getId();
         logger.info("手机获取的地址信息：{}",addressId);
 
