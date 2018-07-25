@@ -24,8 +24,9 @@ public class WechatMiniClientLoginController {
     @Autowired
     private WechatMiniClientLoginService wechatMiniClientLoginService;
 
-    @RequestMapping(value = "/login/{userKey}" ,method = RequestMethod.GET)
-    public ResultInfo view(HttpServletRequest request, @PathVariable("userKey") String userKey) {
+    @RequestMapping(value = "/login" ,method = RequestMethod.POST)
+    public ResultInfo view(HttpServletRequest request) {
+        String userKey = request.getParameter("userCookieKey");
         log.info("----------------微信小程序登录------------{}",userKey);
         return wechatMiniClientLoginService.findCollectorInfo(userKey);
     }
