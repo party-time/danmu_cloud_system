@@ -329,6 +329,7 @@ public class ClientLoginService {
 
             //判断用户是否登陆过
             Channel isLoginChannel = getIsLoginChannel(code,Integer.parseInt(clientType));
+            logger.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++{}"+isLoginChannel);
             if(isLoginChannel!=null){
                 logger.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++对已经登录过的客户端，进行踢下线处理");
                 potocolService.forceLogout(isLoginChannel);
