@@ -202,16 +202,9 @@ public class ClientLoginService {
         logger.info("将要连接到服务器客户端的信息:{}", JSON.toJSONString(danmuClient));
         if (danmuClient != null) {
             //判断用户是否登陆过
-            /*boolean isLogin = checkClientIsLogin(code,Integer.parseInt(clientType));
-            if (isLogin) {
-                logger.info("当前客户端已经登录过，下线");
-                channel.close();
-                return;
-            }*/
             Channel isLoginChannel = getIsLoginChannel(code,Integer.parseInt(clientType));
             if(isLoginChannel!=null){
-                logger.info("对已经登录过的客户端，进行踢下线处理");
-                //isLoginChannel.close();
+                logger.info("对已经登录过的java客户端，进行踢下线处理");
                 potocolService.forceLogout(isLoginChannel);
             }
             DanmuClientInfoModel danmuClientInfoModel = new DanmuClientInfoModel();
@@ -329,9 +322,8 @@ public class ClientLoginService {
 
             //判断用户是否登陆过
             Channel isLoginChannel = getIsLoginChannel(code,Integer.parseInt(clientType));
-            logger.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++{}"+isLoginChannel);
             if(isLoginChannel!=null){
-                logger.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++对已经登录过的客户端，进行踢下线处理");
+                logger.info("对已经登录过的客户端，进行踢下线处理");
                 potocolService.forceLogout(isLoginChannel);
             }
 
