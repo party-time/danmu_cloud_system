@@ -167,7 +167,7 @@ public class BmsCmsService {
                 columnObject.setColumn(column);
                 if( null != column.getObjectIdList()){
                     List<Item> itemList = itemService.findByIds(column.getObjectIdList());
-                    if( null != itemList && itemList.size() > 4){
+                    if( null != itemList ){
                         List<ItemResult> itemResultList = new ArrayList<>();
                         for(Item item : itemList){
                             ItemResult itemResult = new ItemResult();
