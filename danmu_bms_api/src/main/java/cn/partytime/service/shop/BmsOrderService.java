@@ -131,7 +131,7 @@ public class BmsOrderService {
         content.put("keyword4",valueTmpl4);
 
         ValueTmpl valueTmpl5 = new ValueTmpl();
-        valueTmpl5.setValue("请在有效期之前，在星美生活领取您的商品,向工作人员出示您的兑换码，如有任何问题，请联系17501061266");
+        valueTmpl5.setValue("请在有效期之前，去前台领取您的商品,向工作人员展示此信息。");
         valueTmpl5.setColor("#ff0000");
         content.put("remark",valueTmpl5);
         msgTmpl.setData(content);
