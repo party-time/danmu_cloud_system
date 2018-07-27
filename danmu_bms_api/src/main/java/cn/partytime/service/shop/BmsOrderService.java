@@ -154,7 +154,8 @@ public class BmsOrderService {
         }
 
         for(String adminUserId : adminUserIdList){
-            WechatUser wechatUser = wechatUserService.findById(adminUserId);
+            AdminUser adminUser = adminUserService.findById(adminUserId);
+            WechatUser wechatUser = wechatUserService.findById(adminUser.getWechatId());
             MsgTmpl msgTmpl = new MsgTmpl();
             msgTmpl.setTouser(wechatUser.getOpenId());
 
