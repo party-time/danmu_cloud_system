@@ -56,6 +56,26 @@ public class BmsPartyService {
 
 
 
+    public PartyLogicModel findCurrentPartyByUnionId(String unionId) {
+        try {
+            logger.info("查询当前活动----------------------start");
+            //获取用户经纬度
+            WechatUser wechatUser = wechatUserRepository.findByUnionId(unionId);
+            WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
+            String userId = wechatUser.getUserId();
+            logger.info("经度:{},纬度:{},用户编号:{}",wechatUserInfo.getLastLongitude(),wechatUserInfo.getLastLatitude(),userId);
+            PartyLogicModel partyLogicModel =partyLogicService.findPartyByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+            if (partyLogicModel == null) {
+                logger.info("没有活动");
+                return null;
+            }
+            return partyLogicModel;
+        } catch (Exception e) {
+            logger.error("查询当前活动:{}" , e);
+            return null;
+        }
+    }
+
     public PartyLogicModel findCurrentParty(String openId) {
         try {
             logger.info("查询当前活动----------------------start");

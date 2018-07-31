@@ -88,6 +88,8 @@ public class WechatMiniRestController {
     @Autowired
     private WechatMiniCacheService wechatMiniCacheService;
 
+    @Autowired
+    private BmsPartyService bmsPartyService;
 
 
     @RequestMapping(value = "/wxBingPay", method = RequestMethod.POST)
@@ -227,9 +229,11 @@ public class WechatMiniRestController {
 
 
 
-    @RequestMapping(value = "/historyDanmu/{openId}/{pageNo}/{pageSize}", method = RequestMethod.GET)
-    public PageResultModel historyDanmu(@PathVariable("openId")String openId , @PathVariable("pageNo") Integer pageNo, @PathVariable("pageSize")Integer pageSize) {
-        PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
+    @RequestMapping(value = "/historyDanmu/{code}/{pageNo}/{pageSize}", method = RequestMethod.GET)
+    public PageResultModel historyDanmu(@PathVariable("code")String code , @PathVariable("pageNo") Integer pageNo, @PathVariable("pageSize")Integer pageSize) {
+        Object object =  wechatMiniCacheService.getWechatMiniUserCache(code);
+        String unionId = String.valueOf(object);
+        PartyLogicModel party = bmsPartyService.findCurrentPartyByUnionId(unionId);
         log.info("party:{}",JSON.toJSONString(party));
         PageResultModel pageResultModel = bmsDanmuService.findPageResultDanmuModel(pageNo-1,pageSize,party.getAddressId(),party.getPartyId(),1);
         return pageResultModel;
