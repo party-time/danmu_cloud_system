@@ -229,13 +229,21 @@ public class WechatMiniRestController {
 
 
 
-    @RequestMapping(value = "/historyDanmu/{code}/{pageNo}/{pageSize}", method = RequestMethod.GET)
-    public PageResultModel historyDanmu(@PathVariable("code")String code , @PathVariable("pageNo") Integer pageNo, @PathVariable("pageSize")Integer pageSize) {
-        Object object =  wechatMiniCacheService.getWechatMiniUserCache(code);
+    @RequestMapping(value = "/historyDanmu", method = RequestMethod.GET)
+    public PageResultModel historyDanmu(HttpServletRequest request) {
+
+
+        String userCookieKey = request.getParameter("userCookieKey");
+
+        String pageNo = request.getParameter("pageNo");
+
+        String pageSize = request.getParameter("pageSize");
+
+        Object object =  wechatMiniCacheService.getWechatMiniUserCache(userCookieKey);
         String unionId = String.valueOf(object);
         PartyLogicModel party = bmsPartyService.findCurrentPartyByUnionId(unionId);
         log.info("party:{}",JSON.toJSONString(party));
-        PageResultModel pageResultModel = bmsDanmuService.findPageResultDanmuModel(pageNo-1,pageSize,party.getAddressId(),party.getPartyId(),1);
+        PageResultModel pageResultModel = bmsDanmuService.findPageResultDanmuModel(IntegerUtils.objectConvertToInt(pageNo)-1,IntegerUtils.objectConvertToInt(pageSize),party.getAddressId(),party.getPartyId(),1);
         return pageResultModel;
     }
 
