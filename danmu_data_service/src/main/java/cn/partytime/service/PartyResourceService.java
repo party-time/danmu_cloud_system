@@ -1,5 +1,6 @@
 package cn.partytime.service;
 
+import cn.partytime.common.constants.Const;
 import cn.partytime.model.manager.PartyResource;
 import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.repository.manager.PartyResourceRepository;
@@ -44,6 +45,17 @@ public class PartyResourceService {
         partyResource.setPartyId(partyId);
         partyResource.setResourceId(resourceId);
         partyResource.setFileType(fileType);
+        if(fileType == Const.RESOURCE_H5_BACKGROUND){
+            List<PartyResource> partyResourceList  = partyResourceRepository.findByPartyId(partyId);
+            if( null != partyResourceList){
+                for(PartyResource pr : partyResourceList){
+                    if( pr.getFileType() == Const.RESOURCE_H5_BACKGROUND){
+                        partyResource = pr;
+                    }
+                }
+            }
+            partyResource.setResourceId(resourceId);
+        }
         return partyResourceRepository.save(partyResource);
     }
 

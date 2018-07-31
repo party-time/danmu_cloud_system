@@ -507,8 +507,8 @@ public class WechatRestController {
                 log.info(attach);
                 Integer price = item.getShowPrice()*num;
                 Map<String,String> map = wechatPayService.createUnifiedorder(nonceStr,timestamp,openId,item.getName(),"",attach,price,clientIp);
-                bmsOrderService.sendBuySuccess(openId,order.getId());
-                bmsOrderService.sendAdminOrder("buyItem",order.getId());
+                //bmsOrderService.sendBuySuccess(openId,order.getId());
+                //bmsOrderService.sendAdminOrder("buyItem",order.getId());
                 return map;
             }
         }else{
