@@ -91,6 +91,12 @@ public class AuthInterceptor implements HandlerInterceptor {
                 return true;
             }
 
+            //审核页面查询历史弹幕
+            if(url.indexOf("/v1/api/admin/historyCheckDanmu/page") !=-1){
+                return true;
+            }
+
+
             if( null != adminUser){
                 if(!StringUtils.isEmpty(adminUser.getRoleId()) && adminUser.getRoleId().equals("589a98cd77c8afdcbdeaeeb6")){
                     if( url.indexOf("/film/danmuCheck") ==-1 && !url.equals("/v1/logout") ){
