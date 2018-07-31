@@ -313,7 +313,7 @@ public class WechatController {
         if( null == danmuAddress.getShopStatus() || danmuAddress.getShopStatus() == 1){
             return "redirect:/htm/noshop.html";
         }
-        PageColumn pageColumn = bmsCmsService.findItemByAddressId("5afa8e5ee6e9b82681bcb53b");
+        PageColumn pageColumn = bmsCmsService.findItemByAddressId(danmuAddress.getId());
         model.addAttribute("pageColumn",pageColumn);
         model.addAttribute("imgUrl",fileUploadUtil.getUrl());
         model.addAttribute("baseUrl",partyTimeConfig.getUrl());
