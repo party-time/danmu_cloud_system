@@ -108,6 +108,8 @@ public class WechatController {
             return "redirect:/htm/noparty.html";
         }
 
+
+
         WechatUser wechatUser = bmsWechatUserService.findByOpenId(openId);
         if( null == wechatUser){
             return "redirect:/htm/noparty.html";
@@ -121,10 +123,12 @@ public class WechatController {
                 if( null == wechatUserInfo.getLastLongitude() || null == wechatUserInfo.getLastLatitude()){
                     return "redirect:/wechat/getLocation?openId="+openId;
                 }
+                /*
                 long a = (new Date().getTime() -wechatUserInfo.getLastGetLocationDate().getTime())/(1000*60*60);
                 if(a > 24){
+                    log.info("######################/sendDM:redirectUrl");
                     return "redirect:/wechat/getLocation?openId="+openId;
-                }
+                }*/
             }else{
                 return "redirect:/wechat/getLocation?openId="+openId;
             }

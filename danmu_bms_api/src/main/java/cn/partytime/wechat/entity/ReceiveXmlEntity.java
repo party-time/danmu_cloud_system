@@ -27,6 +27,8 @@ public class ReceiveXmlEntity {
 	private String Content="";
 	private String Format="";
 	private String Recognition="";
+	private String MenuId="";
+
 	
 	public String getRecognition() {
 		return Recognition;
@@ -167,7 +169,15 @@ public class ReceiveXmlEntity {
 		MsgType = msgType;
 	}
 
-    @Override
+	public String getMenuId() {
+		return MenuId;
+	}
+
+	public void setMenuId(String menuId) {
+		MenuId = menuId;
+	}
+
+	@Override
     public String toString() {
         return "ReceiveXmlEntity{" +
                 "ToUserName='" + ToUserName + '\'' +

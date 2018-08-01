@@ -142,7 +142,7 @@ public class AdminUserController extends BaseAdminController{
     public RestResultModel createRole(){
         RestResultModel restResultModel = new RestResultModel();
         AdminRole adminRole = new AdminRole();
-        adminRole.setRoleName("第三方发货员");
+        adminRole.setRoleName("第三方经理");
         adminRoleService.save(adminRole);
         restResultModel.setResult(200);
         return restResultModel;
