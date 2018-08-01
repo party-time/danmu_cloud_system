@@ -108,6 +108,8 @@ public class WechatController {
             return "redirect:/htm/noparty.html";
         }
 
+        log.info("######################/sendDM:redirectUrl");
+
         WechatUser wechatUser = bmsWechatUserService.findByOpenId(openId);
         if( null == wechatUser){
             return "redirect:/htm/noparty.html";
