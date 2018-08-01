@@ -25,4 +25,5 @@ public class WechatMiniCacheService {
         return redisService.get(key);
     }
 
+
 }
