@@ -39,7 +39,4 @@ public class Application {
     return factory.createMultipartConfig();
   }
 
-
-
-
 }
