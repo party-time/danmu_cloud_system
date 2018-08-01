@@ -104,6 +104,13 @@ public class AuthInterceptor implements HandlerInterceptor {
                         return false;
                     }
                 }
+
+                if(!StringUtils.isEmpty(adminUser.getRoleId()) && adminUser.getRoleId().equals("5b6166ade6e9b84788fcbc5f")){
+                    if( url.indexOf("/order") ==-1 && !url.equals("/v1/logout") ){
+                        response.setStatus(466);
+                        return false;
+                    }
+                }
             }
         }
         return true;
