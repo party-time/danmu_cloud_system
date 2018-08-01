@@ -357,9 +357,16 @@ public class WechatMiniRestController {
             wechatUser.setLongitude(Double.parseDouble(longitude+""));
         }
 
+        if( null != wechatUser.getAssignAddressTime()){
+            Date now  = new Date();
+            long aa = now.getTime() - wechatUser.getAssignAddressTime().getTime();
+            if( (aa /(1000*60)) > 30 ){
+                wechatUser = wechatUserService.save(wechatUser);
+            }
+        }else{
+            wechatUser = wechatUserService.save(wechatUser);
+        }
 
-
-        wechatUser = wechatUserService.save(wechatUser);
         String wechatId = wechatUser.getId();
 
         WechatUserInfo wechatUserInfo =  wechatUserInfoService.findByWechatId(wechatId);
@@ -368,6 +375,8 @@ public class WechatMiniRestController {
             wechatUserInfo.setLastLongitude(Double.parseDouble(longitude+""));
             //wechatUserInfoService.saveOrUpdate(wechatId,Double.parseDouble(longitude+""),Double.parseDouble(latitude+""));
             wechatUserInfoService.update(wechatUserInfo);
+
+
         }
         restResultModel.setResult(200);
         restResultModel.setData(wechatUser);
