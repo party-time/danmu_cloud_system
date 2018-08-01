@@ -361,9 +361,11 @@ public class WechatMiniRestController {
             Date now  = new Date();
             long aa = now.getTime() - wechatUser.getAssignAddressTime().getTime();
             if( (aa /(1000*60)) > 30 ){
+                log.info("更新用户信息-------------------30");
                 wechatUser = wechatUserService.save(wechatUser);
             }
         }else{
+            log.info("更新用户信息---------------------------------");
             wechatUser = wechatUserService.save(wechatUser);
         }
 
