@@ -161,20 +161,20 @@ public class WechatMiniRestController {
         if( null != userInfo){
             wechatUserService.updateUserInfo(userInfo.toWechatUser());
         }*/
-        String latitude = request.getParameter("latitude");
-        String longitude = request.getParameter("longitude");
+        //String latitude = request.getParameter("latitude");
+        //String longitude = request.getParameter("longitude");
+        String userCookieKey = request.getParameter("userCookieKey");
+        Object object =  wechatMiniCacheService.getWechatMiniUserCache(userCookieKey);
+        String unionId = String.valueOf(object);
+        WechatUser wechatUser = wechatUserService.findByUnionId(unionId);
+        String wechatId =wechatUser.getId();
+        WechatUserInfo wechatUserInfo = wechatUserInfoService.findByWechatId(wechatId);
 
-        //UseSecretInfo useSecretInfo = WeixinUtil.getMiniProgramUserOpenIdAndSessionKey(code);
-        //log.info("useSecretInfo:{}",JSON.toJSONString(useSecretInfo));
-       // String openId = useSecretInfo.getOpenId();
-
+        double latitude = wechatUserInfo.getLastLatitude();
+        double longitude = wechatUserInfo.getLastLongitude();
 
         RestResultModel restResultModel = new RestResultModel();
-        //UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), useSecretInfo.getOpenId());
-
-        //String openId = "oze02wVALzhbkpW9f7r3g036O6vw";
-        //PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
-        PartyLogicModel party = rpcPartyService.findPartyByLonLat(Double.parseDouble(longitude+""),Double.parseDouble(latitude+""));
+        PartyLogicModel party = rpcPartyService.findPartyByLonLat(longitude,latitude);
         log.info("PartyLogicModel:{}",JSON.toJSONString(party));
         if( null == party){
             restResultModel.setResult(404);
