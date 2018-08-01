@@ -74,7 +74,7 @@ public class ReceiveXmlProcess {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-            log.error(e.getMessage());
+            log.error("",e);
 		}
 		return msg;
 	}
@@ -116,7 +116,7 @@ public class ReceiveXmlProcess {
 				method.invoke(entity, ele.getText());
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("",e);
 		}
 		return entity;
 	}
@@ -157,7 +157,7 @@ public class ReceiveXmlProcess {
 				method.invoke(entity, ele.getText());
 			}
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("",e);
 		}
 		return entity;
 	}
