@@ -169,6 +169,64 @@ public class WechatMiniRestController {
     }
 
 
+    @RequestMapping(value = "/findPartyInfoByLocation", method = RequestMethod.POST)
+    public RestResultModel findPartyInfoByLocation(HttpServletRequest request) {
+
+        String latitude = request.getParameter("latitude");
+        String longitude = request.getParameter("longitude");
+        RestResultModel restResultModel = new RestResultModel();
+        PartyLogicModel party = rpcPartyService.findPartyByLonLat(Double.parseDouble(longitude+""),Double.parseDouble(latitude+""));
+        log.info("PartyLogicModel:{}",JSON.toJSONString(party));
+        if( null == party){
+            restResultModel.setResult(404);
+            restResultModel.setResult_msg("没有活动");
+            return restResultModel;
+        }
+
+        Map<String, Object> resourceFileModels = resourceFileService.findResourceMapByPartyId(party.getPartyId());
+
+        List<ResourceFile> all = new ArrayList<>();
+        List<ResourceFile> expressionconstant = (List<ResourceFile>)resourceFileModels.get("expressionconstant");
+        List<ResourceFile> expressions = (List<ResourceFile>)resourceFileModels.get("expressions");
+
+        if( null != expressionconstant){
+            all.addAll(expressionconstant);
+        }
+
+        if( null != expressions){
+            all.addAll(expressions);
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("expressions",all );
+
+        if (null != resourceFileModels.get("h5Background")) {
+            List reList = (ArrayList) resourceFileModels.get("h5Background");
+            if (reList.size() > 0) {
+                map.put("background", reList.get(0));
+            }
+        }
+        map.put("colors", bmsColorService.findDanmuColor(0));
+        //map.put("openId", openId);
+        map.put("partyId",party.getPartyId());
+        map.put("addressId",party.getAddressId());
+
+        List<FastDanmu> fastDanmuList = fastDanmuService.findByPartyId(party.getPartyId());
+        if( null != fastDanmuList && fastDanmuList.size() > 0){
+            map.put("fastdmList",fastDanmuList);
+        }
+
+        String fileUploadUrl = fileUploadUtil.getUrl();
+        map.put("baseUrl",fileUploadUrl);
+        map.put("partyName",party.getPartyName());
+        //map.put("openId",openId);
+
+        //log.info("partyInfo:{}",JSON.toJSONString(map));
+        restResultModel.setResult(200);
+        restResultModel.setData(map);
+        return restResultModel;
+    }
+
+
 
     @RequestMapping(value = "/findPartyInfo", method = RequestMethod.POST)
     public RestResultModel partyInfo(HttpServletRequest request) {
