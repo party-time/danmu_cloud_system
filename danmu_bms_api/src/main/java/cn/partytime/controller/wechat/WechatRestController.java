@@ -683,6 +683,11 @@ public class WechatRestController {
         return restResultModel;
     }
 
+    @RequestMapping(value = "/testAxure", method = RequestMethod.GET)
+    public RestResultModel testAxure(){
+        RestResultModel restResultModel = new RestResultModel();
+        return restResultModel;
+    }
 
     /**
     public static void main(String[] args){
