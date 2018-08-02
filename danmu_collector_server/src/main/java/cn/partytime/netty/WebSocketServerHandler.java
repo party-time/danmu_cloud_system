@@ -54,7 +54,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<FullHttp
 
         logger.info("参数数量:"+parameters.size());
         logger.info("parameters.size()>=2:"+(parameters.size()>=2));
-        if (parameters.size()>=2) {
+        if (parameters.size()<2) {
             logger.info("参数不可缺省");
             sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));
             return;
