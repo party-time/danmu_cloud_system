@@ -53,7 +53,8 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<FullHttp
         Map<String, List<String>> parameters = queryStringDecoder.parameters();
 
         logger.info("参数数量:"+parameters.size());
-        if (parameters.size() >=2) {
+        logger.info("parameters.size()>=2:"+(parameters.size()>=2));
+        if (parameters.size()>=2) {
             logger.info("参数不可缺省");
             sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));
             return;
