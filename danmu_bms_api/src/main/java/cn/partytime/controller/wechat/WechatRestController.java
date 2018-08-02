@@ -686,6 +686,7 @@ public class WechatRestController {
     @RequestMapping(value = "/testAxure", method = RequestMethod.GET)
     public RestResultModel testAxure(){
         RestResultModel restResultModel = new RestResultModel();
+        restResultModel.setResult(200);
         return restResultModel;
     }
 
