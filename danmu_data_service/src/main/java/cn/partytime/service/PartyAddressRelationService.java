@@ -138,6 +138,11 @@ public class PartyAddressRelationService {
 
     }
 
+    public List<PartyAddressRelation> findByPartyIdWithin(List<String> partyIdList) {
+        return partyAddressRelationRepository.findByPartyIdIn(partyIdList);
+    }
+
+
     public PartyAddressRelation findByAddressIdANDPartyIdWithin(String addressId, List<String> partyIdList) {
         Criteria criteria = new Criteria().andOperator(
                 Criteria.where("partyId").in(partyIdList),

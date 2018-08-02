@@ -1,14 +1,14 @@
 package cn.partytime.controller.wechat;
 
 import cn.partytime.cache.wechatmin.WechatMiniCacheService;
+import cn.partytime.common.constants.PartyConst;
 import cn.partytime.common.util.DateUtils;
 import cn.partytime.common.util.IntegerUtils;
+import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcCmdService;
 import cn.partytime.dataRpc.RpcPartyService;
 import cn.partytime.model.*;
-import cn.partytime.model.manager.FastDanmu;
-import cn.partytime.model.manager.H5Template;
-import cn.partytime.model.manager.ResourceFile;
+import cn.partytime.model.manager.*;
 import cn.partytime.model.wechat.UseSecretInfo;
 import cn.partytime.model.wechat.WeChatMiniUser;
 import cn.partytime.model.wechat.WechatUser;
@@ -91,7 +91,40 @@ public class WechatMiniRestController {
     @Autowired
     private BmsPartyService bmsPartyService;
 
+    @Autowired
+    private DanmuAddressService danmuAddressService;
 
+
+    @Autowired
+    private PartyService partyService;
+
+    @Autowired
+    private PartyAddressRelationService partyAddressRelationService;
+
+
+    @RequestMapping(value = "/findAddressList", method = RequestMethod.POST)
+    public RestResultModel findAddressList(HttpServletRequest request) {
+        RestResultModel restResultModel = new RestResultModel();
+        List<DanmuAddress> danmuAddressList =  danmuAddressService.findByType(0);
+        List<Party> partyList =  partyService.findByTypeAndStatusLess(PartyConst.PARTY_TYPE_PARTY,3);
+        if(ListUtils.checkListIsNotNull(partyList)){
+            List<String> partyIdList = new ArrayList<String>();
+            partyList.forEach(party -> partyIdList.add(party.getId()));
+            List<PartyAddressRelation> partyAddressRelationList = partyAddressRelationService.findByPartyIds(partyIdList);
+            List<String> addressList = new ArrayList<String>();
+            if(ListUtils.checkListIsNotNull(partyAddressRelationList)){
+                partyAddressRelationList.forEach(partyAddressRelation -> addressList.add(partyAddressRelation.getAddressId()));
+            }
+            List<DanmuAddress> danmuAddressTempList = danmuAddressService.findDanmuAddressByIdList(addressList);
+            danmuAddressList.addAll(danmuAddressTempList);
+        }
+        restResultModel.setResult(200);
+        if(ListUtils.checkListIsNull(danmuAddressList)){
+            danmuAddressList = new ArrayList<DanmuAddress>();
+        }
+        restResultModel.setData(danmuAddressList);
+        return restResultModel;
+    }
     @RequestMapping(value = "/wxBingPay", method = RequestMethod.POST)
     public RestResultModel wxBingPay(HttpServletRequest request) {
         RestResultModel restResultModel = new RestResultModel();
