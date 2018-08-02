@@ -67,7 +67,6 @@
                        <p><label style="color: #9e9e9e !important;">手机号</label> <input type="text" style="border: 1px solid #cccccc" id="phone"/></p>
                        <p><label style="color: #9e9e9e !important;">影厅</label><input type="text" style="width:50px;margin-right: 50px;border: 1px solid #cccccc" id="roomNum"/> <label style="color: #9e9e9e !important;">座位号</label><input type="text" style="width:50px;border: 1px solid #cccccc" id="seatNum"/></p>
                </div>
-
                 <div class="col-md-5 product-intro">
                     <div class="shop-product-intro grey-500">
                         <div class="form-group margin-top-15" style="float:left;">
