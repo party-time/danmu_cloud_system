@@ -1,5 +1,6 @@
 package cn.partytime.netty;
 
+import cn.partytime.common.constants.ClientConst;
 import cn.partytime.service.ClientLoginService;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
@@ -57,6 +58,9 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<FullHttp
         }
         String code = parameters.get("code").get(0);
         String clientType = parameters.get("clientType").get(0);
+
+
+
         if(StringUtils.isEmpty(clientType) || StringUtils.isEmpty(code)){
             logger.info("唯一标识,客户端类型都不能为空");
             sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1, NOT_FOUND));
@@ -70,7 +74,13 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<FullHttp
             WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
         } else {
             ChannelFuture channelFuture = handshaker.handshake(ctx.channel(), req);
-            clientLoginService.clientLogin(code,clientType,ctx.channel());
+            if (ClientConst.CLIENT_TYPE_WECHATMIN.equals(clientType)) {
+                String latitude = parameters.get("latitude").get(0);
+                String longitude = parameters.get("longitude").get(0);
+                clientLoginService.WechatMinLogin(code,clientType,ctx.channel(),latitude,longitude);
+            }else {
+                clientLoginService.clientLogin(code,clientType,ctx.channel());
+            }
         }
     }
 

@@ -116,11 +116,17 @@ public class ClientLoginService {
             //移动端弹幕处理
             logger.info("h5{}端触发登录", code);
             nodeClientLogin(code, channel, clientType);
-        }else if (ClientConst.CLIENT_TYPE_WECHATMIN.equals(clientType)) {
+        }/*else if (ClientConst.CLIENT_TYPE_WECHATMIN.equals(clientType)) {
             //移动端弹幕处理
             logger.info("小程序{}端触发登录", code);
             wechatMiniClientLogin(code, channel, clientType);
-        }
+        }*/
+    }
+
+    public void WechatMinLogin(String code, String clientType, Channel channel,String latitude,String longitude) {
+        //移动端弹幕处理
+        logger.info("小程序{}端触发登录", code);
+        wechatMiniClientLogin(code, channel, clientType,latitude,longitude);
     }
 
     /**
@@ -130,7 +136,7 @@ public class ClientLoginService {
      * @param channel
      * @param type
      */
-    private void wechatMiniClientLogin(String code, Channel channel, String type) {
+    private void wechatMiniClientLogin(String code, Channel channel, String type,String latitude,String longitude) {
 
         logger.info("小程序端登录服务器,发送的唯一标示:{}", code);
         if (StringUtils.isEmpty(code)) {
@@ -156,15 +162,7 @@ public class ClientLoginService {
             channel.close();
             return;
         }
-
-        WechatUserInfoDto wechatUserInfo = rpcWechatService.findByWechatId(wechatUser.getId());
-        if (wechatUserInfo == null) {
-            logger.info("通过wechatId:{}获取的微信用户地理位置为空,用户为非法用户", wechatUserInfo);
-            channel.close();
-            return;
-        }
-        logger.info("wechatUserInfo:{}",JSON.toJSONString(wechatUserInfo));
-        DanmuAddressModel danmuAddress = rpcDanmuAddressService.findAddressByLonLat(wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude());
+        DanmuAddressModel danmuAddress = rpcDanmuAddressService.findAddressByLonLat(Double.parseDouble(longitude+""), Double.parseDouble(latitude+""));
 
         //如果查询不到场地
         if (danmuAddress == null) {
@@ -173,7 +171,7 @@ public class ClientLoginService {
             return;
         }
 
-        logger.info("通过经纬度:{},{}获取地址信息",wechatUserInfo.getLastLongitude(), wechatUserInfo.getLastLatitude(),JSON.toJSONString(danmuAddress));
+        logger.info("通过经纬度:{},{}获取地址信息",longitude, latitude,JSON.toJSONString(danmuAddress));
         String addressId = danmuAddress.getId();
         logger.info("手机获取的地址信息：{}",addressId);
 
