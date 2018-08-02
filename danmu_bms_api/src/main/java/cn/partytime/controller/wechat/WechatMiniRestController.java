@@ -106,6 +106,7 @@ public class WechatMiniRestController {
     public RestResultModel findAddressList(HttpServletRequest request) {
         RestResultModel restResultModel = new RestResultModel();
         List<DanmuAddress> danmuAddressList =  danmuAddressService.findByType(0);
+        log.info("danmuAddressList:{}",JSON.toJSONString(danmuAddressList));
         List<Party> partyList =  partyService.findByTypeAndStatusLess(PartyConst.PARTY_TYPE_PARTY,3);
         if(ListUtils.checkListIsNotNull(partyList)){
             List<String> partyIdList = new ArrayList<String>();
