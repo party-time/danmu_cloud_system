@@ -174,6 +174,8 @@ public class WechatMiniRestController {
 
         String latitude = request.getParameter("latitude");
         String longitude = request.getParameter("longitude");
+
+        log.info("latitude:{},longitude:{}",latitude,longitude);
         RestResultModel restResultModel = new RestResultModel();
         PartyLogicModel party = rpcPartyService.findPartyByLonLat(Double.parseDouble(longitude+""),Double.parseDouble(latitude+""));
         log.info("PartyLogicModel:{}",JSON.toJSONString(party));
