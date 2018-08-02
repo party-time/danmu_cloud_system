@@ -102,7 +102,7 @@ public class WechatMiniRestController {
     private PartyAddressRelationService partyAddressRelationService;
 
 
-    @RequestMapping(value = "/findAddressList", method = RequestMethod.POST)
+    @RequestMapping(value = "/findAddressList", method = RequestMethod.GET)
     public RestResultModel findAddressList(HttpServletRequest request) {
         RestResultModel restResultModel = new RestResultModel();
         List<DanmuAddress> danmuAddressList =  danmuAddressService.findByType(0);
