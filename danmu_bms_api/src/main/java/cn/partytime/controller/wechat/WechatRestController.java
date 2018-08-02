@@ -687,6 +687,7 @@ public class WechatRestController {
     public RestResultModel testAxure(){
         RestResultModel restResultModel = new RestResultModel();
         restResultModel.setResult(200);
+
         return restResultModel;
     }
 
