@@ -107,17 +107,27 @@ public class WechatMiniRestController {
         RestResultModel restResultModel = new RestResultModel();
         List<DanmuAddress> danmuAddressList =  danmuAddressService.findByType(0);
         log.info("danmuAddressList:{}",JSON.toJSONString(danmuAddressList));
+
+        Set<String> addressSet = new HashSet<String>();
+        danmuAddressList.forEach(danmuAddress -> addressSet.add(danmuAddress.getId()));
         List<Party> partyList =  partyService.findByTypeAndStatusLess(PartyConst.PARTY_TYPE_PARTY,3);
         if(ListUtils.checkListIsNotNull(partyList)){
             List<String> partyIdList = new ArrayList<String>();
             partyList.forEach(party -> partyIdList.add(party.getId()));
+
             List<PartyAddressRelation> partyAddressRelationList = partyAddressRelationService.findByPartyIds(partyIdList);
             List<String> addressList = new ArrayList<String>();
             if(ListUtils.checkListIsNotNull(partyAddressRelationList)){
                 partyAddressRelationList.forEach(partyAddressRelation -> addressList.add(partyAddressRelation.getAddressId()));
             }
             List<DanmuAddress> danmuAddressTempList = danmuAddressService.findDanmuAddressByIdList(addressList);
-            danmuAddressList.addAll(danmuAddressTempList);
+            List<DanmuAddress> partyAddressList = new ArrayList<DanmuAddress>();
+            for(DanmuAddress danmuAddress:danmuAddressTempList){
+                if(!addressSet.contains(danmuAddress.getId())){
+                    partyAddressList.add(danmuAddress);
+                }
+            }
+            danmuAddressList.addAll(partyAddressList);
         }
         restResultModel.setResult(200);
         if(ListUtils.checkListIsNull(danmuAddressList)){
