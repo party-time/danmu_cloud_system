@@ -70,7 +70,6 @@
 
                 <div class="col-md-5 product-intro">
                     <div class="shop-product-intro grey-500">
-
                         <div class="form-group margin-top-15" style="float:left;">
                             <label class="control-label font-weight-unset">数量</label>
                             <div class="width-150">
@@ -106,7 +105,7 @@
     var wechatPay = function(){
         // 注意：此 Demo 使用 2.7 版本支付接口实现，建议使用此接口时参考微信支付相关最新文档。
           $.ajax({
-              url: "/wechat/buyItem?nonceStr=${wxJsConfig.nonceStr}&openId=${opendId}&timestamp=${wxJsConfig.timestamp}&itemId=${itemResult.item.id}&num="+$('#itemNum').val()+"&pnohe="+$('#phone').val()+"&roomNum="+$('#roomNum').val()+"&seatNum="+$('#seatNum').val(),
+              url: "/wechat/buyItem?nonceStr=${wxJsConfig.nonceStr}&openId=${opendId}&timestamp=${wxJsConfig.timestamp}&itemId=${itemResult.item.id}&num="+$('#itemNum').val()+"&phone:="+$('#phone').val()+"&roomNum="+$('#roomNum').val()+"&seatNum="+$('#seatNum').val(),
               type: "get"
           }).done(function (data) {
                   wx.chooseWXPay({
