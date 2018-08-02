@@ -61,6 +61,21 @@ public class Order {
      */
     private String code;
 
+    /**
+     * 影厅号
+     */
+    private Integer roomNum;
+
+    /**
+     * 座位号
+     */
+    private Integer seatNum;
+
+    /**
+     * 电话号码
+     */
+    private String phone;
+
     public String getId() {
         return id;
     }
@@ -187,5 +202,29 @@ public class Order {
 
     public void setNum(Integer num) {
         this.num = num;
+    }
+
+    public Integer getRoomNum() {
+        return roomNum;
+    }
+
+    public void setRoomNum(Integer roomNum) {
+        this.roomNum = roomNum;
+    }
+
+    public Integer getSeatNum() {
+        return seatNum;
+    }
+
+    public void setSeatNum(Integer seatNum) {
+        this.seatNum = seatNum;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

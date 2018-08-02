@@ -63,8 +63,14 @@
                         </div>
                     </div>
                 </div>
+               <div class="col-md-5 product-intro" style="margin-top: 10px;">
+                       <p><label style="color: #9e9e9e !important;">手机号</label> <input type="text" style="border: 1px solid #cccccc" id="phone"/></p>
+                       <p><label style="color: #9e9e9e !important;">影厅</label><input type="text" style="width:50px;margin-right: 50px;border: 1px solid #cccccc" id="roomNum"/> <label style="color: #9e9e9e !important;">座位号</label><input type="text" style="width:50px;border: 1px solid #cccccc" id="seatNum"/></p>
+               </div>
+
                 <div class="col-md-5 product-intro">
                     <div class="shop-product-intro grey-500">
+
                         <div class="form-group margin-top-15" style="float:left;">
                             <label class="control-label font-weight-unset">数量</label>
                             <div class="width-150">
@@ -100,7 +106,7 @@
     var wechatPay = function(){
         // 注意：此 Demo 使用 2.7 版本支付接口实现，建议使用此接口时参考微信支付相关最新文档。
           $.ajax({
-              url: "/wechat/buyItem?nonceStr=${wxJsConfig.nonceStr}&openId=${opendId}&timestamp=${wxJsConfig.timestamp}&itemId=${itemResult.item.id}&num="+$('#itemNum').val(),
+              url: "/wechat/buyItem?nonceStr=${wxJsConfig.nonceStr}&openId=${opendId}&timestamp=${wxJsConfig.timestamp}&itemId=${itemResult.item.id}&num="+$('#itemNum').val()+"&pnohe="+$('#phone').val()+"&roomNum="+$('#roomNum').val()+"&seatNum="+$('#seatNum').val(),
               type: "get"
           }).done(function (data) {
                   wx.chooseWXPay({

@@ -478,7 +478,8 @@ public class WechatRestController {
     }
 
     @RequestMapping(value = "/buyItem", method = RequestMethod.GET)
-    public Map buy(String nonceStr,String timestamp ,String openId, HttpServletRequest request,String itemId,Integer num){
+    public Map buy(String nonceStr,String timestamp ,String openId, HttpServletRequest request,
+                   String itemId,Integer num,Integer roomNum,Integer seatNum,String phone){
         if(!StringUtils.isEmpty(itemId)){
             Item item = itemService.findById(itemId);
             if( null != item){
@@ -501,7 +502,9 @@ public class WechatRestController {
                 order.setStatus(1);
                 order.setTotal_fee(item.getShowPrice());
                 order.setNum(num);
-
+                order.setRoomNum(roomNum);
+                order.setSeatNum(seatNum);
+                order.setPhone(phone);
                 orderService.save(order);
                 String attach = "orderId:"+order.getId();
                 log.info(attach);
