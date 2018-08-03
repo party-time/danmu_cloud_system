@@ -342,10 +342,13 @@ public class WechatMiniRestController {
         String pageNo = request.getParameter("pageNo");
 
         String pageSize = request.getParameter("pageSize");
+        String latitude = request.getParameter("latitude");
+        String longitude = request.getParameter("longitude");
 
-        Object object =  wechatMiniCacheService.getWechatMiniUserCache(userCookieKey);
-        String unionId = String.valueOf(object);
-        PartyLogicModel party = bmsPartyService.findCurrentPartyByUnionId(unionId);
+        //Object object =  wechatMiniCacheService.getWechatMiniUserCache(userCookieKey);
+        //String unionId = String.valueOf(object);
+        //PartyLogicModel party = bmsPartyService.findCurrentPartyByUnionId(unionId);
+        PartyLogicModel party = rpcPartyService.findPartyByLonLat(Double.parseDouble(longitude+""),Double.parseDouble(latitude+""));
         log.info("party:{}",JSON.toJSONString(party));
         PageResultModel pageResultModel = bmsDanmuService.findPageResultDanmuModel(IntegerUtils.objectConvertToInt(pageNo)-1,IntegerUtils.objectConvertToInt(pageSize),party.getAddressId(),party.getPartyId(),1);
         return pageResultModel;
