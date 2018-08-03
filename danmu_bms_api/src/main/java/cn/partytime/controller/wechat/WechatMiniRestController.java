@@ -142,7 +142,12 @@ public class WechatMiniRestController {
         StringBuffer url = request.getRequestURL();
         //log.info("url:{}",url.);
         //url.replace("test","www.party-time.cn");
-        String openId = request.getParameter("openId");
+        //String openId = request.getParameter("openId");
+        String userCookieKey = request.getParameter("userCookieKey");
+        Object object =  wechatMiniCacheService.getWechatMiniUserCache(userCookieKey);
+        String unionId = String.valueOf(object);
+        WechatUser wechatUser = wechatUserService.findByUnionId(unionId);
+        String openId = wechatUser.getOpenId();
         String trueUrl = url.toString().replace("test","www.party-time.cn") + "?&openId="+openId;
         WxJsConfig wxJsConfig = wechatPayService.createWxjsConfig(trueUrl);
         log.info("wxJsConfig:{}",JSON.toJSONString(wxJsConfig));
