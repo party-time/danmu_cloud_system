@@ -354,10 +354,15 @@ public class WechatMiniRestController {
         return pageResultModel;
     }
 
-    @RequestMapping(value = "/historyDanmu/report/{openId}/{danmuId}", method = RequestMethod.GET)
-    public RestResultModel report(@PathVariable("openId")String openId,@PathVariable("danmuId")String danmuId){
+    @RequestMapping(value = "/historyDanmu/report", method = RequestMethod.GET)
+    public RestResultModel report(HttpServletRequest request){
         RestResultModel restResultModel = new RestResultModel();
-        String result = bmsReportService.reportDanmu(openId,danmuId);
+        String userCookieKey = request.getParameter("userCookieKey");
+
+        Object object =  wechatMiniCacheService.getWechatMiniUserCache(userCookieKey);
+        String unionId = String.valueOf(object);
+        String danmuId = request.getParameter("danmuId");
+        String result = bmsReportService.reportDanmuByUnionId(unionId,danmuId);
         if(StringUtils.isEmpty(result)){
             restResultModel.setResult(200);
         }else{

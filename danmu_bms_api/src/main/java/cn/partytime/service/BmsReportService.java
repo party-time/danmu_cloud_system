@@ -95,6 +95,24 @@ public class BmsReportService {
         return "参数错误";
     }
 
+    public String reportDanmuByUnionId(String unionId,String danmuId){
+        WechatUser wechatUser = wechatUserService.findByUnionId(unionId);
+        Danmu danmu = danmuService.findById(danmuId);
+        if( null != wechatUser && null != danmu){
+            Report report = reportService.findByWechatIdAndDanmuId(wechatUser.getId(),danmuId);
+            if( null == report){
+                report = new Report();
+                report.setDanmuId(danmuId);
+                report.setWechatId(wechatUser.getId());
+                reportService.save(report);
+                return null;
+            }else{
+                return "请不要重复举报";
+            }
+        }
+        return "参数错误";
+    }
+
     public void blockDanmu(String openId,String danmuId,String reportId){
         danmuService.blockDanmu(danmuId);
         reportService.updateStatus(reportId,0);
