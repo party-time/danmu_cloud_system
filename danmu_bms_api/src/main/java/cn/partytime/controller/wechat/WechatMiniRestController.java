@@ -140,6 +140,7 @@ public class WechatMiniRestController {
     public RestResultModel wxBingPay(HttpServletRequest request) {
         RestResultModel restResultModel = new RestResultModel();
         StringBuffer url = request.getRequestURL();
+        log.info("url:{}",url);
         String openId = request.getParameter("openId");
         String trueUrl = url.toString() + "?&openId="+openId;
         WxJsConfig wxJsConfig = wechatPayService.createWxjsConfig(trueUrl);
