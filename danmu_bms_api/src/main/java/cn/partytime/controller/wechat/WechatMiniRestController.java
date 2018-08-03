@@ -145,7 +145,7 @@ public class WechatMiniRestController {
         WxJsConfig wxJsConfig = wechatPayService.createWxjsConfig(trueUrl);
         log.info("wxJsConfig:{}",JSON.toJSONString(wxJsConfig));
 
-        /*String nonceStr = wxJsConfig.getNonceStr();
+        String nonceStr = wxJsConfig.getNonceStr();
         String timestamp = wxJsConfig.getTimestamp();
         String body = "弹幕电影-打赏1分";
         String detail="";
@@ -160,10 +160,10 @@ public class WechatMiniRestController {
         }
         Map<String,String> map = new HashMap<>();
         map = wechatPayService.createUnifiedorder(nonceStr,timestamp,openId,body,detail,attach,total_fee,clientIp);
-        log.info("map:{}",JSON.toJSONString(map));*/
+        log.info("map:{}",JSON.toJSONString(map));
 
         restResultModel.setResult(200);
-        restResultModel.setData(null);
+        restResultModel.setData(map);
         return restResultModel;
     }
 
