@@ -148,6 +148,7 @@ public class WechatMiniRestController {
         String unionId = String.valueOf(object);
         WechatUser wechatUser = wechatUserService.findByUnionId(unionId);
         String openId = wechatUser.getOpenId();
+        openId= "ol5eSwm5tmmaKj9UjqZmYdUkZmZM";
         String trueUrl = url.toString().replace("test","www.party-time.cn") + "?&openId="+openId;
         WxJsConfig wxJsConfig = wechatPayService.createWxjsConfig(trueUrl);
         log.info("wxJsConfig:{}",JSON.toJSONString(wxJsConfig));
