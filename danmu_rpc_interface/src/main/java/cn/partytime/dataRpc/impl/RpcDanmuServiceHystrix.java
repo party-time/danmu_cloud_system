@@ -12,6 +12,11 @@ import java.util.Map;
 public class RpcDanmuServiceHystrix implements RpcDanmuService {
 
     @Override
+    public void setSendUserTime(String danmuId) {
+
+    }
+
+    @Override
     public void setAdminAccepetTime(String danmuLogId) {
 
     }
