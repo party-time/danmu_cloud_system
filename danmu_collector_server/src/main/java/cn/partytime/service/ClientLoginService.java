@@ -162,6 +162,15 @@ public class ClientLoginService {
             channel.close();
             return;
         }
+
+        //判断用户是否登陆过
+        Channel isLoginChannel = getIsLoginChannel(code,Integer.parseInt(type));
+        if(isLoginChannel!=null){
+            logger.info("对已经登录过的微信小程序，进行踢下线处理");
+            potocolService.forceLogout(isLoginChannel);
+            return;
+        }
+
         DanmuAddressModel danmuAddress = rpcDanmuAddressService.findAddressByLonLat(Double.parseDouble(longitude+""), Double.parseDouble(latitude+""));
 
         //如果查询不到场地
@@ -186,7 +195,7 @@ public class ClientLoginService {
         }
         //将客户端信息与Channel绑定
         DanmuClientInfoModel danmuClientInfoModel = new DanmuClientInfoModel();
-        danmuClientInfoModel.setDanmuClientCode(unionId);
+        danmuClientInfoModel.setDanmuClientCode(code);
         danmuClientInfoModel.setAddressId(addressId);
         danmuClientInfoModel.setClientType(Integer.parseInt(type));
         logger.info("绑定通道与客户端对象的关系");
