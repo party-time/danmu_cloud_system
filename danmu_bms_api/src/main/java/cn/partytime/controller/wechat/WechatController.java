@@ -132,8 +132,6 @@ public class WechatController {
             }else{
                 return "redirect:/wechat/getLocation?openId="+openId;
             }
-
-
         }
         if( null != userInfo){
             wechatUserService.updateUserInfo(userInfo.toWechatUser());
