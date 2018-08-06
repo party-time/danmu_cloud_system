@@ -62,7 +62,7 @@ public class RpcDanmuService {
     public void setSendUserTime(@RequestParam String danmuId) {
         Danmu danmu = danmuService.findById(danmuId);
         if (danmu != null) {
-            danmu.setAdminAccepetTime(LocalDateTimeUtils.convertLDTToDate(LocalDateTime.now()));
+            danmu.setSendUserTime(LocalDateTimeUtils.convertLDTToDate(LocalDateTime.now()));
             danmuService.save(danmu);
         }
     }
