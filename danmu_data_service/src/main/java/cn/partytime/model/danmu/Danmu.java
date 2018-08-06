@@ -66,12 +66,25 @@ public class Danmu extends BaseModel{
      */
     private Date adminAccepetTime;
 
+    /**
+     * 管理员审核后推送给用户的时间
+     */
+    private Date sendUserTime;
+
     public Date getAdminAccepetTime() {
         return adminAccepetTime;
     }
 
     public void setAdminAccepetTime(Date adminAccepetTime) {
         this.adminAccepetTime = adminAccepetTime;
+    }
+
+    public Date getSendUserTime() {
+        return sendUserTime;
+    }
+
+    public void setSendUserTime(Date sendUserTime) {
+        this.sendUserTime = sendUserTime;
     }
 
     public String getId() {

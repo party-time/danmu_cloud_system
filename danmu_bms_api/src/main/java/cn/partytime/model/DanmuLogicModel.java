@@ -64,4 +64,10 @@ public class DanmuLogicModel {
      * 管理员接收用户发送弹幕的时间
      */
     private Date adminAccepetTime;
+
+
+    /**
+     * 管理员审核后推送给用户的时间
+     */
+    private Date sendUserTime;
 }

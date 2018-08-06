@@ -58,8 +58,17 @@ public class RpcDanmuService {
     private CmdLogicService cmdLogicService;
 
 
+    @RequestMapping(value = "/setSendUserTime" ,method = RequestMethod.GET)
+    public void setSendUserTime(@RequestParam String danmuId) {
+        Danmu danmu = danmuService.findById(danmuId);
+        if (danmu != null) {
+            danmu.setAdminAccepetTime(LocalDateTimeUtils.convertLDTToDate(LocalDateTime.now()));
+            danmuService.save(danmu);
+        }
+    }
+
     @RequestMapping(value = "/setAdminAccepetTime" ,method = RequestMethod.GET)
-    public void updateDanmuStatus(@RequestParam String danmuLogId) {
+    public void setAdminAccepetTime(@RequestParam String danmuLogId) {
 
         DanmuLog danmuLog =  danmuLogService.findDanmuLogById(danmuLogId);
         log.info("danmuLog:{}",JSON.toJSONString(danmuLog));
