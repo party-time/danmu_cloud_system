@@ -490,7 +490,7 @@ public class CommandHanderService {
                     danmuModel.setViewFlg(true);
                     danmuModel.setUpdateTime(DateUtils.getCurrentDate());
                     danmuModel =  rpcDanmuService.save(danmuModel);
-
+                    log.info("danmuModel:{}",JSON.toJSONString(danmuModel));
                     if(danmuModel!=null){
                         //设置推送给用户的时间
                         rpcDanmuService.setSendUserTime(danmuModel.getId());
