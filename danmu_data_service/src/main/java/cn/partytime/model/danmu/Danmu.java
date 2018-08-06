@@ -66,6 +66,7 @@ public class Danmu extends BaseModel{
      */
     private Date adminAccepetTime;
 
+
     /**
      * 管理员审核后推送给用户的时间
      */
