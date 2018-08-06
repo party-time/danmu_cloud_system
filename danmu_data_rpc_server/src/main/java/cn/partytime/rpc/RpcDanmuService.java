@@ -38,7 +38,6 @@ import java.util.Map;
 @Slf4j
 public class RpcDanmuService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RpcDanmuService.class);
 
 
     @Autowired
@@ -60,7 +59,9 @@ public class RpcDanmuService {
 
     @RequestMapping(value = "/setSendUserTime" ,method = RequestMethod.GET)
     public void setSendUserTime(@RequestParam String danmuId) {
+        log.info("设置推送给用户的时间");
         Danmu danmu = danmuService.findById(danmuId);
+        log.info("设置推送给用户的时间danmu:{}",JSON.toJSONString(danmu));
         if (danmu != null) {
             danmu.setSendUserTime(LocalDateTimeUtils.convertLDTToDate(LocalDateTime.now()));
             danmuService.save(danmu);
@@ -199,12 +200,12 @@ public class RpcDanmuService {
 
     public static List<Danmu> resultList(List<Danmu> list,String id,int page){
         if(list==null || list.size()==0){
-            logger.info("没有历史弹幕");
+            log.info("没有历史弹幕");
             return null;
         }
         int max = 0;
         if(StringUtils.isEmpty(id) || "null".equals(id)){
-            logger.info("没有弹幕id");
+            log.info("没有弹幕id");
             int length = list.size();
             if(length>page){
                 max=page;
@@ -213,7 +214,7 @@ public class RpcDanmuService {
             }
             return list.subList(0,max);
         }else{
-            logger.info("list:{}", JSON.toJSONString(list));
+            log.info("list:{}", JSON.toJSONString(list));
             int index = 0;
             for(int i=0;i<=list.size(); i++){
                 if(id.equals(list.get(i).getId())){
