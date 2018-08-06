@@ -489,10 +489,12 @@ public class CommandHanderService {
                     danmuModel.setCheckUserId(adminUser.getId());
                     danmuModel.setViewFlg(true);
                     danmuModel.setUpdateTime(DateUtils.getCurrentDate());
-                    rpcDanmuService.save(danmuModel);
+                    danmuModel =  rpcDanmuService.save(danmuModel);
 
-                    //设置推送给用户的时间
-                    rpcDanmuService.setSendUserTime(danmuId);
+                    if(danmuModel!=null){
+                        //设置推送给用户的时间
+                        rpcDanmuService.setSendUserTime(danmuModel.getId());
+                    }
 
                 }
 
