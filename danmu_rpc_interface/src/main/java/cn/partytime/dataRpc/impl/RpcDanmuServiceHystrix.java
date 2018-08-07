@@ -17,8 +17,8 @@ public class RpcDanmuServiceHystrix implements RpcDanmuService {
     }
 
     @Override
-    public void setAdminAccepetTime(String danmuLogId) {
-
+    public DanmuModel setAdminAccepetTime(String danmuLogId) {
+        return null;
     }
 
     @Override

@@ -69,7 +69,7 @@ public class RpcDanmuService {
     }
 
     @RequestMapping(value = "/setAdminAccepetTime" ,method = RequestMethod.GET)
-    public void setAdminAccepetTime(@RequestParam String danmuLogId) {
+    public Danmu setAdminAccepetTime(@RequestParam String danmuLogId) {
 
         DanmuLog danmuLog =  danmuLogService.findDanmuLogById(danmuLogId);
         log.info("danmuLog:{}",JSON.toJSONString(danmuLog));
@@ -80,9 +80,10 @@ public class RpcDanmuService {
             Danmu danmu = danmuService.findById(danmuId);
             if (danmu != null) {
                 danmu.setAdminAccepetTime(LocalDateTimeUtils.convertLDTToDate(LocalDateTime.now()));
-                danmuService.save(danmu);
+                return danmuService.save(danmu);
             }
         }
+        return null;
     }
 
 

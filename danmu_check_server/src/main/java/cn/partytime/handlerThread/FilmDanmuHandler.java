@@ -6,6 +6,8 @@ import cn.partytime.common.util.ListUtils;
 import cn.partytime.config.DanmuChannelRepository;
 import cn.partytime.dataRpc.RpcDanmuService;
 import cn.partytime.model.AdminTaskModel;
+import cn.partytime.model.DanmuLogicModel;
+import cn.partytime.model.DanmuModel;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -42,10 +44,13 @@ public class FilmDanmuHandler {
         Map<String,Object> danmuMap = (Map<String,Object>)JSON.parse(acceptMessage);
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("type", "normalDanmu");
-        map.put("data", danmuMap);
+
 
         String danmuLogId = String.valueOf(danmuMap.get("id"));
-        rpcDanmuService.setAdminAccepetTime(danmuLogId);
+        DanmuModel danmuModel =  rpcDanmuService.setAdminAccepetTime(danmuLogId);
+
+        danmuMap.put("createTime",danmuModel.getAdminAccepetTime());
+        map.put("data", danmuMap);
         pushDanmu(channelList,danmuLogId,map,null);
 
     }

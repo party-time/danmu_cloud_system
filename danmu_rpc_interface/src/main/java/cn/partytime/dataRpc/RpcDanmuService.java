@@ -21,7 +21,7 @@ public interface RpcDanmuService {
     public void setSendUserTime(@RequestParam(value = "danmuId") String danmuId);
 
     @RequestMapping(value = "/rpcDanmu/setAdminAccepetTime" ,method = RequestMethod.GET)
-    public void setAdminAccepetTime(@RequestParam(value = "danmuLogId") String danmuLogId);
+    public DanmuModel setAdminAccepetTime(@RequestParam(value = "danmuLogId") String danmuLogId);
 
     @RequestMapping(value = "/rpcDanmu/updateDanmuStatus" ,method = RequestMethod.GET)
     public void updateDanmuStatus(@RequestParam(value = "id") String id,@RequestParam(value = "sendStatus") int sendStatus);
