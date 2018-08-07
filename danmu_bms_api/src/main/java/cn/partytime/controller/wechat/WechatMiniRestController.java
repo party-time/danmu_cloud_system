@@ -107,7 +107,7 @@ public class WechatMiniRestController {
 
 
     @RequestMapping("/fileUpload")
-    public String fileUpload(@RequestParam("name") MultipartFile file) throws IOException {
+    public String fileUpload(@RequestParam("file") MultipartFile file) throws IOException {
         if(file.isEmpty()){
             return "false";
         }
