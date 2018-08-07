@@ -31,9 +31,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -101,6 +105,28 @@ public class WechatMiniRestController {
     @Autowired
     private PartyAddressRelationService partyAddressRelationService;
 
+
+    @RequestMapping("/fileUpload")
+    public String fileUpload(@RequestParam("name") MultipartFile file) throws IOException {
+        if(file.isEmpty()){
+            return "false";
+        }
+        String fileName = file.getOriginalFilename();
+
+        log.info("文件名称:{}",fileName);
+
+        /*InputStreamReader isr=new InputStreamReader(file.getInputStream(),"utf8");
+
+        BufferedReader br=new BufferedReader(isr);
+
+        StringBuffer stringBuffer = new StringBuffer();
+        String line;
+        while((line=br.readLine()) != null){
+            stringBuffer.append(line);
+        }*/
+        String result  =fileName;
+        return result;
+    }
 
     @RequestMapping(value = "/findAddressList", method = RequestMethod.GET)
     public RestResultModel findAddressList(HttpServletRequest request) {
