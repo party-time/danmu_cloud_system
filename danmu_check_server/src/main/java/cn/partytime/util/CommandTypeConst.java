@@ -63,4 +63,10 @@ public class CommandTypeConst {
      */
     public static final String CHECK_CHECKSTATUS = "checkStatus";
 
+
+    /**
+     * 设置铃声开启和关闭
+     */
+    public static final String SET_RING = "setring";
+
 }

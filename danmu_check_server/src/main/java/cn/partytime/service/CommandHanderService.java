@@ -149,10 +149,36 @@ public class CommandHanderService {
         }else if (CommandTypeConst.CHECK_CHECKSTATUS.equals(type)) {
             //设置弹幕密度
             setCheckStatus(type,object,channel,partyId);
+        }else if (CommandTypeConst.SET_RING.equals(type)) {
+            setRing(type,object,channel);
         }
     }
 
-    //int count  = collectorCacheService.getClientCount(0,addressId);
+    private void setRing(String type,Object object,Channel channel){
+        Map<String,Object> map = convertObjectToMap(object);
+        int status = Integer.parseInt(String.valueOf(map.get("status")));
+        String key = String.valueOf(map.get("key"));
+        log.info("设置审核状态 status:{},key:{}",status,key);
+
+        AdminUserDto adminUserDto = rpcAdminService.getAdminUser(key);
+
+        log.info("adminUserDto:{}",JSON.toJSONString(adminUserDto));
+        if(adminUserDto!=null) {
+            rpcAdminService.setRingFlg(adminUserDto.getId(), status);
+        }
+
+        Map<String,Object>commandObject = new HashMap<String,Object>();
+
+        Map<String,Object>dataMap = new HashMap<String,Object>();
+        commandObject.put("type","setring");
+
+        dataMap.put("status",status);
+        commandObject.put("data",dataMap);
+        //sendMessageToMq(addressId, commandObject);
+
+        sendMessageToBMS(channel,JSON.toJSONString(commandObject));
+
+    }
 
     private void setDanmuDensity(String partyId,String addressId,String key,int partyType,String type,Channel channel,Object object){
 
@@ -893,6 +919,7 @@ public class CommandHanderService {
 
         //adminLoginService.adminLogin(key,channelFuture.channel(),Integer.parseInt(partyType));
         result.put("checkStatus", adminInfo.getCheckFlg());
+        result.put("ringFlg", adminInfo.getRingFlg());
         if(partyType==0){
             //获取活动信息
             PartyModel party = rpcPartyService.getPartyByPartyId(partyId);

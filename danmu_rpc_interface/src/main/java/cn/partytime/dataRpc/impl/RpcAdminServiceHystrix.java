@@ -26,5 +26,10 @@ public class RpcAdminServiceHystrix implements RpcAdminService {
         return null;
     }
 
+    @Override
+    public AdminUserDto setRingFlg(String id, Integer setRingFlg) {
+        return null;
+    }
+
 
 }

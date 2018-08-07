@@ -35,4 +35,9 @@ public class AdminUserDto {
 
     private int checkFlg;
 
+    /**
+     * 0:铃声 1:静止
+     */
+    private int ringFlg;
+
 }

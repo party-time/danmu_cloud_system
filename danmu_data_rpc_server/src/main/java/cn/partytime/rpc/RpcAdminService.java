@@ -70,6 +70,16 @@ public class RpcAdminService {
         return null;
     }
 
+    @RequestMapping(value = "/setRingFlg" ,method = RequestMethod.GET)
+    public AdminUser setRingFlg(@RequestParam String id,@RequestParam Integer setRingFlg){
+        AdminUser adminUser =  adminUserService.findById(id);
+        if(adminUser!=null){
+            adminUser.setRingFlg(setRingFlg);
+            return adminUserService.save(adminUser);
+        }
+        return null;
+    }
+
 
 
 }

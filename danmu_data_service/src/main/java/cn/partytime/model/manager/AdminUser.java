@@ -37,6 +37,19 @@ public class AdminUser extends BaseModel {
 
     private int checkFlg;
 
+    /**
+     * 0:铃声 1:静止
+     */
+    private int ringFlg;
+
+    public int getRingFlg() {
+        return ringFlg;
+    }
+
+    public void setRingFlg(int ringFlg) {
+        this.ringFlg = ringFlg;
+    }
+
     public String getId() {
         return id;
     }

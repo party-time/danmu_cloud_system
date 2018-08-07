@@ -39,4 +39,12 @@ public interface RpcAdminService {
 
     @RequestMapping(value = "/rpcAdmin/updateCheckFlg" ,method = RequestMethod.GET)
     public AdminUserDto updateCheckFlg(@RequestParam(value = "id") String id,@RequestParam(value = "checkFlg") Integer checkFlg);
+
+
+
+    @RequestMapping(value = "/rpcAdmin/setRingFlg" ,method = RequestMethod.GET)
+    public AdminUserDto setRingFlg(@RequestParam(value = "id") String id,@RequestParam(value = "setRingFlg") Integer setRingFlg);
+
+
+
 }
