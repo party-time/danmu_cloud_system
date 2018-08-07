@@ -49,7 +49,7 @@ public class FilmDanmuHandler {
         String danmuLogId = String.valueOf(danmuMap.get("id"));
         DanmuModel danmuModel =  rpcDanmuService.setAdminAccepetTime(danmuLogId);
 
-        danmuMap.put("createTime",danmuModel.getAdminAccepetTime());
+        danmuMap.put("adminAccepetTime",danmuModel.getAdminAccepetTime());
         map.put("data", danmuMap);
         pushDanmu(channelList,danmuLogId,map,null);
 
