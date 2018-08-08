@@ -142,6 +142,8 @@ public class WechatMiniRestController {
             while ((len = inputStream.read(bs)) != -1) {
                 os.write(bs, 0, len);
             }
+            os.close();
+            inputStream.close();
 
             String command = "/usr/local/install/silk-v3-decoder/converter.sh "+aimPath +" mp3";
             log.info("command:{}",command);
@@ -162,13 +164,6 @@ public class WechatMiniRestController {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // 完毕，关闭所有链接
-            try {
-                os.close();
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         String result  =fileName;
         return result;
