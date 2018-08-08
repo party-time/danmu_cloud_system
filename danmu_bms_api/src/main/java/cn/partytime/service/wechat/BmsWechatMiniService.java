@@ -35,4 +35,6 @@ public class BmsWechatMiniService {
         //System.out.println(res.toString(2));
         return res.toString();
     }
+
+
 }
