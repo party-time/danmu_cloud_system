@@ -145,7 +145,7 @@ public class WechatMiniRestController {
             os.flush();
             os.close();
             inputStream.close();
-
+            log.info("==========================================");
             String command = "/usr/local/install/silk-v3-decoder/converter.sh "+aimPath +" mp3";
             log.info("command:{}",command);
             bmsWechatMiniService.execShell(command);
