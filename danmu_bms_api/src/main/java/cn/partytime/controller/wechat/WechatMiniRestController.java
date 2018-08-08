@@ -162,9 +162,12 @@ public class WechatMiniRestController {
             bmsWechatMiniService.convertVedioToWord(aimPcm);
         } catch (IOException e) {
             e.printStackTrace();
+            log.info("==================================exception1");
         } catch (Exception e) {
             e.printStackTrace();
+            log.info("==================================exception2");
         } finally {
+            log.info("==================================finally");
         }
         String result  =fileName;
         return result;
