@@ -119,6 +119,8 @@ public class WechatMiniRestController {
         log.info("文件名称:{}",fileName);
         InputStream inputStream = file.getInputStream();
 
+        String sourceName = fileName.substring(0,fileName.lastIndexOf("."));
+
         OutputStream os = null;
         try {
             String path = "/home";
@@ -141,8 +143,20 @@ public class WechatMiniRestController {
                 os.write(bs, 0, len);
             }
 
+            String command = "/usr/local/install/silk-v3-decoder/converter.sh "+aimPath +" mp3";
+            log.info("command:{}",command);
+            bmsWechatMiniService.execShell(command);
 
-            bmsWechatMiniService.convertVedioToWord(aimPath);
+            String sourceMp3 = tempFile.getPath()+File.separator+sourceName+".mp3";
+            String aimPcm = tempFile.getPath()+File.separator+ sourceName+".pcm";
+
+            log.info("sourceMp3:{}",sourceMp3);
+            log.info("aimPcm:{}",aimPcm);
+            command = "ffmpeg -y  -i  "+ sourceMp3 +"-acodec pcm_s16le -f s16le -ac 1 -ar 16000 "+aimPcm;
+            log.info("command:{}",command);
+            bmsWechatMiniService.execShell(command);
+
+            bmsWechatMiniService.convertVedioToWord(aimPcm);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {

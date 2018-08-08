@@ -41,13 +41,13 @@ public class BmsWechatMiniService {
         // 也可以直接通过jvm启动参数设置此环境变量
         //System.setProperty("aip.log4j.conf", "path/to/your/log4j.properties");
         // 调用接口
-        JSONObject res = client.asr(path, "wav", 16000, null);
+        JSONObject res = client.asr(path, "pcm", 16000, null);
         //System.out.println(res.toString(2));
         log.info("res.toString()-----------------"+res.toString(2));
         return res.toString();
     }
 
-    private String execShell(String shellString) {
+    public String execShell(String shellString) {
         log.info(shellString);
         Process process = null;
         StringBuffer sb = new StringBuffer();
