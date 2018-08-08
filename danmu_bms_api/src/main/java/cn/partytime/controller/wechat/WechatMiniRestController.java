@@ -14,6 +14,7 @@ import cn.partytime.model.wechat.WeChatMiniUser;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.service.*;
+import cn.partytime.service.wechat.BmsWechatMiniService;
 import cn.partytime.service.wechat.WeChatMiniUserService;
 import cn.partytime.service.wechat.WechatUserInfoService;
 import cn.partytime.service.wechat.WechatUserService;
@@ -104,6 +105,10 @@ public class WechatMiniRestController {
     private PartyAddressRelationService partyAddressRelationService;
 
 
+    @Autowired
+    private BmsWechatMiniService bmsWechatMiniService;
+
+
     @RequestMapping("/fileUpload")
     public String fileUpload(@RequestParam("file") MultipartFile file) throws IOException {
         if(file.isEmpty()){
@@ -128,12 +133,16 @@ public class WechatMiniRestController {
             if (!tempFile.exists()) {
                 tempFile.mkdirs();
             }
-            os = new FileOutputStream(tempFile.getPath() + File.separator + fileName);
+
+            String aimPath = tempFile.getPath() + File.separator + fileName;
+            os = new FileOutputStream(aimPath);
             // 开始读取
             while ((len = inputStream.read(bs)) != -1) {
                 os.write(bs, 0, len);
             }
 
+
+            bmsWechatMiniService.convertVedioToWord(aimPath);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
