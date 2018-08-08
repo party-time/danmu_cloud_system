@@ -142,6 +142,7 @@ public class WechatMiniRestController {
             while ((len = inputStream.read(bs)) != -1) {
                 os.write(bs, 0, len);
             }
+            os.flush();
             os.close();
             inputStream.close();
 
