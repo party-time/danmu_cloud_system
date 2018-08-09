@@ -155,7 +155,7 @@ public class WechatMiniRestController {
 
             log.info("sourceMp3:{}",sourceMp3);
             log.info("aimPcm:{}",aimPcm);
-            command = "ffmpeg -y  -i  "+ sourceMp3 +"-acodec pcm_s16le -f s16le -ac 1 -ar 16000 "+aimPcm;
+            command = "ffmpeg -y  -i  "+ sourceMp3 +" -acodec pcm_s16le -f s16le -ac 1 -ar 16000 "+aimPcm;
             log.info("command:{}",command);
             bmsWechatMiniService.execShell(command);
 
