@@ -110,9 +110,12 @@ public class WechatMiniRestController {
 
 
     @RequestMapping("/fileUpload")
-    public String fileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+    public RestResultModel fileUpload(@RequestParam("file") MultipartFile file) throws IOException {\
+
+        RestResultModel restResultModel = new RestResultModel();
         if(file.isEmpty()){
-            return "false";
+            restResultModel.setData("500");
+            return restResultModel;
         }
         String fileName = file.getOriginalFilename();
 
@@ -159,7 +162,9 @@ public class WechatMiniRestController {
             log.info("command:{}",command);
             bmsWechatMiniService.execShell(command);
 
-            bmsWechatMiniService.convertVedioToWord(aimPcm);
+            String result = bmsWechatMiniService.convertVedioToWord(aimPcm);
+            restResultModel.setResult(200);
+            restResultModel.setData(result);
         } catch (IOException e) {
             e.printStackTrace();
             log.info("==================================exception1");
@@ -169,8 +174,7 @@ public class WechatMiniRestController {
         } finally {
             log.info("==================================finally");
         }
-        String result  =fileName;
-        return result;
+        return restResultModel;
     }
 
     @RequestMapping(value = "/findAddressList", method = RequestMethod.GET)

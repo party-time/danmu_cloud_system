@@ -47,14 +47,20 @@ public class BmsWechatMiniService {
         //System.setProperty("aip.log4j.conf", "path/to/your/log4j.properties");
         // 调用接口
         JSONObject res = client.asr(path, "pcm", 16000, null);
-
-
-        JSONArray jsonArray = res.getJSONArray("result");
-
-        log.info("jsonArray:{}",JSON.toJSONString(jsonArray));
+        //JSONArray jsonArray = res.getJSONArray("result");
+        //log.info("jsonArray:{}",JSON.toJSONString(jsonArray));
         //System.out.println(res.toString(2));
-        log.info("res.toString()-----------------"+res.toString(2));
-        return res.toString();
+        //log.info("res.toString()-----------------"+res.toString(2));
+        //return res.toString();
+
+        Object object = res.get("result");
+
+        StringBuffer stringBuffer = new StringBuffer();
+        com.alibaba.fastjson.JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseArray(String.valueOf(object));
+        for(int i=0; i<jsonArray.size(); i++){
+            stringBuffer.append(String.valueOf(jsonArray.get(i)).replace("，",""));
+        }
+        return stringBuffer.toString();
     }
 
     public String execShell(String shellString) {
