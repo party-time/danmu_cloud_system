@@ -226,7 +226,30 @@
             <groupId>cn.party-time</groupId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache</groupId>
+            <artifactId>aip-java-sdk</artifactId>
+            <version>4.1.1</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/lib/aip-java-sdk-4.1.1.jar</systemPath>
+        </dependency>
 
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160810</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/lib/json-20160810.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/lib/log4j-1.2.17.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
