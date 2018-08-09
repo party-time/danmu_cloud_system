@@ -26,6 +26,9 @@ public class BmsWechatMiniService {
 
     public String convertVedioToWord(String path) throws JSONException {
 
+        log.info("appId:{}",appId);
+        log.info("appKey:{}",appKey);
+        log.info("secret:{}",secret);
         // 初始化一个AipSpeech
         AipSpeech client = new AipSpeech(appId, appKey, secret);
 
