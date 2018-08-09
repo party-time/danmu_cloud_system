@@ -16,13 +16,13 @@ import java.io.InputStreamReader;
 public class BmsWechatMiniService {
 
     @Value("${video_appId}")
-    public static String appId;
+    public String appId;
 
     @Value("${video_appKey}")
-    public static String appKey;
+    public String appKey;
 
     @Value("${video_appsecret}")
-    public static String secret;
+    public String secret;
 
     public String convertVedioToWord(String path) throws JSONException {
 
