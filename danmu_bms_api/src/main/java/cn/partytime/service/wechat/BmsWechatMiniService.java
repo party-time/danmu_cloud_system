@@ -1,8 +1,10 @@
 package cn.partytime.service.wechat;
 
 
+import com.alibaba.fastjson.JSON;
 import com.baidu.aip.speech.AipSpeech;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,6 +47,11 @@ public class BmsWechatMiniService {
         //System.setProperty("aip.log4j.conf", "path/to/your/log4j.properties");
         // 调用接口
         JSONObject res = client.asr(path, "pcm", 16000, null);
+
+
+        JSONArray jsonArray = res.getJSONArray("result");
+
+        log.info("jsonArray:{}",JSON.toJSONString(jsonArray));
         //System.out.println(res.toString(2));
         log.info("res.toString()-----------------"+res.toString(2));
         return res.toString();
