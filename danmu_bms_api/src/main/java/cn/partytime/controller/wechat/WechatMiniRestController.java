@@ -163,8 +163,12 @@ public class WechatMiniRestController {
             bmsWechatMiniService.execShell(command);
 
             String result = bmsWechatMiniService.convertVedioToWord(aimPcm);
+
+            log.info("result============={}",result);
             restResultModel.setResult(200);
             restResultModel.setData(result);
+
+            log.info("restResultModel:{}",JSON.toJSONString(restResultModel));
         } catch (IOException e) {
             e.printStackTrace();
             log.info("==================================exception1");
