@@ -132,4 +132,12 @@ public class FileUtils {
         // 目录此时为空，可以删除
         return dir.delete();
     }
+
+
+    public void delteFile(String filePath){
+        File file  = new File(filePath);
+        if(file.exists()){
+            file.delete();
+        }
+    }
 }

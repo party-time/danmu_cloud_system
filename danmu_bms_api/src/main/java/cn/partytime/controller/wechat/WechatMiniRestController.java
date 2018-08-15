@@ -1,8 +1,10 @@
 package cn.partytime.controller.wechat;
 
+import ch.qos.logback.core.util.FileUtil;
 import cn.partytime.cache.wechatmin.WechatMiniCacheService;
 import cn.partytime.common.constants.PartyConst;
 import cn.partytime.common.util.DateUtils;
+import cn.partytime.common.util.FileUtils;
 import cn.partytime.common.util.IntegerUtils;
 import cn.partytime.common.util.ListUtils;
 import cn.partytime.dataRpc.RpcCmdService;
@@ -14,6 +16,7 @@ import cn.partytime.model.wechat.WeChatMiniUser;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.service.*;
+import cn.partytime.service.daynamic.DynamicContentService;
 import cn.partytime.service.wechat.BmsWechatMiniService;
 import cn.partytime.service.wechat.WeChatMiniUserService;
 import cn.partytime.service.wechat.WechatUserInfoService;
@@ -29,6 +32,7 @@ import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -108,6 +112,14 @@ public class WechatMiniRestController {
     @Autowired
     private BmsWechatMiniService bmsWechatMiniService;
 
+    @Autowired
+    private DynamicContentService dynamicContentService;
+
+    @Value("${wechat.dynamicvoicePath}")
+    private String voicePath;
+
+    @Value("${wechat.dynamicvoiceTempPath}")
+    private String tempPath;
 
     @RequestMapping("/fileUpload")
     public RestResultModel fileUpload(@RequestParam("file") MultipartFile file) throws IOException {
@@ -126,7 +138,6 @@ public class WechatMiniRestController {
 
         OutputStream os = null;
         try {
-            String path = "/home";
             // 2、保存到临时文件
             // 1K的数据缓冲
             byte[] bs = new byte[1024];
@@ -134,7 +145,7 @@ public class WechatMiniRestController {
             int len;
             // 输出的文件流保存到本地文件
 
-            File tempFile = new File(path);
+            File tempFile = new File(tempPath);
             if (!tempFile.exists()) {
                 tempFile.mkdirs();
             }
@@ -148,22 +159,24 @@ public class WechatMiniRestController {
             os.flush();
             os.close();
             inputStream.close();
-            log.info("==========================================");
             String command = "/usr/local/install/silk-v3-decoder/converter.sh "+aimPath +" mp3";
             log.info("command:{}",command);
+
             bmsWechatMiniService.execShell(command);
 
             String sourceMp3 = tempFile.getPath()+File.separator+sourceName+".mp3";
             String aimPcm = tempFile.getPath()+File.separator+ sourceName+".pcm";
 
+
             log.info("sourceMp3:{}",sourceMp3);
             log.info("aimPcm:{}",aimPcm);
             command = "ffmpeg -y  -i  "+ sourceMp3 +" -acodec pcm_s16le -f s16le -ac 1 -ar 16000 "+aimPcm;
+
+
+
             log.info("command:{}",command);
             bmsWechatMiniService.execShell(command);
-
             String result = bmsWechatMiniService.convertVedioToWord(aimPcm);
-
             log.info("result============={}",result);
             restResultModel.setResult(200);
             restResultModel.setData(result);

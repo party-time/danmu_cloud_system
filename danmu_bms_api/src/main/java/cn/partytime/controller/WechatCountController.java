@@ -60,12 +60,16 @@ public class WechatCountController {
         Date endDate = LocalDateTimeUtils.convertLDTToDate(LocalDateTimeUtils.getDayEnd(localDateTime));
 
         List<WechatUserWeekCount> wechatUserWeekCountList = wechatUserWeekCountService.findAll(startDate,endDate);
-        Set<String> set = new HashSet<>();
+        //Set<String> set = new HashSet<>();
+        List<String> dataList = new ArrayList<String>();
         for(WechatUserWeekCount wechatUserWeekCount:wechatUserWeekCountList){
             String date = DateUtils.dateToString(wechatUserWeekCount.getStartDate(),"yyyy-MM-dd");
-            set.add(date);
+            //set.add(date);
+            if(dataList.contains(date)){
+                dataList.add(date);
+            }
         }
-        restResultModel.setData(set);
+        restResultModel.setData(dataList);
         return restResultModel;
     }
 
