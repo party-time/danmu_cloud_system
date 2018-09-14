@@ -109,7 +109,7 @@ public class WechatController {
         }
 
 
-
+        log.info("/sendDM:partyId:{}",partyId);
         WechatUser wechatUser = bmsWechatUserService.findByOpenId(openId);
         if( null == wechatUser){
             return "redirect:/htm/noparty.html";
