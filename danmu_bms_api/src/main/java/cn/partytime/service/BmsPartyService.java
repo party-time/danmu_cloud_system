@@ -96,6 +96,23 @@ public class BmsPartyService {
         }
     }
 
+    public PartyLogicModel findCurrentParty(Double longitude , Double latitude) {
+        try {
+            logger.info("查询当前活动----------------------start");
+            //获取用户经纬度
+
+            PartyLogicModel partyLogicModel =partyLogicService.findPartyByLonLat(longitude, latitude);
+            if (partyLogicModel == null) {
+                logger.info("没有活动");
+                return null;
+            }
+            return partyLogicModel;
+        } catch (Exception e) {
+            logger.error("查询当前活动:{}" , e);
+            return null;
+        }
+    }
+
 
     /**
      * type -1:全部  status:0全部 1未下线或者未结束  2已下线或者已结束

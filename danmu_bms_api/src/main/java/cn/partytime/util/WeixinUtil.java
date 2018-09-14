@@ -102,6 +102,26 @@ public class WeixinUtil {
         return accessToken;
     }
 
+    public static AccessToken getAccessToken1(){
+        AccessToken accessToken = null;
+        String requestUrl = access_token_url.replace("APPID", weixinUtil.partyTimeConfig.getAppId1()).replace("APPSECRET",weixinUtil.partyTimeConfig.getAppSecret1());
+        log.info("get accessToken url:"+requestUrl);
+        JSONObject jsonObject = httpRequest(requestUrl, "GET", null);
+        // 如果请求成功
+        if (null != jsonObject) {
+            try {
+                accessToken = new AccessToken();
+                accessToken.setToken(jsonObject.getString("access_token"));
+                accessToken.setExpiresIn(jsonObject.getInt("expires_in"));
+            } catch (JSONException e) {
+                accessToken = null;
+                // 获取token失败
+                log.error("获取token失败 errcode:{"+ jsonObject.getInt("errcode")+"} errmsg:{"+ jsonObject.getString("errmsg")+"}");
+            }
+        }
+        return accessToken;
+    }
+
     /**
      * 获取用户信息
      *
@@ -262,6 +282,28 @@ public class WeixinUtil {
             return null;
         }
         String requestUrl = openid_code_url.replace("APPID",weixinUtil.partyTimeConfig.getAppId() ).replace("APPSECRET", weixinUtil.partyTimeConfig.getAppSecret()).replace("CODE", code);
+        log.info("code=>openid url:"+requestUrl);
+
+        JSONObject jsonObject = httpRequest(requestUrl, "GET", null);
+        String openId="";
+        // 如果请求成功
+        if (null != jsonObject) {
+            try {
+                openId = jsonObject.getString("openid");
+            } catch (JSONException e) {
+                // 获取token失败
+                log.error("获取openId失败 errcode:{"+ jsonObject.getInt("errcode")+"} errmsg:{"+ jsonObject.getString("errmsg")+"}");
+            }
+        }
+        log.info("code=>openid:"+openId);
+        return openId;
+    }
+
+    public static String getUserOpenId1( String code) {
+        if(StringUtils.isEmpty(code)){
+            return null;
+        }
+        String requestUrl = openid_code_url.replace("APPID",weixinUtil.partyTimeConfig.getAppId1() ).replace("APPSECRET", weixinUtil.partyTimeConfig.getAppSecret1()).replace("CODE", code);
         log.info("code=>openid url:"+requestUrl);
 
         JSONObject jsonObject = httpRequest(requestUrl, "GET", null);

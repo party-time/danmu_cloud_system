@@ -7,7 +7,10 @@ import cn.partytime.model.PartyLogicModel;
 import cn.partytime.model.WechatSession;
 import cn.partytime.model.cms.ItemResult;
 import cn.partytime.model.cms.PageColumn;
-import cn.partytime.model.manager.*;
+import cn.partytime.model.manager.FastDanmu;
+import cn.partytime.model.manager.H5Template;
+import cn.partytime.model.manager.LovePay;
+import cn.partytime.model.manager.ResourceFile;
 import cn.partytime.model.wechat.WechatUser;
 import cn.partytime.model.wechat.WechatUserInfo;
 import cn.partytime.service.*;
@@ -19,7 +22,6 @@ import cn.partytime.util.*;
 import cn.partytime.wechat.payService.WechatPayService;
 import cn.partytime.wechat.pojo.UserInfo;
 import cn.partytime.wechat.pojo.WxJsConfig;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,7 +36,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,9 +44,9 @@ import java.util.Map;
  */
 
 @Controller
-@RequestMapping(value = "/wechat")
+@RequestMapping(value = "/wechat1")
 @Slf4j
-public class WechatController {
+public class WechatController1 {
 
     @Autowired
     private ResourceFileService resourceFileService;
@@ -100,10 +101,10 @@ public class WechatController {
     private FastDanmuService fastDanmuService;
 
     @RequestMapping(value = "/sendDM", method = RequestMethod.GET)
-    public String redirectUrl(String code, String partyId, Model model, HttpServletResponse response,HttpServletRequest request){
+    public String redirectUrl(String code,Model model, HttpServletResponse response,HttpServletRequest request){
 
         log.info("/sendDM:code:{}",code);
-        String openId = WeixinUtil.getUserOpenId(code);
+        String openId = WeixinUtil.getUserOpenId1(code);
         if(StringUtils.isEmpty(openId)){
             return "redirect:/htm/noparty.html";
         }
@@ -115,7 +116,7 @@ public class WechatController {
             return "redirect:/htm/noparty.html";
         }
 
-        UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
+        UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken1().getToken(), openId);
         WechatUserInfo wechatUserInfo = null;
         if( null != wechatUser){
             wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
@@ -136,12 +137,8 @@ public class WechatController {
         if( null != userInfo){
             wechatUserService.updateUserInfo(userInfo.toWechatUser());
         }
-        PartyLogicModel party = null;
-        if( !StringUtils.isEmpty(partyId)){
-            party = bmsWechatUserService.findPartyByAddressId();
-        }else {
-            party = bmsWechatUserService.findPartyByOpenId(openId);
-        }
+
+        PartyLogicModel party = bmsWechatUserService.findPartyByOpenId(openId);
         if( null == party){
             return "redirect:/htm/noparty.html";
         }
@@ -213,7 +210,7 @@ public class WechatController {
     @RequestMapping(value = "/h5temp/{h5Url}", method = RequestMethod.GET)
     public String h5temp(@PathVariable("h5Url") String h5Url, @CookieValue(required=false) String openId, String code , String state,Model model, HttpServletRequest request){
         if( StringUtils.isEmpty(openId)){
-            openId = WeixinUtil.getUserOpenId(code);
+            openId = WeixinUtil.getUserOpenId1(code);
         }
         H5Template h5Template = h5TemplateService.findByH5Url(h5Url);
         if( null != h5Template){
@@ -231,7 +228,7 @@ public class WechatController {
     public String getLocation(String openId, Model model, HttpServletRequest request){
         StringBuffer url = request.getRequestURL();
         String trueUrl = url.toString() + "?openId="+openId;
-        String jsTicket = WeixinUtil.getJsTicket(bmsWechatUserService.getAccessToken());
+        String jsTicket = WeixinUtil.getJsTicket(bmsWechatUserService.getAccessToken1());
         WxJsConfig wxJsConfig = WechatSignUtil.jsSignature(trueUrl,jsTicket);
         model.addAttribute("wxJsConfig",wxJsConfig);
         model.addAttribute("openId",openId);
@@ -248,7 +245,7 @@ public class WechatController {
 
     @RequestMapping(value = "/payIndex", method = RequestMethod.GET)
     public String payIndex(String code,String state, Model model, HttpServletRequest request){
-        String openId = WeixinUtil.getUserOpenId(code);
+        String openId = WeixinUtil.getUserOpenId1(code);
         StringBuffer url = request.getRequestURL();
         String trueUrl = url.toString() + "?code="+code+"&state="+state;
         WxJsConfig wxJsConfig = wechatPayService.createWxjsConfig(trueUrl);
@@ -264,7 +261,7 @@ public class WechatController {
     @RequestMapping(value = "/lovePayIndex", method = RequestMethod.GET)
     public String lovePayIndex(String code,String state, Model model,String lovePayId, HttpServletRequest request){
 
-        String openId = WeixinUtil.getUserOpenId(code);
+        String openId = WeixinUtil.getUserOpenId1(code);
         StringBuffer url = request.getRequestURL();
         String trueUrl = url.toString()+"?lovePayId="+lovePayId + "code="+code+"&state="+state;
         WxJsConfig wxJsConfig = wechatPayService.createWxjsConfig(trueUrl);
@@ -297,7 +294,7 @@ public class WechatController {
         if( StringUtils.isEmpty(code)){
             openIdStr = openId;
         }else{
-            openIdStr = WeixinUtil.getUserOpenId(code);
+            openIdStr = WeixinUtil.getUserOpenId1(code);
         }
 
         if( StringUtils.isEmpty(openIdStr)){
@@ -385,7 +382,7 @@ public class WechatController {
         model.addAttribute("party",party);
          **/
         if(StringUtils.isEmpty(openId)){
-            openId = WeixinUtil.getUserOpenId(code);
+            openId = WeixinUtil.getUserOpenId1(code);
         }
         if(StringUtils.isEmpty(openId)){
             return "redirect:https://open.weixin.qq.com/connect/oauth2/authorize?appid="+partyTimeConfig.getAppId()+"&redirect_uri="+partyTimeConfig.getUrl()+"/wechat/historyDM&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";

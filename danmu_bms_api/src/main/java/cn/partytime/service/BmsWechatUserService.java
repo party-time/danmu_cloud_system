@@ -4,6 +4,8 @@ package cn.partytime.service;
 import cn.partytime.common.cachekey.LoginCodeCacheKey;
 import cn.partytime.common.cachekey.wechat.WechatCacheKey;
 import cn.partytime.model.PartyLogicModel;
+import cn.partytime.model.manager.DanmuAddress;
+import cn.partytime.model.manager.Party;
 import cn.partytime.model.wechat.MaterialListJson;
 import cn.partytime.model.wechat.MaterlListPageResultJson;
 import cn.partytime.model.wechat.WechatUser;
@@ -70,6 +72,9 @@ public class BmsWechatUserService {
     @Autowired
     private WechatUserInfoService wechatUserInfoService;
 
+    @Autowired
+    private DanmuAddressService danmuAddressService;
+
     @Value("${loginTemplate.id}")
     private String templateId;
 
@@ -91,6 +96,11 @@ public class BmsWechatUserService {
     public PartyLogicModel findPartyByOpenId(String openId){
         logger.info("用户请求的openId:{}",openId);
         return  bmsPartyService.findCurrentParty(openId);
+    }
+
+    public PartyLogicModel findPartyByAddressId(){
+
+        return bmsPartyService.findCurrentParty(Double.parseDouble("39.9903267"),Double.parseDouble("116.4926692421"));
     }
 
     public WechatUser subscribe(UserInfo userInfo){
@@ -143,6 +153,18 @@ public class BmsWechatUserService {
             redisService.set(WechatCacheKey.WECHAT_CACHE_KEY,  JSON.toJSONString(accessToken), 3600);
         }
        return accessToken;
+    }
+
+    public AccessToken getAccessToken1(){
+        Object object =redisService.get(WechatCacheKey.WECHAT_CACHE_KEY_1);
+        AccessToken accessToken = null;
+        if( null !=  object) {
+            accessToken = JSON.parseObject((String)object,AccessToken.class);
+        }else{
+            accessToken = new WeixinUtil().getAccessToken1();
+            redisService.set(WechatCacheKey.WECHAT_CACHE_KEY_1,  JSON.toJSONString(accessToken), 3600);
+        }
+        return accessToken;
     }
 
 
