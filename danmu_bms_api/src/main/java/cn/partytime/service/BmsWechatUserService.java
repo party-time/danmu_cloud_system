@@ -100,7 +100,7 @@ public class BmsWechatUserService {
 
     public PartyLogicModel findPartyByAddressId(){
 
-        return bmsPartyService.findCurrentParty(Double.parseDouble("39.9903267"),Double.parseDouble("116.4926692421"));
+        return bmsPartyService.findCurrentParty(Double.parseDouble("116.4926692421"),Double.parseDouble("39.9903267"));
     }
 
     public WechatUser subscribe(UserInfo userInfo){
