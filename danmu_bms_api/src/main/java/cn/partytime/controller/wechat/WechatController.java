@@ -114,27 +114,28 @@ public class WechatController {
         if( null == wechatUser){
             return "redirect:/htm/noparty.html";
         }
-
-        UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
-        WechatUserInfo wechatUserInfo = null;
-        if( null != wechatUser){
-            wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
-            if( null != wechatUserInfo && null != wechatUserInfo.getLastGetLocationDate()){
-                if( null == wechatUserInfo.getLastLongitude() || null == wechatUserInfo.getLastLatitude()){
-                    return "redirect:/wechat/getLocation?openId="+openId;
+        if( StringUtils.isEmpty( partyId )) {
+            UserInfo userInfo = WeixinUtil.getUserInfo(bmsWechatUserService.getAccessToken().getToken(), openId);
+            WechatUserInfo wechatUserInfo = null;
+            if (null != wechatUser) {
+                wechatUserInfo = wechatUserInfoService.findByWechatId(wechatUser.getId());
+                if (null != wechatUserInfo && null != wechatUserInfo.getLastGetLocationDate()) {
+                    if (null == wechatUserInfo.getLastLongitude() || null == wechatUserInfo.getLastLatitude()) {
+                        return "redirect:/wechat/getLocation?openId=" + openId;
+                    }
+                    /*
+                    long a = (new Date().getTime() -wechatUserInfo.getLastGetLocationDate().getTime())/(1000*60*60);
+                    if(a > 24){
+                        log.info("######################/sendDM:redirectUrl");
+                        return "redirect:/wechat/getLocation?openId="+openId;
+                    }*/
+                } else {
+                    return "redirect:/wechat/getLocation?openId=" + openId;
                 }
-                /*
-                long a = (new Date().getTime() -wechatUserInfo.getLastGetLocationDate().getTime())/(1000*60*60);
-                if(a > 24){
-                    log.info("######################/sendDM:redirectUrl");
-                    return "redirect:/wechat/getLocation?openId="+openId;
-                }*/
-            }else{
-                return "redirect:/wechat/getLocation?openId="+openId;
             }
-        }
-        if( null != userInfo){
-            wechatUserService.updateUserInfo(userInfo.toWechatUser());
+            if (null != userInfo) {
+                wechatUserService.updateUserInfo(userInfo.toWechatUser());
+            }
         }
         PartyLogicModel party = null;
         if( !StringUtils.isEmpty(partyId)){
