@@ -29,13 +29,13 @@ public class PartyTimeConfig {
     @Value("${mini_appSecret}")
     private String mini_appSecret;
 
-    @Value("${appId1}")
+
     private String appId1;
 
-    @Value("${appSecret1}")
+
     private String appKey1;
 
-    @Value("${appSecret1}")
+
     private String appSecret1;
 
 }
